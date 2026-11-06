@@ -153,6 +153,7 @@ adr: "ADR-0075, accepted by the owner 2026-11-05 (…c1623ae7), in force at this
   *2026-11-05 (`bapm-ABC-291-probe-lines`; `…69ee96e7` ruling 1): K4 on the build is F2's one re-read. K4 above 1.03 × is the second miss: not merged, and a miss under d11 (d). K4 runs with the owner holding the other
   project, so a void cannot be mistaken for a miss.*
 - **K5, `G6` under `Q-3K-4` (b):** every run at depth ≥ 6, depth 7 a WARN, "≥ base" reported, not graded.
+  *2026-11-06 (`bapm-lines-1106`; `ADR-0075` § What would falsify this, `…7cb68537`, confirmed `…43e6d8fd` 2): the bar stands as written. A clean run below depth 6 on the build is F2's second miss. See § Falsifiers, F2's note.*
 - **K6, the read:** C2′ GAIN ≥ 50.0 of 100 at 100 ms against the merge-base, 100 of 100 complete, 0 candidate faults, 0 losses on time; then S′ at the E
   in force (1 810 today), S-4; then the Levels deep lane.
 - **K7, the tool line** (d11 (a)): `TUNE_DEEP` green at the tip, its count reported.
@@ -190,6 +191,12 @@ adr: "ADR-0075, accepted by the owner 2026-11-05 (…c1623ae7), in force at this
 
 - **F2 after the probe** (2026-11-05, `bapm-ABC-291-probe-lines`; `…69ee96e7` ruling 1): rule 3 spends d5's cut before the build. **K4 on the build is F2's one re-read. K4 above 1.03 × is the second miss: not merged, and a miss under d11 (d).**
   This is the stricter reading, and it stands before QE seals K4's PREREG. The ruling names K4 only. F2's other half, a run below depth 6 on K5, still stops to Architect/Design, but no cut is left for it, and what follows there is not ruled.
+  *2026-11-06 (`bapm-lines-1106`): **K5's half now has its reading,** `ADR-0075` § What would falsify this (`…7cb68537`), confirmed by the Orchestrator (`…43e6d8fd` 2). The ADR holds the text; in short:*
+  - *F2 is one row, so one cut and one re-read. PR8 spent the cut, so the build is the one re-read for both halves.*
+  - *A clean run below depth 6 on K5 is F2's second miss: STOP to Architect/Design, a defect check first, then not merged.*
+  - *No re-read of the same code: it could only replay a recorded FAIL into a pass.*
+  - *A void is not a miss, and a re-read after a void is not F2's re-read.*
+  - *No bar or level moves: depth 6, the depth-7 WARN, "≥ base" reported, `G6`'s rule and `NFR-005`'s level stand.*
 
 - **A candidate fault in the read:** CF1–CF10 reach this read, by the owner's word (`…0f1ab02e` item 1). ~~The form QE copies for a single-part read
   is `arch-owner-answers-1105b`'s, in flight.~~ *2026-11-05 (`bapm-pointers-1105`): **settled.** The form, alone or in a bundle, is `ADR-0056` D5's dated block of
@@ -198,6 +205,7 @@ adr: "ADR-0075, accepted by the owner 2026-11-05 (…c1623ae7), in force at this
 - **No second set of values after a miss** (`ADR-0075` d11 (d)): a rule for this term, on his acceptance (`…c1623ae7`). It does not yet bind the later terms; each asks him in its own ADR.
   - After a miss, `PAWN_CONNECTED`, `PAWN_PHALANX` and `PAWN_BACKWARD` do not get new numbers by hand.
   - **A miss is:** a real safety red (F3), C2′ below the bar on a clean read, a CF2 or CF8 NOT MET, a second `G2` miss *(K4 above 1.03 × on the build, ruling 1)*, or the probe's rule 2 or 4.
+    *2026-11-06 (`bapm-lines-1106`; `…43e6d8fd` 3): **a second K5 miss counts as a miss here.** That is F2's second miss on K5's half: a clean run below depth 6 on the build. New numbers after a cost miss are numbers chosen after a miss, so this narrows what may follow and loosens nothing. It is the Orchestrator's ruling, told to the owner and open to his overruling, as d11's readings are. `ADR-0075`'s list names only "a second `G2` miss", and its § What would falsify this leaves this point with the Orchestrator; the ruling answers that question.*
   - **Not a miss:** a defect fix that restores d1 or d2.
   - A miss here leaves `ABC-292` where it stands.
 
@@ -212,6 +220,7 @@ adr: "ADR-0075, accepted by the owner 2026-11-05 (…c1623ae7), in force at this
 1. QE freezes the seam fixtures and the (b) rows before the build. The probe's 16 positions (`PAWN_SET`, in `arch-ABC-291-probe`'s `raw/scripts/e4bprobe.ts`) meet K1 (a)'s "at least 12", and they are offered to QE.
 2. UAT is owed (production lines); the QE verdict signs it.
 3. QE's PREREG for K4 states PR8's two levels, about 316 and 335 ns, and expects K4 to read the same way. Their cause is `UNKNOWN - verify`.
+4. *2026-11-06 (`bapm-lines-1106`; `…43e6d8fd` 3 and 5):* K4's PREREG carries K5's read and void rule. QE's briefs carry `ADR-0046`'s 23rd line, `F1`'s, in § Dated 2026-11-05 (`arch-ABC-307-records`), so the run rule's "every line" reads 23. It read 1 passed by name at `qe-ABC-305` (`…482f3e67`). That is the rule's count, not a new bar on this page.
 
 ## Size and priority
 

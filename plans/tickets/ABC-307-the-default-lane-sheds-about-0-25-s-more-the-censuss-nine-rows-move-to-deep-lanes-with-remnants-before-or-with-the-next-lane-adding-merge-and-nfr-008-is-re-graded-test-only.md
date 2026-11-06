@@ -1,8 +1,9 @@
 ---
 id: ABC-307
 title: "The default lane sheds about 0.25 s more: the census's nine rows move to deep lanes with remnants, the qe-hop trio together or not at all, before or with the next lane-adding merge, and NFR-008 is re-graded with a twin (test-only)"
-status: ready
-column: Ready
+status: done
+column: Done
+closed: "2026-11-05, merged to local main at bce24018 (a merge commit); QE PASS (qe-ABC-307 …bec57958); A9 graded 9.085 s, H − B −0.350 s, read on the arms before the merge; UAT waived (test note 3; QE's verdict signs). A10: Security/NFR PASS_WITH_RISKS (…6c111277). Front matter and dated lines by bapm-lines-1106, 2026-11-06"
 size: S
 priority: P1
 epic: EPIC-011
@@ -207,6 +208,8 @@ The base is `main` at the commit the build branches from. The tip is this ticket
   - **The next lane-adding merge:** H's median goes through `…b9038a14`'s rule, G-GO, G-WITH or G-HOLD, and the routing is the Orchestrator's.
   - **The lane at ≥ 9.6 s after all budgets:** the standing rule applies (`…f30bd604` 2, `…db111535` 3): a row move first, the owner if the next graded read is still ≥ 9.6 s. § Problem's supply line stands (§ Open 5).
   - **H > 10 s** goes to the owner (`ADR-0035` D6). An inadmissible twin voids the reading, and it is re-read in another window.
+  - *2026-11-06 (`bapm-lines-1106`; `…43e6d8fd` 5): **the read was on the arms, before the merge, not on `main`.** B `e01d39b1`, H `797bb1a5`, H2 its twin, under `…b17275dd`, which allows the branch with H's lane inputs equal. They are: the lane-input diff is empty at `main` `375f6362` (`…01f729cb`, `…bec57958`). The merge, `bce24018`, came after. No read of `main` after the merge stands as A9's, and QE's gap on that stays as QE wrote it. The nearest figure is another ticket's: `ABC-305`'s B arm, `a8594b50`, which is `main` with this ticket in, read 9.24 s [9.03, 9.31] (`…9c9e2a35`). It is that read's arm, and this page does not read it as A9's.*
+  - *2026-11-06 (`bapm-lines-1106`): **the forecast against the read.** § Problem forecast −0.219 s realised (592 of 750, the sealed scale, at 0.37 ms a ms) and −0.211 s scaled row by row (569). `ADR-0046` § `arch-ABC-307`'s earlier forecast, before the remnants were measured, was −0.235 to −0.25 s, and it stands as a forecast. The skip probe read −0.365 s [−0.49, −0.33]. A9 read **−0.350 s** paired median wall, interval −0.500 to −0.220 s (`…78d1f873`). That is 0.131 s past the sealed forecast, 0.139 s past the row-by-row one, 0.100 s past the ADR's far end, and 0.015 s short of the probe. Why it landed past the forecast is `UNKNOWN - verify`: no record reads the cause. The read is one window. Its margin on the target, 0.135 s, is under the twin's wall R of 0.210 s, and one of its 8 deltas, −0.16 s, sits above the target (`…bec57958`). This line states figures only. `R-307-b` is not ruled here; its owner is the Orchestrator.*
 - **`A10` (`R-N8H-1` and the catalog).** **Given** A9, **then** Security/NFR records `R-N8H-1`'s state by `…b9038a14`'s marks (BA/PM does not rule it), and writes `plans/nfr-catalog.md`'s
   `NFR-008` line by one dated insertion: the census's **9.515 s on `572edf13`**, with `R-N8H-1` MEDIUM, then A9's reading. It rides with the graded read (`…f40ce634` 5). No level moves.
   - **`T-QEHOP-GROWTH` retires at this ticket's merge, if the trio moved** (`ADR-0035` C6): not MET, and nothing is read. The 650 ms bound stands, and the set's last reading stays 4 272 notes. Its one dated catalog insertion
@@ -246,6 +249,7 @@ The base is `main` at the commit the build branches from. The tip is this ticket
 ## Open, not bars (for the Orchestrator)
 
 1. **"With" the next merge: answered.** This ticket merges alone and first, A9 reads `main`, and `ABC-305` re-reads on top (`…838ecf31`, `…9e878ba6`).
+   *2026-11-06 (`bapm-lines-1106`; `…43e6d8fd` 5): it merged alone and first, at `bce24018`, and `ABC-305` re-read on top (`…9c9e2a35`). A9 did not read `main`: it read the arms before the merge, under `…b17275dd`, with H's lane inputs equal at `main` `375f6362`. See A9's dated line.*
 2. **`ABC-305`'s A5: answered.** Its read went VOID. A re-read on the same harness, under a new PREREG, waits for this merge (`…9e878ba6`).
 3. **`F1`'s A2 exception.** A2 keeps exceptions for the Architect, and he named none for `F1`. His "no further `node:fs` binding" (`…727e0d0c`) predates the ruling. This page reads it as following from `…db111535` 2.
 4. **`F4`'s cost clause and `F1` on the run rule.** A5 reads the clause as having nothing to read. And `F1` is on none of the 22 lines, so a later tool edit runs the trio's three lines and not `F1`. The rule is
@@ -255,12 +259,14 @@ The base is `main` at the commit the build branches from. The tip is this ticket
 ## Risks
 
 - **`R-N8H-1` (MEDIUM):** 9.515 s is not below 9.5 s. Owner: the Orchestrator. Remedy owner: Architect/Design. A10 records it.
+  *2026-11-06 (`bapm-lines-1106`; `…6c111277`): **LOW, not closed.** By Security/NFR's marks on A9's 9.085 s [9.02, 9.17]: below 9.5 s, above 9.0 s. A risk rating, not an NFR level: `NFR-008` stays at 10 s.*
 - **`R-307-a`: closed, measured.** L2's and L3's remnants search nothing, and L3's full row fits `uci-session` with one name added to an import.
 - **`R-307-b` (LOW):** the margin on the −0.215 s need is 11 ms in-thread (592 against 581), about 0.004 s realised, inside the noise, and the supply is spent after this ticket. Owner: the Orchestrator (`…f30bd604` item 4).
 - **`R-307-c` (LOW, accepted `…f86e0257` 3):** three things leave the default lane with no holder there: a malformed note or a symbolic link outside the named folders; the wiring of levels 2, 3, 4, 6 and 7 through the seam;
   a real level-7 search through the session. Cover: the 22 lines and the hand-run `--sweep`. Owner: Architect/Design.
 - **`AR-154-TWO-POINT-CONTROL`:** its trigger `R-a` fired on this ticket, and `F1`–`F4` ride here (`…db111535` 2).
 - **`R-N8H-2` (LOW):** note growth; closes from the merge (A10). **`R-CEN-1` (LOW):** foreign load voids timing reads (test note 2). **`R-N8H-3` (INFO):** applied, no new file.
+  *2026-11-06 (`bapm-lines-1106`; `…b17275dd`, `…6c111277`, `…43e6d8fd` 4): **`R-CEN-1` reads MEDIUM.** Moved from LOW on 2026-11-05 and carried there on the day's count, five voided graded lane reads of seven, and it now covers any foreign load, not one project. No figure was wrongly read. The Orchestrator accepted it as a delivery risk for that day. Every timing read waits for the owner's word that the host is quiet; the slot gate alone does not protect a read. Owner: the Orchestrator.*
 - **Moved breadth runs only deep.** Mitigation: `ADR-0046`'s run rule gains A4's lines, and A7 measures what leaves.
 
 ## Definition of Ready

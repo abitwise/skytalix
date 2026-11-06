@@ -1729,6 +1729,8 @@ PREREG. There is no blank in them. § 6's "A fault or a loss on time is a defect
 `…d776c0f0` is sealed and is not rewritten; "QE changes no line outside a blank" does not stop this copy, because the block
 governs that shape.
 
+*Dated 2026-11-06 (`arch-ABC-303-load`):* QE also copies FL after CF10: the dated block of that task, at the end of D5. CF1–CF10's words do not change.
+
 - **CF1. What ends a read.** A candidate fault or a candidate loss on time in C2′ or S′ ends that read with no pass, at any score.
   The match plays out as the harness runs it. Its score is used for CF2 and for nothing else.
 - **CF2. The verdict test comes first.** Count each game the candidate lost by fault or on time, and each game not finished, as a
@@ -1858,6 +1860,91 @@ The next terms go on their own reads (`…b836b85c` 3) in D6's order, and a bund
   Architect/Design with any such word (CF10). It is not ruled here.
 - **The question as put to him.** Its verbatim text is not on the records, only his "yes" and the Orchestrator's restatement. Item 1's
   reach rests on that restatement.
+
+#### Dated 2026-11-06 (`arch-ABC-303-load`, records only at `main` `b716d86c`; CF10, on QE's stop `…b59650bc`): foreign load during C2′ and S′. No bar moves, and no word of CF1–CF10 moves
+
+QE stopped before `ABC-303`'s first game (`…53858301` § 0, H1): the records do not say what foreign load does to a game read. This
+block answers for that read and every later C2′. It was written before any game, and no score exists.
+
+**The reading.** Foreign load is a condition of the host, not a case of its own. C-1 to C-3, S′'s bars and CF1–CF9 grade what happened
+in the games, and none asks why. So each outcome under load is already named, and CF10 needs only this statement of it. **A played
+read is never voided for load.** Option (a) is the rule. Option (b) is not taken. Option (c) is a launch condition on this read, and
+no read's standing rests on it.
+
+**FL, the line.** QE copies it word for word after CF10, and after the Reach table where a PREREG has one, in the PREREG or addendum
+of every read the Reach line names. `ABC-303`'s addendum carries it, and that fills H1. It uses no `ABC-303` name, so it needs no row
+in that table.
+
+> **FL. Foreign load.** Foreign load during C2′ or S′ changes no line of this read. No game or read is voided, stopped, paused or
+> played again for it, and no foreign process is touched. The read is graded as played, by its bars and CF1–CF10, whatever the host
+> did: a clean read at or above its bar is MET; a clean read below it is NOT MET (CF5); a candidate fault or loss on time is CF1; a
+> base fault or loss on time is UNRESOLVED, re-run once (C-2, CF9). Load does not answer CF3: if the cause is the host alone, no tree
+> is fixed, so it is CF3's STOP with no new read, and `timemargin` and the control do not move. QE reports beside the result, by
+> class and count: the harness's `host.log`, `fsample.sh`'s busy foreign samples of the total, the largest load1, and each side's
+> largest move time. No verdict rides on those figures.
+
+**W, the window, this read.** `ABC-303`'s addendum carries this line as well.
+
+> **W. The window.** The first game starts only on the owner's word that the whole host is quiet, this project, `grugops` and any
+> other, for all three stages of § 6, checked with `ps` first. A busy foreign process at that check is a wait, not a read. If load
+> comes after the first game, FL governs and the read plays on.
+
+- **Why this read has it.** W shrinks the one branch with no way back (below), on the bundle's one read, for about 44 minutes once.
+  He is already asked for the timing window. The addendum can be sealed before that window, so the games can follow it directly if
+  P6 and P7 are met.
+- **W is a host fact, asked as one, and no bar.** It is `R-CEN-1`'s working control (`…43e6d8fd` 4) carried to a game read. If he
+  will not give it, the Orchestrator may drop W by a recorded line before the first game, and FL alone governs. Never after.
+- **Later C2′ reads.** FL binds them. W is the Orchestrator's, read by read, because the owner's time is what it spends. The advice:
+  ask when the read already owes a quiet window for timing rows, and do not hold a read for it otherwise.
+- **The fsample line.** `fsample.sh` (`qe-ABC-307`'s, as PREREG § 6a names it) records and plays nothing, so it is not "something
+  else" in § 6's hold. It is there because `host.log`'s count is `pgrep -f /vitest`, by argv, which cannot tell a busy process from a waiting one (`…b9038a14` item 4 built the count that can).
+
+**Why the score needs no void.** A timing read is a wall-clock figure, and load moves it one way, so a flag voids it. A game read
+compares two sides on the same host, one game at a time, with each opening played from both colours. Load is not aimed at a side. The
+100 ms reads on the records bear this out:
+
+| read | foreign load | largest move time | losses on time | score, as it stood |
+|---|---|---|---|---|
+| `qe-ABC-264-p2` A6 (`…3af11ebd`) | grugops vitest "at times", not counted | 105 ms | 0 | 44.0, NOT MET |
+| `qe-ABC-268-p2` A6 (`…186a743e`) | 2–3 `/vitest` in 24 of 126 samples, load1 ≤ 3.61 | 106 ms | 0 | 58.0, MET |
+| `qe-ABC-269` (`…2c51ee30`) | 0 of 125 samples | 104 ms | 0 | 57.0 |
+
+- A candidate loses on time past 150 ms. The largest move under load read 1–2 ms above the quiet read, and a miss and a MET each
+  stood under it. These are closer precedents than `qe-ABC-282`'s A6, which played `tc=40/8`.
+- **A correction to the brief's fact.** "One core" here is width 1, one game at a time. Nothing pins the match: `rating.ts` sets no
+  affinity, and the host has 24 cores (`…186a743e`). So load does not fall on both engines through a shared core. It reaches a single
+  move through the scheduler, the frequency and the heat. The conclusion holds, because which side is on move then is not chosen.
+- **`UNKNOWN - verify`:** the move-time tail at 100 ms under heavier load. The 4 vitests at up to 196 % of a core that `qe-ABC-282`'s
+  A4 saw (`…1434a7d1`) have never been read at this control. Two reads are thin evidence. Neither shows how load moves a score.
+
+**Why (b) is not taken.** On the score a void is not needed, and on a loss on time it is not allowed.
+- **On a clean low score it moves CF5.** That a clean low score stays final is in the owner's record (`…b836b85c` 2), and `…d776c0f0`
+  § 6 has "Once a game has started, the read is the read". Even a void blind to the score would give a played read a second draw, which is what B4 keeps
+  shut. A rule that voids only low scores is worse.
+- **On a candidate loss on time it moves C-2 and CF3.** C-2's bar is 0 losses at the 50 ms margin, with no clause on cause. A re-read
+  on the same tree is what CF3's "no new read" and CF4's "another tree" refuse. `ABC-223`'s foreign window rule, quoted in `…6b4674af`,
+  did leave a row ungraded, but that was a line of its own read, and `ABC-282` sits outside CF's reach. Its reason was that load can
+  cause a forfeit. That is not enough here: a load excuse can also cover a real time-check defect, and 50 ms exists so that a change
+  that broke the time check cannot read as a gain.
+- **Its trigger would fire on presence.** The record the brief gives, five of seven lane reads voided (not re-derived), counts how
+  often load is there, not what it does to a game. Voiding on the same flag would cost most reads about 25 minutes for no gain in
+  the score's meaning. And samples every 3 s can miss a spike, so they cannot ground a void.
+
+**What this leaves, stated.** One foreign spike can still end the read. A candidate move past 150 ms is CF1. If CF2 still counts 50.0
+or more, CF3 runs.
+- A real gap in the engine's time check is a defect with a fix, and CF4 gives the one new read. A fix that reads a clock is never
+  CF6's value-identical case.
+- A cause that is the host's alone, or that nobody can reproduce, leaves no fixed tree. That is CF3's STOP: no new read and no
+  verdict. It is not a miss, so B6 does not fire, and only his word could open another read.
+- **That word is not asked here.** It would move C-2, CF3 and CF4, and a load excuse can cover a real time-check defect. W is the
+  cheaper control. If the Orchestrator wants the branch closed in advance, it is the owner's question, before the first game.
+
+**Where it sits.** Within `ADR-0056`'s accepted form. FL adds no bar, drops none, and changes no word of CF1–CF10, B4, B6 or C-1 to C-3.
+"Load does not answer CF3" is the Architect's reading of what CF3 and CF4 already say, and it narrows nothing he accepted. Reach is the
+Reach line's: `ABC-282`, closed reads and every read that is not a C2′ read keep their own validity lines. No `qe-` context for
+`ABC-289`, `ABC-290`–`ABC-294` or `ABC-272` exists at this hop, so nothing sealed needs a change. The Levels lane was not asked: a
+Levels red is CF7's, read by `ADR-0028`, and W spans it because § 6 runs it third. Q2's order is the Orchestrator's ruling, not this
+block's.
 
 ### D6. The order proposed (speed and algorithms interleaved)
 

@@ -1,8 +1,9 @@
 ---
 id: ABC-305
 title: "The tuner's fixes land alone: one merge of b297ab89, never either tip of ABC-301, after an N8-LANE read, with zero production lines and dd88560f out of main's ancestry (tools-only, UAT waived)"
-status: ready
-column: Ready
+status: done
+column: Done
+closed: "2026-11-06, merged to local main at d00164ce (a merge commit); QE PASS (qe-ABC-305 …482f3e67), gaps QE-305-a LOW, QE-305-b and QE-305-c INFO, none blocking; UAT waived by A3 (zero production lines); dd88560f out of main (the Orchestrator's board card). Front matter and dated lines by bapm-lines-1106"
 size: S
 priority: P3
 epic: EPIC-011
@@ -67,6 +68,7 @@ adr: "No new ADR. ADR-0067's dated block of arch-owner-answers-1105 (the tools l
   read, **then** the H − B median wall, with an admissible twin, is **≤ +0.10 s**, and the graded median is ≤ 10 s. H is the tip, B its base
   on `main`, and both are named. No new test file goes in the default lane. Any default-lane row of ≥ 50 ms, by its duration in the tip's
   vitest JSON report, goes to its file's deep lane. Aim, not a gate: the rows this ticket adds or changes sum to ≤ 90 ms in-thread.
+  *2026-11-06 (`bapm-lines-1106`; `…9c9e2a35`, `…482f3e67`): **read: MET.** H `35a694ee`, B `a8594b50`, under PREREG `…987ae6ca`; 0 of 8 rounds flagged, twin admissible. H − B median wall **−0.110 s**, interval −0.250 to +0.150 s, against ≤ +0.10 s. H's median **9.085 s** against ≤ 10 s. No new test file. The rows sum to 6.525 ms against the 90 ms aim and none is ≥ 50 ms, so no row goes deep. The bar is the median, sealed before the read. **`QE-305-a` LOW:** the interval's top and 3 of 8 rounds are above +0.10 s. A5 meets its bar and does not resolve that; it is Security/NFR's to read, with no action on this ticket.*
 - **A6 (the deep lanes of the arriving test files; `…681c6363` 3).** **When** each runs at the tip under the host lock, **then** it exits 0 with
   every registered row passed and 0 skipped, and its count is reported:
   - `TUNE_DEEP=1 NODE_OPTIONS=--max-old-space-size=400 npx vitest run tools/tune` (25 of 25 on the rehearsal);
@@ -78,6 +80,7 @@ adr: "No new ADR. ADR-0067's dated block of arch-owner-answers-1105 (the tools l
 - **A8 (records).** **When** `node tools/grugops/records-path-check.js --base main` runs at the tip, **then** it exits 0.
 - **A9 (QE).** A `qe-e2e` hop records its verdict before the ticket leaves In Review. UAT is waived by A3. The verdict and the waiver go in the
   Done note.
+  *2026-11-06 (`bapm-lines-1106`; `…482f3e67`): **read: QE PASS at `379a1be7`,** every row held and no miss, before the ticket left In Review. UAT is waived by A3, on `git`'s own reads. Merged `d00164ce`. Gaps carried, none blocking: `QE-305-a` LOW, `QE-305-b` and `QE-305-c` INFO.*
 
 ## What happens on a miss
 
