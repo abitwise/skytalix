@@ -1,0 +1,5 @@
+launch 2026-11-06T13:05:33Z
+clear 2026-11-06T13:05:48Z
+hold start 2026-11-06T13:05:48Z; wait-clear: 0 s, load1 0.52; tmp free kB 5000072
+n8 done: rounds 9, complete scored rounds 8, 2026-11-06T13:09:58Z, hold 250 s; tmp free kB 4968636
+exit 0 2026-11-06T13:09:58Z

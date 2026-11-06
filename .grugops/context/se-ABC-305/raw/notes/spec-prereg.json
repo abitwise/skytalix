@@ -1,0 +1,6 @@
+{
+  "refs": ["se-ABC-305", "ABC-305", "ABC-301", "NFR-008", "ADR-0035", "ADR-0067", "158bb992", "a21136b0", "b297ab89",
+           "orch-2026-10-30a/20261105T123040Z-orchestrator-decision-f40ce634",
+           "secnfr-census-1105/20261105T115526Z-security-nfr-decision-b9038a14"],
+  "notes": [{ "kind": "decision", "confidence": "high: a pre-registration; sealed before any timing run; nothing measured yet", "bodyFile": "prereg.md" }]
+}

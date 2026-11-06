@@ -1,0 +1,51 @@
+start 2026-11-06T13:15:20Z head 83ca69f2 main-arm fd0773af
+[13:15:20Z] npm-main start; foreign []
+[13:15:29Z] npm-main exit 0 (5739 B)
+main files 71 total 2709 passed 2709 failed 0 pending 0 todo 0 success true
+[13:15:29Z] npm-tip start; foreign []
+[13:15:39Z] npm-tip exit 0 (5695 B)
+tip files 71 total 2710 passed 2710 failed 0 pending 0 todo 0 success true
+skip tip [0]
+skip main [0]
+integrity exit 0: No findings.
+[13:15:57Z] lint start; foreign []
+[13:15:58Z] lint exit 0 (86 B)
+[13:15:58Z] typecheck start; foreign []
+[13:16:00Z] typecheck exit 0 (44 B)
+[13:16:00Z] build start; foreign []
+[13:16:01Z] build exit 0 (54 B)
+dist files: 24; path naming tools: 0; tune: 0
+[13:16:01Z] tune start; foreign []
+[13:16:32Z] tune exit 0 (1017 B)
+tune files 1 total 25 passed 25 failed 0 pending 0 todo 0 success true
+[13:16:32Z] passer start; foreign []
+[13:16:39Z] passer exit 0 (2379 B)
+passer files 1 total 29 passed 29 failed 0 pending 0 todo 0 success true
+[13:16:39Z] book start; foreign []
+[13:16:40Z] book exit 0 (439 B)
+book files 1 total 36 passed 36 failed 0 pending 0 todo 0 success true
+[13:16:40Z] qehop start; foreign []
+[13:16:40Z] qehop exit 0 (462 B)
+qehop files 1 total 36 passed 36 failed 0 pending 0 todo 0 success true
+[13:16:40Z] cli-flag start; foreign []
+[13:16:44Z] cli-flag exit 0 (446 B)
+cli-flag files 1 total 109 passed 109 failed 0 pending 0 todo 0 success true
+[13:16:44Z] cli-noflag start; foreign []
+[13:16:48Z] cli-noflag exit 0 (448 B)
+cli-noflag files 1 total 109 passed 109 failed 0 pending 0 todo 0 success true
+[13:16:48Z] clireal start; foreign []
+[13:17:01Z] clireal exit 0 (2457 B)
+clireal files 1 total 11 passed 11 failed 0 pending 0 todo 0 success true
+[13:17:02Z] king start; foreign []
+[13:17:02Z] king exit 0 (455 B)
+king files 1 total 11 passed 11 failed 0 pending 0 todo 0 success true
+[13:17:02Z] line23 start; foreign []
+[13:17:03Z] line23 exit 0 (260 B)
+[13:17:03Z] line23-json start; foreign []
+[13:17:03Z] line23-json exit 0 (493 B)
+line23-json files 1 total 36 passed 1 failed 0 pending 35 todo 0 success true
+line23-noflag exit 0 (248 B)
+[13:17:04Z] uci start; foreign []
+[13:22:25Z] uci exit 0 (3602 B)
+uci files 1 total 270 passed 270 failed 0 pending 0 todo 0 success true
+end 2026-11-06T13:22:25Z; foreign [      1 7.3 marketing;      1 7.4 marketing;]

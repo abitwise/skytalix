@@ -39,7 +39,19 @@ export const T_OPEN = 399;
 export const T_SHELQ = 400;
 export const T_HALFQ = 401;
 export const T_OPENQ = 402;
-export const N_TERMS = 403;
+/**
+ * `ABC-271`'s E4a features (`ADR-0067` d5's dated line of 2026-11-04, `ADR-0070` d2), white minus
+ * black, on the eg half only: no mg feature is traced, because `src/evaluate.ts` skips the loop at
+ * w = 24. Each by-rank term runs + own rank index − 1, R 1 … 6, like `T_PASS`. `T_KE` carries
+ * Σ min(d(enemy king, Q), 5), `T_KO` minus Σ min(d(own king, Q), 5), `T_FP` the free passers, and
+ * `T_UN` 1 at phase 0 for a side with a passer the square names. The last is traced so that the
+ * gate sees it; its parameter stays held at 0 (`ADR-0070` d7).
+ */
+export const T_KE = 403;
+export const T_KO = 409;
+export const T_FP = 415;
+export const T_UN = 421;
+export const N_TERMS = 422;
 
 export const PST_NAMES = ["pawn", "knight", "bishop", "rook", "queen", "king"] as const;
 
@@ -162,6 +174,80 @@ export function kingCounts(position: Position): { white: KingCounts; black: King
   };
 }
 
+/** One side's E4a counts, each by own rank R at index R (0 unused), and the unstoppable flag. */
+export interface PasserCounts {
+  readonly enemy: readonly number[];
+  readonly own: readonly number[];
+  readonly free: readonly number[];
+  readonly unstoppable: number;
+}
+
+/** The queening square's Chebyshev distance from `king`, on `file`, the queening rank `qr`. */
+const distance = (king: number, file: number, qr: number): number =>
+  Math.max(Math.abs((king >> 4) - qr), Math.abs((king & 7) - file));
+
+function sideCounts(
+  b: Uint8Array,
+  pawn: number,
+  ownKing: number,
+  enemyKing: number,
+  defenderToMove: boolean,
+  phase: number,
+): PasserCounts {
+  const white = pawn === PAWN;
+  const qr = white ? 7 : 0;
+  const enemy = [0, 0, 0, 0, 0, 0, 0];
+  const own = [0, 0, 0, 0, 0, 0, 0];
+  const free = [0, 0, 0, 0, 0, 0, 0];
+  let unstoppable = 0;
+  for (let f = 0; f < 8; f++) {
+    // Each file's frontmost passer: the first found walking back from the queening rank.
+    for (let i = 1; i <= 6; i++) {
+      const rank = white ? 7 - i : i;
+      const sq = rank * 16 + f;
+      if (b[sq] !== pawn || !passed(b, sq)) continue;
+      const R = white ? rank : 7 - rank;
+      const dEnemy = distance(enemyKing, f, qr);
+      enemy[R] = (enemy[R] as number) + Math.min(dEnemy, 5);
+      own[R] = (own[R] as number) + Math.min(distance(ownKing, f, qr), 5);
+      let path = true;
+      for (let r = rank + (white ? 1 : -1); white ? r <= 7 : r >= 0; r += white ? 1 : -1) {
+        if (b[r * 16 + f] !== EMPTY) path = false;
+      }
+      if (path) {
+        free[R] = (free[R] as number) + 1;
+        const moves = R === 1 ? 5 : 7 - R;
+        if (phase === 0 && moves < dEnemy - (defenderToMove ? 1 : 0)) unstoppable = 1;
+      }
+      break;
+    }
+  }
+  return { enemy, own, free, unstoppable };
+}
+
+/** Per side, the E4a counts `src/evaluate.ts`'s `passerTerms` multiplies by the four tables. */
+export function passerCounts(position: Position): { white: PasserCounts; black: PasserCounts } {
+  const b = position.board;
+  let wk = -1;
+  let bk = -1;
+  let phase = 0;
+  for (let sq = 0; sq < 128; sq++) {
+    if ((sq & 0x88) !== 0) continue;
+    const p = b[sq] as number;
+    if (p === EMPTY) continue;
+    const t = p & 7;
+    if (t === KING) {
+      if ((p & BLACK) !== 0) bk = sq;
+      else wk = sq;
+    } else phase += P.PHASE_WEIGHT[t] as number;
+  }
+  const stm = position.blackToMove;
+  return {
+    white: sideCounts(b, PAWN, wk, bk, stm, phase),
+    black: sideCounts(b, BLACK_PAWN, bk, wk, !stm, phase),
+  };
+}
+
 /** One traced position: sparse (term, count) pairs, white minus black, in term order. */
 export interface Trace {
   readonly f: number[];
@@ -230,12 +316,19 @@ export function trace(position: Position): Trace {
   c[T_SHELQ] = (c[T_SHELQ] as number) + bsq - wsq;
   c[T_HALFQ] = (c[T_HALFQ] as number) + bhq - whq;
   c[T_OPENQ] = (c[T_OPENQ] as number) + boq - woq;
+  const e4a = passerCounts(position);
+  for (let r = 1; r <= 6; r++) {
+    c[T_KE + r - 1] = (e4a.white.enemy[r] as number) - (e4a.black.enemy[r] as number);
+    c[T_KO + r - 1] = (e4a.black.own[r] as number) - (e4a.white.own[r] as number);
+    c[T_FP + r - 1] = (e4a.white.free[r] as number) - (e4a.black.free[r] as number);
+  }
+  c[T_UN] = e4a.white.unstoppable - e4a.black.unstoppable;
   const f: number[] = [];
   for (let t = 0; t < N_TERMS; t++) if (c[t] !== 0) f.push(t, c[t] as number);
   return { f, m, w: phase > 24 ? 24 : phase };
 }
 
-/** A table as vectors over the 403 terms, plus mobility's weights and cap. */
+/** A table as vectors over the 422 terms, plus mobility's weights and cap. */
 export interface Table {
   readonly mg: Float64Array;
   readonly eg: Float64Array;
@@ -278,6 +371,13 @@ export function tableOf(params: Params): Table {
     mg[t] = pair.mg;
     eg[t] = pair.eg;
   }
+  // E4a's eg halves only: `src/evaluate.ts` reads no mg half of these terms (`ADR-0070` d1).
+  for (let r = 1; r <= 6; r++) {
+    eg[T_KE + r - 1] = params.PASSED_KING_ENEMY.eg[r] as number;
+    eg[T_KO + r - 1] = params.PASSED_KING_OWN.eg[r] as number;
+    eg[T_FP + r - 1] = params.PASSED_FREE.eg[r] as number;
+  }
+  eg[T_UN] = params.PASSED_UNSTOPPABLE.eg;
   return {
     mg,
     eg,

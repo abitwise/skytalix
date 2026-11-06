@@ -1,0 +1,47 @@
+B
+H
+H2
+arm B vs git archive a8594b50: 0 differing entries
+arm H vs git archive 35a694ee: 0 differing entries
+H vs H2: 0 differing entries
+--- scripts cmp
+n8.sh equal
+stage.inc.sh equal
+fsample.sh equal
+flags.py equal
+n8-grade.py equal
+reread.sh equal
+census.cjs equal
+--- raw vs scratch outputs
+a8.tsv equal
+flags.out equal
+grade.out equal
+foreign.tsv equal
+cmp: EOF on ‘.grugops/context/se-ABC-305/raw/out/n8-r2/census-H.txt’ after byte 37760, line 275
+rows.txt equal
+--- run files: count, empties
+81
+0
+--- mtimes (flags before grade)
+2026-11-06 13:10:01 <scratch>/se305/out/n8-r2/flags.out
+2026-11-06 13:10:08 <scratch>/se305/out/n8-r2/grade.out
+--- PREREG's lane-input check, read again
+0
+0
+--- n8-r3
+gates2
+n8-r2
+n8-void
+gates2
+gates2.console
+n8
+n8-r2
+n8-r2.console
+n8.console
+--- seals
+a175246b decision 
+2adad06f observation 
+4a7de7a7 observation 
+987ae6ca decision 
+d0980b3c observation 
+9c9e2a35 observation 

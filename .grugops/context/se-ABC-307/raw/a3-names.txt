@@ -1,0 +1,27 @@
+{'numTotalTests': (2709, 2709), 'numPassedTests': (2709, 2709), 'numFailedTests': (0, 0), 'numPendingTests': (0, 0), 'numTodoTests': (0, 0), 'success': (True, True)}
+['exitCode', 'numFailedTestSuites', 'numFailedTests', 'numPassedTestSuites', 'numPassedTests', 'numPendingTestSuites', 'numPendingTests', 'numTodoTests', 'numTotalTestSuites', 'numTotalTests', 'runState', 'snapshot', 'startTime', 'success', 'testResults', 'unhandledErrors']
+files 71 71 same set True
+src/book.test.ts 35 35
+  - ABC-094 A3 — variety after 1. e4 on seeds 1 to 10 ten seeds, one pick each, at least 3 distinct replies
+  + ABC-094 A3 — variety after 1. e4 on seeds 1 to 10 seeds 1 to 7, one pick each, at least 3 distinct replies
+src/cli.test.ts 109 109
+  - ABC-101 — --difficulty selects a level, and the played engine is that level A8′ — the seam built for each level moves exactly as `createLevel` does, on one seed and one injected clock
+  - ABC-241 A4, A7 — the CLI: a third occurrence through an uncapturable ep square A4: with a legal ep capture available the same line is not a draw
+  - ABC-241 A4, A7 — the CLI: a third occurrence through an uncapturable ep square A7: the move the search scores 0 is the move after which gameStatusOf reports the claim
+  + ABC-101 — --difficulty selects a level, and the played engine is that level A8′ (sample) — levels 1 and the default: the seam moves exactly as `createLevel` does, on one seed and one injected clock
+  + ABC-241 A4, A7 — the CLI: a third occurrence through an uncapturable ep square A4 (no search): with a legal ep capture available the two key lists are equal; on the uncapturable line they are not
+  + ABC-241 A4, A7 — the CLI: a third occurrence through an uncapturable ep square A7 (no search): after d8e8, the move A4 (slice) pins, gameStatusOf reports the claim
+src/uci-session.test.ts 245 245
+  - ABC-171 A7 — the blunder path two sessions on the same seededRandom(k) write the same bestmove sequence
+  - ABC-212 A9 — Skill Level reaches 7, and levels 6-7 take the rate-0 path setoption name Skill Level value 7 sets 7: a bare go searches 30 000 ms
+  + ABC-171 A7 — the blunder path two sessions on seededRandom(2), over the first two gos (a blunder, then the engine), write the same bestmove sequence
+  + ABC-212 A9 — Skill Level reaches 7, and levels 6-7 take the rate-0 path setoption name Skill Level value 7 sets 7: a bare go hands the engine 30 000 ms
+tools/grugops/qe-hop-integrity.test.ts 32 32
+  - ABC-105 A3 — the refs-only false pass is closed (real notes) coverage() over EVERY real note (no --ticket folder filter) reads ABC-062 and ABC-073 as findings
+  - ABC-105 A4 — the sweep's counts partition the Done rows (real board) prints each count line and every finding by id, exits 1; 0 when every row is grandfathered
+  - ABC-105 A9 — the security-nfr substitute is visible, not silent (real notes) --sweep lists ABC-073 as a finding
+  + ABC-105 A3 — the refs-only false pass is closed (real notes) coverage() over the named folders' real notes reads ABC-062 and ABC-073 as findings
+  + ABC-105 A4 — the sweep's counts partition the Done rows (real board) on a copy of the named folders: prints each count line and every finding by id, exits 1; 0 when every row is grandfathered
+  + ABC-105 A9 — the security-nfr substitute is visible, not silent (real notes) --sweep on a copy of the named folders lists ABC-073 as a finding, with its trap in the copy
+out 9 in 9
+[deep titles 0

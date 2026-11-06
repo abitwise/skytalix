@@ -1,0 +1,31 @@
+try 2026-11-05T19:21:28Z: 3 foreign, released
+try 2026-11-05T19:22:28Z: 3 foreign, released
+try 2026-11-05T19:23:34Z: 3 foreign, released
+try 2026-11-05T19:24:34Z: 3 foreign, released
+try 2026-11-05T19:25:34Z: 3 foreign, released
+try 2026-11-05T19:26:34Z: 3 foreign, released
+try 2026-11-05T19:27:35Z: 3 foreign, released
+try 2026-11-05T19:28:35Z: 3 foreign, released
+try 2026-11-05T19:29:35Z: 3 foreign, released
+try 2026-11-05T19:30:35Z: 3 foreign, released
+try 2026-11-05T19:31:35Z: 3 foreign, released
+try 2026-11-05T19:32:35Z: 3 foreign, released
+try 2026-11-05T19:33:35Z: 3 foreign, released
+try 2026-11-05T19:34:35Z: 3 foreign, released
+try 2026-11-05T19:35:35Z: 3 foreign, released
+try 2026-11-05T19:36:35Z: 3 foreign, released
+try 2026-11-05T19:37:35Z: 3 foreign, released
+try 2026-11-05T19:38:35Z: 3 foreign, released
+try 2026-11-05T19:39:35Z: 3 foreign, released
+try 2026-11-05T19:40:35Z: 3 foreign, released
+try 2026-11-05T19:41:35Z: 3 foreign, released
+try 2026-11-05T19:42:35Z: 3 foreign, released
+try 2026-11-05T19:43:35Z: 3 foreign, released
+try 2026-11-05T19:44:35Z: 3 foreign, released
+try 2026-11-05T19:45:35Z: 3 foreign, released
+try 2026-11-05T19:46:35Z: 3 foreign, released
+try 2026-11-05T19:47:35Z: 3 foreign, released
+try 2026-11-05T19:48:35Z: 3 foreign, released
+clear 2026-11-05T19:49:50Z
+hold start 2026-11-05T19:49:50Z; wait-clear: 0 s, load1 1.21; tmp free kB 5320388
+n8 done: rounds 9, complete scored rounds 8, 2026-11-05T19:54:10Z, hold 260 s; tmp free kB 5062964

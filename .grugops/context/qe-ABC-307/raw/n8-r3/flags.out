@@ -1,0 +1,7 @@
+samples 86; sample rows naming a foreign vitest 232; projects ['grugops']
+foreign_cpu_s, scored runs: median 15.26, min 3.46, max 25.58
+flagged rounds: {2: ['H:busy-ps+sampled+cpu'], 3: ['B:busy-ps+sampled', 'H:busy-ps+sampled', 'H2:busy-ps+sampled'], 4: ['H:busy-ps+sampled', 'H2:busy-ps+sampled', 'B:busy-ps+sampled'], 5: ['H2:busy-ps+sampled', 'B:busy-ps+sampled', 'H:busy-ps+sampled'], 6: ['B:busy-ps+sampled', 'H:busy-ps+sampled', 'H2:busy-ps+sampled'], 7: ['H:busy-ps+sampled', 'H2:busy-ps+sampled', 'B:busy-ps+sampled+cpu'], 8: ['H2:busy-ps+sampled', 'B:busy-ps+sampled', 'H:busy-ps+sampled']}
+complete scored rounds 8, unflagged 1
+sensitivity B: unflagged rounds wall median 9.260 s
+sensitivity H: unflagged rounds wall median 9.380 s
+sensitivity H2: unflagged rounds wall median 9.180 s

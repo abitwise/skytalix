@@ -1,0 +1,68 @@
+plant	base_red	base_trio	tip_red	tip_remnants	head_red	head_trio	F1_red	head_covers_base	verdict
+control (unmutated)	0	-	0	-	0	-	0	True	ok
+A3-refs-only-full	6	Q1,Q2	6	Q1~,Q2~	8	Q1,Q2	0	True	ok
+ticket-filter-removed-only	1	-	1	-	1	-	0	True	ok
+A3-refs-only	3	Q1,Q2	3	Q1~,Q2~	5	Q1,Q2	0	True	ok
+A3-exact-refs	3	-	3	-	3	-	0	True	ok
+folder-substring	2	-	2	-	2	-	0	True	ok
+accept-observation	1	-	1	-	1	-	0	True	ok
+accept-own-t2p	1	-	1	-	1	-	0	True	ok
+symlink-folder-follow	1	-	1	-	1	-	0	True	ok
+symlink-notesdir-follow	1	-	1	-	1	-	0	True	ok
+symlink-notefile-follow	1	-	1	-	1	-	0	True	ok
+naive-done-all-hits	2	Q3	2	Q3~	3	Q3	0	True	ok
+naive-done-distinct	1	-	1	-	1	-	0	True	ok
+silent-0-missing-board	1	-	1	-	1	-	0	True	ok
+silent-0-missing-snapshot	1	-	1	-	1	-	0	True	ok
+flag-force-accepted	1	-	1	-	1	-	0	True	ok
+flag-snapshot-accepted	1	-	1	-	1	-	0	True	ok
+any-author	3	Q2	3	Q2~	4	Q2	0	True	ok
+malformed-ignored	4	-	4	-	4	-	0	True	ok
+unreadable-note-skipped	1	-	1	-	1	-	0	True	ok
+t2p-check-any-folder-substring	1	-	1	-	1	-	0	True	ok
+A3-refs-only (coverage() only)	3	Q1,Q2	3	Q1~,Q2~	5	Q1,Q2	0	True	ok
+symlink-notesdir-refusal-only	1	-	1	-	1	-	0	True	ok
+q4a-main-sweep-read-drops-secnfr	2	Q1,Q3	1	Q1~	3	Q1,Q3	0	True	ok
+q4a-main-sweep-read-drops-quality-gate	2	Q1,Q3	1	Q1~	3	Q1,Q3	0	True	ok
+q4a-readNotes-unfiltered-drops-secnfr	2	Q1,Q2	1	Q1~	4	Q1,Q2	1	True	ok
+q4a-readNotes-unfiltered-drops-quality-gate	2	Q1,Q2	1	Q1~	4	Q1,Q2	1	True	ok
+q4a-readNotes-unfiltered-empty	10	Q1,Q2	9	Q1~	12	Q1,Q2	1	True	ok
+q5-readNotes-drops-by-secnfr (every read)	3	Q1,Q2	3	Q1~,Q2~	6	Q1,Q2	1	True	ok
+q5-readNotes-drops-by-secnfr (unfiltered only)	2	Q1,Q2	1	Q1~	4	Q1,Q2	1	True	ok
+q5-readNotes-drops-hash-half (every read)	11	Q1,Q2	11	Q1~,Q2~	14	Q1,Q2	1	True	ok
+q5-readNotes-drops-hash-half (unfiltered only)	8	Q1,Q2	7	Q1~	10	Q1,Q2	1	True	ok
+q5x-readNotes-unfiltered-drops-qe-folders	4	-	4	-	5	-	1	True	ok
+q5x-readNotes-unfiltered-drops-qe-and-qe2-qe3-qe4	4	-	4	-	5	-	1	True	ok
+q5x-readNotes-unfiltered-drops-qe-folders-real-tree-only	0	-	0	-	1	-	1	True	ok
+q5x-readNotes-unfiltered-drops-quality-gate-except-ABC-031 (real tree)	0	-	0	-	1	-	1	True	ok
+MQ2	3	Q1,Q2	3	Q1~,Q2~	5	Q1,Q2	0	True	ok
+MQ3	1	Q3	1	Q3~	2	Q3	0	True	ok
+A5R	3	Q1,Q2,Q3	0	-	4	Q1,Q2,Q3	1	True	ok
+q4b-allNotes-memo-empty	2	Q2,Q3	0	-	3	Q2,Q3	1	True	ok
+q4b-allNotes-memo-stale-filtered	2	Q2,Q3	0	-	3	Q2,Q3	1	True	ok
+q4b-plainSweep-memo-empty-notes	2	Q1,Q3	0	-	2	Q1,Q3	0	True	ok
+q4b-both-memos-empty (two faults)	2	Q1,Q2	0	-	3	Q1,Q2	1	True	ok
+q5-allNotes-memo-one-folder quality-gate-ABC-031-qe-2026-08-17	2	Q2,Q3	0	-	3	Q2,Q3	1	True	ok
+q5-allNotes-memo-one-folder secnfr-ABC-072	2	Q2,Q3	0	-	3	Q2,Q3	1	True	ok
+q4b-tip-named-read-empty	-	-	1	Q2~	-	-	-	-	killed
+q4b-tip-copied-root-empty	-	-	1	Q1~	-	-	-	-	killed
+q4b-tip-both-empty (two faults)	-	-	2	Q1~,Q2~	-	-	-	-	killed
+
+F3, the three random-half plants (one edit, read as three plants; the decision is on the pool)
+q5-readNotes-drops-random-half (unfiltered only) #1: base draws 5, names 9; head draws 5, names 12; missing at head in this plant alone 0
+q5-readNotes-drops-random-half (unfiltered only) #2: base draws 5, names 9; head draws 5, names 12; missing at head in this plant alone 0
+q5-readNotes-drops-random-half (unfiltered only) #3: base draws 5, names 9; head draws 5, names 12; missing at head in this plant alone 0
+pool: base draws 15, head draws 15, unread 0; F1 red in 15 of 15 head draws
+base name	base_count	head_count
+ABC-105 A3 — the refs-only false pass is closed (real notes) coverage() over EVERY real note (no --ticket folder filter) reads ABC-062 and ABC-073 as findings	12	12
+ABC-105 A4 — the sweep's counts partition the Done rows (real board) prints each count line and every finding by id, exits 1; 0 when every row is grandfathered	15	15
+ABC-105 A6 and Test note 3 — fail-closed on synthetic trees; no override flag a well-formed tree exits 0	7	3
+ABC-105 A6 and Test note 3 — fail-closed on synthetic trees; no override flag malformed front matter (line 3 is neither "key: value") is an UNKNOWN - verify finding with its path	8	9
+ABC-105 A6 and Test note 3 — fail-closed on synthetic trees; no override flag malformed front matter (no closing --- line) is an UNKNOWN - verify finding with its path	8	8
+ABC-105 A6 and Test note 3 — fail-closed on synthetic trees; no override flag malformed front matter (the first line is not ---) is an UNKNOWN - verify finding with its path	8	8
+ABC-105 A6 and Test note 3 — fail-closed on synthetic trees; no override flag missing board, missing snapshot and an unreadable note each exit 2 with a stderr message	7	7
+ABC-105 A6 and Test note 3 — fail-closed on synthetic trees; no override flag refuses a symbolic link at a note file with exit 2 and does not follow it	7	6
+ABC-105 A9 — the security-nfr substitute is visible, not silent (real notes) --sweep lists ABC-073 as a finding	7	11
+head names not at base: ["ABC-105 A4 — the sweep's counts partition the Done rows (real board) on a copy of the named folders: prints each count line and every finding by id, exits 1; 0 when every row is grandfathered", 'ABC-105 A9 — the security-nfr substitute is visible, not silent (real notes) --sweep on a copy of the named folders lists ABC-073 as a finding, with its trap in the copy', 'AR-154-TWO-POINT-CONTROL F1 — the whole-tree read drops no note allNotes() holds one note per *.md name under every non-symlink notes/ folder']
+base names missing at head: []
+misses or unread: 0

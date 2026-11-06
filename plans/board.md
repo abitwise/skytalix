@@ -1,3 +1,18 @@
+_Updated: 2026-11-06T13:27:26Z — **ABC-305 Done**, merged d00164ce, gates green; se-ABC-303-main2 takes main into bundle 1._
+_Updated: 2026-11-06T13:12:25Z — ABC-305 N8-LANE read stands, A5 MET → In Review, qe-ABC-305._
+_Updated: 2026-11-05T22:06:46Z — se-ABC-305-main done: ABC-305 ready to read; window asked of the owner._
+_Updated: 2026-11-05T21:57:22Z — A10 and Architect records merged; K5 reading confirmed; R-N8H-1 LOW, R-CEN-1 MEDIUM carried. Timing reads wait on the owner's quiet-host word._
+_Updated: 2026-11-05T21:55:22Z — **ABC-307 Done**, merged bce24018, gates green; A10 and Architect records running; se-ABC-305-main takes main in and stops before its read._
+_Updated: 2026-11-05T20:03:27Z — A9 read 3 VOID on foreign load, re-read unspent; ABC-307 stays In Review; next read needs the owner to hold the whole host._
+_Updated: 2026-11-05T19:18:21Z — qe-ABC-307-a9 dispatched on the owner's word; A9 re-read waits on the slot gate._
+_Updated: 2026-11-05 Orchestrator (orch-2026-10-30a) — qe-ABC-307 STOP at A9: all else holds, both graded reads VOID, no verdict (branch b13ab230, kept unmerged). Read 2 stays void. New read on …b9038a14's rule waits on an owner-held window (~10 min). R-CEN-1 MEDIUM. Running: nothing._
+_Updated: 2026-11-05 Orchestrator (orch-2026-10-30a) — `bapm-ABC-291-probe-lines` merged: **ABC-291 Ready**, DoR 10/10, M. Running: qe-ABC-307._
+_Updated: 2026-11-05 Orchestrator (orch-2026-10-30a) — **ABC-307 built** (797bb1a5): counts as the page, no STOP → In Review, `qe-ABC-307`. Running: qe-ABC-307, bapm-ABC-291-probe-lines._
+_Updated: 2026-11-05 Orchestrator (orch-2026-10-30a) — `arch-ABC-291-probe` merged: work goes on; PR8 1.043 above 1.03 spends d5's cut, K4 on the build is the one re-read; size M. → `bapm-ABC-291-probe-lines`. Running: se-ABC-307, that hop._
+_Updated: 2026-11-05 Orchestrator (orch-2026-10-30a) — **ABC-307 DoR 10/10** → In Development, `se-ABC-307`. Forecast lane near 9.596 s with all budgets spent, no rows left: ≥ 9.6 s goes straight to the owner. Running: arch-ABC-291-probe, se-ABC-307._
+_Updated: 2026-11-05 Orchestrator (orch-2026-10-30a) — `arch-ABC-307-reads` merged: parity holds, eight rows S, B1 k = 7, sum inside slack by 11 ms (thin). Rulings 13:43Z: C1 (d) on M6 with an added QE read; F1–F4 ride on ABC-307. → `bapm-ABC-307-lines`, `arch-ABC-291-probe`._
+_Updated: 2026-11-05 Orchestrator (orch-2026-10-30a) — `arch-ABC-307` merged: nine rows form S by design, all predictions. Rulings …12:59:27Z: measured reads close DoR row 10; R-307-c accepted; T-QEHOP-GROWTH armed, backstop 5 900. → `arch-ABC-307-reads`. Running: that hop only._
+_Updated: 2026-11-05 Orchestrator (orch-2026-10-30a) — se-ABC-303-rows done (80bc0711): E1–E4, U1, U2 applied, every figure as listed, 2 733 tests and deep lanes green, A10 title fixed. R1, R2 unchanged, so nothing to the owner. ABC-303 waits for ABC-307, then main in, then qe-ABC-303. Running: arch-ABC-307._
 _Updated: 2026-11-05 Orchestrator (orch-2026-10-30a) — `arch-ABC-303-w1-rows` merged: no bar, door or production change; read form stands. → `se-ABC-303-rows`. QE seals after ABC-307 merges. Running: arch-ABC-307, se-ABC-303-rows._
 _Updated: 2026-11-05 Orchestrator (orch-2026-10-30a) — `bapm-rows-cut-1105` merged: **ABC-307** (S, P1, DoR 9/10). It merges alone and first, so A9 reads main. → `arch-ABC-307`. Running: arch-ABC-303-w1-rows, arch-ABC-307._
 _Updated: 2026-11-05 Orchestrator (orch-2026-10-30a) — se-ABC-305 STOP: built clean (148c42e9), N8-LANE read VOID on foreign load, no verdict. Re-read, gates and deep lanes after ABC-307 merges. Running: arch-ABC-303-w1-rows, bapm-rows-cut-1105._
@@ -1520,7 +1535,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## Ready (WIP 1/8)
+## Ready (WIP 2/8)
+- [ABC-291] E4b pawn structure (ADR-0075 ACCEPTED, in force at merge; DoR 10/10, M, P2). Build after ABC-303, ABC-289, ABC-305. Before K4's PREREG: rule K5's half of F2; date ADR-0075's 640 KiB lines.
 - [ABC-289] Q2 delta pruning (ADR-0074 ACCEPTED; DoR 10/10, S, P3). Reads alone after bundle 1; build starts when ABC-303's merge or failed-attempt is recorded.
 - ~~[ABC-301]~~ → In Development. E2s second pull: one bounded fit on main with E4a's structure; KD/FP freed, U held 0; B-T0–B-T8 (B-T8 two r reads at 0.5 s, ~5 h, owner-approved). Scope 0 preconditions first (after NFR-008 headroom ruling).
 - ~~[ABC-271]~~ → In Development E4a structure only at 0 (ADR-0070 ACCEPTED form (a); DoR 10/10, S, P3). QE freeze first (qe-ABC-271-freeze), then se-ABC-271. No games.
@@ -1533,17 +1549,14 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## In Analysis (WIP 0/2)
 
 
-## In Design (WIP 2/2)
-- [ABC-307] Nine rows to deep lanes, NFR-008 re-graded (S, P1, DoR 9/10). `arch-ABC-307`: remnants and mutant reads. Merges alone and first.
-- [ABC-291] E4b pawn structure (P2, DoR 9/10). ADR-0075 ACCEPTED, in force at merge; hand values fixed. Probe next, K2 list after it; build after ABC-305.
+## In Design (WIP 0/2)
 
 
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 2/3)
-- [ABC-305] Tools-only landing from b297ab89: `se-ABC-305` builds and reads N8-LANE; landing waits on the row move.
-- [ABC-303] Bundle 1, ABC-286 + ABC-288 (ADR-0072, 0073 ACCEPTED over missed premises; DoR 10/10, M, P3). Code only for now (`se-ABC-303`); C2′ only after ABC-282 and ABC-301 settle.
+## In Development (WIP 1/3)
+- [ABC-303] Bundle 1, ABC-286 + ABC-288 (ADR-0072, 0073 ACCEPTED over missed premises; DoR 10/10, M, P3). `se-ABC-303-main2` takes main in; then `qe-ABC-303` seals the C2′ read.
 
 
 
@@ -1631,6 +1644,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready to Release (WIP 0/4)
 
 ## Done (WIP unlimited)
+- [ABC-305] Tools-only landing from b297ab89: merged d00164ce. A5 MET, QE PASS …482f3e67, UAT waived by A3. Gates 2 710, tune 25, passer 29 green; dd88560f out of main.
+- [ABC-307] Nine rows to deep lanes: merged bce24018. A9 graded 9.085 s, H − B −0.350 s, QE PASS …bec57958, UAT waived. Gates and four deep lanes green. A10 rides in `secnfr-ABC-307-a10`.
 - [ABC-282] W1 time use in uci-clock-mode. Merged a6ae8227 (QE PASS_WITH_GAPS …5191f871 signs UAT; A6 56.5/100, A4 MET, 0 time losses).
 - [ABC-281] **→ Done 2026-11-04 (merged 983d16c3; QE PASS_WITH_GAPS …960d38ff, UAT waived; NFR-008 graded H 9.42 s vs B 9.90 s, −0.37 s 8/8; Q-N8H-1 not triggered; post-merge npm test 2 650/2 650). R-281-a LOW → Architect (deep-lane run frequency); A9 → `secnfr-ABC-281-a9`.** **2026-11-04: built (grugops/ABC-281 frozen ea08d7b6): default 2 650 unchanged, deep 45/83/58 (+1 each), each mutant killed by its remnant; early wall median 9.51 s → In Review → `qe-ABC-281` (A8 twin ALONE).** **2026-11-04: row 11 done (arch-ABC-281 …d7b2b02b): all three rows form S, kill parity on 7 mutants, no owner question; forecast −0.36 s → DoR 10/10 → In Development → `se-ABC-281` (page lines `bapm-ABC-281-dor` in parallel).** **2026-11-04: cut (bapm-nfr008-rows), DoR 9/10 → In Design → `arch-ABC-281` (row 11: W/S/K per row).** The default lane sheds ~0.4 s: three named rows move to their files' deep lanes; NFR-008 re-read graded with a twin (test-only; EPIC-011 lane hygiene; S, P2). R-N8H-1 MEDIUM open; Q-N8H-1 held (trigger: median ≥ 9.6 s after).
 - [ABC-280] **→ Done 2026-11-04 (merged 0c8b385a, merge commit; src/ diff of the real merge empty — QE-280-c met; QE PASS_WITH_GAPS …cf60119e, UAT waived …6b09d896; post-merge npm test 2 650/2 650). QE-280-b (NFR-008 headroom ≈ 0) → Security/NFR before the default lane grows.** **2026-11-04: built (grugops/ABC-280 frozen edb9fddd): A1–A7 met — 7 paths, src/ empty diff, npm test 2 650, TUNE_DEEP 17/17, B-T1 0 misses/1 488 071, B-T3 byte-identical → In Review → `qe-ABC-280`.** **2026-11-04: cut 10/10 (bapm-ABC-239-close) → In Development → `se-ABC-280`.** tools/tune lands alone — ABC-239's tuner from grugops/ABC-239b's 4 tool commits, src/ byte-identical to main; B-T1 0 misses + B-T3 byte-identical on main's table; tools only, UAT waived (EPIC-011 Phase 4; size: S, priority: P3)

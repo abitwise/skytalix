@@ -1,0 +1,11 @@
+tip	Q1	exit 0	 Tests 1 passed | 35 skipped (36)
+tip	Q2	exit 0	 Tests 1 passed | 35 skipped (36)
+tip	Q3	exit 0	 Tests 1 passed | 35 skipped (36)
+tip	L1	exit 0	 Tests 1 passed | 269 skipped (270)
+tip	L2	exit 0	 Tests 1 passed | 269 skipped (270)
+tip	L3	exit 0	 Tests 1 passed | 269 skipped (270)
+tip	C1	exit 0	 Tests 1 passed | 269 skipped (270)
+tip	C2	exit 0	 Tests 1 passed | 269 skipped (270)
+tip	B1	exit 0	 Tests 1 passed | 35 skipped (36)
+tip	deep-book	exit 0	total 36 passed 36 failed 0 pending 0 todo 0
+tip	deep-qehop	exit 0	total 36 passed 36 failed 0 pending 0 todo 0

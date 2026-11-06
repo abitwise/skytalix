@@ -1,0 +1,94 @@
+HEAD 83ca69f2; grugops/ABC-305 379a1be7; main fd0773af; tip read T=379a1be7
+T is-ancestor b297ab89: exit 0
+T is-ancestor e763119c: exit 0
+T is-ancestor a8594b50: exit 0
+T is-ancestor dd88560f: exit 1
+T is-ancestor d5041c54: exit 1
+T is-ancestor e9cbeb40: exit 1
+HEAD is-ancestor b297ab89: exit 0
+HEAD is-ancestor e763119c: exit 0
+HEAD is-ancestor a8594b50: exit 0
+HEAD is-ancestor dd88560f: exit 1
+HEAD is-ancestor d5041c54: exit 1
+HEAD is-ancestor e9cbeb40: exit 1
+--- full hashes
+b297ab89d380
+e763119c6004
+dd88560f4612
+d5041c540c98
+e9cbeb40b6ec
+--- commits reachable from T with b297ab89 as a parent (all, not first-parent)
+158bb992 parents 2
+--- same on main-exclusive side: commits in main..T with it as parent
+158bb992
+--- is b297ab89 on main already?
+exit 1
+--- does any commit reachable from T descend from dd88560f (ancestry-path)
+0
+--- dd88560f descendants that are ancestors of T by another door: commits of ABC-301 line in T
+dd88560f parents: b297ab89; subject: feat(ABC-301): the one fit's emission: src/evaluate-params.ts (C-F, lambda 1e-8, 0.9872 x, 26 bounds, 3 active
+b297ab89 subject: docs(se-ABC-301-fit): PREREG sealed before any fit: 26 bounds, free set, data, base, bars, endgame G2; brief c
+--- merges in main..T
+35a694ee 148c42e9 a8594b50 merge(ABC-305): main into grugops/ABC-305, ABC-307 in
+158bb992 2dd18186 b297ab89 merge(ABC-305): b297ab89, the tuner's fixes, alone; never either tip of ABC-301
+ef4e5e21 48f8134e 8527e49f Merge branch 'main' into grugops/ABC-301
+8701a422 a51ef3b0 83894094 Merge branch 'main' into grugops/ABC-301
+a51ef3b0 704e331f ac6889c9 Merge branch 'grugops/qe-ABC-301-s0' into grugops/ABC-301
+--- A2 name list outside records, three dot
+src/evaluate.king-mobility.test.ts
+src/evaluate.passer.test.ts
+tools/tune/bounds.ts
+tools/tune/tracer.ts
+tools/tune/tune.test.ts
+tools/tune/tune.ts
+--- count
+6
+--- A2 two dot vs main, outside records
+src/evaluate.king-mobility.test.ts
+src/evaluate.passer.test.ts
+tools/tune/bounds.ts
+tools/tune/tracer.ts
+tools/tune/tune.test.ts
+tools/tune/tune.ts
+--- A2 empties: diff b297ab89 T -- tools/tune king-mobility (bytes)
+0
+--- A3: diff --name-only main T -- src
+src/evaluate.king-mobility.test.ts
+src/evaluate.passer.test.ts
+--- A3 byte-equal evaluate-params: blob ids
+cfe8f32a77d1
+cfe8f32a77d1
+cfe8f32a77d1
+--- A3 non-test src files differing
+0
+--- A3 lane inputs and other non-record roots
+(end)
+--- A3 tree of src non-test: hash of ls-tree, both
+780b1979ffc56205
+780b1979ffc56205
+--- main since a8594b50, non-record paths
+0
+--- H to T, non-record paths
+0
+--- T to HEAD, non-record paths
+0
+--- A2 ABC-304 re-points in passer test
+28:import { chooseMoveWithoutBundle, type EngineChoice } from "./engine.ts";
+45:import { searchWithoutBundle } from "./search.ts";
+460:      chooseMoveWithoutBundle(parseFen(fenOf(name)), {
+471:      ["kiwipete_search_d8", () => searchWithoutBundle(parseFen(fenOf("kiwipete")), 8).nodes],
+472:      ["pos6_search_d8", () => searchWithoutBundle(parseFen(fenOf("position-6")), 8).nodes],
+main:
+main:src/evaluate.passer.test.ts:5
+379a1be7:src/evaluate.passer.test.ts:5
+--- passer: lines on main with Without... doors missing on T
+- * returns the passer words a fresh `pawnStructure` returns; the source rows. K1 (d), the int16 range
+-import { readdirSync, readFileSync } from "node:fs";
+-import { squareName } from "./position.ts";
+-  it("the seam passerTermsForTest is called from test files only", () => {
+-    const callers = readdirSync(new URL(".", import.meta.url))
+-      .filter((name) => name.endsWith(".ts") && !name.endsWith(".test.ts"))
+-      .filter((name) => name !== "evaluate.ts")
+-      .filter((name) =>
+-        readFileSync(new URL(`./${name}`, import.meta.url), "utf8").includes("passerTermsForTest"),
+-      );

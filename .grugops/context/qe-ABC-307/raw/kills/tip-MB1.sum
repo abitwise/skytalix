@@ -1,0 +1,4 @@
+total 2709 passed 2706 failed 3 pending 0 todo 0 files 71 failedSuites 4
+KILL	book.test.ts::ABC-094 A3 — variety after 1. e4 on seeds 1 to 10 seeds 1 to 7, one pick each, at least 3 distinct replies
+KILL	book.test.ts::the delivered artifact (data/opening-book/book.json) A2 — every book move is legal in its keyed position, over every entry
+KILL	book.test.ts::the delivered artifact (data/opening-book/book.json) A4 — after 1. e4 the book carries >= 3 distinct replies with non-zero weight

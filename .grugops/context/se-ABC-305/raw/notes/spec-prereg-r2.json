@@ -1,0 +1,10 @@
+{
+  "refs": ["se-ABC-305", "se-ABC-305-main", "ABC-305", "ABC-301", "ABC-307", "NFR-008", "ADR-0035", "R-CEN-1", "35a694ee", "a8594b50", "148c42e9",
+           "se-ABC-305/20261105T123410Z-software-engineer-decision-a175246b",
+           "se-ABC-305/20261105T124015Z-software-engineer-observation-2adad06f",
+           "orch-2026-10-30a/20261105T124120Z-orchestrator-decision-9e878ba6",
+           "orch-2026-10-30a/20261105T200316Z-orchestrator-decision-f5dc2987",
+           "orch-2026-10-30a/20261105T215707Z-orchestrator-decision-43e6d8fd",
+           "secnfr-census-1105/20261105T115526Z-security-nfr-decision-b9038a14"],
+  "notes": [{ "kind": "decision", "confidence": "high: a pre-registration; sealed before any poll or timed run; nothing measured", "bodyFile": "prereg-r2.md" }]
+}

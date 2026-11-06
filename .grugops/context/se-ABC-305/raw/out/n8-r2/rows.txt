@@ -1,0 +1,30 @@
+runs per row H+H2 16 B 8
+NEW 3
+  1.4 ('src/evaluate.passer.test.ts', "ABC-301 P1 — the hot path's E4a sum at the probed values (QE-271-h, ADR-0070 d4's dated line) evaluateAtPhase at each fixture's own phase is exact against the seam, on 44 of 44")
+  2.2 ('src/evaluate.passer.test.ts', 'ABC-271 — the source rows (ADR-0070 decisions 2–4) the seams passerTermsForTest and pawnStructureForTest are called from test files only: no other file under src/, no tools/ file, no script (QE-271-g)')
+  2.9 ('tools/tune/tune.test.ts', "ABC-239 — tools/tune's source pins the FEN source row: each bound row's FEN and name appear literally in its src/evaluate*.test.ts file, or its fenFile (ADR-0067 ruling (b)); 26 rows, ABC-301's PREREG")
+GONE 2
+  0.7 ('src/evaluate.passer.test.ts', 'ABC-271 — the source rows (ADR-0070 decisions 2–4) the seam passerTermsForTest is called from test files only')
+  0.8 ('tools/tune/tune.test.ts', "ABC-239 — tools/tune's source pins the FEN source row: each bound row's FEN and name appear literally in its src/evaluate*.test.ts file (ADR-0067 ruling (b))")
+src/evaluate.passer.test.ts 22 H sum 30.3 B sum 27.8
+   9.2 9.1 ABC-271 K1 (e) — the memo: a hit returns what a fresh pawnStructure returns, the two passer words included cold miss, th
+   3.1 3.2 ABC-271 K1 (a) — the mirror, Object.is, 0 mismatches G3 + TAPER_MIRROR_POSITIONS + QE's 12 passer positions (+ the 44 fi
+   2.2 None ABC-271 — the source rows (ADR-0070 decisions 2–4) the seams passerTermsForTest and pawnStructureForTest are called from
+   1.9 2.0 ABC-271 K1 (c) — the structure through the seam, per side (QE-271-a), at ADR-0070 d1's probed values U is 400 exactly wh
+   1.7 1.8 ABC-271 — the E4a terms are data: four exports, every half 0 (ADR-0070 decision 1) PASSED_KING_ENEMY, PASSED_KING_OWN, P
+   1.5 1.1 ABC-271 K1 (a) — the mirror, Object.is, 0 mismatches the same corpus with the terms live at the probed values
+   1.4 None ABC-301 P1 — the hot path's E4a sum at the probed values (QE-271-h, ADR-0070 d4's dated line) evaluateAtPhase at each fi
+   1.3 1.1 ABC-271 K1 (b) — value identity: evaluate is Object.is the pre-ticket evaluate on the frozen corpora QE's ABC-269 door c
+src/evaluate.king-mobility.test.ts 11 H sum 44.9 B sum 41.2
+   34.8 32.2 A6 — purity: evaluation leaves the position byte-identical over ABC-076's corpus, the perft roots and the king positions
+   5.0 4.6 A1 — a position and its colour mirror score exactly equal, over ABC-076's 184 plus the king positions scores every mirro
+   2.8 2.3 A4 — mobility: more moves score higher, and the term is bounded by ±100 cp never exceeds ±100 cp — on the four-queen rig
+   0.8 0.8 A1 — a position and its colour mirror score exactly equal, over ABC-076's 184 plus the king positions adds at least 15 n
+   0.4 0.4 A2 — a missing shelter pawn scores lower at EQUAL material too, at phase 24: the g-pawn on g6 instead of g2 scores stric
+   0.3 0.2 A4 — mobility: more moves score higher, and the term is bounded by ±100 cp white, with substantially more moves at equal
+   0.3 0.2 A2 — a missing shelter pawn scores lower the phase-24 twin bites: with the shelter term zeroed, g6 no longer scores lowe
+   0.2 0.2 A2 — a missing shelter pawn scores lower g2 removed from f2/g2/h2 scores strictly lower for white (the criterion as writ
+tools/tune/tune.test.ts 3 H sum 4.6 B sum 2.5
+   2.9 None ABC-239 — tools/tune's source pins the FEN source row: each bound row's FEN and name appear literally in its src/evaluat
+   1.3 1.3 ABC-239 — tools/tune's source pins imports no TEST-ONLY export of src/ (ADR-0067 d8, S3) and makes no network call (d9)
+   0.3 0.3 ABC-239 — tools/tune's source pins the quiet filter's rules record has no seePruning field, read from the source (ADR-00

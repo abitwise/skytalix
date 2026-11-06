@@ -1,0 +1,37 @@
+tree	id	exit	secs	summary
+worktree	gate-typecheck	0		
+worktree	gate-lint	0		Checked 148 files in 910ms. No fixes applied.
+worktree	gate-build	0		
+base	npm-test	0		 Tests 2709 passed (2709)
+tip	npm-test	0		 Tests 2709 passed (2709)
+worktree	skip-count			0
+worktree	gate-skip-integrity	0		No findings.
+worktree	gate-lane-inventory	0		No findings.
+tip	rr-248	0	1	 Tests 4 passed | 266 skipped (270)
+tip	rr-281R1	0	1	 Tests 1 passed | 45 skipped (46)
+tip	rr-281R2	0	2	 Tests 1 passed | 104 skipped (105)
+tip	rr-281R3	0	0	 Tests 1 passed | 57 skipped (58)
+tip	t-R1	0	1	 Tests 1 passed | 45 skipped (46)
+tip	t-R2	0	1	 Tests 1 passed | 269 skipped (270)
+tip	t-R3	0	1	 Tests 1 passed | 52 skipped (53)
+tip	t-R4	0	1	 Tests 1 passed | 33 skipped (34)
+tip	t-R5	0	1	 Tests 1 passed | 104 skipped (105)
+tip	t-R6	0	0	 Tests 1 passed | 57 skipped (58)
+tip	t-R7	0	1	 Tests 1 passed | 57 skipped (58)
+tip	t-R8	0	1	 Tests 1 passed | 269 skipped (270)
+tip	t-R9	0	1	 Tests 1 passed | 1 skipped (2)
+tip	t-Q1	0	1	 Tests 1 passed | 35 skipped (36)
+tip	t-Q2	0	0	 Tests 1 passed | 35 skipped (36)
+tip	t-Q3	0	1	 Tests 1 passed | 35 skipped (36)
+tip	t-L1	0	1	 Tests 1 passed | 269 skipped (270)
+tip	t-L2	0	1	 Tests 1 passed | 269 skipped (270)
+tip	t-L3	0	1	 Tests 1 passed | 269 skipped (270)
+tip	t-C1	0	1	 Tests 1 passed | 269 skipped (270)
+tip	t-C2	0	1	 Tests 1 passed | 269 skipped (270)
+tip	t-B1	0	0	 Tests 1 passed | 35 skipped (36)
+tip	deep-book	0	1	 Tests 36 passed (36)
+tip	deep-qehop	0	1	 Tests 36 passed (36)
+tip	deep-uci	0	325	 Tests 270 passed (270)
+base	deep-book	0	1	 Tests 35 passed (35)
+base	deep-qehop	0	1	 Tests 32 passed (32)
+base	deep-uci	0	325	 Tests 265 passed (265)
