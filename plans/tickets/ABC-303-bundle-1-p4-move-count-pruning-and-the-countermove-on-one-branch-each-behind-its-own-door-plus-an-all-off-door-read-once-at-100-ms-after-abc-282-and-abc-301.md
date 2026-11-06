@@ -1,16 +1,27 @@
 ---
 id: ABC-303
 title: "Bundle 1: P4 move-count pruning (ADR-0072, form M3) and the countermove (ADR-0073, form C1), built on one branch, each behind its own ADR door plus one door that turns both off; the bars are ADR-0056 D5's dated block, tables 1–3: all-off equals the merge-base exactly, the safety rows, L4, G6, NFR-008 ≤ 10 s and ≤ +0.10 s; then ONE read, 100 games at 100 ms against the merge-base, GAIN ≥ 50.0, never re-played, after ABC-282 and ABC-301 have settled"
-status: ready
-column: Ready
+status: done
+column: Done
+closed: "2026-11-06, merged to local main at 434fa171 (a merge commit); QE MET, PASS_WITH_GAPS, no blocking gap (qe-ABC-303 …ebefbfa2; B4 on the merged tree …9e2facfa), which signs UAT; C2′ 55.5 / 100 (47 / 36 / 17, +38.4 ± 63.0), S′ 9.0 / 10 at E 1 810, Levels 58 / 58; gates 2 734 and the bundle, Levels, engine and uci deep lanes green on main (the Orchestrator's board card). ADR-0072 and ADR-0073 in force, B5 merged 19733697. Front matter and dated lines by bapm-lines-1106b"
 size: M
 priority: P3
 epic: EPIC-011
 feature: —
-adr: "ADR-0072 (form M3; ABC-286) and ADR-0073 (form C1; ABC-288) ACCEPTED 2026-11-04 by the owner's word, OVER MISSED PREMISES (orch-2026-10-30a …3e73f9f9; Status lines arch-owner-answers-1104b …88ca95bd). F1 stays fired on both. Not in force until this ticket merges on its read; on NOT MET, B6 returns each to PROPOSED, premise not met. The bars are ADR-0056 D5's dated block of 2026-11-04, tables 1–3; B5's line naming this ticket and the read is owed at QE's verdict"
+adr: "ADR-0072 (form M3; ABC-286) and ADR-0073 (form C1; ABC-288) ACCEPTED 2026-11-04 by the owner's word, OVER MISSED PREMISES (orch-2026-10-30a …3e73f9f9; Status lines arch-owner-answers-1104b …88ca95bd). F1 stays fired on both. Not in force until this ticket merges on its read; on NOT MET, B6 returns each to PROPOSED, premise not met. The bars are ADR-0056 D5's dated block of 2026-11-04, tables 1–3; B5's line naming this ticket and the read is owed at QE's verdict. 2026-11-06 (bapm-lines-1106b): both IN FORCE on main as parts of bundle 1, merge 434fa171, B5 merged 19733697 (…ebefbfa2, …9e2facfa, …28283e48); the premises stay overridden and F1 stays fired"
 ---
 
 # ABC-303: bundle 1, P4 + the countermove, one branch, one read
+
+> **DONE: MERGED `434fa171`; READ ONCE AND MET; `ADR-0072` AND `ADR-0073` IN FORCE, 2026-11-06, by BA/PM** (task `bapm-lines-1106b`, records only, at `main` `bc2bb953`; nothing run). Sources: QE's verdict `qe-ABC-303` `…ebefbfa2`, B4 `…9e2facfa`,
+> `arch-ABC-303-b5` `…28283e48`, and the Orchestrator's `…aaeffb04`.
+> - **The verdict:** MET, PASS_WITH_GAPS, no blocking gap, which signs UAT. Every row of tables 1 and 2, then C2′, S′ and the Levels lane, on `bb0cc134` against `38914841`. B4 read tables 1 and 2's count rows again on the merged tree, with the stale rule's diff empty, so no game ran again.
+> - **The read:** C2′ 55.5 / 100 (47 / 36 / 17, +38.4 ± 63.0 Elo), 100 of 100, 0 candidate faults, 0 losses on time. S′ 9.0 / 10 at E 1 810. Levels exit 0, 58 / 58. No CF line fired.
+> - **The merge:** `434fa171`. Gates and the bundle, Levels, engine and uci deep lanes green on `main`. B5's line merged at `19733697`: both ADRs are in force, as a part of bundle 1.
+> - **What a pass does not show:** the gain is not proved, because +38.4 ± 63.0 spans 0 and the harness's own label read NEUTRAL. The bar is ≥ 50.0, and it is met. Credit is to the bundle (B5), with no per-part Elo. The premises stay overridden, not met, and F1 stays fired on both.
+> - **The host was not quiet:** W was dropped, so FL governed. QE reports the load by class and count. Nothing shows load reaching a move, and how load moves a score stays `UNKNOWN - verify`.
+> - **`ABC-289`'s build** started on this merge and read NOT MET (its page). The S′ pool is 27.5 / 40, and E stays 1 810 (§ Open 2).
+> - **No bar moved.** No size or priority moves, and the DoR table stands as the record. The title is unchanged.
 
 > **`ABC-282`'S HALF OF THE SLOT IS MET, SO BOTH HALVES ARE; THE CENSUS RULED, 2026-11-05, by BA/PM** (task `bapm-ABC-282-close`,
 > records only, at `main` `572edf13`; nothing run). Sources: `orch-2026-10-30a` `…16e0ec2c` (ruling 1 on `…42f7fd67` item 1) and QE's
@@ -177,6 +188,7 @@ of 10; below that, 10 more games and ≥ 7.0 of 20). Then **the Levels deep lane
 *2026-11-05 (`bapm-wait-lines-1105`): **on a candidate fault, a loss on time or a Levels red, the form is CF1–CF10,** `ADR-0056`'s dated
 block of `arch-owner-answers-1105`. "Never re-played" stands: a CF4 read is not a re-play, because the first read returned no verdict
 and CF4 reads another tree.*
+*2026-11-06 (`bapm-lines-1106b`; `…ebefbfa2`, `…9e2facfa`): **read once, MET.** C2′ 55.5 / 100, 47 / 36 / 17, +38.4 ± 63.0 Elo, 100 of 100 complete, 0 candidate faults, 0 losses on time. S′ 9.0 / 10 at E 1 810, 9 / 1 / 0. Levels exit 0, 58 / 58. Nothing was re-played. `…ebefbfa2` holds the rows, the load and the gaps.*
 
 - **The PREREG is sealed first,** by QE, in the shape `…d776c0f0`, before any game. QE adds no bar and drops none. Its
   first line says the premises are not met and were overridden by the owner's word.
@@ -215,6 +227,7 @@ and CF4 reads another tree.*
   *2026-11-05 (`bapm-wait-lines-1105`; `ADR-0056` B6's dated line): for this ticket this bullet is read through CF1–CF10. A fixed tree
   under CF4 is not a new attempt and does not need the route back.*
 - **On MET and the merge (B5):** both ADRs are in force, and the Architect writes the line naming this ticket and the read.
+  *2026-11-06 (`bapm-lines-1106b`): taken. Merged `434fa171`; B5's line merged at `19733697` (`…aaeffb04`).*
 - **Either way,** the merge or the `failed-attempt` starts `ABC-289`'s build (§ Dependencies).
 
 ## NFR triggers
@@ -322,6 +335,7 @@ The records do not settle these. This page adds none of them as a bar, and none 
    games, 18.5 / 30 = 61.7 %, and no step fires. A next merged S′ below 5.5 / 10 leaves the band, and that step is the owner's
    question. A step before the seal is a dated line in `ADR-0056`, which governs, and a dated line here. A step after the seal
    does not reach this read.*
+   *2026-11-06 (`bapm-lines-1106b`; `…28283e48` § 5): this ticket's S′ read 9.0 / 10 at E 1 810 and pools: 27.5 / 40 = 68.75 %, no step, E stays 1 810.*
 3. **The slot's reading, for the Orchestrator.** That `main` goes into the branch before the PREREG is BA/PM's reading of
    "neither makes that read stale", not his words.
    *2026-11-05 (`bapm-wait-lines-1105`): **ruled** (`…3c67d3c4` 3). The reading stands: `main` goes into `grugops/ABC-303`, with no
@@ -361,4 +375,4 @@ The records do not settle these. This page adds none of them as a bar, and none 
 **DoR 10/10. Ready.** The column move and the build slot are the Orchestrator's. *2026-11-04 (`bapm-K0-cut`): row 10 holds. § Open
 1 waits on the owner and blocks neither the build nor the read, because the strict reading stands in the meantime. **DoR 10/10,
 unchanged.*** *2026-11-05 (`bapm-wait-lines-1105`): § Open 1 is answered, so the strict reading no longer stands in. **DoR 10/10,
-unchanged.***
+unchanged.*** *2026-11-06 (`bapm-lines-1106b`): Done; see the head of this page.*
