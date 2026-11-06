@@ -1,3 +1,4 @@
+_Updated: 2026-11-06T17:54:44Z — **bundle 1 MET**, C2′ 55.5 of 100, verdict …ebefbfa2; qe-ABC-303-b4 reads the merged tree._
 _Updated: 2026-11-06T16:47:16Z — owner holds the whole host; qe-ABC-303-read runs timing, then games._
 _Updated: 2026-11-06T14:16:01Z — arch-ABC-303-load merged: FL logs and reports load, W asks a held host for ABC-303's games; one window asked of the owner._
 _Updated: 2026-11-06T14:08:04Z — qe-ABC-303 STOP before games, no miss: B6 keeps timing first; arch-ABC-303-load reads foreign load under CF10; window asked._
@@ -1561,7 +1562,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 ## In Development (WIP 1/3)
-- [ABC-303] Bundle 1, ABC-286 + ABC-288 (ADR-0072, 0073 ACCEPTED over missed premises; DoR 10/10, M, P3). Tables 1 to 3 met but for timing; qe-ABC-303 stopped before any game: timing first (owner window), foreign-load reading with the Architect.
+- [ABC-303] Bundle 1, ABC-286 + ABC-288 (ADR-0072, 0073 ACCEPTED over missed premises; DoR 10/10, M, P3). QE MET …ebefbfa2: C2′ 55.5, S′ 9.0, Levels 58/58, P6, P7 met. B4 re-read on the merged tree, then merge.
 
 
 
