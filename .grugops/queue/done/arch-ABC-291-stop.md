@@ -29,3 +29,4 @@ Publish: sealed notes (contextRoot = the worktree's .grugops/context, `at` from 
 - **Not checked but by the SE's note:** `cp 88`, `cp 99`, `nodes 10614`. The repair's lane run checks them, under a STOP line.
 - **Depends on:** `qe-ABC-291-k1`. A defect fix that moves a production line voids the lines in item 1.
 - **Owed:** the Orchestrator: the repair brief (`…2d2c2bad` § 5), and telling the owner K1 (h)'s reading. BA/PM: `ABC-291`'s K1 (h), K2 and banner lines, in the hop already waiting on this ruling.
+- **Path check:** `node tools/grugops/records-path-check.js --base main` exit 0 at `cef0ec1e`, before this last commit.
