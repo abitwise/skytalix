@@ -25,3 +25,4 @@ _by architect-design (claude-opus-5-5, arch-ABC-303-b5), 2026-11-06T18:35:08Z, b
 - **Both reads carry, none of it a bar:** FL word for word after the table; `fsample.sh` named; W asked or dropped afresh; a Levels line; the harness label line; FL kept off the timing rows. `ABC-289` also carries the moved door figures and `G6`'s moved base. `ABC-291` gains nothing else.
 - **Open to the Orchestrator:** the Levels line, `…28283e48` § 3 (d), an Architect reading that stands unless overruled before the first seal.
 - **Notes:** `…28283e48` (decision), `…0332e6bb` (observation: that note's title says four lines, and its § 3 lists six; § 3 governs).
+- **Path check:** `node tools/grugops/records-path-check.js --base main` exit 0 at `a24eb83b`, before this last commit.
