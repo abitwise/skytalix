@@ -24,3 +24,4 @@ Publish: sealed notes (contextRoot = the worktree's .grugops/context, `at` from 
 - **3 (K1 (c)):** not written as done. The head banner says the line follows `qe-ABC-291-k1`'s report.
 - **K1 (h), the near point:** a pointer only, the page's words unchanged. The Orchestrator accepts the reading and has told the owner (`…5c911039`); his answer is not on the record. That note is on `main` at `f59be09d`, after this branch's base.
 - **Left stale, outside the list (`…9118767a`):** "K3 is unread" in three places against `se-ABC-291`'s Result, the Order line "owed" in § Dependencies, `ABC-282` A2 (b)'s fixture in § `UNKNOWN - verify`, and no pointer at Scope 4 or K7 for `QUIET_RULES`.
+- **Path check:** `node tools/grugops/records-path-check.js --base main` exited 0 before the last commit.
