@@ -25,3 +25,4 @@ Publish: sealed notes (contextRoot = the worktree's .grugops/context, `at` from 
 - **A correction to the brief:** "one core" is width 1, not a pin. The match is not pinned and the host has 24 cores. The conclusion holds.
 - **`UNKNOWN - verify`:** the move-time tail at 100 ms under heavy load, and how load moves a score.
 - **QE owes:** the addendum carrying FL and W word for word, sealed before the first game, with the order as ruled for Q2.
+- **Path check:** `node tools/grugops/records-path-check.js --base main` exit 0 at `d4f00dc8`, before this last commit.
