@@ -75,6 +75,7 @@ build may start on PROPOSED. Nothing here is in force until `ABC-282` merges on 
 | 2026-11-05 | Orchestrator | **IN FORCE.** `ABC-282` merged at `a6ae8227` on QE's verdict `…5191f871` | `orch-2026-10-30a` `…16e0ec2c` |
 | 2026-11-05 | Architect/Design | Status restated as in force. QE-282-l ruled: no decision moves, dated lines under D11 and § Consequences. D12 item 5 written in `ADR-0066` | `arch-ABC-282-close` |
 | 2026-11-05 | Architect/Design | The 19 rows with bundle 1 on: dated lines under D8, D9 and D12 item 4. No decision, bar or production line moves, and F1 and F2 do not fire | `arch-ABC-303-w1-rows` `…0f8a4f82` |
+| 2026-11-06 | Architect/Design | A0 on `ABC-291`'s tree: dated line under D8. No decision, bar or production line moves, and F1 does not fire. Nothing run | `arch-ABC-291-stop` |
 
 ## Context
 
@@ -333,6 +334,25 @@ second, so A0 takes this form on `ABC-303`. The rows bind and no decision moves.
   are what a leak would change. `go depth 6` re-pins its line: no clock reaches it on any tree, and the default-lane row
   "hands no soft limit" carries its claim. The `69 705` in D3's row stays.
 - **F1 does not fire.** The figures moved because the tree did, not because W1 acted.
+
+*Dated 2026-11-06 (`arch-ABC-291-stop`, records only at `main` `48993089`; `se-ABC-291` `…a8daf408` § 1): **`ABC-291` changes the evaluation under these rows, so A0 takes this form there. The rows bind and no decision moves.***
+- **A0-3 stays on the session, in the form above.** The session has no door. Six rows, three constants in `src/uci-session.test.ts`, each literal exact:
+
+  | line | rows | old | new |
+  |---|---|---|---|
+  | `D8` | `level` ×2, `simple-tournament` `go movetime 200`, `uci-clock-mode` `go movetime 200` | `info depth 8 score cp 45 nodes 196681 time 201 nps 978512 pv c3d5` | `info depth 8 score cp 74 nodes 196681 time 201 nps 978512 pv c3d5` |
+  | `D7` | `simple-tournament` `go wtime 8000 btime 8000 movestogo 40` | `info depth 7 score cp 43 nodes 69705 time 76 nps 917171 pv c3d5` | `info depth 7 score cp 88 nodes 69705 time 76 nps 917171 pv c3d5` |
+  | `D6` | `uci-clock-mode` `go depth 6` | `info depth 6 score cp 87 nodes 10513 time 17 nps 618412 pv c3d5` | `info depth 6 score cp 99 nodes 10614 time 17 nps 624353 pv c3d5` |
+
+- **Nothing else moves.** The title, `bestmove c3d5`, the default-lane "hands no soft limit" rows and the `69_705` in D3's row stay. No row retires, because A0-3's sentence is still true.
+- **What still reads a leak on this tree, by arithmetic on `virtualClock(1)`, not by a run:**
+  - **`D7`:** D3's row is the leak's own line, at the same budget. It reads under 69 705 and is green at the tip.
+  - **`D8`:** a leak gives a soft limit of 200 / 2.3 = 86.96. Depth 8 ends at 81 563 nodes (`ADR-0075` K0 (c)), after 86 clock reads, so the loop's next read returns 87 and iteration 9 does not start. The line would read 81 563 nodes against 196 681. **The margin is one clock read.** On the bundle's tree it was 14. `depth` and the move would not change.
+  - **`D6`:** no clock reaches it, so it is a tree pin. "Hands no soft limit" carries that row's claim, as before.
+- **A0-1 and A0-2.** Their all-on figures re-point to `chooseMoveWithoutPawnShape`, unchanged, because their other side is an older door (`ADR-0075` d4). A0-1 keeps the `softMs` absent ≡ 1 relation on `chooseMove`. A0-2 keeps no shipped line: a stepping clock's stop follows the tree (`e76d22f3`). The door shares `deepen`, so the row still reads W1 off there, and `D8` above carries position-6 at 200 on the shipped session.
+- **D12 item 6 stands:** no row hands a door `softMs`. A0-1's `softMs: 1` read stays on `chooseMove`.
+- **F1 does not fire.** The figures moved because the evaluation did, not because W1 acted.
+- **These lines bind on `ABC-291`'s production files at `63af973e`.** A fix that moves a production line voids them, and the new lines come back to the Architect before they land.
 
 ### D9. A1 and A2: fixtures, corpus and clock
 
