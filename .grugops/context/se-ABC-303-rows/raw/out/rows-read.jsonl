@@ -1,0 +1,25 @@
+{"row":"E1 head","budget":5,"move":"c3d5","score":85,"depth":3,"nodes":1262}
+{"row":"E1 base","budget":5,"move":"c3d5","score":85,"depth":3,"nodes":2121}
+{"row":"E1 N(3)","move":"c3d5","score":85,"depth":3,"nodes":1262}
+{"row":"E1 N(4)","move":"c3d5","score":85,"depth":4,"nodes":2197}
+{"row":"A0-2 door","name":"kiwipete","budgetMs":50,"move":"e2a6","score":-59,"depth":5,"nodes":47384}
+{"row":"A0-2 on","name":"kiwipete","budgetMs":50,"move":"e2a6","score":-75,"depth":5,"nodes":47384}
+{"row":"A0-2 door","name":"kiwipete","budgetMs":200,"move":"e2a6","score":-59,"depth":6,"nodes":199960}
+{"row":"A0-2 on","name":"kiwipete","budgetMs":200,"move":"e2a6","score":-101,"depth":6,"nodes":199960}
+{"row":"A0-2 door","name":"position-6","budgetMs":50,"move":"c3d5","score":79,"depth":7,"nodes":44105}
+{"row":"A0-2 on","name":"position-6","budgetMs":50,"move":"c3d5","score":43,"depth":7,"nodes":44105}
+{"row":"A0-2 door","name":"position-6","budgetMs":200,"move":"c3d5","score":71,"depth":8,"nodes":196681}
+{"row":"A0-2 on","name":"position-6","budgetMs":200,"move":"c3d5","score":45,"depth":8,"nodes":196681}
+{"row":"A0-1 softMs absent","name":"kiwipete","move":"e2a6","score":-101,"depth":6,"nodes":104780}
+{"row":"A0-1 softMs 1","name":"kiwipete","move":"e2a6","score":-101,"depth":6,"nodes":104780}
+{"row":"A0-1 softMs absent","name":"kiwipete","move":"e2a6","score":-105,"depth":7,"nodes":244677}
+{"row":"A0-1 softMs 1","name":"kiwipete","move":"e2a6","score":-105,"depth":7,"nodes":244677}
+{"row":"A0-1 softMs absent","name":"kiwipete","move":"e2a6","score":-114,"depth":8,"nodes":573518}
+{"row":"A0-1 softMs 1","name":"kiwipete","move":"e2a6","score":-114,"depth":8,"nodes":573518}
+{"row":"A0-1 softMs absent","name":"position-6","move":"c3d5","score":87,"depth":6,"nodes":10513}
+{"row":"A0-1 softMs 1","name":"position-6","move":"c3d5","score":87,"depth":6,"nodes":10513}
+{"row":"A0-1 softMs absent","name":"position-6","move":"c3d5","score":43,"depth":7,"nodes":39268}
+{"row":"A0-1 softMs 1","name":"position-6","move":"c3d5","score":43,"depth":7,"nodes":39268}
+{"row":"A0-1 softMs absent","name":"position-6","move":"c3d5","score":45,"depth":8,"nodes":94911}
+{"row":"A0-1 softMs 1","name":"position-6","move":"c3d5","score":45,"depth":8,"nodes":94911}
+{"row":"D5","count":3,"lines":["info string partial depth 3","info depth 2 score cp 475 nodes 3125 time 6 nps 520833 pv a1f6","bestmove a1f6"]}

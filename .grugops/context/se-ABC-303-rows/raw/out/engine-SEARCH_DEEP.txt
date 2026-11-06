@@ -1,0 +1,11 @@
+
+ RUN  v4.1.12 <home>/<repo>/.claude/worktrees/se-ABC-303
+
+ ✓ src/engine.test.ts (79 tests) 397ms
+
+ Test Files  1 passed (1)
+      Tests  79 passed (79)
+   Start at  12:51:12
+   Duration  651ms (transform 0ms, setup 0ms, import 188ms, tests 397ms, environment 0ms)
+
+JSON report written to <scratch>

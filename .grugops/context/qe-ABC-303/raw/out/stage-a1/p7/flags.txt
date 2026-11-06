@@ -1,0 +1,7 @@
+samples 87; sample rows naming a foreign vitest 241; projects ['marketing']
+foreign_cpu_s, scored runs: median 15.40, min 6.10, max 36.76
+flagged rounds: {1: ['H:busy-ps+sampled+cpu', 'H2:busy-ps+sampled', 'B:busy-ps+sampled'], 2: ['H2:busy-ps+sampled', 'B:busy-ps+sampled', 'H:busy-ps+sampled'], 3: ['B:busy-ps+sampled', 'H:busy-ps+sampled', 'H2:busy-ps+sampled'], 4: ['H:busy-ps+sampled', 'H2:busy-ps+sampled', 'B:busy-ps+sampled'], 5: ['H2:busy-ps+sampled', 'B:busy-ps+sampled', 'H:busy-ps+sampled'], 6: ['B:busy-ps+sampled', 'H:busy-ps+sampled', 'H2:busy-ps+sampled'], 7: ['H:busy-ps+sampled+cpu', 'H2:busy-ps+sampled', 'B:busy-ps+sampled+cpu'], 8: ['H2:busy-ps+sampled+cpu', 'B:busy-ps+sampled', 'H:busy-ps+sampled+cpu']}
+complete scored rounds 8, unflagged 0
+B: none
+H: none
+H2: none

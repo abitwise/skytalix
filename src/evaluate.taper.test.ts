@@ -386,7 +386,14 @@ describe("ABC-269 — one switch, taper, and three test-only doors (ADR-0064 dec
       "search",
       "searchWithoutSeePruning",
       "searchWithoutTaper",
-      ["searchWithoutHistory", "searchWithoutSeeOrdering", "searchWithoutBundle"],
+      [
+        "searchWithoutMoveCountPruning",
+        "searchWithoutCountermove",
+        "searchWithoutQuietBundle",
+        "searchWithoutHistory",
+        "searchWithoutSeeOrdering",
+        "searchWithoutBundle",
+      ],
     ],
     [
       "engine",
@@ -395,6 +402,9 @@ describe("ABC-269 — one switch, taper, and three test-only doors (ADR-0064 dec
       "chooseMoveWithoutSeePruning",
       "chooseMoveWithoutTaper",
       [
+        "chooseMoveWithoutMoveCountPruning",
+        "chooseMoveWithoutCountermove",
+        "chooseMoveWithoutQuietBundle",
         "chooseMoveWithoutHistory",
         "chooseMoveWithoutSeeOrdering",
         "chooseMoveWithoutAspiration",
@@ -724,8 +734,8 @@ describe("ABC-269 cut C1 P5 — the guard: no per-call phase walk on the shipped
       2,
     );
     expect(code(SOURCES.quiescence).match(/phaseAfterMove\(phase, move\)/g)).toHaveLength(1);
-    expect(code(SOURCES.search)).toContain("killers, keys, true, phase, );");
-    expect(code(SOURCES.engine)).toContain("budget, true, phase, );");
+    expect(code(SOURCES.search)).toContain("killers, keys, true, phase, null, );");
+    expect(code(SOURCES.engine)).toContain("budget, true, phase, null, );");
   });
 
   it("the carrier is an argument: no phase on Position, UndoRecord or module state", () => {

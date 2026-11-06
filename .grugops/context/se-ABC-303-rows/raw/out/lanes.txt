@@ -1,0 +1,4 @@
+npm test exit=0 seconds=9
+ENGINE_DEEP src/engine.test.ts exit=0 seconds=269       Tests  105 passed (105)
+SEARCH_DEEP src/engine.test.ts exit=0 seconds=0       Tests  79 passed (79)
+ENGINE_DEEP src/uci-session.test.ts exit=0 seconds=342       Tests  265 passed (265)

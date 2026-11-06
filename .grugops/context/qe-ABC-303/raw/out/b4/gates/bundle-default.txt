@@ -1,0 +1,48 @@
+
+ RUN  v4.1.12 <repo>/.claude/worktrees/qe-ABC-303
+
+ ✓ src/search.bundle.test.ts > ABC-283 (h) — the history table (ADR-0063 decisions 1-5) > is 2 × 64 × 64 cells of 32 bits: 32 768 bytes 1ms
+ ✓ src/search.bundle.test.ts > ABC-283 (h) — the history table (ADR-0063 decisions 1-5) > a quiet cutoff gives +d² to the cutter and -d² to each quiet move before it; a capture cutter changes nothing 7ms
+ ✓ src/search.bundle.test.ts > ABC-283 (h) — the history table (ADR-0063 decisions 1-5) > gravity bounds every cell to [-16 384, 16 384], with no clamp: the bound is a fixed point 0ms
+ ✓ src/search.bundle.test.ts > ABC-283 (h) — the history table (ADR-0063 decisions 1-5) > at a futile node a move futility skipped gets no malus; the first move, always searched, does 0ms
+ ✓ src/search.bundle.test.ts > ABC-283 (h) — the history table (ADR-0063 decisions 1-5) > orders the quiet moves by max(0, cell), below both killers, ties in generation order; off, generation order 0ms
+ ✓ src/search.bundle.test.ts > ABC-283 (h) — the history table (ADR-0063 decisions 1-5) > is cleared at every search() entry and chooseMove call, and no door writes it 107ms
+ ✓ src/search.bundle.test.ts > ABC-283 (h) — the history table (ADR-0063 decisions 1-5) > source: each negamax updates once, at its beta cutoff, behind the switch; the clear sits beside clearTable; quiescence never touches it 2ms
+ ✓ src/search.bundle.test.ts > ABC-283 (s) — SEE orders the losing captures after the killers (ADR-0065 decisions 2-4) > a capture below -50 sorts after both killers and before every other quiet move; -10 stays a capture 1ms
+ ✓ src/search.bundle.test.ts > ABC-283 (s) — SEE orders the losing captures after the killers (ADR-0065 decisions 2-4) > the hash move stays first even when it is a losing capture 0ms
+ ✓ src/search.bundle.test.ts > ABC-283 (s) — SEE orders the losing captures after the killers (ADR-0065 decisions 2-4) > with the switch off the full-width search computes no SEE; on, it does 58ms
+ ✓ src/search.bundle.test.ts > ABC-283 (s) — SEE orders the losing captures after the killers (ADR-0065 decisions 2-4) > source: every full-width call site hands the position only when seeOrdering is on 1ms
+ ✓ src/search.bundle.test.ts > ABC-283 (a) — aspiration at the root of chooseMove (ADR-0066 decisions 1-7) > iterations 1-4 are the door's, node for node, and store no root lower bound 43ms
+ ✓ src/search.bundle.test.ts > ABC-283 (a) — aspiration at the root of chooseMove (ADR-0066 decisions 1-7) > a non-mate fail high: iteration 5 fails high and is re-searched to the door's exact move and score; the door stores no root lower bound 53ms
+ ✓ src/search.bundle.test.ts > ABC-283 (a) — aspiration at the root of chooseMove (ADR-0066 decisions 1-7) > a mate found at iteration 6: iteration 6 fails high and is re-searched to the door's exact move and score; the door stores no root lower bound 33ms
+ ✓ src/search.bundle.test.ts > ABC-283 (a) — aspiration at the root of chooseMove (ADR-0066 decisions 1-7) > source: the window, the mate guard, the widening and the gate 1ms
+ ✓ src/search.bundle.test.ts > ABC-303 (m) — move-count pruning (ADR-0072 decisions 1-4) > T = 4 / 7 / 12 at remaining depth 1 / 2 / 3, and none at 0 or 4 0ms
+ ✓ src/search.bundle.test.ts > ABC-303 (m) — move-count pruning (ADR-0072 decisions 1-4) > never at the root 0ms
+ ✓ src/search.bundle.test.ts > ABC-303 (m) — move-count pruning (ADR-0072 decisions 1-4) > only with a null window 0ms
+ ✓ src/search.bundle.test.ts > ABC-303 (m) — move-count pruning (ADR-0072 decisions 1-4) > only with alpha and beta strictly inside the mate floor 0ms
+ ✓ src/search.bundle.test.ts > ABC-303 (m) — move-count pruning (ADR-0072 decisions 1-4) > never in check 0ms
+ ✓ src/search.bundle.test.ts > ABC-303 (m) — move-count pruning (ADR-0072 decisions 1-4) > needs three non-pawn pieces of the side to move: pawns, the king and the other side's pieces do not count 0ms
+ ✓ src/search.bundle.test.ts > ABC-303 (m) — move-count pruning (ADR-0072 decisions 1-4) > moveCountFrom is the first key-0 index straight after the sort, and the count when no key is 0 0ms
+ ✓ src/search.bundle.test.ts > ABC-303 (m) — move-count pruning (ADR-0072 decisions 1-4) > the malus: from the first skipped index a move the rule skipped keeps its cell; a checking move, searched, does not 0ms
+ ✓ src/search.bundle.test.ts > ABC-303 (m) — move-count pruning (ADR-0072 decisions 1-4) > source: both recursions read the node test and the tail once, skip by the move test, and keep the index 0ms
+ ✓ src/search.bundle.test.ts > ABC-303 (c) — the countermove (ADR-0073 decisions 1-6) > is 12 × 64 cells of 32 bits: 3 072 bytes 0ms
+ ✓ src/search.bundle.test.ts > ABC-303 (c) — the countermove (ADR-0073 decisions 1-6) > a quiet cutter overwrites the previous move's cell; a capture cutter, or no previous move, writes nothing 3ms
+ ✓ src/search.bundle.test.ts > ABC-303 (c) — the countermove (ADR-0073 decisions 1-6) > the read keys on the coloured piece and the to-square: a different piece, colour or square is another cell 0ms
+ ✓ src/search.bundle.test.ts > ABC-303 (c) — the countermove (ADR-0073 decisions 1-6) > is cleared at every search() entry and chooseMove call with the switch on; a door with it off leaves the table 15ms
+ ✓ src/search.bundle.test.ts > ABC-303 (c) — the countermove (ADR-0073 decisions 1-6) > the tier: after both killers, above the losing captures and every history cell; a higher tier keeps its place 0ms
+ ✓ src/search.bundle.test.ts > ABC-303 (c) — the countermove (ADR-0073 decisions 1-6) > source: the cell is read behind the switch, nothing at the root or after a null move; one write, one clear 1ms
+ ✓ src/search.bundle.test.ts > ABC-303 — the doors (ADR-0072 decision 6, ADR-0073 decision 7) > search: moveCount true, countermove true, everything older as shipped 0ms
+ ✓ src/search.bundle.test.ts > ABC-303 — the doors (ADR-0072 decision 6, ADR-0073 decision 7) > searchWithoutMoveCountPruning: moveCount false, countermove true, everything older as shipped 0ms
+ ✓ src/search.bundle.test.ts > ABC-303 — the doors (ADR-0072 decision 6, ADR-0073 decision 7) > searchWithoutCountermove: moveCount true, countermove false, everything older as shipped 0ms
+ ✓ src/search.bundle.test.ts > ABC-303 — the doors (ADR-0072 decision 6, ADR-0073 decision 7) > searchWithoutQuietBundle: moveCount false, countermove false, everything older as shipped 0ms
+ ✓ src/search.bundle.test.ts > ABC-303 — the doors (ADR-0072 decision 6, ADR-0073 decision 7) > chooseMove: moveCount true, countermove true, everything older as shipped 0ms
+ ✓ src/search.bundle.test.ts > ABC-303 — the doors (ADR-0072 decision 6, ADR-0073 decision 7) > chooseMoveWithoutMoveCountPruning: moveCount false, countermove true, everything older as shipped 0ms
+ ✓ src/search.bundle.test.ts > ABC-303 — the doors (ADR-0072 decision 6, ADR-0073 decision 7) > chooseMoveWithoutCountermove: moveCount true, countermove false, everything older as shipped 0ms
+ ✓ src/search.bundle.test.ts > ABC-303 — the doors (ADR-0072 decision 6, ADR-0073 decision 7) > chooseMoveWithoutQuietBundle: moveCount false, countermove false, everything older as shipped 0ms
+ ✓ src/search.bundle.test.ts > ABC-303 — the doors (ADR-0072 decision 6, ADR-0073 decision 7) > every other door in both modules turns both parts off 1ms
+
+ Test Files  1 passed (1)
+      Tests  39 passed (39)
+   Start at  18:04:04
+   Duration  582ms (transform 0ms, setup 0ms, import 167ms, tests 333ms, environment 0ms)
+

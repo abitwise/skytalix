@@ -1,0 +1,48 @@
+
+ RUN  v4.1.12 <repo>/.claude/worktrees/qe-ABC-303
+
+heap-guard: refused. This run's V8 heap_size_limit is 4192 MiB, above the ONE-FILE row of 496 MiB (1 test file; ABC-173, ADR-0008 addendum 2026-10-19). Prefix the command with NODE_OPTIONS=--max-old-space-size=400, as AGENTS.md spells it.
+⎯⎯⎯⎯⎯⎯ Unhandled Errors ⎯⎯⎯⎯⎯⎯
+
+Vitest caught 1 unhandled error during the test run.
+This might cause false positive tests. Resolve unhandled errors to make sure your tests are not affected.
+
+⎯⎯⎯⎯⎯ Heap Guard Refusal ⎯⎯⎯⎯⎯
+Error: heap-guard: refused. This run's V8 heap_size_limit is 4192 MiB, above the ONE-FILE row of 496 MiB (1 test file; ABC-173, ADR-0008 addendum 2026-10-19). Prefix the command with NODE_OPTIONS=--max-old-space-size=400, as AGENTS.md spells it.
+ ❯ admit tools/grugops/heap-guard.js:70:11
+ ❯ guard tools/grugops/heap-guard.js:83:5
+ ❯ Object.setup tools/grugops/heap-guard.js:94:3
+ ❯ TestProject._initializeGlobalSetup ../../../node_modules/vitest/dist/chunks/cli-api.B0Pz1_R7.js:10813:50
+ ❯ Vitest.initializeGlobalSetup ../../../node_modules/vitest/dist/chunks/cli-api.B0Pz1_R7.js:13812:35
+ ❯ ../../../node_modules/vitest/dist/chunks/cli-api.B0Pz1_R7.js:13655:6
+ ❯ ../../../node_modules/vitest/dist/chunks/cli-api.B0Pz1_R7.js:13684:11
+ ❯ ../../../node_modules/vitest/dist/chunks/cli-api.B0Pz1_R7.js:13546:19
+ ❯ startVitest ../../../node_modules/vitest/dist/chunks/cli-api.B0Pz1_R7.js:14621:8
+ ❯ start ../../../node_modules/vitest/dist/chunks/cac.DzDtg8hz.js:2340:15
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+
+
+ Test Files  no tests
+      Tests  no tests
+     Errors  1 error
+   Start at  14:04:37
+   Duration  1ms (transform 0ms, setup 0ms, import 0ms, tests 0ms, environment 0ms)
+
+
+⎯⎯⎯⎯⎯⎯ Unhandled Error ⎯⎯⎯⎯⎯⎯⎯
+Error: heap-guard: refused. This run's V8 heap_size_limit is 4192 MiB, above the ONE-FILE row of 496 MiB (1 test file; ABC-173, ADR-0008 addendum 2026-10-19). Prefix the command with NODE_OPTIONS=--max-old-space-size=400, as AGENTS.md spells it.
+ ❯ admit tools/grugops/heap-guard.js:70:11
+ ❯ guard tools/grugops/heap-guard.js:83:5
+ ❯ Object.setup tools/grugops/heap-guard.js:94:3
+ ❯ TestProject._initializeGlobalSetup ../../../node_modules/vitest/dist/chunks/cli-api.B0Pz1_R7.js:10813:50
+ ❯ Vitest.initializeGlobalSetup ../../../node_modules/vitest/dist/chunks/cli-api.B0Pz1_R7.js:13812:35
+ ❯ ../../../node_modules/vitest/dist/chunks/cli-api.B0Pz1_R7.js:13655:6
+ ❯ ../../../node_modules/vitest/dist/chunks/cli-api.B0Pz1_R7.js:13684:11
+ ❯ ../../../node_modules/vitest/dist/chunks/cli-api.B0Pz1_R7.js:13546:19
+ ❯ startVitest ../../../node_modules/vitest/dist/chunks/cli-api.B0Pz1_R7.js:14621:8
+ ❯ start ../../../node_modules/vitest/dist/chunks/cac.DzDtg8hz.js:2340:15
+
+
+
+

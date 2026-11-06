@@ -1,0 +1,2 @@
+hold start 2026-11-06T17:08:12Z; wait-clear: 0 s, load1 0.39; tmp free kB 3997132
+n8 done: rounds 9, complete scored rounds 8, 2026-11-06T17:12:20Z, hold 248 s; tmp free kB 3965692

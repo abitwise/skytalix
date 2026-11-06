@@ -481,8 +481,10 @@ describe("both recursions test the node once, with the entry window, after the t
   // `ABC-283`: search.ts's third `futileMove(` is the history update (`recordHistoryCutoff`), which
   // asks it again so a skipped move gets no malus (`ADR-0063` decision 2); it skips nothing.
   const MODULES = [
-    { path: "./search.ts", depth: "depth", on: "switches", calls: 2, moveCalls: 3 },
-    { path: "./engine.ts", depth: "remaining", on: "budget", calls: 1, moveCalls: 1 },
+    // `moveCalls` since `ABC-303`: `futileMove` is also the move-count rule's move test, in each
+    // recursion and in the malus (`ADR-0072` decisions 3 and 4).
+    { path: "./search.ts", depth: "depth", on: "switches", calls: 2, moveCalls: 5 },
+    { path: "./engine.ts", depth: "remaining", on: "budget", calls: 1, moveCalls: 2 },
   ];
 
   for (const { path, depth, on, calls, moveCalls } of MODULES) {
@@ -513,7 +515,7 @@ describe("both recursions test the node once, with the entry window, after the t
       expect(loop, path).toBeGreaterThan(at);
       const body = flat.slice(loop, flat.indexOf("storeEntry(", loop));
       const skip =
-        "{ if (futile && futileMove(position, move, index)) { index++; continue; } const reduction";
+        "{ if (futile && futileMove(position, move, index)) { index++; continue; } if (moveLimit > 0) {";
       expect(body, path).toContain(skip);
       // Nothing between the node test and the loop makes a move or stores.
       const between = flat.slice(at, loop);
@@ -570,7 +572,14 @@ describe("the doors — searchWithoutFutility and chooseMoveWithoutFutility turn
       path: "./search.ts",
       call: "searchRoot(position, depth, {",
       on: "search",
-      bundle: ["searchWithoutHistory", "searchWithoutSeeOrdering", "searchWithoutBundle"],
+      bundle: [
+        "searchWithoutMoveCountPruning",
+        "searchWithoutCountermove",
+        "searchWithoutQuietBundle",
+        "searchWithoutHistory",
+        "searchWithoutSeeOrdering",
+        "searchWithoutBundle",
+      ],
       see: "searchWithoutSeePruning",
       tap: "searchWithoutTaper",
       least: 17,
@@ -580,6 +589,9 @@ describe("the doors — searchWithoutFutility and chooseMoveWithoutFutility turn
       call: "deepen(position, options, {",
       on: "chooseMove",
       bundle: [
+        "chooseMoveWithoutMoveCountPruning",
+        "chooseMoveWithoutCountermove",
+        "chooseMoveWithoutQuietBundle",
         "chooseMoveWithoutHistory",
         "chooseMoveWithoutSeeOrdering",
         "chooseMoveWithoutAspiration",

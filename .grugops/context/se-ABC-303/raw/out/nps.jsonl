@@ -1,0 +1,4 @@
+{"arm":"OFF","nps":{"kiwipete":689401.4860625347,"position-6":626453.1768390278},"ratioToDoor":{"kiwipete":1,"position-6":1}}
+{"arm":"ALL","nps":{"kiwipete":702283.050636188,"position-6":594759.9878499808},"ratioToDoor":{"kiwipete":0.9817,"position-6":1.0533}}
+{"arm":"NOP4","nps":{"kiwipete":690913.8784542867,"position-6":623376.6061271544},"ratioToDoor":{"kiwipete":0.9978,"position-6":1.0049}}
+{"arm":"NOCM","nps":{"kiwipete":702697.8744681805,"position-6":599293.5503728064},"ratioToDoor":{"kiwipete":0.9811,"position-6":1.0453}}

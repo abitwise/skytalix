@@ -578,17 +578,25 @@ describe("A6 — no move is selected without a caller-supplied depth", () => {
     // recursions share (`ADR-0063` decisions 1-3, 6): `clearHistory` zeroes it, `recordHistoryCutoff`
     // updates it at a cutoff it is handed, `historyByteLength` is a number for `NFR-009` (a)'s byte
     // sum, and `historyScore` reads one cell for a move it is handed. None picks a move.
+    // ABC-303 added seven (`ADR-0072` d4, d6, `ADR-0073` d7): the doors `searchWithoutMoveCountPruning`,
+    // `searchWithoutCountermove` and the all-off `searchWithoutQuietBundle`; `moveCountNode` and
+    // `moveCountFrom`, the rule's two pure tests; `countermoveByteLength` for `NFR-009` (a); and
+    // `countermoveAt`, which reads one cell for a move it is handed. None picks a move.
     // Still nothing here picks a move without being told how deep.
     expect(Object.keys(searchModule).sort()).toEqual([
       "KEY_ARRAY_CAPACITY",
       "KillerTable",
       "MATE_SCORE",
       "clearHistory",
+      "countermoveAt",
+      "countermoveByteLength",
       "futileMove",
       "futilityNode",
       "historyByteLength",
       "historyScore",
       "lateMoveReduction",
+      "moveCountFrom",
+      "moveCountNode",
       "nullMoveReduction",
       "orderMoves",
       "orderScratchByteLength",
@@ -596,9 +604,11 @@ describe("A6 — no move is selected without a caller-supplied depth", () => {
       "repeatsInPath",
       "search",
       "searchWithoutBundle",
+      "searchWithoutCountermove",
       "searchWithoutFutility",
       "searchWithoutHistory",
       "searchWithoutKillers",
+      "searchWithoutMoveCountPruning",
       "searchWithoutNullMove",
       "searchWithoutOrdering",
       "searchWithoutPruning",
@@ -606,6 +616,7 @@ describe("A6 — no move is selected without a caller-supplied depth", () => {
       "searchWithoutPvsOrReductions",
       "searchWithoutQuiescence",
       "searchWithoutQuiescenceEvasions",
+      "searchWithoutQuietBundle",
       "searchWithoutQuietPromotions",
       "searchWithoutReductions",
       "searchWithoutSeeOrdering",

@@ -1,0 +1,8 @@
+{"refs":["ABC-303","ABC-286","ABC-288","EPIC-011","ADR-0056","ADR-0072","ADR-0073","R-BUNDLE-1","R-283-LMR","NFR-005","NFR-008","NFR-009","orch-2026-10-30a/20261104T222400Z-orchestrator-decision-3c67d3c4","orch-2026-10-30a/20261103T221607Z-orchestrator-decision-42c82347"],
+"notes":[
+{"kind":"decision","confidence":"high on the form, which reproduces the probe to the count","bodyFile":"dec.md"},
+{"kind":"observation","confidence":"high: read as run; R5 is a timing; P6 not read; -t lines not run singly","bodyFile":"obs-read.md"},
+{"kind":"observation","confidence":"high on the list; UNKNOWN - verify on whether ABC-279 A3 (a) may re-point, which is the Architect's","bodyFile":"obs-rows.md"},
+{"kind":"observation","confidence":"medium: ungraded, spread wider than the budget","bodyFile":"obs-lane.md"},
+{"kind":"artifact-ref","confidence":"high","bodyFile":"art.md"}
+]}

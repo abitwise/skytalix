@@ -1,0 +1,46 @@
+
+ RUN  v4.1.12 <home>/<repo>/.claude/worktrees/se-ABC-303
+
+stdout | src/uci-session.test.ts > ABC-220 A11 — five searches at T = 22 000 on the real clock [deep, ENGINE_DEEP=1] > start: returns in < 22 500 ms of wall
+ABC-220 A11 start: wall 22000.6 ms; info depth 13 score cp 16 nodes 11063316 time 22000 nps 502878 pv b1c3
+
+stdout | src/uci-session.test.ts > ABC-220 A11 — five searches at T = 22 000 on the real clock [deep, ENGINE_DEEP=1] > after 1. e4 e5: returns in < 22 500 ms of wall
+ABC-220 A11 after 1. e4 e5: wall 22000.7 ms; info depth 13 score cp 38 nodes 10766365 time 22001 nps 489358 pv g1f3
+
+stdout | src/uci-session.test.ts > ABC-220 A11 — five searches at T = 22 000 on the real clock [deep, ENGINE_DEEP=1] > italian: returns in < 22 500 ms of wall
+ABC-220 A11 italian: wall 22001.2 ms; info depth 13 score cp 15 nodes 11084837 time 22001 nps 503833 pv f3g5
+
+stdout | src/uci-session.test.ts > ABC-220 A11 — five searches at T = 22 000 on the real clock [deep, ENGINE_DEEP=1] > kiwipete: returns in < 22 500 ms of wall
+ABC-220 A11 kiwipete: wall 22000.0 ms; info depth 12 score cp -146 nodes 13783320 time 22000 nps 626515 pv e2a6
+
+stdout | src/uci-session.test.ts > ABC-220 A11 — five searches at T = 22 000 on the real clock [deep, ENGINE_DEEP=1] > cpw position 4: returns in < 22 500 ms of wall
+ABC-220 A11 cpw position 4: wall 22001.7 ms; info depth 15 score cp -446 nodes 15638984 time 22001 nps 710831 pv c4c5
+
+stdout | src/uci-session.test.ts > ABC-220 A11 — five searches at T = 22 000 on the real clock [deep, ENGINE_DEEP=1] > reports the max wall and its excess over 22 000 ms (the overshoot, against AR-NFR004-A)
+ABC-220 A11 max wall 22001.7 ms, excess over 22 000 ms 1.7 ms
+
+stdout | src/uci-session.test.ts > ABC-221 A10 — four searches at 59 500 ms on the real clock [deep, ENGINE_DEEP=1] > each returns in <= 60 000 ms of wall; memory <= 16 MiB, growth <= 1 MiB; max depth logged
+ABC-221 A10 start: wall 59500.4 ms, depth 15, nodes 29998100, time 59500; heapUsed 9.84 MiB, arrayBuffers 4.74 MiB
+ABC-221 A10 italian: wall 59499.9 ms, depth 14, nodes 30550053, time 59500; heapUsed 9.87 MiB, arrayBuffers 4.74 MiB
+ABC-221 A10 kiwipete: wall 59501.0 ms, depth 13, nodes 37652760, time 59501; heapUsed 9.86 MiB, arrayBuffers 4.74 MiB
+ABC-282 A3 at the ceiling: wall 47746.9 ms, depth 13, nodes 30658188, time 47747
+ABC-221 A10 first read: heapUsed 9.74 MiB, arrayBuffers 4.74 MiB; max wall 59501.0 ms; max completed depth 15 (KEY_ARRAY_CAPACITY tripwire 100: not reached)
+
+ ✓ src/uci-session.test.ts (265 tests) 340981ms
+     ✓ start: returns in < 22 500 ms of wall  22001ms
+     ✓ after 1. e4 e5: returns in < 22 500 ms of wall  22001ms
+     ✓ italian: returns in < 22 500 ms of wall  22002ms
+     ✓ kiwipete: returns in < 22 500 ms of wall  22000ms
+     ✓ cpw position 4: returns in < 22 500 ms of wall  22002ms
+     ✓ each returns in <= 60 000 ms of wall; memory <= 16 MiB, growth <= 1 MiB; max depth logged  227382ms
+     ✓ level, go movetime 200 reads W1 off's lines  338ms
+     ✓ level, go wtime 4000 btime 4000 reads W1 off's lines  329ms
+     ✓ simple-tournament, go movetime 200 reads W1 off's lines  330ms
+     ✓ uci-clock-mode, go movetime 200 reads W1 off's lines  333ms
+
+ Test Files  1 passed (1)
+      Tests  265 passed (265)
+   Start at  12:51:13
+   Duration  341.20s (transform 0ms, setup 0ms, import 155ms, tests 340.98s, environment 0ms)
+
+JSON report written to <scratch>

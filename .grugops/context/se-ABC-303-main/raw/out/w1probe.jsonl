@@ -1,0 +1,10 @@
+{"arm":"shipped","row":"A1(a) head","move":"c3d5","score":85,"depth":3,"nodes":1262}
+{"arm":"shipped","row":"A1(a) base","move":"c3d5","score":85,"depth":4,"nodes":2197}
+{"arm":"shipped","row":"A2(a) head","move":"a1f6","score":475,"depth":2,"nodes":3125,"partial":true}
+{"arm":"shipped","row":"A2(a) soft5","move":"a1f6","score":475,"depth":2,"nodes":3125,"partial":true}
+{"arm":"shipped","row":"A2(a) base","move":"a1e5","score":484,"depth":2,"nodes":3125}
+{"arm":"allOff","row":"A1(a) head","move":"c3d5","score":85,"depth":3,"nodes":1514}
+{"arm":"allOff","row":"A1(a) base","move":"c3d5","score":85,"depth":3,"nodes":3145}
+{"arm":"allOff","row":"A2(a) head","move":"a1b1","score":450,"depth":2,"nodes":3125,"partial":true}
+{"arm":"allOff","row":"A2(a) soft5","move":"a1b1","score":450,"depth":2,"nodes":3125,"partial":true}
+{"arm":"allOff","row":"A2(a) base","move":"a1e5","score":484,"depth":2,"nodes":3125}

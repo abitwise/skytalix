@@ -25,7 +25,7 @@ import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { makeMove, unmakeMove } from "./apply.ts";
 import {
-  chooseMove,
+  type chooseMove,
   chooseMoveWithoutBundle,
   chooseMoveWithoutSeePruning,
   type EngineChoice,
@@ -442,7 +442,9 @@ describe("ABC-279 — one switch, seePruning, and two test-only doors (ADR-0069 
         const found = literal.match(/seePruning: (true|false),/g);
         const on =
           entry === shipped ||
-          /^(search|chooseMove)Without(History|SeeOrdering|Aspiration|Bundle)$/.test(entry);
+          /^(search|chooseMove)Without(MoveCountPruning|Countermove|QuietBundle|History|SeeOrdering|Aspiration|Bundle)$/.test(
+            entry,
+          );
         expect(found, entry).toEqual([on ? "seePruning: true," : "seePruning: false,"]);
       }
       const strip = (literal: string): string =>
@@ -558,8 +560,10 @@ if (process.env.SEARCH_DEEP === "1") {
       expect(corpus()).toHaveLength(190);
     });
 
-    // Both rows' shipped side is the all-off door, one rung above Q1's: `ADR-0069` d11's dated line
-    // of 2026-11-04 (`ADR-0072` d7's). Titles and bars stay.
+    // Both rows' shipped side is `ABC-283`'s all-off door, `searchWithoutBundle` /
+    // `chooseMoveWithoutBundle`, one rung above Q1's, not `ABC-303`'s `…WithoutQuietBundle`, which
+    // reads Q1 plus history, SEE ordering and aspiration: `ADR-0069` d11's dated line of 2026-11-04
+    // (`ADR-0072` d7's). Titles and bars stay.
     it("search() against searchWithoutSeePruning at depth 5: >= 93% within 25 cp, none beyond 144, 0 mate sign changes [deep, SEARCH_DEEP=1]", () => {
       bar(
         "search() d5",
@@ -650,7 +654,8 @@ if (process.env.SEARCH_DEEP === "1") {
           return { depth: choice.depth, move: label(choice.move) };
         });
       const door = reach(chooseMoveWithoutSeePruning);
-      const head = reach(chooseMove);
+      // The head is the door, not `chooseMove`: + 0.55 is Q1's level (`ADR-0069` d12's dated line, `QE-304-a`).
+      const head = reach(chooseMoveWithoutBundle);
       const mean = (xs: Array<{ depth: number }>) =>
         xs.reduce((sum, x) => sum + x.depth, 0) / xs.length;
       const deeper = head.filter((x, i) => x.depth > (door[i] as { depth: number }).depth).length;

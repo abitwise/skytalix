@@ -1,0 +1,27 @@
+HOLDS	src/evaluate.test.ts	scores startpos-minus-a-black-knight between +250 and +400 for white	score >= 250	read=-309	rhs=-250	le	slack=59
+HOLDS	src/evaluate.test.ts	scores startpos-minus-a-black-knight between +250 and +400 for white	score <= 400	read=309	rhs=400	le	slack=91
+HOLDS	src/evaluate.test.ts	prefers a white knight on e4 to the same knight on b1		read=-70	rhs=0	strict	slack=69
+HOLDS	src/evaluate.king-mobility.test.ts	g2 removed from f2/g2/h2 scores strictly lower for white (the criterion as written)		read=-141	rhs=0	strict	slack=140
+HOLDS	src/evaluate.king-mobility.test.ts	at EQUAL material too, at phase 24: the g-pawn on g6 instead of g2 scores strictly lower (ABC-270 re-find)		read=-3	rhs=0	strict	slack=2
+HOLDS	src/evaluate.king-mobility.test.ts	the phase-24 twin bites: with the shelter term zeroed, g6 no longer scores lower (red without the term)		read=-12	rhs=0	le	slack=12
+HOLDS	src/evaluate.king-mobility.test.ts	no f-pawn (black f7 remains) scores strictly lower than f2 for white (the criterion as written)		read=-121	rhs=0	strict	slack=120
+HOLDS	src/evaluate.king-mobility.test.ts	at EQUAL material, shelter equal, at phase 24: the f-pawn on e5 (f half-open) scores lower than on f5 (ABC-270 re-find)		read=-2	rhs=0	strict	slack=1
+HOLDS	src/evaluate.king-mobility.test.ts	the phase-24 twin bites: with the half-open term zeroed, e5 no longer scores lower (red without the term)		read=-8	rhs=0	le	slack=8
+HOLDS	src/evaluate.king-mobility.test.ts	white, with substantially more moves at equal material, scores strictly higher		read=-60	rhs=0	strict	slack=59
+HOLDS	src/evaluate.king-mobility.test.ts	never exceeds ±100 cp — on the four-queen rig and over the whole corpus, both colours to move	mobilityTerm(rig) > 0	read=-100	rhs=0	strict	slack=99
+HOLDS	src/evaluate.pawns.test.ts	c3/c4 scores strictly lower than c3/d3 for white, and the gap is <= 50	gap > 0	read=-33	rhs=0	strict	slack=32
+HOLDS	src/evaluate.pawns.test.ts	c3/c4 scores strictly lower than c3/d3 for white, and the gap is <= 50	gap <= 50	read=33	rhs=50	le	slack=17
+HOLDS	src/evaluate.pawns.test.ts	d4 with c3/e3 removed scores strictly lower for white (the criterion as written)		read=-265	rhs=0	strict	slack=264
+HOLDS	src/evaluate.pawns.test.ts	at EQUAL material too: c3/e3 moved to a3/g3, isolating all three, scores strictly lower		read=-63	rhs=0	strict	slack=62
+HOLDS	src/evaluate.pawns.test.ts	d4 with its only neighbour on the LEFT (c3) scores higher than d4 with a3, both isolated		read=-24	rhs=0	strict	slack=23
+HOLDS	src/evaluate.pawns.test.ts	d4 with its only neighbour on the RIGHT (e3) scores higher than d4 with b4, both isolated		read=-2	rhs=0	strict	slack=1
+HOLDS	src/evaluate.pawns.test.ts	a7 scores strictly higher than a5		read=-130	rhs=0	strict	slack=129
+HOLDS	src/evaluate.pawns.test.ts	both score higher than the same a5 pawn stopped by a black pawn on b6, at equal material	a5 > stopped	read=-62	rhs=0	strict	slack=61
+HOLDS	src/evaluate.pawns.test.ts	both score higher than the same a5 pawn stopped by a black pawn on b6, at equal material	a7 > stopped	read=-192	rhs=0	strict	slack=191
+HOLDS	src/evaluate.taper.test.ts	ABC-269 B1 (d) — the king walks: centre beats corner by >= 20 cp on QE's six graded endings	D1	read=-75	rhs=-20	le	slack=55
+HOLDS	src/evaluate.taper.test.ts	ABC-269 B1 (d) — the king walks: centre beats corner by >= 20 cp on QE's six graded endings	D2	read=-34	rhs=-20	le	slack=14
+HOLDS	src/evaluate.taper.test.ts	ABC-269 B1 (d) — the king walks: centre beats corner by >= 20 cp on QE's six graded endings	D3	read=-85	rhs=-20	le	slack=65
+HOLDS	src/evaluate.taper.test.ts	ABC-269 B1 (d) — the king walks: centre beats corner by >= 20 cp on QE's six graded endings	D4	read=-44	rhs=-20	le	slack=24
+HOLDS	src/evaluate.taper.test.ts	ABC-269 B1 (d) — the king walks: centre beats corner by >= 20 cp on QE's six graded endings	D5	read=-55	rhs=-20	le	slack=35
+HOLDS	src/evaluate.taper.test.ts	ABC-269 B1 (d) — the king walks: centre beats corner by >= 20 cp on QE's six graded endings	D6	read=-35	rhs=-20	le	slack=15
+TOTAL rows=26 held=26 minslack=1

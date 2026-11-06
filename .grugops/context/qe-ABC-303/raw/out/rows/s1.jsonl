@@ -1,0 +1,13 @@
+{"row":"S1","name":"kiwipete","d":6,"what":"search","nodes":113828,"base":113828,"score":-59,"baseScore":-59,"move":"e2a6","baseMove":"e2a6","ok":true}
+{"row":"S1","name":"kiwipete","d":6,"what":"chooseMove","nodes":140341,"base":140341,"score":-59,"baseScore":-59,"move":"e2a6","baseMove":"e2a6","ok":true}
+{"row":"S1","name":"kiwipete","d":7,"what":"search","nodes":267078,"base":267078,"score":-82,"baseScore":-82,"move":"d5e6","baseMove":"d5e6","ok":true}
+{"row":"S1","name":"kiwipete","d":7,"what":"chooseMove","nodes":330628,"base":330628,"score":-82,"baseScore":-82,"move":"d5e6","baseMove":"d5e6","ok":true}
+{"row":"S1","name":"kiwipete","d":8,"what":"search","nodes":523847,"base":523847,"score":-89,"baseScore":-89,"move":"d5e6","baseMove":"d5e6","ok":true}
+{"row":"S1","name":"kiwipete","d":8,"what":"chooseMove","nodes":707548,"base":707548,"score":-89,"baseScore":-89,"move":"d5e6","baseMove":"d5e6","ok":true}
+{"row":"S1","name":"position-6","d":6,"what":"search","nodes":29835,"base":29835,"score":87,"baseScore":87,"move":"c3d5","baseMove":"c3d5","ok":true}
+{"row":"S1","name":"position-6","d":6,"what":"chooseMove","nodes":14570,"base":14570,"score":87,"baseScore":87,"move":"c3d5","baseMove":"c3d5","ok":true}
+{"row":"S1","name":"position-6","d":7,"what":"search","nodes":90642,"base":90642,"score":79,"baseScore":79,"move":"c3d5","baseMove":"c3d5","ok":true}
+{"row":"S1","name":"position-6","d":7,"what":"chooseMove","nodes":32165,"base":32165,"score":79,"baseScore":79,"move":"c3d5","baseMove":"c3d5","ok":true}
+{"row":"S1","name":"position-6","d":8,"what":"search","nodes":234214,"base":234214,"score":74,"baseScore":74,"move":"c3d5","baseMove":"c3d5","ok":true}
+{"row":"S1","name":"position-6","d":8,"what":"chooseMove","nodes":101425,"base":101425,"score":71,"baseScore":71,"move":"c3d5","baseMove":"c3d5","ok":true}
+{"S1":12,"of":12}

@@ -1,0 +1,7 @@
+SEARCH_DEEP src/evaluate.passer.test.ts exit=0 seconds=8       Tests  28 passed (28)
+SEARCH_DEEP src/see.test.ts exit=0 seconds=61       Tests  52 passed (52)
+SEARCH_DEEP src/transposition.test.ts exit=0 seconds=13       Tests  40 passed (40)
+ENGINE_DEEP src/transposition.test.ts exit=0 seconds=50       Tests  26 passed (26)
+ENGINE_DEEP src/engine.test.ts exit=1 seconds=287       Tests  12 failed | 93 passed (105)
+SEARCH_DEEP src/engine.test.ts exit=1 seconds=300       Tests  2 failed | 77 passed (79)
+ENGINE_DEEP src/uci-session.test.ts exit=1 seconds=341       Tests  7 failed | 258 passed (265)

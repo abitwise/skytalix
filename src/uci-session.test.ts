@@ -2578,6 +2578,7 @@ describe("ABC-282 — W1 acts in uci-clock-mode under a clock, and nowhere else 
 
   it("D5: a kept move is reported by one line, just before an unchanged info line", () => {
     // `base/b09#8` at a budget of 5 (`src/engine.test.ts` ABC-282 A2 (a)): 1 105 - 1 100 = 5.
+    // `ABC-303`, 2026-11-05 (`…0f8a4f82` U1): pinned from cp 450, a1b1, with A2 (a), the same search.
     const rig = session220({ stub: false, stepMs: 1 });
     rig.send(CLOCK_MODE);
     rig.send("setoption name OwnBook value false");
@@ -2585,8 +2586,8 @@ describe("ABC-282 — W1 acts in uci-clock-mode under a clock, and nowhere else 
     const lines = rig.send("go wtime 1105 btime 1105 movestogo 1");
     expect(lines).toHaveLength(3);
     expect(lines[0]).toBe("info string partial depth 3");
-    expect(lines[1]).toMatch(/^info depth 2 score cp 450 nodes \d+ time \d+ nps \d+ pv a1b1$/);
-    expect(lines[2]).toBe("bestmove a1b1");
+    expect(lines[1]).toMatch(/^info depth 2 score cp 475 nodes \d+ time \d+ nps \d+ pv a1f6$/);
+    expect(lines[2]).toBe("bestmove a1f6");
   });
 
   it("D5: no line without a kept move", () => {
@@ -2618,7 +2619,7 @@ describe("ABC-282 — W1 acts in uci-clock-mode under a clock, and nowhere else 
  * ceiling, is a fourth search: it stops at or past the soft limit and inside the same 60 000.
  */
 if (RUN_ENGINE_DEEP) {
-  describe("ABC-221 A10 — three searches at 59 500 ms on the real clock [deep, ENGINE_DEEP=1]", () => {
+  describe("ABC-221 A10 — four searches at 59 500 ms on the real clock [deep, ENGINE_DEEP=1]", () => {
     it("each returns in <= 60 000 ms of wall; memory <= 16 MiB, growth <= 1 MiB; max depth logged", () => {
       const fixtures: ReadonlyArray<readonly [string, string]> = [
         ["start", START_FEN],
@@ -2721,7 +2722,12 @@ if (RUN_ENGINE_DEEP) {
     }, 360_000);
   });
 
-  /** `ADR-0071` D8, A0-3: `main`'s lines, read on the base before the change (`…aadd2d48`). */
+  /**
+   * `ADR-0071` D8, A0-3: `main`'s lines, read on the base before the change (`…aadd2d48`).
+   * `ABC-303`, 2026-11-05 (`…0f8a4f82` U2): the session has no door, so the lines are pinned on the
+   * bundle's tree. `cp` moves on five, and `go depth 6` is a tree pin; `depth`, `nodes`, `time`,
+   * `nps` and the move stay on the five, and those are what a W1 leak would change.
+   */
   describe("ABC-282 A0-3 — the session's lines where W1 is off [deep, ENGINE_DEEP=1]", () => {
     const POSITION_6 = "r4rk1/1pp1qppp/p1np1n2/2b1p1B1/2B1P1b1/P1NP1N2/1PP1QPPP/R4RK1 w - - 0 10";
     const search = (mode: string, go: string): string[] => {
@@ -2731,9 +2737,9 @@ if (RUN_ENGINE_DEEP) {
       rig.send(`position fen ${POSITION_6}`);
       return rig.send(go);
     };
-    const D8 = "info depth 8 score cp 71 nodes 196681 time 201 nps 978512 pv c3d5";
-    const D7 = "info depth 7 score cp 79 nodes 69705 time 76 nps 917171 pv c3d5";
-    const D6 = "info depth 6 score cp 87 nodes 14570 time 21 nps 693810 pv c3d5";
+    const D8 = "info depth 8 score cp 45 nodes 196681 time 201 nps 978512 pv c3d5";
+    const D7 = "info depth 7 score cp 43 nodes 69705 time 76 nps 917171 pv c3d5";
+    const D6 = "info depth 6 score cp 87 nodes 10513 time 17 nps 618412 pv c3d5";
     const rows: ReadonlyArray<readonly [string, string, string]> = [
       ["level", "go movetime 200", D8],
       ["level", "go wtime 4000 btime 4000", D8],
@@ -2743,7 +2749,7 @@ if (RUN_ENGINE_DEEP) {
       ["uci-clock-mode", "go depth 6", D6],
     ];
     for (const [mode, go, line] of rows) {
-      it(`${mode}, ${go} reads the base's lines`, () => {
+      it(`${mode}, ${go} reads W1 off's lines`, () => {
         expect(search(mode, go)).toEqual([line, "bestmove c3d5"]);
       });
     }

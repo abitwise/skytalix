@@ -1,0 +1,2 @@
+{"head":"ALL","door":"NOP4","maxNodes":47000,"rows":190,"doorMean":6.9,"headMean":7.016,"gain":0.116,"deeper":33,"shallower":13,"moveDiff":20}
+{"head":"ALL","door":"OFF","maxNodes":47000,"rows":190,"doorMean":6.868,"headMean":7.016,"gain":0.148,"deeper":37,"shallower":12,"moveDiff":22}
