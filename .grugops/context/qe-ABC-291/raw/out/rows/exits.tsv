@@ -1,0 +1,14 @@
+k0a	exit=0	secs=12	bytes=1092	errbytes=0	start=2026-11-06T21:06:41Z	load1=3.52->3.52	busy_node_before=2	busy_node_after=1
+k0c	exit=0	secs=5	bytes=1092	errbytes=0	start=2026-11-06T21:06:53Z	load1=3.52->3.47	busy_node_before=1	busy_node_after=1
+k0b	exit=0	secs=265	bytes=8000	errbytes=0	start=2026-11-06T21:06:58Z	load1=3.47->3.54	busy_node_before=1	busy_node_after=0
+floor	exit=0	secs=2	bytes=172	errbytes=0	start=2026-11-06T21:11:23Z	load1=3.54->3.42	busy_node_before=0	busy_node_after=1
+zug	exit=0	secs=4	bytes=567	errbytes=0	start=2026-11-06T21:11:25Z	load1=3.42->3.42	busy_node_before=1	busy_node_after=1
+g1	exit=0	secs=4	bytes=290	errbytes=0	start=2026-11-06T21:11:29Z	load1=3.42->3.30	busy_node_before=1	busy_node_after=1
+reach	exit=0	secs=31	bytes=79	errbytes=0	start=2026-11-06T21:11:33Z	load1=3.30->3.22	busy_node_before=0	busy_node_after=1
+row1632	exit=0	secs=3	bytes=1158	errbytes=0	start=2026-11-06T21:12:04Z	load1=3.22->3.20	busy_node_before=1	busy_node_after=0
+PR2-mirror	exit=0	secs=0	bytes=108	errbytes=0	start=2026-11-06T21:12:07Z	load1=3.20->3.20	busy_node_before=1	busy_node_after=0
+PR3-arith	exit=0	secs=0	bytes=374	errbytes=0	start=2026-11-06T21:12:07Z	load1=3.20->3.20	busy_node_before=1	busy_node_after=1
+PR4-memo	exit=0	secs=1	bytes=90	errbytes=0	start=2026-11-06T21:12:07Z	load1=3.20->3.20	busy_node_before=0	busy_node_after=0
+drift	exit=0	secs=6	bytes=128	errbytes=0	start=2026-11-06T21:12:08Z	load1=3.20->3.10	busy_node_before=1	busy_node_after=0
+k1-run	exit=0	secs=0	bytes=126	errbytes=0	start=2026-11-06T21:12:14Z	load1=3.10->3.10	busy_node_before=1	busy_node_after=1
+DONE 2026-11-06T21:12:14Z

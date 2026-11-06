@@ -1,0 +1,8 @@
+list entries {'1 byte': 2, '2 value': 2, '3 lost fixture': 1, '4 re-point': 25, '5 door join': 21, '6 switch site': 13} total 64 distinct 53
+red on arm T 63
+red inside the list, by group: {'5 door join': 21, '2 value': 2, '3 lost fixture': 1, '4 re-point': 25, '6 switch site': 13} sum 62
+red outside the list: 1
+   tune/tune.test.ts | ABC-239 — tools/tune's source pins the quiet filter's rules record has no seePruning field, read from the source (ADR-0069 d6, test note 5)
+listed, not red on arm T: 2
+   1 byte | evaluate.pawns.test.ts | ABC-235 cut 5 — the pawn memo returns what a fresh pawnStructure returns is a fixed 576 KiB: 2^14 slots o
+   1 byte | transposition.test.ts | A7 — the table holds a fixed 4 MiB, whatever the search stays inside NFR-009's 16 MiB with the key array, 

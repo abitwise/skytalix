@@ -1,0 +1,70 @@
+clean-pawns failed 0 passed 120
+clean-d8 failed 0 passed 16
+flip-left-arm failed 6 passed 114
+   rror score exactly equal, over ABC-076's 184 plus the pawn structures scores every mirrored pair exactly equal
+   ABC-291 K1 (a) — the mirror, Object.is, 0 mismatches G3, TAPER_MIRROR_POSITIONS and 16 pawn-shape positions
+    — the seam by arithmetic, per side (ADR-0075 d1 and d2) N13: exclusion: double step not read, target attacked
+   y arithmetic, per side (ADR-0075 d1 and d2) L4: (b) alone: neighbour two behind, neither connected nor phalanx
+   ABC-291 K1 (c) — the seam by arithmetic, per side (ADR-0075 d1 and d2) N5: (c) alone: enemy on (f-1, R+3)
+   ABC-291 K1 (c) — the seam by arithmetic, per side (ADR-0075 d1 and d2) N6: (c) alone: enemy on (f+1, R+3)
+flip-left-arm-noflip failed 5 passed 115
+   rror score exactly equal, over ABC-076's 184 plus the pawn structures scores every mirrored pair exactly equal
+   ABC-291 K1 (a) — the mirror, Object.is, 0 mismatches G3, TAPER_MIRROR_POSITIONS and 16 pawn-shape positions
+    — the seam by arithmetic, per side (ADR-0075 d1 and d2) N13: exclusion: double step not read, target attacked
+   y arithmetic, per side (ADR-0075 d1 and d2) L4: (b) alone: neighbour two behind, neither connected nor phalanx
+   ABC-291 K1 (c) — the seam by arithmetic, per side (ADR-0075 d1 and d2) N5: (c) alone: enemy on (f-1, R+3)
+stm-sign failed 5 passed 115
+   rror score exactly equal, over ABC-076's 184 plus the pawn structures scores every mirrored pair exactly equal
+   ABC-291 K1 (a) — the mirror, Object.is, 0 mismatches G3, TAPER_MIRROR_POSITIONS and 16 pawn-shape positions
+   m (QE-271-h) evaluate minus the off door is the seam's white minus black, signed for the side to move, exactly
+   h against the seam (QE-271-h) at unequal test halves the part enters the blend, each position at its own phase
+   K1 (h)) the memo: 2^14 slots, doubled and isolated in one word (d5's cut), one shape word, added by the caller
+stm-memo failed 4 passed 116
+   he pawn memo returns what a fresh pawnStructure returns cold then warm, on every position of the walk, depth 1
+   he pawn memo returns what a fresh pawnStructure returns cold then warm, on G3's mirror corpus and every mirror
+   m (QE-271-h) evaluate minus the off door is the seam's white minus black, signed for the side to move, exactly
+   h against the seam (QE-271-h) at unequal test halves the part enters the blend, each position at its own phase
+memo-hit-drops failed 7 passed 113
+   he pawn memo returns what a fresh pawnStructure returns cold then warm, on every position of the walk, depth 1
+   he pawn memo returns what a fresh pawnStructure returns cold then warm, on G3's mirror corpus and every mirror
+   m (QE-271-h) evaluate minus the off door is the seam's white minus black, signed for the side to move, exactly
+   h against the seam (QE-271-h) at unequal test halves the part enters the blend, each position at its own phase
+   shape part included cold miss then hit, each equal to the fresh call, and the shape part is what the seam nets
+   art included a forced collision: two placements on one slot, with different shape parts, each return their own
+   ructure returns, shape part included on then off, and off then on, of one slot: each entry reads its own value
+memo-narrow failed 9 passed 111
+   he pawn memo returns what a fresh pawnStructure returns cold then warm, on every position of the walk, depth 1
+   he pawn memo returns what a fresh pawnStructure returns cold then warm, on G3's mirror corpus and every mirror
+   ure returns is a fixed 576 KiB: 2^14 slots of two 8-byte masks, three 4-byte parts and two 4-byte passer words
+   m (QE-271-h) evaluate minus the off door is the seam's white minus black, signed for the side to move, exactly
+   h against the seam (QE-271-h) at unequal test halves the part enters the blend, each position at its own phase
+   shape part included cold miss then hit, each equal to the fresh call, and the shape part is what the seam nets
+   art included a forced collision: two placements on one slot, with different shape parts, each return their own
+   ructure returns, shape part included on then off, and off then on, of one slot: each entry reads its own value
+   K1 (h)) the memo: 2^14 slots, doubled and isolated in one word (d5's cut), one shape word, added by the caller
+memo-negative failed 10 passed 110
+   rror score exactly equal, over ABC-076's 184 plus the pawn structures scores every mirrored pair exactly equal
+   aves the position byte-identical over the six perft roots and every pawn structure, twice, with the same score
+   he pawn memo returns what a fresh pawnStructure returns cold then warm, on every position of the walk, depth 1
+   he pawn memo returns what a fresh pawnStructure returns cold then warm, on G3's mirror corpus and every mirror
+   ABC-291 K1 (a) — the mirror, Object.is, 0 mismatches G3, TAPER_MIRROR_POSITIONS and 16 pawn-shape positions
+   m (QE-271-h) evaluate minus the off door is the seam's white minus black, signed for the side to move, exactly
+   h against the seam (QE-271-h) at unequal test halves the part enters the blend, each position at its own phase
+   shape part included cold miss then hit, each equal to the fresh call, and the shape part is what the seam nets
+   art included a forced collision: two placements on one slot, with different shape parts, each return their own
+   ructure returns, shape part included on then off, and off then on, of one slot: each entry reads its own value
+leak-level-movetime failed 2 passed 14
+   ck-mode under a clock, and nowhere else (ADR-0071 D1, D3, D5) A0-3: level, go movetime 200 hands no soft limit
+   2 A0-3 — the session's lines where W1 is off [deep, ENGINE_DEEP=1] level, go movetime 200 reads W1 off's lines
+leak-level-clock failed 2 passed 14
+   nder a clock, and nowhere else (ADR-0071 D1, D3, D5) A0-3: level, go wtime 4000 btime 4000 hands no soft limit
+   the session's lines where W1 is off [deep, ENGINE_DEEP=1] level, go wtime 4000 btime 4000 reads W1 off's lines
+leak-movetime failed 5 passed 11
+   r a clock, and nowhere else (ADR-0071 D1, D3, D5) A0-3: simple-tournament, go movetime 200 hands no soft limit
+   nder a clock, and nowhere else (ADR-0071 D1, D3, D5) A0-3: uci-clock-mode, go movetime 200 hands no soft limit
+   -0071 D1, D3, D5) A0-3: uci-clock-mode, go wtime 8000 btime 8000 movestogo 40 movetime 200 hands no soft limit
+    session's lines where W1 is off [deep, ENGINE_DEEP=1] simple-tournament, go movetime 200 reads W1 off's lines
+   the session's lines where W1 is off [deep, ENGINE_DEEP=1] uci-clock-mode, go movetime 200 reads W1 off's lines
+leak-simple-clock failed 2 passed 14
+    else (ADR-0071 D1, D3, D5) A0-3: simple-tournament, go wtime 8000 btime 8000 movestogo 40 hands no soft limit
+    W1 is off [deep, ENGINE_DEEP=1] simple-tournament, go wtime 8000 btime 8000 movestogo 40 reads W1 off's lines

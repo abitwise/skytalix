@@ -1,0 +1,29 @@
+clean-pawns	exit=0	secs=1	 Tests 120 passed (120)
+clean-d8	exit=0	secs=2	 Tests 16 passed | 254 skipped (270)
+planted flip-left-arm
+flip-left-arm	exit=1	secs=0	 Tests 6 failed | 114 passed (120)
+planted flip-left-arm-noflip
+flip-left-arm-noflip	exit=1	secs=1	 Tests 5 failed | 115 passed (120)
+planted stm-sign
+stm-sign	exit=1	secs=1	 Tests 5 failed | 115 passed (120)
+stm-sign-k0c	exit=0	secs=5	
+stm-sign-engine	exit=1	secs=1	 Tests 2 failed | 77 passed (79)
+planted stm-memo
+stm-memo	exit=1	secs=1	 Tests 4 failed | 116 passed (120)
+stm-memo-k0c	exit=0	secs=5	
+stm-memo-engine	exit=1	secs=1	 Tests 1 failed | 78 passed (79)
+planted memo-hit-drops
+memo-hit-drops	exit=1	secs=1	 Tests 7 failed | 113 passed (120)
+planted memo-narrow
+memo-narrow	exit=1	secs=1	 Tests 9 failed | 111 passed (120)
+planted memo-negative
+memo-negative	exit=1	secs=1	 Tests 10 failed | 110 passed (120)
+planted leak-level-movetime
+leak-level-movetime	exit=1	secs=2	 Tests 2 failed | 14 passed | 254 skipped (270)
+planted leak-level-clock
+leak-level-clock	exit=1	secs=3	 Tests 2 failed | 14 passed | 254 skipped (270)
+planted leak-movetime
+leak-movetime	exit=1	secs=2	 Tests 5 failed | 11 passed | 254 skipped (270)
+planted leak-simple-clock
+leak-simple-clock	exit=1	secs=3	 Tests 2 failed | 14 passed | 254 skipped (270)
+DONE copy deleted 2026-11-06T21:26:25Z

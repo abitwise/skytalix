@@ -1,0 +1,12 @@
+== leak-level-movetime
++   "info depth 8 score cp 74 nodes 81563 time 88 nps 926852 pv c3d5",
+-   "info depth 8 score cp 74 nodes 196681 time 201 nps 978512 pv c3d5",
+== leak-level-clock
++   "info depth 8 score cp 74 nodes 81563 time 88 nps 926852 pv c3d5",
+-   "info depth 8 score cp 74 nodes 196681 time 201 nps 978512 pv c3d5",
+== leak-movetime
++   "info depth 8 score cp 74 nodes 81563 time 88 nps 926852 pv c3d5",
+-   "info depth 8 score cp 74 nodes 196681 time 201 nps 978512 pv c3d5",
+== leak-simple-clock
++   "info depth 7 score cp 88 nodes 30620 time 37 nps 827568 pv c3d5",
+-   "info depth 7 score cp 88 nodes 69705 time 76 nps 917171 pv c3d5",
