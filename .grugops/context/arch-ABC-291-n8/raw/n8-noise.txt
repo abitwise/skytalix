@@ -1,0 +1,23 @@
+wall_s: H-B median +0.155 mean +0.175; H2-B median +0.180 mean +0.090; per-round mean of the two arms less B: median +0.165 mean +0.133 sd 0.159; positive H 7/8, H2 6/8
+cpu_s: H-B median +0.760 mean +0.756; H2-B median +0.405 mean +0.586; per-round mean of the two arms less B: median +0.625 mean +0.671 sd 0.490; positive H 8/8, H2 7/8
+wall mean by position in the round: {0: 9.203, 1: 9.181, 2: 9.181}
+twin paired median wall -0.105  n 8  out/read-a1/n8
+twin paired median wall +0.040  n 8  qe-ABC-281/raw/a8
+twin paired median wall +0.005  n 8  raw/out/n8
+twin paired median wall +0.025  n 8  qe-ABC-302/raw/a8
+twin paired median wall -0.085  n 8  out/stage-a2/p7
+twin paired median wall +0.090  n 8  qe-ABC-307/raw/n8-r5
+twin paired median wall -0.010  n 8  raw/out/n8-r2
+twin paired median wall +0.075  n 8  raw/out/n8
+twin paired median wall -0.035  n 8  raw/out/n8
+twin paired median wall -0.030  n 8  raw/out/n8
+clean reads 10; RMS of the twin paired median 0.060 s
+true H-B +0.175: chance a read lands <= +0.10 is 0.11
+true H-B +0.155: chance a read lands <= +0.10 is 0.18
+true H-B +0.100: chance a read lands <= +0.10 is 0.50
+true H-B +0.085: chance a read lands <= +0.10 is 0.60
+true H-B +0.065: chance a read lands <= +0.10 is 0.72
+true H-B +0.035: chance a read lands <= +0.10 is 0.86
+true H-B +0.020: chance a read lands <= +0.10 is 0.91
+true H-B +0.000: chance a read lands <= +0.10 is 0.95
+float: 9.40 - 9.30 = 0.09999999999999964 reads <= 0.10: True
