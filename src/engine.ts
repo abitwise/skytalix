@@ -339,6 +339,8 @@ interface Heuristics {
    * `RULES_SEE_PRUNING` or `RULES_TAPERED`.
    */
   readonly taper: boolean;
+  /** The shape part (`ABC-291`, `ADR-0075` decision 4): true on `chooseMove` only. */
+  readonly pawnShape: boolean;
   /**
    * Quiescence skips a losing capture out of check (`ABC-279`, `ADR-0069` decisions 1-3, 6, 7): true
    * on `chooseMove` only, where the taper is on too, so its rules record is `RULES_SEE_PRUNING`.
@@ -384,6 +386,14 @@ const RULES_SEE_PRUNING: QuiescenceRules = {
   quietPromotions: true,
   taper: true,
   seePruning: true,
+};
+/** `chooseMove`'s record (`ABC-291`, `ADR-0075` decision 4): `RULES_SEE_PRUNING` with the shape part. */
+const RULES_PAWN_SHAPE: QuiescenceRules = {
+  evasions: true,
+  quietPromotions: true,
+  taper: true,
+  seePruning: true,
+  pawnShape: true,
 };
 
 /** The deepening loop's mutable state: the clock, the deadline, and when to consult again. */
@@ -446,7 +456,9 @@ function leafScore(
   if (reason === null) {
     const rules = budget.taper
       ? budget.seePruning
-        ? RULES_SEE_PRUNING
+        ? budget.pawnShape
+          ? RULES_PAWN_SHAPE
+          : RULES_SEE_PRUNING
         : RULES_TAPERED
       : budget.quiescenceEvasions
         ? budget.quietPromotions
@@ -564,7 +576,8 @@ function negamax(
   const hashMove = slot === -1 ? null : entryMove(slot, moves);
   // Futility (`ABC-268`): once per node, with the entry window; a skipped move still takes its index.
   const futile =
-    budget.futility && futilityNode(position, remaining, ply, alphaIn, beta, budget.taper, phase);
+    budget.futility &&
+    futilityNode(position, remaining, ply, alphaIn, beta, budget.taper, budget.pawnShape, phase);
   let best = Number.NEGATIVE_INFINITY;
   let bestMove = moves[0] as Move;
   let index = 0;
@@ -872,6 +885,34 @@ export function chooseMove(position: Position, options: EngineOptions): EngineCh
     quietPromotions: true,
     futility: true,
     taper: true,
+    pawnShape: true,
+    seePruning: true,
+    history: true,
+    seeOrdering: true,
+    aspiration: true,
+    moveCount: true,
+    countermove: true,
+  });
+}
+
+/**
+ * TEST-ONLY (`ABC-291`, `ADR-0075` decision 4): `chooseMove` without the shape part, the merge-base's
+ * `chooseMove` node for node. Not an engine option; nothing in production calls it.
+ */
+export function chooseMoveWithoutPawnShape(
+  position: Position,
+  options: EngineOptions,
+): EngineChoice | null {
+  return deepen(position, options, {
+    pvs: true,
+    reductions: true,
+    nullMove: true,
+    priorKeys: true,
+    quiescenceEvasions: true,
+    quietPromotions: true,
+    futility: true,
+    taper: true,
+    pawnShape: false,
     seePruning: true,
     history: true,
     seeOrdering: true,
@@ -898,6 +939,7 @@ export function chooseMoveWithoutMoveCountPruning(
     quietPromotions: true,
     futility: true,
     taper: true,
+    pawnShape: false,
     seePruning: true,
     history: true,
     seeOrdering: true,
@@ -924,6 +966,7 @@ export function chooseMoveWithoutCountermove(
     quietPromotions: true,
     futility: true,
     taper: true,
+    pawnShape: false,
     seePruning: true,
     history: true,
     seeOrdering: true,
@@ -951,6 +994,7 @@ export function chooseMoveWithoutQuietBundle(
     quietPromotions: true,
     futility: true,
     taper: true,
+    pawnShape: false,
     seePruning: true,
     history: true,
     seeOrdering: true,
@@ -978,6 +1022,7 @@ export function chooseMoveWithoutHistory(
     quietPromotions: true,
     futility: true,
     taper: true,
+    pawnShape: false,
     seePruning: true,
     history: false,
     seeOrdering: true,
@@ -1005,6 +1050,7 @@ export function chooseMoveWithoutSeeOrdering(
     quietPromotions: true,
     futility: true,
     taper: true,
+    pawnShape: false,
     seePruning: true,
     history: true,
     seeOrdering: false,
@@ -1032,6 +1078,7 @@ export function chooseMoveWithoutAspiration(
     quietPromotions: true,
     futility: true,
     taper: true,
+    pawnShape: false,
     seePruning: true,
     history: true,
     seeOrdering: true,
@@ -1061,6 +1108,7 @@ export function chooseMoveWithoutBundle(
     quietPromotions: true,
     futility: true,
     taper: true,
+    pawnShape: false,
     seePruning: true,
     history: false,
     seeOrdering: false,
@@ -1090,6 +1138,7 @@ export function chooseMoveWithoutSeePruning(
     quietPromotions: true,
     futility: true,
     taper: true,
+    pawnShape: false,
     seePruning: false,
     history: false,
     seeOrdering: false,
@@ -1119,6 +1168,7 @@ export function chooseMoveWithoutTaper(
     quietPromotions: true,
     futility: true,
     taper: false,
+    pawnShape: false,
     seePruning: false,
     history: false,
     seeOrdering: false,
@@ -1148,6 +1198,7 @@ export function chooseMoveWithoutFutility(
     quietPromotions: true,
     futility: false,
     taper: false,
+    pawnShape: false,
     seePruning: false,
     history: false,
     seeOrdering: false,
@@ -1177,6 +1228,7 @@ export function chooseMoveWithoutQuietPromotions(
     quietPromotions: false,
     futility: false,
     taper: false,
+    pawnShape: false,
     seePruning: false,
     history: false,
     seeOrdering: false,
@@ -1205,6 +1257,7 @@ export function chooseMoveWithoutQuiescenceEvasions(
     quietPromotions: false,
     futility: false,
     taper: false,
+    pawnShape: false,
     seePruning: false,
     history: false,
     seeOrdering: false,
@@ -1233,6 +1286,7 @@ export function chooseMoveWithoutNullMove(
     quietPromotions: false,
     futility: false,
     taper: false,
+    pawnShape: false,
     seePruning: false,
     history: false,
     seeOrdering: false,
@@ -1261,6 +1315,7 @@ export function chooseMoveWithoutReductions(
     quietPromotions: false,
     futility: false,
     taper: false,
+    pawnShape: false,
     seePruning: false,
     history: false,
     seeOrdering: false,
@@ -1288,6 +1343,7 @@ export function chooseMoveWithoutPvsOrReductions(
     quietPromotions: false,
     futility: false,
     taper: false,
+    pawnShape: false,
     seePruning: false,
     history: false,
     seeOrdering: false,

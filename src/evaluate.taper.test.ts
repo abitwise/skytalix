@@ -40,6 +40,7 @@ import {
   type EvaluationParameters,
   evaluate,
   evaluateAtPhase,
+  evaluateAtPhaseWithoutPawnShape,
   evaluateWithoutMobility,
   evaluateWithoutTaper,
   isPassedPawn,
@@ -69,6 +70,10 @@ import {
 } from "./position.ts";
 import { MATE_CORPUS } from "./search.mate-corpus.ts";
 import { MATE_SCORE, search, searchWithoutSeePruning, searchWithoutTaper } from "./search.ts";
+
+/** `evaluate` without E4b's shape part (`ABC-291`, `ADR-0075` decision 4): these rows read older terms. */
+const offEvaluate = (position: Position): number =>
+  evaluateAtPhaseWithoutPawnShape(position, phaseOf(position));
 
 const RUN_DEEP = process.env.SEARCH_DEEP === "1";
 
@@ -113,8 +118,8 @@ describe("ABC-269 B1 (a) — a position and its colour mirror score exactly equa
       const white = fromSide(evaluateWithoutTaper(position), position, "white");
       expect(Object.is(white, 0), id).toBe(true);
       // The delta form returns +0 on both sides; the full form would return -0 on one of them.
-      expect(Object.is(evaluate(position), 0), id).toBe(true);
-      expect(Object.is(evaluate(mirrorPosition(position)), 0), id).toBe(true);
+      expect(Object.is(offEvaluate(position), 0), id).toBe(true);
+      expect(Object.is(offEvaluate(mirrorPosition(position)), 0), id).toBe(true);
     }
   });
 });
@@ -127,7 +132,7 @@ describe("ABC-269 B1 (b) — at phase 24, evaluate equals evaluateWithoutTaper e
     );
     for (const { id, fen } of rows) {
       const position = parseFen(fen);
-      expect(Object.is(evaluate(position), evaluateWithoutTaper(position)), id).toBe(true);
+      expect(Object.is(offEvaluate(position), evaluateWithoutTaper(position)), id).toBe(true);
     }
   });
 
@@ -135,7 +140,7 @@ describe("ABC-269 B1 (b) — at phase 24, evaluate equals evaluateWithoutTaper e
     const full = buildCorpus().filter(({ position }) => rawPhase(position) >= 24);
     expect(full.length).toBeGreaterThanOrEqual(7);
     for (const { name, position } of full) {
-      expect(Object.is(evaluate(position), evaluateWithoutTaper(position)), name).toBe(true);
+      expect(Object.is(offEvaluate(position), evaluateWithoutTaper(position)), name).toBe(true);
     }
   });
 });
@@ -390,6 +395,7 @@ describe("ABC-269 — one switch, taper, and three test-only doors (ADR-0064 dec
         "searchWithoutMoveCountPruning",
         "searchWithoutCountermove",
         "searchWithoutQuietBundle",
+        "searchWithoutPawnShape",
         "searchWithoutHistory",
         "searchWithoutSeeOrdering",
         "searchWithoutBundle",
@@ -405,6 +411,7 @@ describe("ABC-269 — one switch, taper, and three test-only doors (ADR-0064 dec
         "chooseMoveWithoutMoveCountPruning",
         "chooseMoveWithoutCountermove",
         "chooseMoveWithoutQuietBundle",
+        "chooseMoveWithoutPawnShape",
         "chooseMoveWithoutHistory",
         "chooseMoveWithoutSeeOrdering",
         "chooseMoveWithoutAspiration",
@@ -428,19 +435,19 @@ describe("ABC-269 — one switch, taper, and three test-only doors (ADR-0064 dec
   it("the call sites: futilityNode is handed the switch and the carried phase, the leaf and the stand pat pick by the switch", () => {
     const flat = (source: string): string => source.replace(/\s+/g, " ");
     expect(flat(SOURCES.search)).toContain(
-      "futilityNode(position, depth, ply, alphaIn, beta, switches.taper, phase)",
+      "futilityNode(position, depth, ply, alphaIn, beta, switches.taper, switches.pawnShape, phase)",
     );
     expect(flat(SOURCES.engine)).toContain(
-      "futilityNode(position, remaining, ply, alphaIn, beta, budget.taper, phase)",
+      "futilityNode(position, remaining, ply, alphaIn, beta, budget.taper, budget.pawnShape, phase)",
     );
     expect(flat(SOURCES.search)).toContain(
-      "const staticScore = taper ? evaluateAtPhase(position, phase) : evaluateWithoutTaper(position);",
+      "const staticScore = taper ? pawnShape ? evaluateAtPhase(position, phase) : evaluateAtPhaseWithoutPawnShape(position, phase) : evaluateWithoutTaper(position);",
     );
     expect(flat(SOURCES.search)).toContain(
-      "return switches.taper ? evaluateAtPhase(position, phase) : evaluateWithoutTaper(position);",
+      "return switches.taper ? switches.pawnShape ? evaluateAtPhase(position, phase) : evaluateAtPhaseWithoutPawnShape(position, phase) : evaluateWithoutTaper(position);",
     );
     expect(flat(SOURCES.quiescence)).toContain(
-      "const standPat = rules.taper === true ? evaluateAtPhase(position, phase) : evaluateWithoutTaper(position);",
+      "const standPat = rules.taper === true ? rules.pawnShape === true ? evaluateAtPhase(position, phase) : evaluateAtPhaseWithoutPawnShape(position, phase) : evaluateWithoutTaper(position);",
     );
     for (const source of [SOURCES.search, SOURCES.engine]) {
       expect(flat(source)).toContain(
@@ -1119,7 +1126,7 @@ describe("ABC-274 A3 — the blend is live for every term family (ADR-0067 decis
       // offset's shift of Δ.
       const e1 = rows.map((position) => {
         const mg = whitePov(position, evaluateWithoutTaper(position));
-        const delta = whitePov(position, evaluateAtPhase(position, 0)) - mg;
+        const delta = whitePov(position, evaluateAtPhaseWithoutPawnShape(position, 0)) - mg;
         return { mg, delta, shift: family.shift(position) as number };
       });
 
@@ -1129,11 +1136,14 @@ describe("ABC-274 A3 — the blend is live for every term family (ADR-0067 decis
           const w = Math.max(0, Math.min(SPAN, phaseOf(position) - PARAMS.PHASE_EG));
           const expected = mg + Math.trunc(((delta + shift) * (SPAN - w)) / SPAN);
           const fen = toFen(position);
-          expect(Object.is(evaluate(position), whitePov(position, expected)), fen).toBe(true);
+          expect(Object.is(offEvaluate(position), whitePov(position, expected)), fen).toBe(true);
           // The middlegame half does not move, and at phase 0 the whole offset is read: a blend
           // that ignored this family's endgame half would read 0 here.
           expect(whitePov(position, evaluateWithoutTaper(position)), fen).toBe(mg);
-          expect(whitePov(position, evaluateAtPhase(position, 0)) - (mg + delta), fen).toBe(shift);
+          expect(
+            whitePov(position, evaluateAtPhaseWithoutPawnShape(position, 0)) - (mg + delta),
+            fen,
+          ).toBe(shift);
         });
       });
     });
@@ -1261,7 +1271,14 @@ describe("ABC-274 A9 — the packed sums fit in int16, bounded from src/evaluate
           5 * largest(params.PASSED_KING_OWN[half]) +
           largest(params.PASSED_FREE[half])) +
       Math.abs(params.PASSED_UNSTOPPABLE[half]);
-    return sideMax - sideMin + 2 * pawns + 2 * kingFiles + 2 * passerTerms;
+    // E4b (`ABC-291` K1 (f), `ADR-0075`): the shape part sits in the packed sum. Per side at most
+    // eight pawns, each at the largest of all three terms.
+    const pawnShape =
+      8 *
+      (largest(params.PAWN_CONNECTED[half]) +
+        largest(params.PAWN_PHALANX[half]) +
+        Math.abs(params.PAWN_BACKWARD[half]));
+    return sideMax - sideMin + 2 * pawns + 2 * kingFiles + 2 * passerTerms + 2 * pawnShape;
   };
 
   it("Σ mg and Σ eg, white minus black, each lie inside −32 768 … 32 767", () => {
@@ -1271,6 +1288,20 @@ describe("ABC-274 A9 — the packed sums fit in int16, bounded from src/evaluate
       expect(b).toBeLessThanOrEqual(32_767);
       expect(-b).toBeGreaterThanOrEqual(-32_768);
     }
+  });
+
+  it("the bound reads the three shape pairs: each adds 16 per point (ABC-291 K1 (f))", () => {
+    const at = PARAMS.PAWN_BACKWARD.mg;
+    const row = PARAMS.PAWN_CONNECTED.mg.map((value) => value + 1);
+    const phalanx = PARAMS.PAWN_PHALANX.mg.map((value) => value + 1);
+    const base = bound(PARAMS, "mg");
+    expect(bound({ ...PARAMS, PAWN_BACKWARD: { mg: at + 1, eg: at } }, "mg") - base).toBe(16);
+    expect(
+      bound({ ...PARAMS, PAWN_CONNECTED: { mg: row, eg: PARAMS.PAWN_CONNECTED.eg } }, "mg") - base,
+    ).toBe(16);
+    expect(
+      bound({ ...PARAMS, PAWN_PHALANX: { mg: phalanx, eg: PARAMS.PAWN_PHALANX.eg } }, "mg") - base,
+    ).toBe(16);
   });
 
   it("the bound reads the table: a queen endgame half of 3 000 would turn it red", () => {

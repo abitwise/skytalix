@@ -40,6 +40,7 @@ import {
   chooseMoveWithoutCountermove,
   chooseMoveWithoutHistory,
   chooseMoveWithoutMoveCountPruning,
+  chooseMoveWithoutPawnShape,
   chooseMoveWithoutQuietBundle,
   type EngineChoice,
 } from "./engine.ts";
@@ -345,7 +346,7 @@ describe("ABC-283 (a) — aspiration at the root of chooseMove (ADR-0066 decisio
   ] as const) {
     it(`${what}: iteration ${failHigh} fails high and is re-searched to the door's exact move and score; the door stores no root lower bound`, () => {
       rootStores.log = [];
-      const head = deepenTo(chooseMove, fen, 6);
+      const head = deepenTo(chooseMoveWithoutPawnShape, fen, 6);
       expect(
         rootStores.log.filter((store) => store.bound === BOUND_LOWER).map((s) => s.depth),
       ).toEqual([failHigh]);
@@ -588,10 +589,12 @@ describe("ABC-303 — the doors (ADR-0072 decision 6, ADR-0073 decision 7)", () 
   };
   for (const [door, moveCount, countermove] of [
     ["search", true, true],
+    ["searchWithoutPawnShape", true, true],
     ["searchWithoutMoveCountPruning", false, true],
     ["searchWithoutCountermove", true, false],
     ["searchWithoutQuietBundle", false, false],
     ["chooseMove", true, true],
+    ["chooseMoveWithoutPawnShape", true, true],
     ["chooseMoveWithoutMoveCountPruning", false, true],
     ["chooseMoveWithoutCountermove", true, false],
     ["chooseMoveWithoutQuietBundle", false, false],
@@ -600,7 +603,9 @@ describe("ABC-303 — the doors (ADR-0072 decision 6, ADR-0073 decision 7)", () 
       const source = door.startsWith("search") ? SOURCE.search : SOURCE.engine;
       const shipped = door.startsWith("search") ? "search" : "chooseMove";
       const older = (text: string): string =>
-        text.slice(text.indexOf("{\n")).replace(/ {4}(moveCount|countermove): \w+,\n/g, "");
+        text
+          .slice(text.indexOf("{\n"))
+          .replace(/ {4}(moveCount|countermove|pawnShape): \w+,\n/g, "");
       const body = record(source, door);
       expect(body).toContain(`moveCount: ${moveCount},`);
       expect(body).toContain(`countermove: ${countermove},`);
@@ -614,7 +619,7 @@ describe("ABC-303 — the doors (ADR-0072 decision 6, ADR-0073 decision 7)", () 
       expect(doors.length).toBeGreaterThan(10);
       for (const found of doors) {
         const name = found.replace("export function ", "");
-        if (/MoveCountPruning|Countermove/.test(name)) continue;
+        if (/MoveCountPruning|Countermove|PawnShape/.test(name)) continue;
         expect(`${name} ${record(source, name).match(/moveCount: \w+|countermove: \w+/g)}`).toBe(
           `${name} moveCount: false,countermove: false`,
         );

@@ -1189,7 +1189,7 @@ describe("ABC-228 — the rule rows (`ADR-0053` decision 9; each reds a planted 
         "const RULES_SEE_PRUNING: QuiescenceRules = { evasions: true, quietPromotions: true, taper: true, seePruning: true, };",
       );
       expect(flat).toMatch(
-        /const rules = (switches|budget)\.taper \? \1\.seePruning \? RULES_SEE_PRUNING : RULES_TAPERED : \1\.quiescenceEvasions \? \1\.quietPromotions \? RULES_SHIPPED : RULES_NO_QUIET_PROMOTIONS : \1\.quietPromotions \? RULES_NO_EVASIONS : RULES_NEITHER;/,
+        /const rules = (switches|budget)\.taper \? \1\.seePruning \? \1\.pawnShape \? RULES_PAWN_SHAPE : RULES_SEE_PRUNING : RULES_TAPERED : \1\.quiescenceEvasions \? \1\.quietPromotions \? RULES_SHIPPED : RULES_NO_QUIET_PROMOTIONS : \1\.quietPromotions \? RULES_NO_EVASIONS : RULES_NEITHER;/,
       );
       const calls = [...flat.matchAll(/quiesce\(([^;]*?)\);/g)].map((m) => m[1]);
       expect(calls).toHaveLength(1);
@@ -1213,6 +1213,7 @@ const SWITCH_MODULES = [
     see: "searchWithoutSeePruning",
     /** `ABC-283`'s and `ABC-303`'s doors: the shipped path less one or all of a bundle, every older switch on. */
     bundle: [
+      "searchWithoutPawnShape",
       "searchWithoutMoveCountPruning",
       "searchWithoutCountermove",
       "searchWithoutQuietBundle",
@@ -1230,6 +1231,7 @@ const SWITCH_MODULES = [
     tap: "chooseMoveWithoutTaper",
     see: "chooseMoveWithoutSeePruning",
     bundle: [
+      "chooseMoveWithoutPawnShape",
       "chooseMoveWithoutMoveCountPruning",
       "chooseMoveWithoutCountermove",
       "chooseMoveWithoutQuietBundle",

@@ -30,7 +30,7 @@ import {
   chooseMoveWithoutSeePruning,
   type EngineChoice,
 } from "./engine.ts";
-import { evaluateAtPhase, phaseOf } from "./evaluate.ts";
+import { evaluateAtPhaseWithoutPawnShape, phaseOf } from "./evaluate.ts";
 import { parseFen, toFen } from "./fen.ts";
 import { gameStatus } from "./gameend.ts";
 import { isInCheck, legalCapturesAndQueenPromotions, legalMoves } from "./legal.ts";
@@ -340,7 +340,7 @@ describe("ABC-279 A1 (c) — quiesce skips exactly the moves isLosingCapture nam
     const position = parseFen(fen);
     const phase = phaseOf(position);
     const stood = quiesce(position, -1e9, 1e9, 0, 0, SEE_PRUNING, () => {}, phase);
-    expect(stood).toBe(evaluateAtPhase(position, phase));
+    expect(stood).toBe(evaluateAtPhaseWithoutPawnShape(position, phase));
   });
 
   it("the source: one sort of the whole list, then the test in the loop, gated on the stand-pat branch", () => {
@@ -442,7 +442,7 @@ describe("ABC-279 — one switch, seePruning, and two test-only doors (ADR-0069 
         const found = literal.match(/seePruning: (true|false),/g);
         const on =
           entry === shipped ||
-          /^(search|chooseMove)Without(MoveCountPruning|Countermove|QuietBundle|History|SeeOrdering|Aspiration|Bundle)$/.test(
+          /^(search|chooseMove)Without(PawnShape|MoveCountPruning|Countermove|QuietBundle|History|SeeOrdering|Aspiration|Bundle)$/.test(
             entry,
           );
         expect(found, entry).toEqual([on ? "seePruning: true," : "seePruning: false,"]);

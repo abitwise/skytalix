@@ -10,6 +10,12 @@
  *
  * NO wall-clock assertion lives here (`A6`'s cost and the `NFR-005` depth read are REPORTED figures
  * with their machine, the standing rule of `src/zobrist.nfr.test.ts`).
+ *
+ * `ABC-291` (E4b, `ADR-0075`) K1's rows are the last blocks of this file. K1 (b)'s off-door rows are
+ * `ABC-271` and `ABC-270` K1 (b) in `src/evaluate.passer.test.ts` and `src/evaluate.queen-on.test.ts`,
+ * `evaluateWithoutTaper`'s is `ABC-269` B1 (c), and K1 (f) is `ABC-274` A9 in
+ * `src/evaluate.taper.test.ts`. No QE freeze of K1's fixtures is on record: `SEAM_ROWS` is the
+ * Engineer's, hand-worked from d1's words, and `PAWN_SHAPE_POSITIONS` is the probe's offered 16.
  */
 
 import { readdirSync, readFileSync } from "node:fs";
@@ -21,14 +27,22 @@ import {
   mirrorPosition,
   PERFT_POSITIONS,
 } from "./evaluate.mirror-corpus.ts";
+import { TAPER_MIRROR_POSITIONS } from "./evaluate.taper-corpus.ts";
 import {
   clearPawnCacheForTest,
   evaluate,
+  evaluateAtPhase,
+  evaluateAtPhaseWithoutPawnShape,
   evaluateWithoutPawnCache,
   isPassedPawn,
   pawnCacheByteLength,
   pawnCacheProbeForTest,
+  pawnShapeForTest,
+  pawnStructureForTest,
+  phaseOf,
+  withParametersForTest,
 } from "./evaluate.ts";
+import * as PARAMS from "./evaluate-params.ts";
 import { parseFen, parseFenGrammarOnly, toFen } from "./fen.ts";
 import { legalMoves } from "./legal.ts";
 import {
@@ -536,4 +550,469 @@ describe("ABC-235 cut 5 — the pawn memo returns what a fresh pawnStructure ret
       600_000,
     );
   }
+});
+
+// ---------------------------------------------------------------------------
+// ABC-291 (E4b, `ADR-0075`): connected, phalanx and backward pawns. K1's rows; no search here.
+// ---------------------------------------------------------------------------
+
+/** K1 (a)'s new positions: the probe's `PAWN_SET`, offered to QE (`ADR-0075` § The probe's reading). */
+const PAWN_SHAPE_POSITIONS: readonly string[] = [
+  "4k3/8/8/8/3P4/2P5/1P6/4K3 w - - 0 1",
+  "4k3/1p6/2p5/3p4/8/8/8/4K3 b - - 0 1",
+  "4k3/8/8/3PP3/8/8/8/4K3 w - - 0 1",
+  "4k3/8/8/8/P7/1P6/8/4K3 w - - 0 1",
+  "4k3/8/8/7p/6p1/8/8/4K3 b - - 0 1",
+  "4k3/8/8/4p3/2P5/3P4/8/4K3 w - - 0 1",
+  "4k3/8/3p4/2p5/4P3/8/8/4K3 b - - 0 1",
+  "4k3/8/8/4p3/8/3P4/8/4K3 w - - 0 1",
+  "4k3/8/8/4p3/8/2PP4/8/4K3 w - - 0 1",
+  "4k3/8/8/8/2P5/3P4/8/4K3 w - - 0 1",
+  "4k3/8/8/8/2PPp3/8/3P4/4K3 w - - 0 1",
+  "4k3/8/8/8/2Pp4/3P4/8/4K3 w - - 0 1",
+  "4k3/8/8/6p1/6P1/7P/8/4K3 w - - 0 1",
+  "4k3/8/p7/1p6/1P6/8/8/4K3 b - - 0 1",
+  "r1bqkbnr/pp3ppp/2n1p3/2ppP3/3P4/2P2N2/PP3PPP/RNBQKB1R w KQkq - 0 1",
+  "r1bq1rk1/pp2bppp/2n1pn2/3p4/2PP4/2N2N2/PP2BPPP/R1BQ1RK1 b - - 0 1",
+];
+
+type ShapeSums = readonly [connected: number, phalanx: number, backward: number];
+
+/**
+ * K1 (c), by arithmetic from d1's words and d2's table: each side's connected, phalanx and backward
+ * sums. R is the pawn's own rank index, so a white pawn on rank 4 is R 3 and a black one on rank 5
+ * is R 3. Connected reads 2, 5, 10, 17, 28 at R 2 to 6; phalanx 1, 2, 5, 8, 14.
+ */
+const SEAM_ROWS: ReadonlyArray<
+  readonly [id: string, fen: string, white: ShapeSums, black: ShapeSums]
+> = [
+  // Connected.
+  ["connected, white: c3 R2, d4 R3", "4k3/8/8/8/3P4/2P5/1P6/4K3 w - - 0 1", [7, 0, 0], [0, 0, 0]],
+  ["connected, black: c6 R2, d5 R3", "4k3/1p6/2p5/3p4/8/8/8/4K3 b - - 0 1", [0, 0, 0], [7, 0, 0]],
+  [
+    "connected once with two defenders: d5 R4",
+    "4k3/8/8/3P4/2P1P3/8/8/4K3 w - - 0 1",
+    [10, 0, 0],
+    [0, 0, 0],
+  ],
+  ["connected at R6: d7, on a passer", "6k1/3P4/2P5/8/8/8/8/4K3 w - - 0 1", [28, 0, 0], [0, 0, 0]],
+  ["connected, white a-file: a4 by b3", "4k3/8/8/8/P7/1P6/8/4K3 w - - 0 1", [5, 0, 0], [0, 0, 0]],
+  ["connected, white h-file: h4 by g3", "4k3/8/8/8/7P/6P1/8/4K3 w - - 0 1", [5, 0, 0], [0, 0, 0]],
+  ["connected, black a-file: a5 by b6", "4k3/8/1p6/p7/8/8/8/4K3 b - - 0 1", [0, 0, 0], [5, 0, 0]],
+  ["connected, black h-file: h5 by g6", "4k3/8/6p1/7p/8/8/8/4K3 b - - 0 1", [0, 0, 0], [5, 0, 0]],
+  // Phalanx.
+  ["phalanx, white: d5 e5, each R4", "4k3/8/8/3PP3/8/8/8/4K3 w - - 0 1", [0, 10, 0], [0, 0, 0]],
+  ["phalanx, black: d5 e5, each R3", "4k3/8/8/3pp3/8/8/8/4K3 b - - 0 1", [0, 0, 0], [0, 4, 0]],
+  ["phalanx once per pawn: c5 d5 e5", "4k3/8/8/2PPP3/8/8/8/4K3 w - - 0 1", [0, 15, 0], [0, 0, 0]],
+  ["phalanx at R6: c7 d7", "8/2PP2k1/8/8/8/8/8/4K3 w - - 0 1", [0, 28, 0], [0, 0, 0]],
+  [
+    "phalanx does not fire at R1: the start position",
+    "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    [0, 0, 0],
+    [0, 0, 0],
+  ],
+  ["phalanx, white a-file: a5 b5", "4k3/8/8/PP6/8/8/8/4K3 w - - 0 1", [0, 10, 0], [0, 0, 0]],
+  ["phalanx, white h-file: g5 h5", "4k3/8/8/6PP/8/8/8/4K3 w - - 0 1", [0, 10, 0], [0, 0, 0]],
+  ["phalanx, black a-file: a4 b4", "4k3/8/8/8/pp6/8/8/4K3 b - - 0 1", [0, 0, 0], [0, 10, 0]],
+  ["phalanx, black h-file: g4 h4", "4k3/8/8/8/6pp/8/8/4K3 b - - 0 1", [0, 0, 0], [0, 10, 0]],
+  [
+    "connected and phalanx add on one pawn: d5",
+    "4k3/8/8/2PP4/2P5/8/8/4K3 w - - 0 1",
+    [10, 10, 0],
+    [0, 0, 0],
+  ],
+  // Backward: clause (c) by each of its three squares, and both colours.
+  [
+    "backward, white: stop attacked from the right (e5)",
+    "4k3/8/8/4p3/2P5/3P4/8/4K3 w - - 0 1",
+    [5, 0, 10],
+    [0, 0, 0],
+  ],
+  [
+    "backward, white: stop attacked from the left (c5)",
+    "4k3/8/8/2p5/4P3/3P4/8/4K3 w - - 0 1",
+    [5, 0, 10],
+    [0, 0, 0],
+  ],
+  [
+    "backward, white: an enemy pawn on the stop square",
+    "4k3/8/8/8/2Pp4/3P4/8/4K3 w - - 0 1",
+    [5, 0, 10],
+    [0, 0, 0],
+  ],
+  [
+    "backward, black: stop attacked (e4)",
+    "4k3/8/3p4/2p5/4P3/8/8/4K3 b - - 0 1",
+    [0, 0, 0],
+    [5, 0, 10],
+  ],
+  [
+    "backward, black: an enemy pawn on the stop square",
+    "4k3/8/3p4/2pP4/8/8/8/4K3 b - - 0 1",
+    [0, 0, 0],
+    [5, 0, 10],
+  ],
+  ["backward, white a-file: a3", "4k3/8/8/1p6/1P6/P7/8/4K3 w - - 0 1", [5, 0, 10], [0, 0, 0]],
+  ["backward, white h-file: h3", "4k3/8/8/6p1/6P1/7P/8/4K3 w - - 0 1", [5, 0, 10], [0, 0, 0]],
+  ["backward, black a-file: a6", "4k3/8/p7/1p6/1P6/8/8/4K3 b - - 0 1", [0, 0, 0], [5, 0, 10]],
+  ["backward, black h-file: h6", "4k3/8/7p/6p1/6P1/8/8/4K3 b - - 0 1", [0, 0, 0], [5, 0, 10]],
+  [
+    "backward at R4: d5, stop attacked from the far rank (e7)",
+    "4k3/4p3/2P5/3P4/8/8/8/4K3 w - - 0 1",
+    [17, 0, 10],
+    [0, 0, 0],
+  ],
+  // Each clause failing alone.
+  [
+    "clause (a) fails alone: d3 has no neighbour, so it is isolated",
+    "4k3/8/8/4p3/8/3P4/8/4K3 w - - 0 1",
+    [0, 0, 0],
+    [0, 0, 0],
+  ],
+  [
+    "clause (b) fails alone: a neighbour on rank R (c3)",
+    "4k3/8/8/4p3/8/2PP4/8/4K3 w - - 0 1",
+    [0, 2, 0],
+    [0, 0, 0],
+  ],
+  [
+    "clause (b) fails alone: a neighbour behind (c2)",
+    "4k3/8/8/4p3/8/3P4/2P5/4K3 w - - 0 1",
+    [2, 0, 0],
+    [0, 0, 0],
+  ],
+  [
+    "clause (b) fails on one side: c4 has passed d3, e2 has not",
+    "4k3/8/8/4p3/2P5/3P4/4P3/4K3 w - - 0 1",
+    [7, 0, 0],
+    [0, 0, 0],
+  ],
+  [
+    "clause (b) reads the rearmost neighbour: c3 behind c4",
+    "4k3/8/8/4p3/2P5/2PP4/8/4K3 w - - 0 1",
+    [5, 2, 0],
+    [0, 0, 0],
+  ],
+  [
+    "clause (c) fails alone: no enemy pawn",
+    "4k3/8/8/8/2P5/3P4/8/4K3 w - - 0 1",
+    [5, 0, 0],
+    [0, 0, 0],
+  ],
+  [
+    "clause (c) fails: e4 attacks d3, not its stop square",
+    "4k3/8/8/8/2P1p3/3P4/8/4K3 w - - 0 1",
+    [5, 0, 0],
+    [0, 0, 0],
+  ],
+  // d1's exclusions.
+  [
+    "a backward rear pawn of a doubled pair still pays: d2",
+    "4k3/8/8/8/2PPp3/8/3P4/4K3 w - - 0 1",
+    [0, 4, 10],
+    [0, 0, 0],
+  ],
+];
+
+/** Sums the seam's parts for one half, in `SEAM_ROWS`' order. */
+const sums = (
+  parts: ReturnType<typeof pawnShapeForTest>["white"],
+  half: "mg" | "eg",
+): ShapeSums => [parts.connected[half], parts.phalanx[half], parts.backward[half]];
+
+/** The seam's white minus black, one half: the two bonuses less the penalty, per side. */
+const seamNet = (position: Position, half: "mg" | "eg"): number => {
+  const { white, black } = pawnShapeForTest(position);
+  const side = (parts: typeof white): number =>
+    parts.connected[half] + parts.phalanx[half] - parts.backward[half];
+  return side(white) - side(black);
+};
+
+const offAtOwnPhase = (position: Position): number =>
+  evaluateAtPhaseWithoutPawnShape(position, phaseOf(position));
+
+const shapeCorpus = (): Position[] => [
+  ...buildCorpus().map(({ position }) => position),
+  ...TAPER_MIRROR_POSITIONS.map(({ fen }) => parseFen(fen)),
+  ...PAWN_SHAPE_POSITIONS.map((fen) => parseFen(fen)),
+];
+
+describe("ABC-291 K1 (a) — the mirror, Object.is, 0 mismatches", () => {
+  it("G3, TAPER_MIRROR_POSITIONS and 16 pawn-shape positions", () => {
+    expect(PAWN_SHAPE_POSITIONS).toHaveLength(16);
+    const positions = shapeCorpus();
+    expect(positions).toHaveLength(184 + TAPER_MIRROR_POSITIONS.length + 16);
+    const differ = positions.filter((p) => !Object.is(evaluate(p), evaluate(mirrorPosition(p))));
+    expect(differ.map((p) => toFen(p))).toEqual([]);
+  });
+});
+
+describe("ABC-291 K1 (c) — the seam by arithmetic, per side (ADR-0075 d1 and d2)", () => {
+  for (const [id, fen, white, black] of SEAM_ROWS) {
+    it(id, () => {
+      const position = parseFen(fen);
+      const seam = pawnShapeForTest(position);
+      expect([sums(seam.white, "mg"), sums(seam.black, "mg")]).toEqual([white, black]);
+      expect([sums(seam.white, "eg"), sums(seam.black, "eg")]).toEqual([white, black]);
+      // The colour mirror swaps the two sides, part for part.
+      const mirrored = pawnShapeForTest(mirrorPosition(position));
+      expect([sums(mirrored.white, "mg"), sums(mirrored.black, "mg")]).toEqual([black, white]);
+    });
+  }
+});
+
+const UNEQUAL_HALVES = {
+  ...PARAMS,
+  PAWN_CONNECTED: { mg: [0, 0, 3, 6, 11, 19, 30, 0], eg: [0, 0, 7, 13, 23, 37, 61, 0] },
+  PAWN_PHALANX: { mg: [0, 0, 2, 3, 6, 9, 15, 0], eg: [0, 0, 5, 9, 17, 29, 47, 0] },
+  PAWN_BACKWARD: { mg: 7, eg: 19 },
+};
+
+describe("ABC-291 K1 (d) — the hot path against the seam (QE-271-h)", () => {
+  it("evaluate minus the off door is the seam's white minus black, signed for the side to move, exactly", () => {
+    const positions = [...shapeCorpus(), ...SEAM_ROWS.map(([, fen]) => parseFen(fen))];
+    const misses = positions.filter((position) => {
+      const net = seamNet(position, "mg");
+      expect(seamNet(position, "eg")).toBe(net);
+      return evaluate(position) - offAtOwnPhase(position) !== (position.blackToMove ? -net : net);
+    });
+    expect(misses.map((p) => toFen(p))).toEqual([]);
+    expect(positions.filter((p) => evaluate(p) !== offAtOwnPhase(p)).length).toBeGreaterThan(100);
+  });
+
+  /**
+   * `ADR-0070` d4's own-phase form: each position at its own phase, so the part's two halves enter
+   * the blend. mg and Δ are the off door's at the same table, read at phases 24 and 0, and the
+   * seam's two halves move them. The off door holds no shape part, so it fixes the rest.
+   */
+  it("at unequal test halves the part enters the blend, each position at its own phase", () => {
+    const whitePov = (position: Position, score: number): number =>
+      position.blackToMove ? 0 - score : score;
+    const misses = withParametersForTest(UNEQUAL_HALVES, () =>
+      [...shapeCorpus(), ...SEAM_ROWS.map(([, fen]) => parseFen(fen))].filter((position) => {
+        const off = (phase: number): number =>
+          whitePov(position, evaluateAtPhaseWithoutPawnShape(position, phase));
+        const netMg = seamNet(position, "mg");
+        const netEg = seamNet(position, "eg");
+        const phase = phaseOf(position);
+        const mg = off(24);
+        const delta = off(0) - mg;
+        const blend = ((delta + netEg - netMg) * (24 - Math.min(phase, 24))) / 24;
+        const want = mg + netMg + Math.trunc(blend);
+        return whitePov(position, evaluateAtPhase(position, phase)) !== want;
+      }),
+    );
+    expect(misses.map((p) => toFen(p))).toEqual([]);
+  });
+
+  it("the unequal halves really differ on the seam: the chain reads 3 + 6 and 7 + 13", () => {
+    withParametersForTest(UNEQUAL_HALVES, () => {
+      const { white } = pawnShapeForTest(parseFen("4k3/8/8/8/3P4/2P5/1P6/4K3 w - - 0 1"));
+      expect(white.connected).toEqual({ mg: 9, eg: 20 });
+    });
+  });
+});
+
+describe("ABC-291 K1 (e) — each export is d2's rule, rebuilt from the anchors at ADR-0075's date", () => {
+  const PASSED_AT_ADR = {
+    mg: [0, 5, 10, 20, 35, 60, 100, 0],
+    eg: [0, 10, 20, 40, 70, 120, 200, 0],
+  };
+  const ISOLATED_AT_ADR = { mg: 10, eg: 10 };
+  for (const half of ["mg", "eg"] as const) {
+    it(`${half}: backward is isolated; connected and phalanx follow the passer, anchored at R 4`, () => {
+      const passed = PASSED_AT_ADR[half];
+      const isolated = ISOLATED_AT_ADR[half];
+      const rule = (value: (rank: number) => number): number[] =>
+        passed.map((_, rank) => (rank >= 2 && rank <= 6 ? value(rank) : 0));
+      const connected = rule((rank) =>
+        Math.floor(((passed[rank] as number) * isolated) / (passed[4] as number)),
+      );
+      expect(PARAMS.PAWN_BACKWARD[half]).toBe(isolated);
+      expect(PARAMS.PAWN_CONNECTED[half]).toEqual(connected);
+      expect(PARAMS.PAWN_PHALANX[half]).toEqual(
+        rule((rank) => Math.floor((connected[rank] as number) / 2)),
+      );
+    });
+  }
+
+  it("d2's table, by value: the rule above cannot drift with it", () => {
+    expect(PARAMS.PAWN_CONNECTED.mg).toEqual([0, 0, 2, 5, 10, 17, 28, 0]);
+    expect(PARAMS.PAWN_CONNECTED.eg).toEqual(PARAMS.PAWN_CONNECTED.mg);
+    expect(PARAMS.PAWN_PHALANX.mg).toEqual([0, 0, 1, 2, 5, 8, 14, 0]);
+    expect(PARAMS.PAWN_PHALANX.eg).toEqual(PARAMS.PAWN_PHALANX.mg);
+    expect(PARAMS.PAWN_BACKWARD).toEqual({ mg: 10, eg: 10 });
+  });
+});
+
+describe("ABC-291 K1 (g) — the memo: a hit returns what a fresh pawnStructure returns, shape part included", () => {
+  it("cold miss then hit, each equal to the fresh call, and the shape part is what the seam nets", () => {
+    clearPawnCacheForTest();
+    for (const position of shapeCorpus()) {
+      const fresh = pawnStructureForTest(position, false);
+      expect(pawnStructureForTest(position, true), toFen(position)).toEqual(fresh);
+      expect(pawnCacheProbeForTest(position).hit, toFen(position)).toBe(true);
+      expect(pawnStructureForTest(position, true), toFen(position)).toEqual(fresh);
+      const packed = seamNet(position, "eg") * 65536 + seamNet(position, "mg");
+      expect(fresh.shape, toFen(position)).toBe(packed);
+    }
+    clearPawnCacheForTest();
+  });
+
+  it("a forced collision: two placements on one slot, with different shape parts, each return their own", () => {
+    let seed = 291;
+    const next = (bound: number): number => {
+      seed = (Math.imul(seed, 1103515245) + 12345) & 0x7fffffff;
+      return (seed >>> 8) % bound;
+    };
+    const placement = (): Position => {
+      const position = emptyPosition();
+      position.board[parseSquareName("e1")] = KING;
+      position.board[parseSquareName("e8")] = KING | BLACK;
+      for (let i = 0; i < 10; i++) {
+        const square = (1 + next(6)) * 16 + next(8);
+        if (position.board[square] === EMPTY) {
+          position.board[square] = next(2) === 0 ? PAWN : PAWN | BLACK;
+        }
+      }
+      return position;
+    };
+    const bySlot = new Map<number, Position>();
+    let pair: [Position, Position] | null = null;
+    for (let i = 0; i < 100_000 && pair === null; i++) {
+      const position = placement();
+      const { slot } = pawnCacheProbeForTest(position);
+      const other = bySlot.get(slot);
+      if (other === undefined) bySlot.set(slot, position);
+      else if (
+        pawnStructureForTest(other, false).shape !== pawnStructureForTest(position, false).shape
+      ) {
+        pair = [other, position];
+      }
+    }
+    expect(pair).not.toBeNull();
+    const [a, b] = pair as [Position, Position];
+    clearPawnCacheForTest();
+    for (let round = 0; round < 3; round++) {
+      for (const position of [a, b]) {
+        expect(pawnCacheProbeForTest(position).hit).toBe(false);
+        expect(pawnStructureForTest(position, true)).toEqual(pawnStructureForTest(position, false));
+        expect(pawnCacheProbeForTest(position).hit).toBe(true);
+        expect(pawnStructureForTest(position, true)).toEqual(pawnStructureForTest(position, false));
+      }
+    }
+    clearPawnCacheForTest();
+  });
+
+  it("on then off, and off then on, of one slot: each entry reads its own value", () => {
+    for (const position of shapeCorpus()) {
+      clearPawnCacheForTest();
+      const offFirst = offAtOwnPhase(position);
+      const onSecond = evaluate(position);
+      clearPawnCacheForTest();
+      const onFirst = evaluate(position);
+      const offSecond = offAtOwnPhase(position);
+      expect(Object.is(offFirst, offSecond), toFen(position)).toBe(true);
+      expect(Object.is(onFirst, onSecond), toFen(position)).toBe(true);
+    }
+    clearPawnCacheForTest();
+  });
+});
+
+describe("ABC-291 — the source rows (ADR-0075 d3 and d4; K1 (h))", () => {
+  const read = (name: string): string =>
+    readFileSync(new URL(name, import.meta.url), "utf8").replace(/\s+/g, " ");
+  const SEARCH = read("./search.ts");
+  const ENGINE = read("./engine.ts");
+  const QUIESCENCE = read("./quiescence.ts");
+  const EVALUATE = read("./evaluate.ts");
+  const doors = (source: string): [string, string][] =>
+    source
+      .split(/(?=export function )/)
+      .map((block): [string, string] => [/^export function (\w+)/.exec(block)?.[1] ?? "", block])
+      .filter(([name]) => /^(search|chooseMove)(Without\w+)?$/.test(name));
+
+  for (const [file, source, shipped, door, total] of [
+    ["./search.ts", SEARCH, "search", "searchWithoutPawnShape", 22],
+    ["./engine.ts", ENGINE, "chooseMove", "chooseMoveWithoutPawnShape", 17],
+  ] as const) {
+    it(`${file}: every entry passes one pawnShape literal, true on ${shipped} only; ${door} is ${shipped} with it off`, () => {
+      const found = doors(source);
+      expect(found).toHaveLength(total);
+      for (const [name, block] of found) {
+        expect(block.match(/pawnShape: \w+,/g), name).toEqual([
+          `pawnShape: ${name === shipped ? "true" : "false"},`,
+        ]);
+      }
+      const record = (name: string): string =>
+        (found.find(([entry]) => entry === name)?.[1] ?? "")
+          .replace(/^[^{]*\{/, "")
+          .replace(/pawnShape: \w+,/, "")
+          .replace(/ \/\*\*.*$/, "");
+      expect(record(door).length).toBeGreaterThan(100);
+      expect(record(door)).toBe(record(shipped));
+    });
+  }
+
+  it("the evaluate entries: evaluateWithoutTaper never adds the part; the mobility and memo doors keep it", () => {
+    expect(EVALUATE).toContain("whiteMinusBlack(position, true, true, false, false, 0)");
+    expect(EVALUATE).toContain(
+      "whiteMinusBlack(position, false, true, true, true, phaseOf(position))",
+    );
+    expect(EVALUATE).toContain(
+      "whiteMinusBlack(position, true, false, true, true, phaseOf(position))",
+    );
+  });
+
+  it("the memo: 2^14 slots, doubled and isolated in one word (d5's cut), one shape word, added by the caller", () => {
+    expect(EVALUATE).not.toMatch(/pawnCacheDoubled\b|pawnCacheIsolated\b/);
+    expect(EVALUATE).toContain(
+      "const pawnCacheDoubledIsolated = new Int32Array(PAWN_CACHE_SLOTS);",
+    );
+    expect(EVALUATE).toContain("const pawnCacheShape = new Int32Array(PAWN_CACHE_SLOTS);");
+    expect(EVALUATE).toContain("return doubled + isolated + passed;");
+    expect(EVALUATE).toContain(
+      "const packed = score + structure + kingSafety + (pawnShape ? shapePart : 0);",
+    );
+  });
+
+  const tree = (directory: string): string[] => {
+    const root = new URL("../", import.meta.url).pathname;
+    return (readdirSync(`${root}${directory}`, { recursive: true }) as string[])
+      .map((name) => `${directory}${name}`)
+      .filter((name) => name.endsWith(".ts") && !name.endsWith(".test.ts"));
+  };
+  const callers = (name: string): string[] => {
+    const root = new URL("../", import.meta.url).pathname;
+    return [...tree("src/"), ...tree("tools/")]
+      .filter((file) => file !== "src/evaluate.ts")
+      .filter((file) => readFileSync(`${root}${file}`, "utf8").includes(name));
+  };
+
+  it("K1 (h): pawnShapeForTest is called from test files only", () => {
+    expect(tree("src/").length).toBeGreaterThan(20);
+    expect(callers("pawnShapeForTest")).toEqual([]);
+    expect(EVALUATE.split("pawnShapeForTest(").length - 1).toBe(1);
+  });
+
+  /**
+   * NOT K1 (h)'s letter. K1 (h) reads this export "called from test files only", and d4 reads it
+   * "the evaluation those doors call", so the off branch of each switch names it in production
+   * source. This row pins what d4 builds: those three branches, and no other caller. Which reading
+   * holds is the Architect's (`se-ABC-291`).
+   */
+  it("evaluateAtPhaseWithoutPawnShape: outside test files, only the three off branches d4 puts it on", () => {
+    expect(callers("evaluateAtPhaseWithoutPawnShape")).toEqual([
+      "src/quiescence.ts",
+      "src/search.ts",
+    ]);
+    const calls = (source: string): number =>
+      source.split("evaluateAtPhaseWithoutPawnShape(position, phase)").length - 1;
+    expect(calls(SEARCH)).toBe(2);
+    expect(calls(QUIESCENCE)).toBe(1);
+    expect(calls(ENGINE)).toBe(0);
+    expect(SEARCH).toContain(
+      "const staticScore = taper ? pawnShape ? evaluateAtPhase(position, phase) : evaluateAtPhaseWithoutPawnShape(position, phase)",
+    );
+  });
 });

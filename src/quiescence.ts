@@ -70,7 +70,12 @@
  */
 
 import { makeMove, unmakeMove } from "./apply.ts";
-import { evaluateAtPhase, evaluateWithoutTaper, phaseAfterMove } from "./evaluate.ts";
+import {
+  evaluateAtPhase,
+  evaluateAtPhaseWithoutPawnShape,
+  evaluateWithoutTaper,
+  phaseAfterMove,
+} from "./evaluate.ts";
 import { isInCheck, legalCaptures, legalCapturesAndQueenPromotions, legalMoves } from "./legal.ts";
 import type { Move } from "./moves.ts";
 import { type Position, pieceType } from "./position.ts";
@@ -173,6 +178,8 @@ export interface QuiescenceRules {
    * record that predates the switch, and any record a caller builds for itself, is unchanged.
    */
   readonly seePruning?: boolean;
+  /** The stand pat adds the shape part (`ABC-291`, `ADR-0075` decision 4). True only in the shipped record. */
+  readonly pawnShape?: boolean;
 }
 
 /**
@@ -215,7 +222,11 @@ export function quiesce(
     best = Number.NEGATIVE_INFINITY;
   } else {
     const standPat =
-      rules.taper === true ? evaluateAtPhase(position, phase) : evaluateWithoutTaper(position);
+      rules.taper === true
+        ? rules.pawnShape === true
+          ? evaluateAtPhase(position, phase)
+          : evaluateAtPhaseWithoutPawnShape(position, phase)
+        : evaluateWithoutTaper(position);
     if (standPat >= beta) return standPat; // standing still already refutes the opponent's line
     if (qply >= QUIESCENCE_MAX_PLY) return standPat; // the runaway guard: stand pat, do not expand
 

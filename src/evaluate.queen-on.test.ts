@@ -26,13 +26,19 @@ import {
   type EvaluationParameters,
   evaluate,
   evaluateAtPhase,
+  evaluateAtPhaseWithoutPawnShape,
   evaluateWithoutTaper,
   kingExposureForTest,
+  phaseOf,
   withParametersForTest,
 } from "./evaluate.ts";
 import * as PARAMS from "./evaluate-params.ts";
 import { parseFen, toFen } from "./fen.ts";
 import { BLACK, type Position, pieceType, QUEEN } from "./position.ts";
+
+/** `evaluate` without E4b's shape part (`ABC-291`, `ADR-0075` decision 4): these rows read older terms. */
+const offEvaluate = (position: Position): number =>
+  evaluateAtPhaseWithoutPawnShape(position, phaseOf(position));
 
 interface KingCounts {
   readonly s: number;
@@ -812,14 +818,14 @@ describe("ABC-270 K1 (b) — value identity: evaluate is Object.is the pre-ticke
   it("G3's 184 in buildCorpus order", () => {
     const corpus = buildCorpus();
     expect(corpus).toHaveLength(G3_PRE.length);
-    const differ = corpus.filter(({ position }, i) => !Object.is(evaluate(position), G3_PRE[i]));
+    const differ = corpus.filter(({ position }, i) => !Object.is(offEvaluate(position), G3_PRE[i]));
     expect(differ.map(({ name }) => name)).toEqual([]);
   });
 
   it("QE's ABC-269 door corpus (176; every taper-corpus position, the KP rows among them, and its mirror)", () => {
     expect(TAPER_DOOR_CORPUS).toHaveLength(DOOR_PRE.length);
     const differ = TAPER_DOOR_CORPUS.filter(
-      ({ fen }, i) => !Object.is(evaluate(parseFen(fen)), DOOR_PRE[i]),
+      ({ fen }, i) => !Object.is(offEvaluate(parseFen(fen)), DOOR_PRE[i]),
     );
     expect(differ.map(({ fen }) => fen)).toEqual([]);
   });
@@ -827,7 +833,7 @@ describe("ABC-270 K1 (b) — value identity: evaluate is Object.is the pre-ticke
   it("QE's ABC-270 queen pairs and their mirrors", () => {
     expect(QUEEN_PAIR_PRE).toHaveLength(28);
     const differ = QUEEN_PAIR_PRE.filter(
-      ([fen, main]) => !Object.is(evaluate(parseFen(fen)), main),
+      ([fen, main]) => !Object.is(offEvaluate(parseFen(fen)), main),
     );
     expect(differ).toEqual([]);
   });

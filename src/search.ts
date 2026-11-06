@@ -121,7 +121,13 @@
  */
 
 import { makeMove, makeNullMove, unmakeMove, unmakeNullMove } from "./apply.ts";
-import { evaluateAtPhase, evaluateWithoutTaper, phaseAfterMove, phaseOf } from "./evaluate.ts";
+import {
+  evaluateAtPhase,
+  evaluateAtPhaseWithoutPawnShape,
+  evaluateWithoutTaper,
+  phaseAfterMove,
+  phaseOf,
+} from "./evaluate.ts";
 import { leafEndReason } from "./gameend.ts";
 import { givesCheck, isInCheck, legalMoves } from "./legal.ts";
 import type { Move } from "./moves.ts";
@@ -160,6 +166,14 @@ const RULES_SEE_PRUNING: QuiescenceRules = {
   quietPromotions: true,
   taper: true,
   seePruning: true,
+};
+/** `search()`'s record (`ABC-291`, `ADR-0075` decision 4): `RULES_SEE_PRUNING` with the shape part. */
+const RULES_PAWN_SHAPE: QuiescenceRules = {
+  evasions: true,
+  quietPromotions: true,
+  taper: true,
+  seePruning: true,
+  pawnShape: true,
 };
 
 export interface SearchResult {
@@ -538,6 +552,8 @@ interface Switches {
    * reads the pre-`ABC-269` evaluation.
    */
   readonly taper: boolean;
+  /** The shape part (`ABC-291`, `ADR-0075` decision 4): true on `search()` only. */
+  readonly pawnShape: boolean;
   /**
    * Quiescence skips a losing capture out of check (`ABC-279`, `ADR-0069` decisions 1-3, 6, 7). True
    * on `search()` only, where the taper is on too, so its rules record is `RULES_SEE_PRUNING`;
@@ -668,6 +684,7 @@ export function futilityNode(
   alphaIn: number,
   beta: number,
   taper: boolean,
+  pawnShape: boolean,
   phase: number,
 ): boolean {
   if (ply === 0 || alphaIn + 1 !== beta) return false;
@@ -675,7 +692,11 @@ export function futilityNode(
   if (alphaIn >= MATE_FLOOR || alphaIn <= 0 - MATE_FLOOR) return false;
   if (beta >= MATE_FLOOR || beta <= 0 - MATE_FLOOR) return false;
   if (isInCheck(position)) return false;
-  const staticScore = taper ? evaluateAtPhase(position, phase) : evaluateWithoutTaper(position);
+  const staticScore = taper
+    ? pawnShape
+      ? evaluateAtPhase(position, phase)
+      : evaluateAtPhaseWithoutPawnShape(position, phase)
+    : evaluateWithoutTaper(position);
   return staticScore + (FUTILITY_MARGIN[depth] as number) <= alphaIn;
 }
 
@@ -792,12 +813,18 @@ function leafScore(
   const reason = leafEndReason(position);
   if (reason === null) {
     if (!switches.quiescence) {
-      return switches.taper ? evaluateAtPhase(position, phase) : evaluateWithoutTaper(position);
+      return switches.taper
+        ? switches.pawnShape
+          ? evaluateAtPhase(position, phase)
+          : evaluateAtPhaseWithoutPawnShape(position, phase)
+        : evaluateWithoutTaper(position);
     }
     // Every capture node the quiescence search enters is a position visited, and is counted.
     const rules = switches.taper
       ? switches.seePruning
-        ? RULES_SEE_PRUNING
+        ? switches.pawnShape
+          ? RULES_PAWN_SHAPE
+          : RULES_SEE_PRUNING
         : RULES_TAPERED
       : switches.quiescenceEvasions
         ? switches.quietPromotions
@@ -912,7 +939,8 @@ function negamax(
   const hashMove = slot === -1 ? null : entryMove(slot, moves);
   // Futility (`ABC-268`): once per node, with the entry window; a skipped move still takes its index.
   const futile =
-    switches.futility && futilityNode(position, depth, ply, alphaIn, beta, switches.taper, phase);
+    switches.futility &&
+    futilityNode(position, depth, ply, alphaIn, beta, switches.taper, switches.pawnShape, phase);
   let best = Number.NEGATIVE_INFINITY;
   let bestMove = moves[0] as Move;
   let index = 0;
@@ -1195,6 +1223,33 @@ export function search(position: Position, depth: number): SearchResult {
     quietPromotions: true,
     futility: true,
     taper: true,
+    pawnShape: true,
+    seePruning: true,
+    history: true,
+    seeOrdering: true,
+    moveCount: true,
+    countermove: true,
+  });
+}
+
+/**
+ * TEST-ONLY (`ABC-291`, `ADR-0075` decision 4): `search()` without the shape part, the merge-base's
+ * `search()` node for node. Not an engine option; nothing in production calls it.
+ */
+export function searchWithoutPawnShape(position: Position, depth: number): SearchResult {
+  return searchRoot(position, depth, {
+    prune: true,
+    quiescence: true,
+    ordering: "full",
+    table: true,
+    pvs: true,
+    reductions: true,
+    nullMove: true,
+    quiescenceEvasions: true,
+    quietPromotions: true,
+    futility: true,
+    taper: true,
+    pawnShape: false,
     seePruning: true,
     history: true,
     seeOrdering: true,
@@ -1220,6 +1275,7 @@ export function searchWithoutMoveCountPruning(position: Position, depth: number)
     quietPromotions: true,
     futility: true,
     taper: true,
+    pawnShape: false,
     seePruning: true,
     history: true,
     seeOrdering: true,
@@ -1245,6 +1301,7 @@ export function searchWithoutCountermove(position: Position, depth: number): Sea
     quietPromotions: true,
     futility: true,
     taper: true,
+    pawnShape: false,
     seePruning: true,
     history: true,
     seeOrdering: true,
@@ -1271,6 +1328,7 @@ export function searchWithoutQuietBundle(position: Position, depth: number): Sea
     quietPromotions: true,
     futility: true,
     taper: true,
+    pawnShape: false,
     seePruning: true,
     history: true,
     seeOrdering: true,
@@ -1296,6 +1354,7 @@ export function searchWithoutHistory(position: Position, depth: number): SearchR
     quietPromotions: true,
     futility: true,
     taper: true,
+    pawnShape: false,
     seePruning: true,
     history: false,
     seeOrdering: true,
@@ -1321,6 +1380,7 @@ export function searchWithoutSeeOrdering(position: Position, depth: number): Sea
     quietPromotions: true,
     futility: true,
     taper: true,
+    pawnShape: false,
     seePruning: true,
     history: true,
     seeOrdering: false,
@@ -1348,6 +1408,7 @@ export function searchWithoutBundle(position: Position, depth: number): SearchRe
     quietPromotions: true,
     futility: true,
     taper: true,
+    pawnShape: false,
     seePruning: true,
     history: false,
     seeOrdering: false,
@@ -1376,6 +1437,7 @@ export function searchWithoutSeePruning(position: Position, depth: number): Sear
     quietPromotions: true,
     futility: true,
     taper: true,
+    pawnShape: false,
     seePruning: false,
     history: false,
     seeOrdering: false,
@@ -1404,6 +1466,7 @@ export function searchWithoutTaper(position: Position, depth: number): SearchRes
     quietPromotions: true,
     futility: true,
     taper: false,
+    pawnShape: false,
     seePruning: false,
     history: false,
     seeOrdering: false,
@@ -1432,6 +1495,7 @@ export function searchWithoutFutility(position: Position, depth: number): Search
     quietPromotions: true,
     futility: false,
     taper: false,
+    pawnShape: false,
     seePruning: false,
     history: false,
     seeOrdering: false,
@@ -1460,6 +1524,7 @@ export function searchWithoutQuietPromotions(position: Position, depth: number):
     quietPromotions: false,
     futility: false,
     taper: false,
+    pawnShape: false,
     seePruning: false,
     history: false,
     seeOrdering: false,
@@ -1487,6 +1552,7 @@ export function searchWithoutQuiescenceEvasions(position: Position, depth: numbe
     quietPromotions: false,
     futility: false,
     taper: false,
+    pawnShape: false,
     seePruning: false,
     history: false,
     seeOrdering: false,
@@ -1514,6 +1580,7 @@ export function searchWithoutNullMove(position: Position, depth: number): Search
     quietPromotions: false,
     futility: false,
     taper: false,
+    pawnShape: false,
     seePruning: false,
     history: false,
     seeOrdering: false,
@@ -1545,6 +1612,7 @@ export function searchWithoutPruning(position: Position, depth: number): SearchR
     quietPromotions: false,
     futility: false,
     taper: false,
+    pawnShape: false,
     seePruning: false,
     history: false,
     seeOrdering: false,
@@ -1574,6 +1642,7 @@ export function searchWithoutQuiescence(position: Position, depth: number): Sear
     quietPromotions: false,
     futility: false,
     taper: false,
+    pawnShape: false,
     seePruning: false,
     history: false,
     seeOrdering: false,
@@ -1605,6 +1674,7 @@ export function searchWithoutPruningOrQuiescence(position: Position, depth: numb
     quietPromotions: false,
     futility: false,
     taper: false,
+    pawnShape: false,
     seePruning: false,
     history: false,
     seeOrdering: false,
@@ -1632,6 +1702,7 @@ export function searchWithoutOrdering(position: Position, depth: number): Search
     quietPromotions: false,
     futility: false,
     taper: false,
+    pawnShape: false,
     seePruning: false,
     history: false,
     seeOrdering: false,
@@ -1658,6 +1729,7 @@ export function searchWithoutKillers(position: Position, depth: number): SearchR
     quietPromotions: false,
     futility: false,
     taper: false,
+    pawnShape: false,
     seePruning: false,
     history: false,
     seeOrdering: false,
@@ -1685,6 +1757,7 @@ export function searchWithoutTable(position: Position, depth: number): SearchRes
     quietPromotions: false,
     futility: false,
     taper: false,
+    pawnShape: false,
     seePruning: false,
     history: false,
     seeOrdering: false,
@@ -1712,6 +1785,7 @@ export function searchWithoutReductions(position: Position, depth: number): Sear
     quietPromotions: false,
     futility: false,
     taper: false,
+    pawnShape: false,
     seePruning: false,
     history: false,
     seeOrdering: false,
@@ -1739,6 +1813,7 @@ export function searchWithoutPvsOrReductions(position: Position, depth: number):
     quietPromotions: false,
     futility: false,
     taper: false,
+    pawnShape: false,
     seePruning: false,
     history: false,
     seeOrdering: false,

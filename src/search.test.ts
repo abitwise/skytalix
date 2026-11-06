@@ -611,6 +611,7 @@ describe("A6 — no move is selected without a caller-supplied depth", () => {
       "searchWithoutMoveCountPruning",
       "searchWithoutNullMove",
       "searchWithoutOrdering",
+      "searchWithoutPawnShape",
       "searchWithoutPruning",
       "searchWithoutPruningOrQuiescence",
       "searchWithoutPvsOrReductions",

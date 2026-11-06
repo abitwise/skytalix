@@ -528,6 +528,7 @@ describe("A4 — no fixed depth anywhere in the delivered engine", () => {
       "chooseMoveWithoutHistory",
       "chooseMoveWithoutMoveCountPruning",
       "chooseMoveWithoutNullMove",
+      "chooseMoveWithoutPawnShape",
       "chooseMoveWithoutPvsOrReductions",
       "chooseMoveWithoutQuiescenceEvasions",
       "chooseMoveWithoutQuietBundle",
@@ -1827,7 +1828,8 @@ describe("QE-268-a — chooseMoveWithoutFutility reads prior keys, as chooseMove
 describe("ABC-249 — a pre-root repetition met four plies deep scores 0 (QE-248-c)", () => {
   // Re-pinned at `ABC-269` (the tapered evaluation): Ke1 404 -> 441 with the keys, Kg1 497 -> 520
   // without; the moves, and so the property, are unchanged.
-  it("Qe5+ at ply 4 stood twice before the root: Ke1 at 441 with the keys, Kg1 at 520 without", () => {
+  // Re-pinned at `ABC-291` (E4b's shape part, `ADR-0075`, K2): Ke1 441 -> 443, Kg1 520 -> 522.
+  it("Qe5+ at ply 4 stood twice before the root: Ke1 at 443 with the keys, Kg1 at 522 without", () => {
     const game = gameOf(
       "6k1/RR3ppp/8/4q3/8/7P/PP4PK/1N6 w - - 0 1",
       "h2h1 e5e1 h1h2 e1e5 h2g1 e5d4 g1f1 d4f6",
@@ -1851,7 +1853,7 @@ describe("ABC-249 — a pre-root repetition met four plies deep scores 0 (QE-248
     expect(toFen(game.position)).toBe(root);
     expect(withKeys && { move: label(withKeys.move), score: withKeys.score }).toEqual({
       move: "f1e1",
-      score: 441,
+      score: 443,
     });
 
     // Withheld keys: Kg1 lets Black return to the twice-seen position, which is not a draw here.
@@ -1860,7 +1862,7 @@ describe("ABC-249 — a pre-root repetition met four plies deep scores 0 (QE-248
     expect(toFen(position)).toBe(root);
     expect(base && { move: label(base.move), score: base.score }).toEqual({
       move: "f1g1",
-      score: 520,
+      score: 522,
     });
   });
 });
@@ -1944,11 +1946,14 @@ describe("ABC-282 A2 — a partial iteration's move is played only if it beat th
     },
     {
       row: "(b) stopped before any root move beat it, the incumbent is played",
-      fen: "r3k2r/Pppp1ppp/1b3nbN/nP6/BBP1P3/q4N2/Pp1P2PP/R2Q1R1K b kq - 1 1",
+      // `ABC-291`, 2026-11-06 (`ADR-0075` K2 item 3): re-found by the row's own scan, not re-pinned.
+      // On the old fixture (a child of position-4, a3b4 531) E4b's part makes the head stop at 1 153
+      // nodes against the base's 3 197, so that row no longer read its title.
+      fen: "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/3RK2R b Kkq - 1 1",
       budgetMs: 5,
       softMs: 5 / ITERATION_GROWTH,
       depth: 2,
-      incumbent: ["a3b4", 531],
+      incumbent: ["b4c3", 230],
     },
     {
       row: "(c) a completed mate above the incumbent is played with its own score",
@@ -1956,7 +1961,7 @@ describe("ABC-282 A2 — a partial iteration's move is played only if it beat th
       budgetMs: 3,
       softMs: 3,
       depth: 2,
-      incumbent: ["e4d3", 1_070],
+      incumbent: ["e4d3", 1_075],
       kept: ["g5f7", 29_997],
     },
     {

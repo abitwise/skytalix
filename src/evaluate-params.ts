@@ -316,3 +316,21 @@ export const KING_FILE_OPEN_QUEEN: MgEg<number> = { mg: 0, eg: 0 };
  */
 export const MOBILITY_WEIGHT: MgEg<number> = { mg: 4, eg: 4 };
 export const MOBILITY_CAP: MgEg<number> = { mg: 100, eg: 100 };
+
+/**
+ * E4b (`ABC-291`, `ADR-0075` decisions 1 and 2): connected, phalanx and backward pawns. Hand values
+ * by one rule, fixed before any row. By the pawn's OWN rank R (1 = its start rank, 6 = one step from
+ * promotion); every other index is 0.
+ * PAWN_CONNECTED[h][R] = PASSED[h][R] x ISOLATED[h] / PASSED[h][4], floored, R = 2 ... 6.
+ * PAWN_PHALANX[h][R] = PAWN_CONNECTED[h][R] / 2, floored, R = 2 ... 6.
+ * PAWN_BACKWARD[h] = ISOLATED[h], a penalty held as a positive value.
+ */
+export const PAWN_CONNECTED: MgEg<readonly number[]> = {
+  mg: [0, 0, 2, 5, 10, 17, 28, 0],
+  eg: [0, 0, 2, 5, 10, 17, 28, 0],
+};
+export const PAWN_PHALANX: MgEg<readonly number[]> = {
+  mg: [0, 0, 1, 2, 5, 8, 14, 0],
+  eg: [0, 0, 1, 2, 5, 8, 14, 0],
+};
+export const PAWN_BACKWARD: MgEg<number> = { mg: 10, eg: 10 };

@@ -33,6 +33,7 @@ import {
   type EvaluationParameters,
   evaluate,
   evaluateAtPhase,
+  evaluateAtPhaseWithoutPawnShape,
   passerTermsForTest,
   pawnCacheProbeForTest,
   pawnStructureForTest,
@@ -43,6 +44,10 @@ import * as PARAMS from "./evaluate-params.ts";
 import { parseFen, toFen } from "./fen.ts";
 import { type Position, squareName } from "./position.ts";
 import { searchWithoutBundle } from "./search.ts";
+
+/** `evaluate` without E4b's shape part (`ABC-291`, `ADR-0075` decision 4): these rows read older terms. */
+const offEvaluate = (position: Position): number =>
+  evaluateAtPhaseWithoutPawnShape(position, phaseOf(position));
 
 const FIXTURES_FILE = new URL("./evaluate.passer-fixtures.json", import.meta.url);
 const FIXTURES_SHA256 = "bf3c205bf4106209e3151717d93542180d90d344cecfdfbb6f2a30c9d5db887a";
@@ -369,14 +374,14 @@ describe("ABC-271 K1 (b) — value identity: evaluate is Object.is the pre-ticke
   it("G3's 184 in buildCorpus order", () => {
     const corpus = buildCorpus();
     expect(corpus).toHaveLength(G3_PRE.length);
-    const differ = corpus.filter(({ position }, i) => !Object.is(evaluate(position), G3_PRE[i]));
+    const differ = corpus.filter(({ position }, i) => !Object.is(offEvaluate(position), G3_PRE[i]));
     expect(differ.map(({ name }) => name)).toEqual([]);
   });
 
   it("QE's ABC-269 door corpus (176; the KP rows among them)", () => {
     expect(TAPER_DOOR_CORPUS).toHaveLength(DOOR_PRE.length);
     const differ = TAPER_DOOR_CORPUS.filter(
-      ({ fen }, i) => !Object.is(evaluate(parseFen(fen)), DOOR_PRE[i]),
+      ({ fen }, i) => !Object.is(offEvaluate(parseFen(fen)), DOOR_PRE[i]),
     );
     expect(differ.map(({ fen }) => fen)).toEqual([]);
   });
@@ -384,14 +389,14 @@ describe("ABC-271 K1 (b) — value identity: evaluate is Object.is the pre-ticke
   it("ABC-270's queen pairs and their mirrors (28)", () => {
     expect(QUEEN_PAIR_PRE).toHaveLength(28);
     const differ = QUEEN_PAIR_PRE.filter(
-      ([fen, main]) => !Object.is(evaluate(parseFen(fen)), main),
+      ([fen, main]) => !Object.is(offEvaluate(parseFen(fen)), main),
     );
     expect(differ).toEqual([]);
   });
 
   it("QE's 12 passer positions and 44 fixtures, each with its mirror (112)", () => {
     expect(PASSER_PRE).toHaveLength(2 * (12 + 44));
-    const differ = PASSER_PRE.filter(([fen, main]) => !Object.is(evaluate(parseFen(fen)), main));
+    const differ = PASSER_PRE.filter(([fen, main]) => !Object.is(offEvaluate(parseFen(fen)), main));
     expect(differ).toEqual([]);
   });
 });
