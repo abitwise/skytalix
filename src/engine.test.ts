@@ -2077,6 +2077,9 @@ if (RUN_DEEP) {
       };
     };
     const door = engineModule.chooseMoveWithoutQuietBundle;
+    // `ABC-291` (`ADR-0075` d4): the all-on figures re-point to the off door, unchanged. The shipped
+    // path keeps the identity itself: softMs absent and softMs 1 read one line, at one node count.
+    const allOn = engineModule.chooseMoveWithoutPawnShape;
 
     // `main` `22931005`, read on the base before the change (`se-ABC-282` `…aadd2d48`).
     // `ABC-303`, 2026-11-05 (`…0f8a4f82` E3): split. The all-off door keeps the base's figures, and
@@ -2101,8 +2104,11 @@ if (RUN_DEEP) {
           partial: undefined,
         });
         expect(read(door, fenOf(name), frozen)).toEqual(expected(off));
-        expect(read(chooseMove, fenOf(name), frozen)).toEqual(expected(on));
-        expect(read(chooseMove, fenOf(name), { ...frozen, softMs: 1 })).toEqual(expected(on));
+        expect(read(allOn, fenOf(name), frozen)).toEqual(expected(on));
+        expect(read(allOn, fenOf(name), { ...frozen, softMs: 1 })).toEqual(expected(on));
+        expect(read(chooseMove, fenOf(name), { ...frozen, softMs: 1 })).toEqual(
+          read(chooseMove, fenOf(name), frozen),
+        );
       });
     }
 
@@ -2121,7 +2127,8 @@ if (RUN_DEEP) {
         const stepped = () => ({ budgetMs, now: virtualClock(1) });
         const expected = (score: number) => ({ move, score, depth, nodes, partial: undefined });
         expect(read(door, fenOf(name), stepped())).toEqual(expected(off));
-        expect(read(chooseMove, fenOf(name), stepped())).toEqual(expected(on));
+        expect(read(allOn, fenOf(name), stepped())).toEqual(expected(on));
+        expect(read(chooseMove, fenOf(name), stepped()).nodes).toBe(nodes);
       });
     }
   });
