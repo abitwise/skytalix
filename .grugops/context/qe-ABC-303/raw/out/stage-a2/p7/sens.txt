@@ -1,0 +1,1 @@
+unflagged rounds [1, 2, 3, 4, 5, 6, 7, 8] of [1, 2, 3, 4, 5, 6, 7, 8]; H median 9.140 s; H-B wall -0.010 s, CPU +0.320 s; H2-H CPU -0.365 s

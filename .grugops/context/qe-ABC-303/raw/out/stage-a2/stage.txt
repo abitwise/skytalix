@@ -1,0 +1,4 @@
+2026-11-06T17:08:12Z load1 0.39 hold start rows=p7
+2026-11-06T17:08:12Z load1 0.39 P7 start
+2026-11-06T17:12:20Z load1 3.57 P7 exit=0
+2026-11-06T17:12:20Z load1 3.57 hold end
