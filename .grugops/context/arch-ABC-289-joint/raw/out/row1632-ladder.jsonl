@@ -1,0 +1,16 @@
+{"rung":"0.8x","step":1.25,"n":"head","depth":5,"move":"e7e3","score":29993,"nodes":15414}
+{"rung":"0.8x","step":1.25,"n":"door","depth":4,"move":"e7f6","score":1520,"nodes":16438}
+{"rung":"1x","step":1,"n":"head","depth":5,"move":"e7e3","score":29993,"nodes":20534}
+{"rung":"1x","step":1,"n":"door","depth":5,"move":"e7e2","score":29995,"nodes":20534}
+{"rung":"+5%","step":0.9524,"n":"head","depth":5,"move":"e7e3","score":29993,"nodes":22582}
+{"rung":"+5%","step":0.9524,"n":"door","depth":5,"move":"e7e2","score":29995,"nodes":22582}
+{"rung":"+10%","step":0.9091,"n":"head","depth":5,"move":"e7e3","score":29993,"nodes":23606}
+{"rung":"+10%","step":0.9091,"n":"door","depth":5,"move":"e7e2","score":29995,"nodes":23606}
+{"rung":"+25%","step":0.8,"n":"head","depth":5,"move":"e7e3","score":29993,"nodes":27702}
+{"rung":"+25%","step":0.8,"n":"door","depth":5,"move":"e7e2","score":29995,"nodes":27702}
+{"rung":"2x","step":0.5,"n":"head","depth":5,"move":"e7e3","score":29993,"nodes":46134}
+{"rung":"2x","step":0.5,"n":"door","depth":5,"move":"e7e2","score":29995,"nodes":46134}
+{"rung":"2.5x","step":0.4,"n":"head","depth":5,"move":"e7e3","score":29993,"nodes":59446}
+{"rung":"2.5x","step":0.4,"n":"door","depth":5,"move":"e7e2","score":29995,"nodes":59446}
+{"rung":"3.33x","step":0.3,"n":"head","depth":6,"move":"e7e2","score":29995,"nodes":79926}
+{"rung":"3.33x","step":0.3,"n":"door","depth":5,"move":"e7e2","score":29995,"nodes":80950}

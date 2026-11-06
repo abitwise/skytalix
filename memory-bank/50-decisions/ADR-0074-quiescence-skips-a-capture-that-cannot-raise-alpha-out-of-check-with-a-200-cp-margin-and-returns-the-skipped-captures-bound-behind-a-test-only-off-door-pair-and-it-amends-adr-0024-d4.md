@@ -6,6 +6,21 @@ id: ADR-0074
 
 ## Status
 
+***Dated 2026-11-06 (`arch-ABC-289-joint`, at `main` `3ff03a9d`; scratch reads on copies, no game): F1 AND F7 FIRED ON AN EXACT
+BUILD, ON THE JOINT TREE. BY THE LETTER, NOT MET. THIS ADR STAYS ACCEPTED, NOT IN FORCE.***
+- **The build:** `grugops/ABC-289` `b42706b3`, on `main` `063ca870`, which holds bundle 1 (`se-ABC-289` `…0e380b06`). Drift reads
+  99.47 % within 25 cp, max **34 cp** against none beyond 30, in both recursions, on one row, `kiwipete/a2a4`, 290 → 324. `G1` reads
+  **53 / 58** against 54, "mate in 3, seed 1632" NEWLY MISSED. Mate floor 0, zugzwang 7 / 7.
+- **It is not a defect.** With `moveCount` and `countermove` off, every figure of this ADR reproduces (`…0e380b06`).
+- **The two reds are this rule with P4.** On the four arms (`arch-ABC-289-joint` `…d61479af`): with `moveCount` off both clear;
+  with `countermove` off both stay.
+- **The bars did not presume the old tree.** § Consequences' "no bar moves" and "F1 or F2 governs", and `ADR-0056` D5's "If one
+  trips, `ADR-0074` F1 governs and no bar moves", wrote this case down first. **No bar, margin, form or pin moved.**
+- **The premise is not what failed.** Pay is met on this tree: d8 ratios 0.6084 to 0.8215, reach +0.389. "PREMISE MET" above is the
+  record of `0cc9afd1`. This is a miss on decision 11.
+- **What follows is not written here.** Closing the ticket is the Orchestrator's; any override, new form or change to `ADR-0072`
+  is the owner's. See § What would falsify this, the dated block.
+
 **ACCEPTED 2026-11-04 by the owner's word (OQ-0074-1). PREMISE MET ON `main`. Not in force until `ABC-289` merges on its own
 read (decision 13).** Recorded by Architect/Design (task `arch-owner-answers-1104b`, records only, on
 `grugops/arch-owner-answers-1104b` from `main` `65e28f95`). Nothing was run.
@@ -50,6 +65,7 @@ a scratch copy of `main`'s `src/`, outside the repository, under the host lock, 
 | 2026-11-04 | Architect/Design | PROPOSED. Premise met; D200b the only form through both gates | `arch-ABC-289` `…ee8a8621` (readings), `…62012bbe` (decision) |
 | 2026-11-04 | Owner | OQ-0074-1: yes, accept | `orch-2026-10-30a` `…3e73f9f9` |
 | 2026-11-04 | Architect/Design | **ACCEPTED, not in force.** `ADR-0024` d4 amended by pointer; order after bundle 1 | `arch-owner-answers-1104b` |
+| 2026-11-06 | Architect/Design | F1 and F7 read on the joint tree: fired, exact build, NOT MET by the letter; no bar moved | `arch-ABC-289-joint` `…7c297147` (decision), `…d61479af` (readings) |
 
 ### The nine items `ADR-0024` § Status, the fourth block, asks for
 
@@ -234,6 +250,9 @@ verdict does not change.
       - (d) **the order:** a capture both rules name contributes its bound;
       - (e) **in check:** every evasion is searched at an alpha that would skip it;
       - (f) **the seam:** a record without `deltaPruning` searches the same board in full.
+      *2026-11-06 (`arch-ABC-289-joint`): (a)'s "at one centipawn more" means the sum one centipawn over alpha, so alpha one below
+      the sum. Decision 1's test is `≤ alpha`, so a higher alpha still skips. `se-ABC-289`'s row (700 skipped, 699 searched) is
+      the faithful one (`…4ad7c049`). A reading of the words; no bar moves.*
     - **Source rows,** by editing the existing ones: the rules-record constants and the ternary
       (`src/quiescence.test.ts`), and the export lists.
     - **Deep lane (`SEARCH_DEEP=1`, `src/quiescence.test.ts`):** the doors' node equality (`DP0`), and the drift, mate, node
@@ -258,6 +277,9 @@ verdict does not change.
       `ABC-279`'s door pair reads 839 514 / 1 533 901 / 1 296 788 / 404 930. If `main`'s production code has moved by the
       build, the Engineer re-reads these on the new base and puts both sets in the PR. The bars stay; a re-derived count is a
       dated line here, never a moved bar.
+      *2026-11-06 (`arch-ABC-289-joint`): re-read on `main` `063ca870` (`se-ABC-289` `…8b80f592`). Door d8 311 546 / 163 523 and
+      573 518 / 94 911, reach 7.016. Head d8 189 531 / 118 836 and 357 380 / 77 974, reach 7.405. `ABC-279`'s pair unchanged. Bar (b)
+      stays door + 0.15, so ≥ 7.166 here. Bar (a) stays ≤ 0.88×. Both are met.*
 13. **The read, by reference (`ADR-0056` C2′ as folded):** 100 games at 100 ms against the merge-base. **The intent is GAIN,
     ≥ 50.0 / 100.** Also S′ at E 1 810 and the Levels deep lane. A miss is NOT MET and is not re-played.
     - **The firing figure at 100 ms:** at 47 000 nodes on the 190 the rule skips **48.25 %** of the captures reached out of
@@ -279,6 +301,18 @@ verdict does not change.
 | **F7** | regression | `G1` below 54 / 58, or a NEWLY-MISSED line | decision 11 | classed per row under `ADR-0034` |
 | **F8** | 12 (c), cost | `G6` below base by the median | decision 12 | the test's per-move cost outweighs the nodes it saves on the real clock. NOT MET; no tuning after the read |
 | **F9** | 3, the bound | a build that leaves `best` at the stand pat on a skip | decision 10 (b) | a defect; it is the failed form D200 |
+
+*Dated 2026-11-06 (`arch-ABC-289-joint`): how F1 and F7 read on `b42706b3`.*
+- **F1:** the defect check is done (`…0e380b06`: exact build, eight planted faults each red). So its last words apply: "On an exact
+  build: NOT MET". `ABC-289` F4 says the same. F2, F3, F4 here, F6 and F9 did not fire. F5 and F8 were not reached.
+- **F7:** the row is class B twice over. `ADR-0034` d2: the diff's loadable files are `src/engine.ts`, `src/quiescence.ts` and
+  `src/search.ts`, so it has no drift class. Its table: a mate-in-3 row still missed at +25 % readings, at depth 5 against base's 5.
+  The head solves the row only between 2.5× and 3.33× readings. d2's oracle is decision 11 itself, and `ADR-0028` d1's first proof needs the oracle rows green. F1's
+  drift row is red, so no agent can clear it. `ADR-0034` d4 rules out re-finding a mate row; the note `…42c82347` says `G1` is never re-pinned.
+  It is the row and the miss D300 also failed on, in § What the probe measured.
+- **A re-read of D200b, unchanged, on a later tree is not a route.** That is a miss re-played. A new read needs a new form or the
+  owner's word.
+- **Routes, and whose each is:** `arch-ABC-289-joint` `…7c297147` § 2.
 
 ## Alternatives
 
@@ -331,6 +365,7 @@ nothing about the same clause with the bound.
     0.15. Its "≥ 7.018" was that bar on a door of 6.868, and it re-derives with the door.
   - **The joint tree is unread.** No probe has had P4 and this rule both on, so decision 11's drift and floor on that tree are
     `UNKNOWN - verify`. If one trips, F1 or F2 governs.
+    *2026-11-06 (`arch-ABC-289-joint`): read. Floor 0, drift red, and `G1`, which this line did not name, red. F1 and F7 govern.*
 
   **`ABC-282`, in either case:** this rule changes the tree's growth (d8 0.64–0.83×), so `ADR-0072` d11's line on b = 2.3 applies
   here too. Whichever of W1 and this ticket lands second re-reads b by P1's method, reports it to the Orchestrator, and any
