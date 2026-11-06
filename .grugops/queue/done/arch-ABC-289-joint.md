@@ -18,3 +18,17 @@ Answer:
 You may run read-only scratch reads under the host lock named in your dispatch prompt, on copies, no games. Do not change the branch.
 Dated insertions in ADR-0074 only, if any. Fences: ADRs and your records. No ticket, EPIC, board, src or test edits. No push, force, amend, rebase or merge into main.
 Publish: sealed notes (contextRoot = the worktree's .grugops/context, `at` from `date -u` run immediately before each note); queue moves; commit; ## Result + trace row; brief + claim to done/. Before your last commit, run `node tools/grugops/records-path-check.js --base main`; it must exit 0.
+
+## Result
+
+_by architect-design (claude-opus-5-5, arch-ABC-289-joint), 2026-11-06T19:22:40Z, branch `grugops/arch-ABC-289-joint` from `main` `3ff03a9d`. Dated insertions in `ADR-0074` only, and records. Scratch reads on copies of `b42706b3` under the host lock, no game, no timing. No `src/`, test, ticket, EPIC or board edit. `grugops/ABC-289` not changed. Nothing pushed, nothing merged into main, nothing left running._
+
+1. **F1 and F7:** NOT MET on an exact build. F1 by its own words. F7 by `ADR-0034` d1 and d2 and its table, class B, which no agent can clear while F1's drift row is red, then `ABC-289` F4. The bars did not presume the old tree: `ADR-0074` § Consequences and d12, and `ADR-0056` D5 ("If one trips, `ADR-0074` F1 governs and no bar moves"). The premise's pay stands: d8 0.6084 to 0.8215, reach +0.389.
+2. **Routes:** close (moves nothing); override on this build (d11's drift bar and `G1`, the owner's, a safety override); D200b + mate-band guard (his form; clears `G1` on one scratch read, leaves drift at 34, so no route alone); another new form (his form, unread on purpose; the PREREG's bar rule would turn 30 into 51 at 34, so he must be told); P4 out, Q2 in (`ADR-0072`, the only route read to clear both, on scratch). Re-reading D200b on a later tree is not a route.
+3. **Recommendation:** close. Worth stays the estimated +5–20 Elo, with less confidence. Not worth another form now: about six hops and an owner-held quiet window for a read that a real gain would fail a quarter to nearly half the time.
+4. **`ABC-291`:** may build now on `main`, whatever the outcome. Its C2′ waits only for `ABC-289`'s outcome to be recorded. The page needs six dated lines, `…7c297147` § 4.
+5. **The 21 rows:** nothing on close. On any route they come back here on that build.
+
+- **New from these reads:** with `moveCount` off both reds clear; with `countermove` off both stay. Row 1632 is missed at +25 % at equal depth. Drift is wider than the one row at d5 suggests: d6 106 and 103 cp, d7 58 and 110 cp, reports only. On `main` the door misses row 1632 at 0.8× readings, so the row has lost `ADR-0034` d5's margin.
+- **Owner:** one question, OQ-0074-2, drafted in `…7c297147` § 7. It blocks nothing.
+- **Notes:** `…7c297147` (decision), `…d61479af` (observation).
