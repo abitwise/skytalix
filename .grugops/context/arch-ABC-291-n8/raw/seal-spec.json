@@ -1,0 +1,23 @@
+{
+  "refs": ["arch-ABC-291-n8", "ABC-291", "ABC-290", "ABC-292", "ABC-293", "ABC-307", "ABC-305", "ABC-303", "EPIC-011", "ADR-0075", "ADR-0046", "ADR-0035", "NFR-008", "R-N8H-1", "R-N8H-3", "K0", "K1", "K2", "K3", "K4", "K5", "K7", "H3", "G-WITH", "G-GO", "70d931ab", "780d9021", "35a694ee", "fcc59889",
+           "qe-ABC-291/20261106T222838Z-qe-e2e-observation-024bbd63",
+           "qe-ABC-291/20261106T222838Z-qe-e2e-decision-5826dcf6",
+           "qe-ABC-291/20261106T221245Z-qe-e2e-decision-51558b04",
+           "qe-ABC-291/20261106T210624Z-qe-e2e-decision-a49d69d7",
+           "orch-2026-10-30a/20261106T223014Z-orchestrator-decision-a9e7118e",
+           "orch-2026-10-30a/20261106T220610Z-orchestrator-decision-ceb1125e",
+           "orch-2026-10-30a/20261104T203850Z-orchestrator-decision-f30bd604",
+           "orch-2026-10-30a/20261105T123040Z-orchestrator-decision-f40ce634",
+           "orch-2026-10-30a/20261105T135350Z-orchestrator-decision-ad217a34",
+           "secnfr-census-1105/20261105T115526Z-security-nfr-decision-b9038a14",
+           "secnfr-census-1105/20261105T122931Z-security-nfr-decision-19cea480",
+           "secnfr-ABC-307-a10/20261105T215450Z-security-nfr-observation-f627093d",
+           "se-ABC-305/20261105T124015Z-software-engineer-observation-2adad06f",
+           "se-ABC-305/20261106T131126Z-software-engineer-observation-9c9e2a35",
+           "qe-ABC-303/20261106T180618Z-qe-e2e-observation-9e2facfa",
+           "arch-ABC-307-reads/20261105T134134Z-architect-design-observation-f8c13d49"],
+  "notes": [
+    {"kind": "observation", "confidence": "high for every figure read from a8.tsv, source and the notes; the wall split and the row ms are estimates on records, not reads of the candidate; nothing was run", "bodyFile": "note-readings.md"},
+    {"kind": "decision", "confidence": "high that a row move merged first leaves H - B unchanged, by the bar's own definition; medium on the supply, whose kept and saved ms are unbuilt estimates, UNKNOWN - verify; the moved bar is named, not ruled", "bodyFile": "note-decision.md"}
+  ]
+}
