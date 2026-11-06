@@ -51,7 +51,16 @@ export const T_KE = 403;
 export const T_KO = 409;
 export const T_FP = 415;
 export const T_UN = 421;
-export const N_TERMS = 422;
+/**
+ * `ABC-291`'s E4b features (`ADR-0075` d1, d11 (a)), white minus black, traced and held, not free, as
+ * `T_UN` is: no fit moves them. `T_CON` and `T_PHX` run + own rank index − 1, R 1 … 6, like `T_PASS`.
+ * `T_BWD` counts −1 for a white defect, like `T_DBL`. `shapeCounts` reads d1's words apart from
+ * `src/evaluate.ts`, so the identity gate is a second reading of them.
+ */
+export const T_CON = 422;
+export const T_PHX = 428;
+export const T_BWD = 434;
+export const N_TERMS = 435;
 
 export const PST_NAMES = ["pawn", "knight", "bishop", "rook", "queen", "king"] as const;
 
@@ -248,6 +257,52 @@ export function passerCounts(position: Position): { white: PasserCounts; black: 
   };
 }
 
+/** One side's E4b counts: connected and phalanx by own rank R at index R (0 unused), and backward. */
+export interface ShapeCounts {
+  readonly connected: readonly number[];
+  readonly phalanx: readonly number[];
+  readonly backward: number;
+}
+
+/** `ADR-0075` d1 over one side's pawns, each as own file and own rank; `enemy` in the same frame. */
+function shapeOf(own: readonly (readonly [number, number])[], enemy: typeof own): ShapeCounts {
+  const at = (set: typeof own, f: number, R: number): boolean =>
+    set.some(([file, rank]) => file === f && rank === R);
+  const connected = [0, 0, 0, 0, 0, 0, 0];
+  const phalanx = [0, 0, 0, 0, 0, 0, 0];
+  let backward = 0;
+  for (const [f, R] of own) {
+    if (at(own, f - 1, R - 1) || at(own, f + 1, R - 1)) connected[R] = (connected[R] as number) + 1;
+    if (R >= 2 && (at(own, f - 1, R) || at(own, f + 1, R))) {
+      phalanx[R] = (phalanx[R] as number) + 1;
+    }
+    const neighbours = own.filter(([file]) => Math.abs(file - f) === 1);
+    if (
+      neighbours.length > 0 &&
+      neighbours.every(([, rank]) => rank > R) &&
+      (at(enemy, f, R + 1) || at(enemy, f - 1, R + 2) || at(enemy, f + 1, R + 2))
+    ) {
+      backward++;
+    }
+  }
+  return { connected, phalanx, backward };
+}
+
+/** Per side, the E4b counts `src/evaluate.ts`'s `pawnStructure` multiplies by the three tables. */
+export function shapeCounts(position: Position): { white: ShapeCounts; black: ShapeCounts } {
+  const white: [number, number][] = [];
+  const black: [number, number][] = [];
+  for (let r = 1; r <= 6; r++) {
+    for (let f = 0; f < 8; f++) {
+      const x = position.board[r * 16 + f];
+      if (x === PAWN) white.push([f, r]);
+      else if (x === BLACK_PAWN) black.push([f, r]);
+    }
+  }
+  const flip = ([f, r]: [number, number]): [number, number] => [f, 7 - r];
+  return { white: shapeOf(white, black), black: shapeOf(black.map(flip), white.map(flip)) };
+}
+
 /** One traced position: sparse (term, count) pairs, white minus black, in term order. */
 export interface Trace {
   readonly f: number[];
@@ -323,12 +378,18 @@ export function trace(position: Position): Trace {
     c[T_FP + r - 1] = (e4a.white.free[r] as number) - (e4a.black.free[r] as number);
   }
   c[T_UN] = e4a.white.unstoppable - e4a.black.unstoppable;
+  const e4b = shapeCounts(position);
+  for (let r = 1; r <= 6; r++) {
+    c[T_CON + r - 1] = (e4b.white.connected[r] as number) - (e4b.black.connected[r] as number);
+    c[T_PHX + r - 1] = (e4b.white.phalanx[r] as number) - (e4b.black.phalanx[r] as number);
+  }
+  c[T_BWD] = e4b.black.backward - e4b.white.backward;
   const f: number[] = [];
   for (let t = 0; t < N_TERMS; t++) if (c[t] !== 0) f.push(t, c[t] as number);
   return { f, m, w: phase > 24 ? 24 : phase };
 }
 
-/** A table as vectors over the 422 terms, plus mobility's weights and cap. */
+/** A table as vectors over the 435 terms, plus mobility's weights and cap. */
 export interface Table {
   readonly mg: Float64Array;
   readonly eg: Float64Array;
@@ -366,6 +427,7 @@ export function tableOf(params: Params): Table {
     [T_SHELQ, params.KING_SHELTER_MISSING_QUEEN],
     [T_HALFQ, params.KING_FILE_HALF_OPEN_QUEEN],
     [T_OPENQ, params.KING_FILE_OPEN_QUEEN],
+    [T_BWD, params.PAWN_BACKWARD],
   ];
   for (const [t, pair] of scalars) {
     mg[t] = pair.mg;
@@ -378,6 +440,12 @@ export function tableOf(params: Params): Table {
     eg[T_FP + r - 1] = params.PASSED_FREE.eg[r] as number;
   }
   eg[T_UN] = params.PASSED_UNSTOPPABLE.eg;
+  for (let r = 1; r <= 6; r++) {
+    mg[T_CON + r - 1] = params.PAWN_CONNECTED.mg[r] as number;
+    eg[T_CON + r - 1] = params.PAWN_CONNECTED.eg[r] as number;
+    mg[T_PHX + r - 1] = params.PAWN_PHALANX.mg[r] as number;
+    eg[T_PHX + r - 1] = params.PAWN_PHALANX.eg[r] as number;
+  }
   return {
     mg,
     eg,

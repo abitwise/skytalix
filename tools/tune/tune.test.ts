@@ -30,8 +30,10 @@ describe("ABC-239 — tools/tune's source pins", () => {
 
   it("the quiet filter's rules record has no seePruning field, read from the source (ADR-0069 d6, test note 5)", () => {
     const tune = readFileSync(new URL("tune.ts", HERE), "utf8");
-    const record = /export const QUIET_RULES: QuiescenceRules = (\{[^}]*\});/.exec(tune)?.[1];
-    expect(record).toBe("{ evasions: true, quietPromotions: true, taper: true }");
+    const record = /export const QUIET_RULES: QuiescenceRules = (\{[^}]*\});/
+      .exec(tune)?.[1]
+      ?.replace(/\s+/g, " ");
+    expect(record).toBe("{ evasions: true, quietPromotions: true, taper: true, pawnShape: true, }");
     expect(record).not.toMatch(/seePruning/);
   });
 
@@ -58,7 +60,7 @@ if (RUN_DEEP) {
   const { createHash } = await import("node:crypto");
   const { zstdCompressSync } = await import("node:zlib");
   const { makeMove } = await import("../../src/apply.ts");
-  const { evaluate } = await import("../../src/evaluate.ts");
+  const { evaluate, pawnShapeForTest } = await import("../../src/evaluate.ts");
   const { buildCorpus } = await import("../../src/evaluate.mirror-corpus.ts");
   const { parseFen, toFen } = await import("../../src/fen.ts");
   const { legalMoves } = await import("../../src/legal.ts");
@@ -77,14 +79,18 @@ if (RUN_DEEP) {
     T_FP,
     T_KE,
     T_KO,
+    T_BWD,
+    T_CON,
+    T_PHX,
     T_UN,
+    shapeCounts,
     tableOf,
     trace,
   } = await import("./tracer.ts");
 
   const START = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
   const RESULTS = ["1-0", "0-1", "1/2-1/2"];
-  /** The seventeen value exports, in the order `canonicalValues` hashes them. */
+  /** The twenty value exports, in the order `canonicalValues` hashes them. */
   const EXPORT_NAMES = [
     "MATERIAL",
     "PST",
@@ -103,6 +109,9 @@ if (RUN_DEEP) {
     "KING_FILE_OPEN_QUEEN",
     "MOBILITY_WEIGHT",
     "MOBILITY_CAP",
+    "PAWN_CONNECTED",
+    "PAWN_PHALANX",
+    "PAWN_BACKWARD",
   ];
   const sha = (b: Buffer | string): string => createHash("sha256").update(b).digest("hex");
   const tmp = (): string => mkdtempSync(join(tmpdir(), "tune-test-"));
@@ -475,18 +484,64 @@ if (RUN_DEEP) {
     const exportsOf = (source: string): string[] =>
       Array.from(source.matchAll(/^export const (\w+)/gm), (m) => m[1] as string);
 
-    it("an emission at the base values has main's exports, 17 value exports and the 3 phase constants, equal value for value", async () => {
+    it("an emission at the base values has main's exports, 20 value exports and the 3 phase constants, equal value for value", async () => {
       const source = baseEmission();
       const main = readFileSync(new URL("../../src/evaluate-params.ts", HERE), "utf8");
       const names = exportsOf(source);
       expect(names).toEqual(exportsOf(main));
       const values = names.filter((n) => !["PHASE_WEIGHT", "PHASE_MG", "PHASE_EG"].includes(n));
-      expect(values).toHaveLength(17);
+      expect(values).toHaveLength(20);
       const dir = tmp();
       writeFileSync(join(dir, "evaluate-params.ts"), source);
       const imported = await import(join(dir, "evaluate-params.ts"));
       for (const name of names) expect(imported[name], name).toEqual(P[name as keyof typeof P]);
       expect(imported.PASSED_UNSTOPPABLE).toEqual({ mg: 0, eg: 0 });
+      expect(imported.PAWN_BACKWARD).toEqual({ mg: 10, eg: 10 });
+    });
+
+    it("ABC-291 K7: the three E4b terms round-trip through the emission, each column its own", async () => {
+      const mg = Float64Array.from(SHIPPED.mg);
+      const eg = Float64Array.from(SHIPPED.eg);
+      [T_CON, T_PHX].forEach((first, c) => {
+        for (let r = 0; r < 6; r++) {
+          mg[first + r] = 100 + 10 * c + r;
+          eg[first + r] = 200 + 10 * c + r;
+        }
+      });
+      mg[T_BWD] = 301;
+      eg[T_BWD] = 302;
+      const dir = tmp();
+      writeFileSync(join(dir, "evaluate-params.ts"), baseEmission({ ...SHIPPED, mg, eg }));
+      const imported = await import(join(dir, "evaluate-params.ts"));
+      const column = (base: number): number[] => [0, ...[0, 1, 2, 3, 4, 5].map((r) => base + r), 0];
+      expect(imported.PAWN_CONNECTED).toEqual({ mg: column(100), eg: column(200) });
+      expect(imported.PAWN_PHALANX).toEqual({ mg: column(110), eg: column(210) });
+      expect(imported.PAWN_BACKWARD).toEqual({ mg: 301, eg: 302 });
+      expect(Array.from(tableOf(imported).eg)).toEqual(Array.from(eg));
+    });
+
+    it("ABC-291 K7: the tracer's own reading of d1 is the seam's, count for value, over G3's 184", () => {
+      const worth = (table: readonly number[], counts: readonly number[]): number =>
+        counts.reduce((sum, count, r) => sum + count * (table[r] as number), 0);
+      for (const { name, position } of buildCorpus()) {
+        const counts = shapeCounts(position);
+        const seam = pawnShapeForTest(position);
+        for (const side of ["white", "black"] as const) {
+          expect(worth(P.PAWN_CONNECTED.mg, counts[side].connected), name).toBe(
+            seam[side].connected.mg,
+          );
+          expect(worth(P.PAWN_PHALANX.mg, counts[side].phalanx), name).toBe(seam[side].phalanx.mg);
+          expect(counts[side].backward * P.PAWN_BACKWARD.mg, name).toBe(seam[side].backward.mg);
+        }
+      }
+    });
+
+    it("ABC-291 K7: the fit holds the three terms: neither makeCfg nor the free scalars name them", () => {
+      const tune = readFileSync(new URL("tune.ts", HERE), "utf8");
+      const from = tune.indexOf("const SCALAR_TERMS");
+      const fit = tune.slice(from, tune.indexOf("/** One weighted group of rows", from));
+      expect(fit).toContain("function makeCfg(");
+      expect(fit).not.toMatch(/T_CON|T_PHX|T_BWD/);
     });
 
     it("QE-301-b: distinct non-zero E4a halves round-trip: each column reads back its own, and the values hash is over them", async () => {

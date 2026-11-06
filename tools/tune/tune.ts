@@ -52,6 +52,8 @@ import {
   N_TERMS,
   PST_NAMES,
   SHIPPED,
+  T_BWD,
+  T_CON,
   T_DBL,
   T_FP,
   T_HALF,
@@ -63,6 +65,7 @@ import {
   T_OPEN,
   T_OPENQ,
   T_PASS,
+  T_PHX,
   T_PST,
   T_SHEL,
   T_SHELQ,
@@ -104,11 +107,18 @@ export const OWN_PLAYERS = ["skytalix", "base", "skytalix-a", "skytalix-b", "sky
  * (`ADR-0069` d6). It is `src/search.ts`'s `RULES_TAPERED` as it stood at `main` `441c547e`, the
  * record `chooseMoveWithoutSeePruning` still passes after Q1 (`ABC-279`). It has no `seePruning`
  * field, and `quiesce` reads `seePruning === true`, so Q1's switch is off here and the data set
- * does not move with Q1's merge.
+ * does not move with Q1's merge. `pawnShape` is on (`ABC-291`): `isQuiet` compares the stand pat with
+ * the shipped `evaluate`, so the two must read the same evaluation, or every position the shape part
+ * touches would read as not quiet.
  */
-export const QUIET_RULES: QuiescenceRules = { evasions: true, quietPromotions: true, taper: true };
+export const QUIET_RULES: QuiescenceRules = {
+  evasions: true,
+  quietPromotions: true,
+  taper: true,
+  pawnShape: true,
+};
 export const QUIET_RULES_NAME =
-  "quiesce(full window) with { evasions: true, quietPromotions: true, taper: true }, no seePruning (src/search.ts RULES_TAPERED at main 441c547e; ADR-0069 d6)";
+  "quiesce(full window) with { evasions: true, quietPromotions: true, taper: true, pawnShape: true }, no seePruning (src/search.ts RULES_TAPERED at main 441c547e; ADR-0069 d6; ADR-0075 d4)";
 
 const START_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
@@ -1299,7 +1309,10 @@ export function termName(t: number): string {
     [T_HALFQ]: "KING_FILE_HALF_OPEN_QUEEN",
     [T_OPENQ]: "KING_FILE_OPEN_QUEEN",
     [T_UN]: "PASSED_UNSTOPPABLE",
+    [T_BWD]: "PAWN_BACKWARD",
   };
+  if (t >= T_PHX && t < T_BWD) return `PAWN_PHALANX[${t - T_PHX + 1}]`;
+  if (t >= T_CON && t < T_PHX) return `PAWN_CONNECTED[${t - T_CON + 1}]`;
   if (t >= T_FP && t < T_UN) return `PASSED_FREE[${t - T_FP + 1}]`;
   if (t >= T_KO && t < T_FP) return `PASSED_KING_OWN[${t - T_KO + 1}]`;
   if (t >= T_KE && t < T_KO) return `PASSED_KING_ENEMY[${t - T_KE + 1}]`;
@@ -1718,10 +1731,13 @@ function valuesOf(th: Table) {
     KING_FILE_OPEN_QUEEN: pair(T_OPENQ),
     MOBILITY_WEIGHT: { mg: th.wmg + 0, eg: th.weg + 0 },
     MOBILITY_CAP: { mg: th.cap, eg: th.cap },
+    PAWN_CONNECTED: byRank(T_CON),
+    PAWN_PHALANX: byRank(T_PHX),
+    PAWN_BACKWARD: pair(T_BWD),
   };
 }
 
-/** JSON of the seventeen value exports, in this order, mg before eg. */
+/** JSON of the twenty value exports, in this order, mg before eg. */
 export function canonicalValues(v: ReturnType<typeof valuesOf>): string {
   const names = [
     "MATERIAL",
@@ -1741,6 +1757,9 @@ export function canonicalValues(v: ReturnType<typeof valuesOf>): string {
     "KING_FILE_OPEN_QUEEN",
     "MOBILITY_WEIGHT",
     "MOBILITY_CAP",
+    "PAWN_CONNECTED",
+    "PAWN_PHALANX",
+    "PAWN_BACKWARD",
   ] as const;
   return JSON.stringify(names.map((n) => [n, v[n]]));
 }
@@ -1998,6 +2017,24 @@ export function emitSource(info: ExtractInfo, fitted: FitReport, toolCommit: str
     " */",
     `export const MOBILITY_WEIGHT: MgEg<number> = { mg: ${th.wmg + 0}, eg: ${th.weg + 0} };`,
     `export const MOBILITY_CAP: MgEg<number> = { mg: ${th.cap}, eg: ${th.cap} };`,
+    "",
+    "/**",
+    " * E4b (`ABC-291`, `ADR-0075` decisions 1 and 2): connected, phalanx and backward pawns. Hand values",
+    " * by one rule, traced and held by the fit (`ADR-0075` d11 (a)). By the pawn's OWN rank R (1 = its",
+    " * start rank, 6 = one step from promotion); every other index is 0.",
+    " * PAWN_CONNECTED[h][R] = PASSED[h][R] x ISOLATED[h] / PASSED[h][4], floored, R = 2 ... 6.",
+    " * PAWN_PHALANX[h][R] = PAWN_CONNECTED[h][R] / 2, floored, R = 2 ... 6.",
+    " * PAWN_BACKWARD[h] = ISOLATED[h], a penalty held as a positive value.",
+    " */",
+    "export const PAWN_CONNECTED: MgEg<readonly number[]> = {",
+    `  mg: [0, ${range(T_CON, 6, "mg").join(", ")}, 0],`,
+    `  eg: [0, ${range(T_CON, 6, "eg").join(", ")}, 0],`,
+    "};",
+    "export const PAWN_PHALANX: MgEg<readonly number[]> = {",
+    `  mg: [0, ${range(T_PHX, 6, "mg").join(", ")}, 0],`,
+    `  eg: [0, ${range(T_PHX, 6, "eg").join(", ")}, 0],`,
+    "};",
+    `export const PAWN_BACKWARD: MgEg<number> = ${pair(T_BWD)};`,
     "",
   );
   return lines.join("\n");
