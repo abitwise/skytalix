@@ -45,6 +45,7 @@ dated lines; `ADR-0067`'s dated blocks; `ADR-0070`; `ADR-0064` d3–d8; `ADR-002
 | 2026-11-05 | Architect/Design | Status, this log and the dated lines in `ADR-0056` and `ADR-0067` read accepted. No value, rule, bar or probe row moved. Nothing run | `arch-ABC-291-accept` |
 | 2026-11-05 | Architect/Design | The probe, once, under PREREG `…2a579895` (`d033ea0e`): premise stands under rule 3, PR8 R = 1.04287, PR9 14.72 %. K0 (c)'s counts and K2's list by dated line. No value, rule, definition, ratio, intent or bar moved | `arch-ABC-291-probe` `…65c7a9c9`, `…2926c26b` |
 | 2026-11-05 | Architect/Design | The 640 KiB lines dated; F2's K5 half written, as a reading open to the Orchestrator until K4's PREREG seals. No value, rule, definition, ratio, intent, bar or level moved. Nothing run | `arch-ABC-307-records` |
+| 2026-11-06 | Architect/Design | Dated pointers to `…43e6d8fd` 3 on d11 (d)'s list and on "What stays open". No value, rule, definition, ratio, intent, bar or level moved. Nothing run | `arch-ABC-303-b5` |
 
 ## Context
 
@@ -281,6 +282,7 @@ Notation: R is the pawn's own rank index, as in `PASSED`. 1 is its start rank, 6
     - **(d) No second set of values after a miss. Settled here for this term, on his acceptance. Each later term's ADR carries it, and he sees it each time.**
       - **The line.** After a miss, `PAWN_CONNECTED`, `PAWN_PHALANX` and `PAWN_BACKWARD` do not get new numbers by hand. New numbers chosen after a loss are tuning on play by hand.
       - **A miss is:** a real safety red (F3), C2′ below the bar on a clean read, a CF2 or CF8 NOT MET, a second `G2` miss, or the probe's rule 2 or 4.
+        *Dated 2026-11-06 (`arch-ABC-303-b5`): a second K5 miss is also a miss here. The Orchestrator ruled it (`…43e6d8fd` 3) and told the owner. It stays open to his overruling, as d11's readings are. That miss is F2's second miss on K5's half (§ What would falsify this). The list's words above stand.*
       - **Not a miss:** a defect fix that restores d1 or d2.
       - **How it sits with C2′'s line** "a changed form may come back as a new attempt". It narrows that line for a hand-valued term. A change of values alone is not a changed form. A new form needs a new definition,
         a reason drawn from no missed read, its own ADR and his acceptance.
@@ -392,6 +394,7 @@ A pass means "not seen worse", not "proven better". A term worth nothing still p
 - **A void is not a miss.** A run inside a read voided by foreign load is not a run on K5. The PREREG states K5's void rule, K5 reads in the window ruling 1 gives K4, and a re-read after a void is not F2's re-read.
 - **What does not move.** Depth 6, the depth-7 WARN, "≥ base" reported and not graded, `G6`'s reading rule and `NFR-005`'s level. K5 loses no re-read that was left to it: had PR8 held, a K5 miss would have earned the cut, and PR8 did not hold.
 - **What stays open: d11 (d)'s list.** It names "a second `G2` miss", and K5 is `G6`. This line does not add K5, because d11 (d) was settled on his acceptance. So a K5 second miss is "not merged", in F2's words. Whether it is also a miss under d11 (d) is with the Orchestrator. My recommendation is that it is, since new numbers after a cost miss are still numbers chosen after a miss. K4's PREREG does not wait on this: nothing it seals turns on it.
+  *Dated 2026-11-06 (`arch-ABC-303-b5`): no longer open. `…43e6d8fd` 3 ruled it: a second K5 miss is a miss under d11 (d). See d11 (d)'s dated line. The ruling stays open to the owner's overruling.*
 - **How near.** `G6` on this term is `UNKNOWN - verify`. `qe-ABC-271` read kiwipete at 9 and position-6 at 12 on every run (`…3e1cc3ff`), and PR10, on the form before the cut, read 0.988 of `main`'s ns per node on 3.45 % more nodes. By reading, the floor is far off.
 
 ## Consequences

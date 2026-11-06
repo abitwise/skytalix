@@ -6,6 +6,12 @@ id: ADR-0073
 
 ## Status
 
+***Dated 2026-11-06 (`arch-ABC-303-b5`, records only at `main` `063ca870`; nothing run): IN FORCE on `main`, as a part of bundle 1.*** This is `ADR-0056` B5's line. `ABC-303` (`ABC-286` + `ABC-288`) merged at `434fa171` on QE's verdict `…ebefbfa2`: MET, PASS_WITH_GAPS, no blocking gap.
+- **The read:** C2′ 55.5 / 100 against 50.0, S′ 9.0 / 10 at E 1 810, the Levels deep lane 58 / 58. `…9e2facfa` is B4's read of the merged tree. `ADR-0072` § Status's dated line of this date gives the rest.
+- **Credit is to the bundle (B5). No per-part Elo is stated or inferred.**
+- **The premise stays overridden, not met, and F1 stays fired, as written below.** CH3 stays missed. Table 3 reports it at the figures he was shown, and no verdict rides on them. The countermove still has no measured pay, and this read cannot show that it earns its place.
+- **What this line replaces:** "not in force until the bundle merges on its read" below, and nothing else. B6 did not fire. `ADR-0063`'s pointer on d2 and d4 takes effect with this merge, as its § Status says.
+
 **ACCEPTED 2026-11-04 BY THE OWNER'S WORD, OVER A MISSED PREMISE. THE PREMISE IS NOT MET AND F1 STAYS FIRED. Part of bundle
 1; not in force until the bundle merges on its read.** Recorded by Architect/Design (task `arch-owner-answers-1104b`, records
 only, on `grugops/arch-owner-answers-1104b` from `main` `65e28f95`). Nothing was run.
@@ -62,6 +68,7 @@ copies of `src/`, under the host lock. Nothing was committed to `src/` or `tools
 | 2026-11-04 | Architect/Design | PROPOSED. C1 picked; CH1 and CH2 rejected; safety met; CH3 missed; F1 fired | `arch-bundle-1` `…ed82b408` (readings), `…37b7fb23` (decision) |
 | 2026-11-04 | Owner | (a): override both missed premises and build both; OQ-0073-1 answered, `ABC-288` narrowed to C1 | `orch-2026-10-30a` `…3e73f9f9` |
 | 2026-11-04 | Architect/Design | **ACCEPTED over a missed premise, not in force.** F1 stays fired. The rows the read holds are ruled in `ADR-0056` | `arch-owner-answers-1104b` |
+| 2026-11-06 | Architect/Design | **IN FORCE,** a part of bundle 1: `ABC-303` merged `434fa171`, QE `…ebefbfa2`, B4 `…9e2facfa`. Credit to the bundle, no per-part Elo. The premise stays overridden and F1 stays fired | `arch-ABC-303-b5` |
 
 ## Context
 
