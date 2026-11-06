@@ -1,0 +1,44 @@
+start                  legal 20 dmax 10 N 178375 r(2..) 6.25 1.83 2.83 2.28 3.58 2.50 2.57 2.08 2.53
+kiwipete               legal 48 dmax 10 N 1587071 r(2..) 1.96 2.10 1.78 3.29 3.15 2.18 2.22 2.10 2.11
+position-6             legal 46 dmax 10 N 413327 r(2..) 11.02 1.59 1.71 1.72 2.65 3.73 2.33 2.43 2.19
+endgame-cpw3           legal 14 dmax 10 N 175223 r(2..) 4.12 2.46 4.20 2.65 2.43 4.55 1.84 2.00 2.26
+in-check               legal  5 dmax 10 N 106564 r(2..) 12.00 7.48 1.85 2.73 2.38 1.69 2.02 1.71 3.40
+candidate/b04#10       legal 43 dmax 10 N 695858 r(2..) 3.05 7.43 2.74 1.96 3.97 1.98 1.96 2.22 1.95
+candidate/b08#19       legal 29 dmax 10 N 115579 r(2..) 4.97 4.64 1.70 2.57 1.60 2.46 2.29 2.36 1.81
+candidate/b06#2        legal 38 dmax 10 N 237610 r(2..) 3.06 2.86 2.35 1.95 3.94 1.96 1.62 1.79 2.01
+base/b09#8             legal 44 dmax 10 N 428445 r(2..) 4.40 16.29 1.64 1.26 2.48 1.73 3.21 2.24 1.78
+base/b10#17            legal 38 dmax 10 N 898683 r(2..) 10.16 2.94 1.48 4.76 2.18 2.00 2.61 2.75 2.79
+base/b04#6             legal 37 dmax 10 N 356664 r(2..) 4.00 3.89 1.79 2.67 2.58 3.24 3.15 1.95 1.64
+candidate/b06#3        legal 31 dmax 10 N 367817 r(2..) 2.18 6.35 1.76 2.95 2.54 1.76 3.89 1.91 2.08
+candidate/b10#7        legal 35 dmax 10 N 404802 r(2..) 2.67 2.61 2.80 2.79 1.72 1.44 1.77 2.24 5.48
+base/b08#7             legal 34 dmax 10 N 1306863 r(2..) 9.30 4.15 2.07 3.88 3.16 3.21 2.29 1.39 2.95
+candidate/b03#19       legal 44 dmax 10 N 244480 r(2..) 9.42 3.99 1.81 2.00 2.65 1.77 1.96 2.28 1.79
+candidate/b09#7        legal 34 dmax 10 N 442141 r(2..) 7.46 2.89 2.25 1.85 5.21 1.51 2.27 1.82 2.81
+candidate/b08#15       legal 36 dmax 10 N 288802 r(2..) 7.85 2.32 2.14 1.76 1.97 1.88 2.16 2.22 2.25
+candidate/b03#7        legal  6 dmax 10 N 71581 r(2..) 5.80 4.28 3.38 1.77 2.09 1.72 2.33 2.32 2.50
+base/b01#14            legal  3 dmax 10 N 51815 r(2..) 5.57 2.03 1.87 2.61 2.12 2.07 2.08 2.18 2.05
+candidate/b01#17       legal 40 dmax 10 N 249487 r(2..) 3.50 5.50 1.97 1.56 1.92 2.38 2.53 2.75 2.65
+candidate/b02#19       legal 39 dmax 10 N 697280 r(2..) 2.95 4.27 1.77 3.12 2.77 2.20 3.16 2.60 2.71
+candidate/b08#6        legal 11 dmax 10 N 229131 r(2..) 3.00 4.59 2.69 3.09 2.20 2.31 2.86 2.33 2.18
+candidate/b04#8        legal 27 dmax 10 N 246787 r(2..) 6.63 4.27 2.41 1.28 1.42 2.11 2.42 2.55 3.17
+base/b03#2             legal  2 dmax 10 N 56910 r(2..) 18.00 2.22 2.24 4.14 2.06 2.77 2.35 2.29 2.50
+candidate/b08#10       legal  2 dmax 10 N 670924 r(2..) 14.50 2.78 4.26 3.70 2.82 3.42 2.79 3.25 3.02
+pooled n 175 median 2.2727 p25 1.950 p75 2.743 p10 1.720 p90 3.273
+d 4 n 25 median 2.075 p25 1.782 p75 2.688
+d 5 n 25 median 2.610 p25 1.851 p75 3.087
+d 6 n 25 median 2.479 p25 2.088 p75 2.823
+d 7 n 25 median 2.114 p25 1.768 p75 2.497
+d 8 n 25 median 2.327 p25 2.085 p75 2.605
+d 9 n 25 median 2.236 p25 1.998 p75 2.357
+d 10 n 25 median 2.256 p25 2.049 p75 2.785
+odd d median 2.236 n 75 even d median 2.288 n 100
+P2f kiwipete {"d":6,"nodes":73844,"move":"e2a6","score":-101,"depth":6}
+P2f kiwipete {"d":7,"nodes":161150,"move":"e2a6","score":-105,"depth":7}
+P2f kiwipete {"d":8,"nodes":357380,"move":"e2a6","score":-114,"depth":8}
+P2f position-6 {"d":6,"nodes":8964,"move":"c3d5","score":87,"depth":6}
+P2f position-6 {"d":7,"nodes":33398,"move":"c3d5","score":43,"depth":7}
+P2f position-6 {"d":8,"nodes":77974,"move":"c3d5","score":45,"depth":8}
+{"probe":"P2v","name":"kiwipete","budgetMs":50,"depth":5,"nodes":47052,"move":"e2a6","score":-75,"elapsedMs":51}
+{"probe":"P2v","name":"kiwipete","budgetMs":200,"depth":7,"nodes":198604,"move":"e2a6","score":-105,"elapsedMs":201}
+{"probe":"P2v","name":"position-6","budgetMs":50,"depth":7,"nodes":44098,"move":"c3d5","score":43,"elapsedMs":51}
+{"probe":"P2v","name":"position-6","budgetMs":200,"depth":9,"nodes":195650,"move":"c3d5","score":34,"elapsedMs":201}

@@ -1,0 +1,14 @@
+{"arm":"shipped","row":"A1(a)","H":3,"head":{"depth":2,"move":"c3d5","score":59,"nodes":727},"base":{"depth":2,"move":"c3d5","score":59,"nodes":1090}}
+{"arm":"shipped","row":"A1(a)","H":4,"head":{"depth":2,"move":"c3d5","score":59,"nodes":727},"base":{"depth":3,"move":"c3d5","score":85,"nodes":1155}}
+{"arm":"shipped","row":"A1(a)","H":5,"head":{"depth":3,"move":"c3d5","score":85,"nodes":1155},"base":{"depth":4,"move":"c3d5","score":85,"nodes":1971}}
+{"arm":"shipped","row":"A1(a)","H":6,"head":{"depth":3,"move":"c3d5","score":85,"nodes":1155},"base":{"depth":4,"move":"c3d5","score":85,"nodes":2114}}
+{"arm":"shipped","row":"A2(a)","head":{"depth":2,"move":"f2e3","score":463,"nodes":3125,"partial":true},"base":{"depth":2,"move":"a1e5","score":484,"nodes":3125}}
+{"arm":"shipped","row":"A2(b)","head":{"depth":3,"move":"a3b4","score":531,"nodes":2115},"base":{"depth":3,"move":"a3b4","score":531,"nodes":2136}}
+{"arm":"shipped","row":"D12","head":{"depth":4,"move":"f2f3","score":-66,"nodes":2139,"partial":true},"base":{"depth":4,"move":"f2c2","score":-167,"nodes":2139}}
+{"arm":"door","row":"A1(a)","H":3,"head":{"depth":2,"move":"c3d5","score":59,"nodes":801},"base":{"depth":2,"move":"c3d5","score":59,"nodes":1097}}
+{"arm":"door","row":"A1(a)","H":4,"head":{"depth":2,"move":"c3d5","score":59,"nodes":801},"base":{"depth":3,"move":"c3d5","score":85,"nodes":1262}}
+{"arm":"door","row":"A1(a)","H":5,"head":{"depth":3,"move":"c3d5","score":85,"nodes":1262},"base":{"depth":3,"move":"c3d5","score":85,"nodes":2121}}
+{"arm":"door","row":"A1(a)","H":6,"head":{"depth":3,"move":"c3d5","score":85,"nodes":1262},"base":{"depth":4,"move":"c3d5","score":85,"nodes":2197}}
+{"arm":"door","row":"A2(a)","head":{"depth":2,"move":"a1f6","score":475,"nodes":3125,"partial":true},"base":{"depth":2,"move":"a1e5","score":484,"nodes":3125}}
+{"arm":"door","row":"A2(b)","head":{"depth":2,"move":"a3b4","score":531,"nodes":3197},"base":{"depth":2,"move":"a3b4","score":531,"nodes":3197}}
+{"arm":"door","row":"D12","head":{"depth":4,"move":"f2f3","score":50,"nodes":2155,"partial":true},"base":{"depth":4,"move":"f2c2","score":-141,"nodes":2155}}

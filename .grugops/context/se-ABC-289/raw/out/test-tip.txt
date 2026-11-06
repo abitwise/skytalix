@@ -1,0 +1,7 @@
+ FAIL  src/engine.test.ts > ABC-282 A1 — no iteration starts that the clock says cannot finish > (a) past the soft limit the search returns after iteration d, with 0 nodes of d + 1
+ FAIL  src/engine.test.ts > ABC-282 A2 — a partial iteration's move is played only if it beat the incumbent > (a) a root move that beat the incumbent is played (candidate of K25, base/b09#8)
+ FAIL  src/engine.test.ts > ABC-282 A2 — a partial iteration's move is played only if it beat the incumbent > (b) stopped before any root move beat it, the incumbent is played
+ FAIL  src/engine.test.ts > ABC-282 A2 — a partial iteration's move is played only if it beat the incumbent > D12: a fail high above an exact incumbent stands while the next pass is aborted
+ FAIL  src/uci-session.test.ts > ABC-282 — W1 acts in uci-clock-mode under a clock, and nowhere else (ADR-0071 D1, D3, D5) > D5: a kept move is reported by one line, just before an unchanged info line
+ Test Files  2 failed | 69 passed (71)
+      Tests  5 failed | 2742 passed (2747)

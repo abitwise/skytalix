@@ -1,0 +1,7 @@
+{"refs":["ABC-289","ABC-282","ABC-303","EPIC-011","ADR-0024","ADR-0056","ADR-0071","ADR-0074","NFR-005","NFR-008","NFR-009","arch-ABC-303-w1-rows/20261105T124145Z-architect-design-decision-0f8a4f82"],
+"notes":[
+{"kind":"failed-attempt","confidence":"high on the reds and the exact build; UNKNOWN - verify on the ruling and on the W1 rows' form","bodyFile":"stop.md"},
+{"kind":"decision","confidence":"high on the form, which reproduces the probe to the count","bodyFile":"dec.md"},
+{"kind":"observation","confidence":"high: read as run; G6, the lane wall, firing and audit not read","bodyFile":"obs.md"},
+{"kind":"artifact-ref","confidence":"high","bodyFile":"art.md"}
+]}

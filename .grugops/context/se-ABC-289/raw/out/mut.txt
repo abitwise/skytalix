@@ -1,0 +1,8 @@
+0 F9 stand-pat return exit=1       Tests  3 failed | 5 passed | 101 skipped (109)
+1 order reversed exit=1       Tests  1 failed | 7 passed | 101 skipped (109)
+2 break for continue exit=1       Tests  1 failed | 7 passed | 101 skipped (109)
+3 strict < exit=1       Tests  4 failed | 4 passed | 101 skipped (109)
+4 margin 201 exit=1       Tests  5 failed | 3 passed | 101 skipped (109)
+5 promotions tested exit=1       Tests  2 failed | 6 passed | 101 skipped (109)
+6 in check too exit=1       Tests  2 failed | 6 passed | 101 skipped (109)
+7 seam: always on exit=1       Tests  1 failed | 7 passed | 101 skipped (109)

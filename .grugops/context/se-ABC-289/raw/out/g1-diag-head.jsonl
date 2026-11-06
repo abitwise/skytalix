@@ -1,0 +1,13 @@
+{"fen":"8/2R1QpK1/5p2/8/8/8/7n/1N4k1 w - - 0 1","accept":["e7e2"],"budgetMs":25,"stepMs":1}
+{"n":"head","clock":"G1","depth":5,"move":"e7e3","score":29993,"nodes":20534}
+{"n":"head","d":4,"move":"e7f6","score":1520,"nodes":3471}
+{"n":"head","d":5,"move":"e7e3","score":29993,"nodes":12811}
+{"n":"head","d":6,"move":"e7e2","score":29995,"nodes":63916}
+{"n":"head","d":7,"move":"e7e2","score":29995,"nodes":176034}
+{"n":"head","d":8,"move":"e7e2","score":29995,"nodes":661145}
+{"n":"door","clock":"G1","depth":5,"move":"e7e2","score":29995,"nodes":20534}
+{"n":"door","d":4,"move":"e7f6","score":1520,"nodes":3908}
+{"n":"door","d":5,"move":"e7e2","score":29995,"nodes":16838}
+{"n":"door","d":6,"move":"e7e2","score":29995,"nodes":84157}
+{"n":"door","d":7,"move":"e7e2","score":29995,"nodes":241747}
+{"n":"door","d":8,"move":"e7e2","score":29995,"nodes":884067}

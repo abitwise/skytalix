@@ -1,0 +1,13 @@
+{"row":"S1","name":"kiwipete","d":6,"what":"search","nodes":110567,"base":110567,"score":-83,"move":"d5e6","eq":true}
+{"row":"S1","name":"kiwipete","d":6,"what":"chooseMove","nodes":104780,"base":104780,"score":-101,"move":"e2a6","eq":true}
+{"row":"S1","name":"kiwipete","d":7,"what":"search","nodes":175635,"base":175635,"score":-114,"move":"e2a6","eq":true}
+{"row":"S1","name":"kiwipete","d":7,"what":"chooseMove","nodes":244677,"base":244677,"score":-105,"move":"e2a6","eq":true}
+{"row":"S1","name":"kiwipete","d":8,"what":"search","nodes":311546,"base":311546,"score":-81,"move":"e2a6","eq":true}
+{"row":"S1","name":"kiwipete","d":8,"what":"chooseMove","nodes":573518,"base":573518,"score":-114,"move":"e2a6","eq":true}
+{"row":"S1","name":"position-6","d":6,"what":"search","nodes":25915,"base":25915,"score":87,"move":"c3d5","eq":true}
+{"row":"S1","name":"position-6","d":6,"what":"chooseMove","nodes":10513,"base":10513,"score":87,"move":"c3d5","eq":true}
+{"row":"S1","name":"position-6","d":7,"what":"search","nodes":63435,"base":63435,"score":79,"move":"c3d5","eq":true}
+{"row":"S1","name":"position-6","d":7,"what":"chooseMove","nodes":39268,"base":39268,"score":43,"move":"c3d5","eq":true}
+{"row":"S1","name":"position-6","d":8,"what":"search","nodes":163523,"base":163523,"score":71,"move":"c3d5","eq":true}
+{"row":"S1","name":"position-6","d":8,"what":"chooseMove","nodes":94911,"base":94911,"score":45,"move":"c3d5","eq":true}
+{"S1":12,"of":12}

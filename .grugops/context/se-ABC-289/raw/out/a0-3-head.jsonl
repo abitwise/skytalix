@@ -1,0 +1,7 @@
+{"mode":"level","go":"go movetime 200","lines":["info depth 9 score cp 34 nodes 195650 time 201 nps 973383 pv c3d5","bestmove c3d5"]}
+{"mode":"level","go":"go wtime 4000 btime 4000","lines":["info depth 9 score cp 34 nodes 195650 time 201 nps 973383 pv c3d5","bestmove c3d5"]}
+{"mode":"simple-tournament","go":"go movetime 200","lines":["info depth 9 score cp 34 nodes 195650 time 201 nps 973383 pv c3d5","bestmove c3d5"]}
+{"mode":"simple-tournament","go":"go wtime 8000 btime 8000 movestogo 40","lines":["info depth 7 score cp 43 nodes 69698 time 76 nps 917079 pv c3d5","bestmove c3d5"]}
+{"mode":"uci-clock-mode","go":"go movetime 200","lines":["info depth 9 score cp 34 nodes 195650 time 201 nps 973383 pv c3d5","bestmove c3d5"]}
+{"mode":"uci-clock-mode","go":"go depth 6","lines":["info depth 6 score cp 87 nodes 8964 time 15 nps 597600 pv c3d5","bestmove c3d5"]}
+{"mode":"uci-clock-mode","go":"go wtime 8000 btime 8000 movestogo 40","lines":["info depth 7 score cp 43 nodes 33398 time 40 nps 834950 pv c3d5","bestmove c3d5"]}
