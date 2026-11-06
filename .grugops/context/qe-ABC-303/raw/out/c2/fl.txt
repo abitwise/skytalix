@@ -1,0 +1,2 @@
+fsample: 405 samples; 8 name a foreign vitest; 8 busy (pcpu > 1.0) of 405; rows by project {'marketing': 13}; largest load1 2.08
+host.log: 122 lines; samples with foreign_vitest_procs > 0: 3 of 122; largest count 2; largest load1 2.08

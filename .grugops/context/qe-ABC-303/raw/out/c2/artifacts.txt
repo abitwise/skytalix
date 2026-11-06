@@ -1,0 +1,60 @@
+skytalix bb0cc13420285720519c8086c653055e122216de dist/ (24 files) tree sha256 fd27ec59adaeec26f303a683144c2f170ebcb873a129eda5aa83a1136e76e5c8
+  758bbd2d1eeef8bbbfb9dadf9a24cf72ad8e9f746d9e1ddc9c8f90ace5bc1971  ./apply.js
+  66da0f17f14c38aa4f60b180ab7c9bca90f4b6dd8c14ae391ffa2fd991ac12db  ./book-file.js
+  04bd131e37355954d647ad5c01459b2c40c7fffc885662488b0257ec189df374  ./book.js
+  2e7199d9b1254772476681d2e9bcc417820bf06da7920317cf7c8992bab582c5  ./coordinate-move.js
+  e0a32c6d1e034adc568370504c341f6466795d1e687d93c9179cd436ad550069  ./engine.js
+  633b5c58b23182de80c64b1128b7471218f683c8161ebc27d362e91b52523090  ./evaluate-params.js
+  ffd6e53843847d055db6d1f706b0a979520b15dad4058c880176ba86c7b05ef2  ./evaluate.js
+  5d7b981fdcdb5d52046be15e3d6d7c93cb24274daba884439732d3460d258ec4  ./fen.js
+  708580df293a2fe49e7aba412c579a8601f9cde264b46c7a09ba3c294a48a72f  ./frame.js
+  93e9ac2a7eaa665a54daaba3490cfd4b0ee22cac36d997a81f5526fc1170d05b  ./gameend.js
+  74821da4c44d1650855cf91d50e1a2d50d499dfaadf65cc9334b735d2f7f4a98  ./history.js
+  029e56824f673b75c977de3fb6a13ed122971c5a97eb2382096639595b836476  ./legal.js
+  e577a4f9c8e3ccaa1be8ee5e75bc41a74a66f992c4f6dfca96b492b98c852eb6  ./levels.js
+  54ef9d62be11abb309e8eb8cd5be3547311b79642402f6900708ef7bf4b53181  ./moves.js
+  c921e5f2663dabdfdc5088cc47554ba00077da2f2dd91a9f3b98a3f33f6fe253  ./position.js
+  b127f5b4920447f4e2f7138153e7675c85faee2b8a8f1b5d166f0410e651b384  ./quiescence.js
+  29100100c7ff5a4145ec9083213def6d2ff8c8210cf68987231ff020094b6333  ./render.js
+  d15875f61720de50182e4d91ff26f638b4372008a320d5aa9067356edd30866d  ./search.js
+  35a2740866e9ed105fff5563aa45e1628b9dab66044065dc3f9865b1e5f4349d  ./see.js
+  5fcec59710cc5831b0fcb9d9e40a2306253858d31a9d2109cb24e57f97dfed72  ./transposition.js
+  f39000177b5b01e5b708f4622ae9a0f7f77a3f0e8cea4cd69180b92a9a4e8523  ./turn-loop.js
+  e9203f005ca16f03b63cbd64b91df787385880aed8de5b03011ca92f5bd1ff38  ./uci-session.js
+  877e9595746aead5019a2e604da2ef0021e2d688168b275d809e572fe8a9b98d  ./uci.js
+  017cbcf93e86c515c3050cbbbbc1a6f8be842593556ef83bb34758d0068ed24c  ./zobrist.js
+  id name skytalix
+  id author Olger Oeselg
+  option name OwnBook type check default true
+  option name Skill Level type spin default 5 min 1 max 7
+  option name TimeMode type combo default level var level var simple-tournament var uci-clock-mode
+base 389148411f41f30e6bbb027557e47b50a4237bb2 dist/ (24 files) tree sha256 c3f8c88dd2ab49d653009c5c6abdb3389f04fe4361789b10c3c4ffeea802d304
+  758bbd2d1eeef8bbbfb9dadf9a24cf72ad8e9f746d9e1ddc9c8f90ace5bc1971  ./apply.js
+  66da0f17f14c38aa4f60b180ab7c9bca90f4b6dd8c14ae391ffa2fd991ac12db  ./book-file.js
+  04bd131e37355954d647ad5c01459b2c40c7fffc885662488b0257ec189df374  ./book.js
+  2e7199d9b1254772476681d2e9bcc417820bf06da7920317cf7c8992bab582c5  ./coordinate-move.js
+  1dfd769626ef9bcfb81ac56c5c189a96d399337745424097ba5ceb86f52b2b7b  ./engine.js
+  633b5c58b23182de80c64b1128b7471218f683c8161ebc27d362e91b52523090  ./evaluate-params.js
+  ffd6e53843847d055db6d1f706b0a979520b15dad4058c880176ba86c7b05ef2  ./evaluate.js
+  5d7b981fdcdb5d52046be15e3d6d7c93cb24274daba884439732d3460d258ec4  ./fen.js
+  708580df293a2fe49e7aba412c579a8601f9cde264b46c7a09ba3c294a48a72f  ./frame.js
+  93e9ac2a7eaa665a54daaba3490cfd4b0ee22cac36d997a81f5526fc1170d05b  ./gameend.js
+  74821da4c44d1650855cf91d50e1a2d50d499dfaadf65cc9334b735d2f7f4a98  ./history.js
+  029e56824f673b75c977de3fb6a13ed122971c5a97eb2382096639595b836476  ./legal.js
+  e577a4f9c8e3ccaa1be8ee5e75bc41a74a66f992c4f6dfca96b492b98c852eb6  ./levels.js
+  54ef9d62be11abb309e8eb8cd5be3547311b79642402f6900708ef7bf4b53181  ./moves.js
+  c921e5f2663dabdfdc5088cc47554ba00077da2f2dd91a9f3b98a3f33f6fe253  ./position.js
+  b127f5b4920447f4e2f7138153e7675c85faee2b8a8f1b5d166f0410e651b384  ./quiescence.js
+  29100100c7ff5a4145ec9083213def6d2ff8c8210cf68987231ff020094b6333  ./render.js
+  bc2f5cdc47317b9e547a1de7bb9f6a19d218041cf67c59a9672219971f5cd138  ./search.js
+  35a2740866e9ed105fff5563aa45e1628b9dab66044065dc3f9865b1e5f4349d  ./see.js
+  5fcec59710cc5831b0fcb9d9e40a2306253858d31a9d2109cb24e57f97dfed72  ./transposition.js
+  f39000177b5b01e5b708f4622ae9a0f7f77a3f0e8cea4cd69180b92a9a4e8523  ./turn-loop.js
+  e9203f005ca16f03b63cbd64b91df787385880aed8de5b03011ca92f5bd1ff38  ./uci-session.js
+  877e9595746aead5019a2e604da2ef0021e2d688168b275d809e572fe8a9b98d  ./uci.js
+  017cbcf93e86c515c3050cbbbbc1a6f8be842593556ef83bb34758d0068ed24c  ./zobrist.js
+  id name skytalix
+  id author Olger Oeselg
+  option name OwnBook type check default true
+  option name Skill Level type spin default 5 min 1 max 7
+  option name TimeMode type combo default level var level var simple-tournament var uci-clock-mode
