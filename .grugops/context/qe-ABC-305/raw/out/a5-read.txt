@@ -1,0 +1,22 @@
+rows 27 rounds [0, 1, 2, 3, 4, 5, 6, 7, 8]
+runs off expected 0
+orders ['B H H2', 'H H2 B', 'H2 B H', 'B H H2', 'H H2 B', 'H2 B H', 'B H H2', 'H H2 B', 'H2 B H']
+scored flags by round {0: ['0', '0', '0'], 1: ['1', '1', '1'], 2: ['1', '1', '1'], 3: ['1', '1', '1'], 4: ['1', '1', '1'], 5: ['1', '1', '1'], 6: ['1', '1', '1'], 7: ['1', '1', '1'], 8: ['1', '1', '1']}
+load_wait_s nonzero 0 load1 min/max 0.52 3.89
+vitest fields nonzero 0
+n 8
+B walls [8.93, 9.03, 9.05, 9.22, 9.26, 9.28, 9.31, 9.33] median 9.24 [k=2] 9.03 9.31 max 9.33 cpu median 31.29
+H walls [8.95, 9.06, 9.07, 9.08, 9.09, 9.17, 9.25, 9.27] median 9.085 [k=2] 9.06 9.25 max 9.27 cpu median 31.235
+H2 walls [8.99, 9.04, 9.04, 9.19, 9.28, 9.29, 9.29, 9.37] median 9.235 [k=2] 9.04 9.29 max 9.37 cpu median 31.54
+H-B paired by round {1: 0.24, 2: 0.15, 3: 0.12, 4: -0.21, 5: -0.01, 6: -0.24, 7: -0.27, 8: -0.25}
+sorted [-0.27, -0.25, -0.24, -0.21, -0.01, 0.12, 0.15, 0.24] median -0.11 [k=2] -0.25 0.15 positive 3 over +0.10: 3
+H-B cpu [-0.53, -0.43, -0.34, -0.14, 0.09, 0.22, 0.44, 1.04] median -0.025 [k=2] -0.43 0.44
+H2-H wall [-0.07, -0.06, -0.05, -0.04, 0.02, 0.2, 0.22, 0.33] median -0.01 [k=2] -0.06 0.22 over +0.10 abs: 3
+H2-H cpu [-0.3, -0.23, 0.04, 0.24, 0.4, 0.44, 0.62, 0.86] median 0.32 pct of H 1.024 limit 0.4685 sign 6 / 8
+H2-B wall (the same tree against B) [-0.32, -0.29, -0.07, 0.01, 0.06, 0.11, 0.26, 0.32] median 0.035 [k=2] -0.29 0.26
+wall median by slot in round {0: 9.06, 1: 9.27, 2: 9.15}
+wall by round order [('1', 'H', '9.27'), ('1', 'H2', '9.29'), ('1', 'B', '9.03'), ('2', 'H2', '9.04'), ('2', 'B', '8.93'), ('2', 'H', '9.08')]
+samples 83 unique ts 83 rows not 'none' 0 field counts [3]
+foreign_cpu_s median 3.12 min 2.55 max 4.1 threshold 8.120000000000001
+sample gap s max 4.0 first 2026-11-06T13:05:48Z last 2026-11-06T13:09:57Z
+first run start 2026-11-06T13:05:48Z last run start 2026-11-06T13:09:48Z

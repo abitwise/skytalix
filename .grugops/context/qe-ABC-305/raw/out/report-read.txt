@@ -1,0 +1,36 @@
+A4 tip rows 2708 main rows 2707
+A4 in tip not main: 3
+  + src/evaluate.passer.test.ts :: ABC-301 P1 — the hot path's E4a sum at the probed values (QE-271-h, ADR-0070 d4's dated line) evaluateAtPhase at each fixture's ow
+  + src/evaluate.passer.test.ts :: ABC-271 — the source rows (ADR-0070 decisions 2–4) the seams passerTermsForTest and pawnStructureForTest are called from test file
+  + tools/tune/tune.test.ts :: ABC-239 — tools/tune's source pins the FEN source row: each bound row's FEN and name appear literally in its src/evaluate*.test.ts
+A4 in main not tip: 2
+  - src/evaluate.passer.test.ts :: ABC-271 — the source rows (ADR-0070 decisions 2–4) the seam passerTermsForTest is called from test files only
+  - tools/tune/tune.test.ts :: ABC-239 — tools/tune's source pins the FEN source row: each bound row's FEN and name appear literally in its src/evaluate*.test.ts
+A4 rows not passed: tip 0 main 0
+A4 files equal: True
+lane tune: files 1 numTotal 25 passed 25 failed 0 pending 0 todo 0 statuses {'passed': 25}; rows naming [deep 22; same file in default lane 3
+lane passer: files 1 numTotal 29 passed 29 failed 0 pending 0 todo 0 statuses {'passed': 29}; rows naming [deep 7; same file in default lane 22
+lane book: files 1 numTotal 36 passed 36 failed 0 pending 0 todo 0 statuses {'passed': 36}; rows naming [deep 1; same file in default lane 35
+lane qehop: files 1 numTotal 36 passed 36 failed 0 pending 0 todo 0 statuses {'passed': 36}; rows naming [deep 4; same file in default lane 32
+lane cli-flag: files 1 numTotal 109 passed 109 failed 0 pending 0 todo 0 statuses {'passed': 109}; rows naming [deep 0; same file in default lane 109
+lane cli-noflag: files 1 numTotal 109 passed 109 failed 0 pending 0 todo 0 statuses {'passed': 109}; rows naming [deep 0; same file in default lane 109
+lane king: files 1 numTotal 11 passed 11 failed 0 pending 0 todo 0 statuses {'passed': 11}; rows naming [deep 0; same file in default lane 11
+lane uci: files 1 numTotal 270 passed 270 failed 0 pending 0 todo 0 statuses {'passed': 270}; rows naming [deep 25; same file in default lane 245
+lane clireal: files 1 numTotal 11 passed 11 failed 0 pending 0 todo 0 statuses {'passed': 11}; rows naming [deep 0; same file in default lane 1
+cli rows flag on vs off identical: True and equal to default lane's: True
+king rows with ENGINE_DEEP equal default lane's: True
+A7 rows:
+  P1 passed src/evaluate.passer.test.ts :: ABC-301 P1 — the hot path's E4a sum at the probed values (QE-271-h, ADR-0070 d4's dated line) evaluateAtPhase at each fixture's own phase is exact aga
+  P2 passed src/evaluate.passer.test.ts :: ABC-271 — the source rows (ADR-0070 decisions 2–4) the seams passerTermsForTest and pawnStructureForTest are called from test files only: no other fil
+  P3 passed tools/tune/tune.test.ts :: ABC-301 QE-271-i: E4a traced and emitted (ADR-0067 d5's dated line) [deep, TUNE_DEEP=1] the tracer row: on the 44 fixtures each side's traced counts a
+  P3 passed tools/tune/tune.test.ts :: ABC-301 QE-271-i: E4a traced and emitted (ADR-0067 d5's dated line) [deep, TUNE_DEEP=1] the trace reaches the model: the probed table moves it by the 
+  P3 passed tools/tune/tune.test.ts :: ABC-301 QE-271-i: E4a traced and emitted (ADR-0067 d5's dated line) [deep, TUNE_DEEP=1] the gate holds on the 44 fixtures and QE's 12 passer positions
+  P3 passed tools/tune/tune.test.ts :: ABC-301 QE-271-i: E4a traced and emitted (ADR-0067 d5's dated line) [deep, TUNE_DEEP=1] an emission at the base values has main's exports, 17 value ex
+  P3 passed tools/tune/tune.test.ts :: ABC-301 QE-271-i: E4a traced and emitted (ADR-0067 d5's dated line) [deep, TUNE_DEEP=1] QE-301-b: distinct non-zero E4a halves round-trip: each column
+  P3 passed tools/tune/tune.test.ts :: ABC-301 QE-271-i: E4a traced and emitted (ADR-0067 d5's dated line) [deep, TUNE_DEEP=1] the project typechecks with that emission in src/evaluate-para
+  twins passed src/evaluate.king-mobility.test.ts :: A2 — a missing shelter pawn scores lower the phase-24 twin bites: with the shelter term zeroed, g6 no longer scores lower (red without the term)
+  twins passed src/evaluate.king-mobility.test.ts :: A3 — a half-open file next to the king scores lower the phase-24 twin bites: with the half-open term zeroed, e5 no longer scores lower (red without th
+  QE-301 bound passed tools/tune/tune.test.ts :: ABC-239 F3's bound and the one refit (ADR-0067 ruling (b), test note 8) [deep, TUNE_DEEP=1] ABC-301: every bound row holds on the table in place, read
+  QE-301 bound passed tools/tune/tune.test.ts :: ABC-239 F3's bound and the one refit (ADR-0067 ruling (b), test note 8) [deep, TUNE_DEEP=1] ABC-301: a term's without removes its families from a, and
+line23 report: passed 1 failed 0 pending 35 total 36
+   passed AR-154-TWO-POINT-CONTROL F1 — the whole-tree read drops no note [deep, ENGINE_DEEP=1] allNotes() holds one note per *.md

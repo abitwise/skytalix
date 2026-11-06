@@ -1,0 +1,9 @@
+
+ RUN  v4.1.12 <repo>/.claude/worktrees/qe-ABC-305
+
+
+ Test Files  1 skipped (1)
+      Tests  32 skipped (32)
+   Start at  13:17:03
+   Duration  97ms (transform 0ms, setup 0ms, import 26ms, tests 0ms, environment 0ms)
+

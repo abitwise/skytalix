@@ -1,0 +1,5 @@
+{ "refs": ["se-ABC-305", "se-ABC-305-read", "ABC-305", "ABC-301", "NFR-008", "R-CEN-1", "ADR-0035", "35a694ee", "a8594b50", "a81c2899",
+           "se-ABC-305/20261105T220519Z-software-engineer-decision-987ae6ca",
+           "se-ABC-305/20261105T220616Z-software-engineer-observation-d0980b3c",
+           "secnfr-census-1105/20261105T115526Z-security-nfr-decision-b9038a14"],
+  "notes": [{ "kind": "observation", "confidence": "high: every figure read from the harness's files under the sealed PREREG, flags read before the grade", "bodyFile": "read.md" }] }

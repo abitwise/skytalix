@@ -8,7 +8,8 @@
  * DEFAULT LANE (no search): the data row; K1 (a) the mirror, at 0 and at the probed values; K1 (b)
  * `evaluate` `Object.is`-equal to the pre-ticket `evaluate` on the frozen corpora; K1 (c) QE's
  * frozen fixtures through the seam `passerTermsForTest`, per side (`QE-271-a`); K1 (e) the memo
- * returns the passer words a fresh `pawnStructure` returns; the source rows. K1 (d), the int16 range
+ * returns the passer words a fresh `pawnStructure` returns; the source rows; `ABC-301` P1, the hot
+ * path against the seam at the probed values (`QE-271-h`). K1 (d), the int16 range
  * row, is `ABC-274` `A9` in `src/evaluate.taper.test.ts`. K2's two re-pins are
  * `src/evaluate.pawns.test.ts`'s memo-size row and `src/transposition.test.ts`'s A7 sum.
  *
@@ -22,7 +23,7 @@
  */
 
 import { createHash } from "node:crypto";
-import { readdirSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { chooseMoveWithoutBundle, type EngineChoice } from "./engine.ts";
 import { buildCorpus, mirrorPosition, PERFT_POSITIONS } from "./evaluate.mirror-corpus.ts";
@@ -31,6 +32,7 @@ import {
   clearPawnCacheForTest,
   type EvaluationParameters,
   evaluate,
+  evaluateAtPhase,
   passerTermsForTest,
   pawnCacheProbeForTest,
   pawnStructureForTest,
@@ -39,7 +41,7 @@ import {
 } from "./evaluate.ts";
 import * as PARAMS from "./evaluate-params.ts";
 import { parseFen, toFen } from "./fen.ts";
-import { squareName } from "./position.ts";
+import { type Position, squareName } from "./position.ts";
 import { searchWithoutBundle } from "./search.ts";
 
 const FIXTURES_FILE = new URL("./evaluate.passer-fixtures.json", import.meta.url);
@@ -107,6 +109,7 @@ const PROBED: EvaluationParameters = {
 };
 
 const SIDES = ["white", "black"] as const;
+const PHASE_SPAN = PARAMS.PHASE_MG - PARAMS.PHASE_EG;
 const ZERO: Parts = { kd: 0, free: 0, un: 0 };
 
 /** The squares a passer word names (3 bits a file, the board rank, 0 for none), in file order. */
@@ -250,6 +253,42 @@ describe("ABC-271 K1 (c) — the structure through the seam, per side (QE-271-a)
   });
 });
 
+describe("ABC-301 P1 — the hot path's E4a sum at the probed values (QE-271-h, ADR-0070 d4's dated line)", () => {
+  /**
+   * At phase 0 this is the ticket's form: live − shipped, white's view, is the seam's white minus
+   * black. Each fixture runs at its OWN phase, not at a forced 0: U fires on the phase argument and
+   * the seam reads `phaseOf`, so the forced form reads 31 of 44, the 13 misses each ± U on a fixture
+   * of phase 1 … 5 where the square holds. The blend then gives mg + trunc((D + e) × (24 − k) / 24),
+   * QE's hot-row identity, with mg and D read at the shipped values and e the seam's move between
+   * the two tables. So a hot path that fires U off phase 0 is red here too.
+   */
+  it("evaluateAtPhase at each fixture's own phase is exact against the seam, on 44 of 44", () => {
+    const whitePov = (position: Position, phase: number): number => {
+      const score = evaluateAtPhase(position, phase);
+      return position.blackToMove ? 0 - score : score;
+    };
+    const net = (position: Position): number => {
+      const { white, black } = passerTermsForTest(position);
+      return white.kd + white.free + white.un - black.kd - black.free - black.un;
+    };
+    const shipped = FROZEN.k1c.map((row) => {
+      const position = parseFen(row.fen);
+      const mg = whitePov(position, PHASE_SPAN);
+      return { row, position, mg, delta: whitePov(position, 0) - mg, seam: net(position) };
+    });
+    const misses = withParametersForTest(PROBED, () =>
+      shipped
+        .filter(({ row, position, mg, delta, seam }) => {
+          const blend = (delta + net(position) - seam) * (PHASE_SPAN - row.phase);
+          return whitePov(position, row.phase) !== mg + Math.trunc(blend / PHASE_SPAN);
+        })
+        .map(({ row }) => row.id),
+    );
+    expect(shipped).toHaveLength(44);
+    expect(misses).toEqual([]);
+  });
+});
+
 describe("ABC-271 K1 (e) — the memo: a hit returns what a fresh pawnStructure returns, the two passer words included", () => {
   it("cold miss, then hit, each equal to the fresh call; the words name exactly QE's frontmost passers", () => {
     clearPawnCacheForTest();
@@ -380,14 +419,34 @@ describe("ABC-271 — the source rows (ADR-0070 decisions 2–4)", () => {
     expect(terms).not.toMatch(/=== 0 \? 0|_EG\[\w+\] as number\) === 0|passedUnstoppableEg ===/);
   });
 
-  it("the seam passerTermsForTest is called from test files only", () => {
-    const callers = readdirSync(new URL(".", import.meta.url))
-      .filter((name) => name.endsWith(".ts") && !name.endsWith(".test.ts"))
-      .filter((name) => name !== "evaluate.ts")
-      .filter((name) =>
-        readFileSync(new URL(`./${name}`, import.meta.url), "utf8").includes("passerTermsForTest"),
-      );
+  it("the seams passerTermsForTest and pawnStructureForTest are called from test files only: no other file under src/, no tools/ file, no script (QE-271-g)", () => {
+    const root = new URL("../", import.meta.url).pathname;
+    const tree = (directory: string): string[] =>
+      existsSync(`${root}${directory}`)
+        ? (readdirSync(`${root}${directory}`, { recursive: true }) as string[]).map(
+            (name) => `${directory}${name}`,
+          )
+        : [];
+    const files = [
+      ...tree("src/")
+        .filter((name) => name.endsWith(".ts") && !name.endsWith(".test.ts"))
+        .filter((name) => name !== "src/evaluate.ts"),
+      ...tree("tools/"),
+      ...tree("spike/"),
+      ...tree("scripts/"),
+      "package.json",
+      "vitest.config.ts",
+    ].filter((name) => statSync(`${root}${name}`).isFile());
+    expect(files.length).toBeGreaterThan(50);
+    const callers = files.filter((name) =>
+      /passerTermsForTest|pawnStructureForTest/.test(readFileSync(`${root}${name}`, "utf8")),
+    );
     expect(callers).toEqual([]);
+    for (const seam of ["passerTermsForTest(", "pawnStructureForTest("]) {
+      expect(CODE.split(seam).length - 1, `${seam} in src/evaluate.ts: its definition only`).toBe(
+        1,
+      );
+    }
   });
 });
 

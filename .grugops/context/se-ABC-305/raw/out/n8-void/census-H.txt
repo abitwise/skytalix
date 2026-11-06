@@ -1,0 +1,412 @@
+runs used 16 (arms H,H2); files 71; sum of file slots 6636 ms; sum of in-thread 6578 ms
+file	slot_ms	in_thread_ms	n
+src/uci-session.test.ts	1651	1645	16
+src/cli.test.ts	688	685	16
+src/search.null-move.test.ts	571	570	16
+src/engine.test.ts	427	425	16
+tools/grugops/qe-hop-integrity.test.ts	391	390	16
+src/levels.test.ts	258	256	16
+src/search.bundle.test.ts	176	175	16
+src/search.test.ts	171	170	16
+
+slowest rows (median in-thread ms)
+194	tools/grugops/qe-hop-integrity.test.ts :: ABC-105 A9 — the security-nfr substitute is visible, not silent (real notes) --sweep lists ABC-073 as a finding
+157	src/cli.test.ts :: ABC-042 — the shape of what was delivered N8-LANE — this file spawns TWENTY-EIGHT children and no more
+123	src/cli.test.ts :: ABC-101 — --difficulty selects a level, and the played engine is that level A8′ — the seam built for each level moves exactly as `createLevel` does, on one seed and one injected clock
+119	src/search.null-move.test.ts :: A2 — the shipped engine plays the recorded move in every zugzwang row, at the row's depth zugzwang.001: chooseMove on a frozen clock to depth 9 plays e1f1
+111	src/uci-session.test.ts :: ABC-167 A5 — the D4 time rule, read from the info line's time white reads wtime: go wtime 1000 btime 9000 -> 50 ms (within 2 x 1 ms)
+91	tools/grugops/qe-hop-integrity.test.ts :: ABC-105 A3 — the refs-only false pass is closed (real notes) coverage() over EVERY real note (no --ticket folder filter) reads ABC-062 and ABC-073 as findings
+89	src/history-pane.nfr.test.ts :: A11 — the pane derives nothing, and this is a CALL COUNT evaluates history.ts's module body NOWHERE ON THE FRAME PATH — measured, not pattern-matched
+86	src/legal.test.ts :: ABC-206 A2 — the faster pieces equal what they replace givesCheck(p, m) equals make, isInCheck, unmake for every legal move, and p is unchanged
+84	src/uci-session.test.ts :: ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) A13 — busy isready (ADR-0052 D7), default lane isready that arrives mid-search is answered once, after the bestmove, in order
+83	src/cli.test.ts :: ABC-173 — every vitest run carries the V8 heap ceiling, read where it applies (ADR-0008 addendum 2026-10-19) A6 (static) — the history-pane and transposition children inherit childOf's construction: no env key, 
+79	src/uci-session.test.ts :: ABC-167 A5 — the D4 time rule, read from the info line's time black reads btime: go wtime 1000 btime 9000 -> 450 ms (within 2 x 10 ms)
+77	src/cli.test.ts :: ABC-241 A4, A7 — the CLI: a third occurrence through an uncapturable ep square A4: with a legal ep capture available the same line is not a draw
+76	src/search.test.ts :: A4 — the returned root move is legal in every corpus position returns a legal move in 200+ positions from the perft corpus, at depth 1
+73	src/uci-session.test.ts :: ABC-167 A7 — the D12 limits go depth 3 reports depth 3 on a clock where an unlimited go reaches depth >= 5
+72	src/uci-session.test.ts :: ABC-174 A5 — UCI reads the re-cut table (ADR-0045 D4, D11, D12) at the default, a bare go takes the chooseMove path: score, and time within 4 000 ms
+71	tools/grugops/qe-hop-integrity.test.ts :: ABC-105 A4 — the sweep's counts partition the Done rows (real board) prints each count line and every finding by id, exits 1; 0 when every row is grandfathered
+71	src/uci-session.test.ts :: ABC-167 A6 — infinite waits for stop A6-d1: go ponder holds at the capped ceiling; ponderhit releases once
+70	src/uci-session.test.ts :: ABC-167 A7 — the D12 limits A7-f3: go movetime 1e2 and movestogo 0 are dropped with one info string
+70	src/uci-session.test.ts :: ABC-167 A7 — the D12 limits A7-f2: go movetime with no value searches as a bare go
+69	src/uci-session.test.ts :: ABC-167 A7 — the D12 limits ABC-197 R2: go depth 0 on step 100 searches G = 4 000, time in [4 000, 4 200]
+69	src/uci-session.test.ts :: ABC-171 A2 — setoption setoption name Hash value 64 writes nothing and changes nothing
+61	src/uci-session.test.ts :: ABC-171 A6 — a level change is observable (EPIC-007 M7) level 5: go wtime 60000 btime 60000 winc 1000 binc 1000 -> 3500 ms (within 2 x 100 ms)
+61	src/cli.test.ts :: ABC-241 A4, A7 — the CLI: a third occurrence through an uncapturable ep square A7: the move the search scores 0 is the move after which gameStatusOf reports the claim
+60	src/uci-session.test.ts :: ABC-167 A7 — the D12 limits go movetime 1000 searchmoves e2e4 -> one info string, all moves searched
+60	src/cli.test.ts :: ABC-173 — every vitest run carries the V8 heap ceiling, read where it applies (ADR-0008 addendum 2026-10-19) C2 — no src test file calls an asynchronous child_process form; at least four synchronous call sites e
+54	src/uci-session.test.ts :: ABC-171 A7 — the blunder path two sessions on the same seededRandom(k) write the same bestmove sequence
+54	src/search.null-move.test.ts :: the doors — searchWithoutNullMove and chooseMoveWithoutNullMove turn null move off, as every older door does searchWithoutQuiescenceEvasions makes null moves on position-6 at depth 4, and changes th
+53	src/search.bundle.test.ts :: ABC-283 (h) — the history table (ADR-0063 decisions 1-5) is cleared at every search() entry and chooseMove call, and no door writes it
+51	src/uci-session.test.ts :: ABC-212 A9 — Skill Level reaches 7, and levels 6-7 take the rate-0 path setoption name Skill Level value 7 sets 7: a bare go searches 30 000 ms
+51	src/search.null-move.test.ts :: the doors — searchWithoutNullMove and chooseMoveWithoutNullMove turn null move off, as every older door does chooseMoveWithoutQuiescenceEvasions makes null moves on position-6 deepened to 4, and cha
+51	src/engine.capacity.test.ts :: ABC-122 A8: src/engine.ts's KEY_ARRAY_CAPACITY guard, reached through chooseMove() on a clock spent after 2 x ITERATIONS (260) root passes, ends every line at ply 128 with a leaf's score: no node or 
+47	src/book.test.ts :: ABC-094 A3 — variety after 1. e4 on seeds 1 to 10 ten seeds, one pick each, at least 3 distinct replies
+44	src/san.test.ts :: toSan — the logic beneath the table emits only strings of the SAN grammar
+44	src/levels.test.ts :: A4 — the easiest level over ≥ 200 moves hands the borrowed position back byte-identical after a blunder
+43	src/uci-session.test.ts :: ABC-167 A7 — the D12 limits go nodes 20000 -> nodes <= 21 024, unless depth 1 alone took more
+42	src/search.null-move.test.ts :: QE-208-b — the null child's key is written: every table probe reads the key of the position it probes search() on startpos at depth 6
+41	src/uci-session.test.ts :: ABC-167 A6 — infinite waits for stop A6-e2: position startpos writes the held bestmove first, in the position it searched
+38	src/search.bundle.test.ts :: ABC-283 (a) — aspiration at the root of chooseMove (ADR-0066 decisions 1-7) a non-mate fail high: iteration 5 fails high and is re-searched to the door's exact move and score; the door stores no root l
+37	src/uci-session.test.ts :: ABC-167 A6 — infinite waits for stop A6-e3: ucinewgame writes the held bestmove first, in the position it searched
+37	src/uci-session.test.ts :: ABC-167 A3 — a move from a position writes one info line then one bestmove, the same legal move
+37	src/evaluate.king-mobility.test.ts :: A6 — purity: evaluation leaves the position byte-identical over ABC-076's corpus, the perft roots and the king positions, twice, with the same score
+36	src/search.ordering.test.ts :: Scope — the engine orders its root exactly as search() does chooseMove's completed depth-1 iteration returns search()'s move: a4b3 on the door pair, a1b1 shipped
+35	src/search.test.ts :: A1 — pruned and unpruned scores are identical position-4 at depth 2
+35	src/search.null-move.test.ts :: QE-208-b — the null child's key is written: every table probe reads the key of the position it probes chooseMove on startpos deepened to 6
+34	src/search.null-move.test.ts :: the null move — makeNullMove / unmakeNullMove and zobristKeyAfterNullMove passes: the side flips, the ep square clears, the halfmove clock is 0, fullmove moves as makeMove's
+34	src/search.futility.test.ts :: the doors — searchWithoutFutility and chooseMoveWithoutFutility turn futility off, as every older door does depth 1 has no null-window node below the root: searchWithoutTaper at depth 1 IS its door, 
+34	src/uci-session.test.ts :: ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) A6 — the hard ceiling: no go hands the search more than 22 000 ms the real engine on a step-1 000 clock: a bare go reports time in [22 000, 22 000
+30	src/quiescence.test.ts :: A1 — the losing capture is not chosen in >= 19 of 20, and the bare leaf is strictly worse both arms at depth 1 — with quiescence the losing move is avoided, without it it is played
+30	src/search.null-move.test.ts :: the doors — searchWithoutNullMove and chooseMoveWithoutNullMove turn null move off, as every older door does chooseMoveWithoutReductions makes no null move on position-6 deepened to 4
+29	src/search.null-move.test.ts :: the doors — searchWithoutNullMove and chooseMoveWithoutNullMove turn null move off, as every older door does chooseMoveWithoutNullMove makes no null move on position-6 deepened to 4
+28	src/levels.test.ts :: ABC-242 — a blunder scores a root move that makes the third occurrence exactly 0 A6: with no keys, or an empty list, the list, depth, nodes and elapsedMs are base's
+27	src/san.qualifier.hardening.test.ts :: ABC-025 A1 — the qualifier is the shortest ladder entry that names exactly one move holds for every non-pawn, non-castle legal move of all 207 corpus positions, both call forms
+27	src/engine.test.ts :: ABC-170 A3 — absent limits are today's engine, clock read for clock read returns identical move, score, depth, nodes and elapsedMs on perft root kiwipete
+27	src/search.null-move.test.ts :: the null move — makeNullMove / unmakeNullMove and zobristKeyAfterNullMove unmakeNullMove leaves every position byte-identical
+26	src/search.bundle.test.ts :: ABC-283 (a) — aspiration at the root of chooseMove (ADR-0066 decisions 1-7) a mate found at iteration 6: iteration 6 fails high and is re-searched to the door's exact move and score; the door stores no
+25	src/search.null-move.test.ts :: the doors — searchWithoutNullMove and chooseMoveWithoutNullMove turn null move off, as every older door does searchWithoutReductions makes no null move on position-6 at depth 4
+25	src/engine.test.ts :: A3 (identity) — the completed iteration equals search() in move AND score agrees with search() on move and score across the mate/stalemate endgames
+25	src/transposition.test.ts :: A5 — the only non-losing line repeats, and it scores exactly 0 search(), depth 4: the perpetual scores exactly 0 and is played — in 7 295 nodes
+25	src/levels.test.ts :: A10 — the seed is threaded, not global two instances, different seeds, called A, B, A, B, … play as each alone: 10/10 each
+25	src/turn-loop.nfr.test.ts :: NFR-002 — the loop derives once per ply, spied at A17's three ply counts derives EXACTLY once per ply at 300 plies
+24	src/search.bundle.test.ts :: ABC-283 (s) — SEE orders the losing captures after the killers (ADR-0065 decisions 2-4) with the switch off the full-width search computes no SEE; on, it does
+24	src/perft.test.ts :: ABC-006 acceptance — exact perft counts startpos perft(4) = 197281
+24	src/zobrist.test.ts :: ABC-011 QE — zobristKey returns the position exactly as it found it is byte-pure at every node of a 2-ply walk from all six perft positions
+23	src/puzzle-suite.test.ts :: A6 — every puzzle carries its provenance, and the mates are the rules' answer each mate row has no mate in 1, and its accepted moves are EXACTLY the moves that mate in 2
+23	src/search.null-move.test.ts :: A2 — the instrumented search makes 0 null moves in check, and 0 below three non-pawn pieces the in-check root and position-5, search() to depth 4 and chooseMove deepened to 4: every null move is mad
+23	src/engine.test.ts :: ABC-170 A3 — absent limits are today's engine, clock read for clock read returns identical move, score, depth, nodes and elapsedMs on perft root startpos
+23	src/search.null-move.test.ts :: the doors — searchWithoutNullMove and chooseMoveWithoutNullMove turn null move off, as every older door does searchWithoutNullMove makes no null move on position-6 at depth 4
+23	src/engine.test.ts :: ABC-170 A3 — absent limits are today's engine, clock read for clock read returns identical move, score, depth, nodes and elapsedMs on perft root position-4
+23	src/uci-session.test.ts :: ABC-242 A4 — Skill Level 1: the CLI seam, UCI and a direct createLevel call agree A4: the same move from all three; UCI's nodes and depth are the direct call's, whose list carries the 0
+22	src/legal.test.ts :: ABC-254 A1 — the lazy filters equal the full make/test/unmake filters on ABC-206's roots to depth 1: four lists in order, hasLegalMove, p unchanged
+22	src/search.test.ts :: A1 — pruned and unpruned scores are identical position-3 at depth 3
+21	src/search.bundle.test.ts :: ABC-283 (a) — aspiration at the root of chooseMove (ADR-0066 decisions 1-7) iterations 1-4 are the door's, node for node, and store no root lower bound
+21	src/engine.test.ts :: ABC-170 A3 — absent limits are today's engine, clock read for clock read returns identical move, score, depth, nodes and elapsedMs on perft root position-6
+21	src/engine.test.ts :: ABC-170 A3 — absent limits are today's engine, clock read for clock read returns identical move, score, depth, nodes and elapsedMs on perft root position-5
+21	src/search.null-move.test.ts :: QE-208-a — an abort inside a null move's subtree still hands the root back byte-identical position-6, readings 8 and 10 on chooseMoveWithoutTaper: 0 mutated roots, aborts landing inside a null subtr
+21	src/search.ordering.test.ts :: A1 — ordered and unordered scores are identical startpos at depth 3
+20	src/cli.test.ts :: ABC-230 A1, A3 — the CLI's level seam hands the search the game's prior keys A1: with keyHistory injected the default level plays the third occurrence, at 0
+20	src/engine.test.ts :: ABC-170 A2 — maxNodes aborts, and the last COMPLETED iteration is played plays searchWithoutSeePruning(position, d)'s move and score at the reported depth d — the abort is discarded
+20	src/book.test.ts :: ABC-094 A2 — deterministic under a fixed seed two fresh module instances, same position, artifact and seed: 100 picks identical element for element
+19	src/engine.test.ts :: ABC-170 A3 — absent limits are today's engine, clock read for clock read returns identical move, score, depth, nodes and elapsedMs on perft root position-3
+19	src/search.ordering.test.ts :: A3 — ordered search visits a small fraction of the unordered nodes position-6 at depth 2 — the default lane's standing guard
+19	src/levels.test.ts :: QE-087-a — the seed never reaches the engine (ADR-0027 d1) every call is `{ budgetMs, now }`; the engine path gets the level budget for any seed
+18	src/uci-session.test.ts :: ABC-167 A3 — a move from a position A3-h1: nps = round(N x 1000 / max(1, T))
+18	src/legal.test.ts :: ABC-235 cut 1 — the hoisted king square answers what the per-move scan answered legalMoves, legalCaptures and hasLegalMove equal the per-move-scan reference, p unchanged
+18	src/levels.test.ts :: ABC-242 — a blunder scores a root move that makes the third occurrence exactly 0 A1: the third-occurrence move scores exactly 0, unsearched; base scores it otherwise
+18	src/engine.test.ts :: ABC-230 A3 and A4 — no prior keys is base, node for node, and the doors take none A4 (slice): an empty list is node-equal to an absent one on kr-corner, startpos and position-6
+18	src/uci-session.test.ts :: ABC-171 A13a — the seed oracle floor(random() * 2^32) (QE-171-a) non-vacuous: on some k the 2^16 seed gives a different move from the oracle's
+17	src/engine.test.ts :: ABC-086 A1 — the same position, budget and fresh virtual clock choose the same move is identical 2/2 on 15 positions, each completing root depth >= 2 — 30/30, 15/15
+17	src/cli.test.ts :: ABC-241 A4, A7 — the CLI: a third occurrence through an uncapturable ep square A4 (slice): on a 500 ms virtual step, with repetitionKeyHistory injected the default level plays d8e8 at exactly 0; base does not
+16	src/search.ordering.test.ts :: Scope — the engine orders its root exactly as search() does the fixture bites: ordered and unordered depth-1 searches break the tie differently
+16	src/search.pvs-lmr.test.ts :: PVS identity — searchWithoutReductions scores what searchWithoutPvsOrReductions scores the engine doors bite: chooseMoveWithoutReductions is the unreduced engine, not chooseMove
+15	src/engine.test.ts :: ABC-282 A2 — a partial iteration's move is played only if it beat the incumbent D12: a pass in which the incumbent failed low gives no evidence
+15	src/uci-session.test.ts :: ABC-171 A8 — no reseed, and one draw per blunder-level search every blunder level's searched go draws exactly one seed (a book hit draws 0: A13b)
+15	src/quiescence.test.ts :: A6 — the searched position is unchanged on return leaves every hanging-piece position byte-identical after a depth-1 search, both arms
+15	src/cli.test.ts :: ABC-242 A4 — the CLI seam at level 1: a blunder that reads the third occurrence as 0 A4: the seam plays a direct createLevel(LEVELS[1]) call's move; that call's list carries the 0
+14	src/uci-session.test.ts :: ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) A7 — the ceiling: no go hands the search more than 59 500 ms the real engine on a step-5 000 clock: go movetime 90000 reports time in [59 500, 59 
+14	src/search.ordering.test.ts :: A2 — the ordered move list is a permutation of legalMoves, not a filter returns the same moves, each exactly once, in every position and every variant
+14	src/levels.test.ts :: seededRandom — the generator returns numbers in [0, 1), the same sequence for the same seed
+14	src/levels.test.ts :: A6 — the default level at rate 0 returns `chooseMove`'s move, depth, nodes and elapsed on the same clock
+14	src/quiescence.test.ts :: A3 — quiescence returns on 200+ corpus positions and never exceeds QUIESCENCE_MAX_PLY the cap BINDS on a runaway rig — twenty queens on alternating squares — and is not exceeded
+13	src/uci-session.test.ts :: ABC-167 A11 — capability-free, and M4 every line written in every row starts with an M4 prefix
+13	src/transposition.test.ts :: A1 — table-on and table-off scores are identical knight-g1 w K at depth 4 — G6: 939 with the table on and off
+13	src/uci-session.test.ts :: ABC-171 A7 — the blunder path go depth 3 at level 1: one info string naming the dropped limit, then a bestmove
+13	src/search.pvs-lmr.test.ts :: A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one chooseMove(): the same, deepened to depth 4 in the engine's own recursion
+13	src/search.pvs-lmr.test.ts :: A4 — the reduced move fails high at a null-window node, is re-searched at full depth, and the answer is the unreduced one search(): a null-window reduced fail-high is re-searched, and score and move e
+12	src/engine.test.ts :: ABC-282 A2 — a partial iteration's move is played only if it beat the incumbent (a) a root move that beat the incumbent is played (candidate of K25, base/b09#8)
+12	src/engine.test.ts :: ABC-282 A1 — no iteration starts that the clock says cannot finish (a) past the soft limit the search returns after iteration d, with 0 nodes of d + 1
+12	src/perft.test.ts :: ABC-006 acceptance — exact perft counts kiwipete perft(3) = 97862
+12	src/quiescence.test.ts :: A3 — quiescence returns on 200+ corpus positions and never exceeds QUIESCENCE_MAX_PLY returns on every one of 200+ positions, the capture-dense roots included, under the cap
+12	src/evaluate.pawns.test.ts :: A6 — purity: evaluation leaves the position byte-identical over the six perft roots and every pawn structure, twice, with the same score
+12	src/search.pvs-lmr.test.ts :: PVS identity — searchWithoutReductions scores what searchWithoutPvsOrReductions scores the default-lane guard bites: PVS really does change the work at depth 4
+11	src/quiescence.test.ts :: ABC-229 — the doors: searchWithoutQuietPromotions and chooseMoveWithoutQuietPromotions Q-SET's INFO row kpk-b6c6 through searchWithoutTaper at depth 8: 902 shipped, 186 on the door, both b6c6
+11	src/san.test.ts :: toSan — the logic beneath the table gives every legal move of a position a DISTINCT string
+11	src/uci-session.test.ts :: ABC-174 A5 — UCI reads the re-cut table (ADR-0045 D4, D11, D12) at skill 4, go depth 3: one info string naming depth, a level line with no score, bestmove
+11	src/frame.test.ts :: ABC-018 acceptance — the assembled frame keeps one row count at EVERY ply of a game played to 80 plies and on to 300
+11	src/transposition.test.ts :: A1 — table-on and table-off scores are identical position-3 at depth 4 — the same score, and the work changes: 1 377 nodes with the table, 1 533 without
+11	src/uci-session.test.ts :: ABC-171 A4 — OwnBook off OwnBook false before isready/go: a search, no book line, read called 0 times
+11	src/uci-session.test.ts :: ABC-167 A9 — ignored and reset A9-h1: a new session with no position line starts at the start position
+11	src/uci-session.test.ts :: ABC-167 A9 — ignored and reset ucinewgame sets the position back to the start
+11	src/uci-session.test.ts :: ABC-171 A2 — setoption OwnBook value maybe: one info string, the old value (false) kept
+11	src/engine.test.ts :: ABC-170 A2 — maxNodes aborts, and the last COMPLETED iteration is played stops within one clock-check interval of the node budget
+11	src/levels.test.ts :: ABC-241 A5 — the blunder path's appended root key is a repetition key every child search is handed the prior keys plus repetitionKey(root), not the raw hash
+11	src/levels.test.ts :: QE-087-b — the scored list is the engine's, not a self-consistent lie each child's score is minus the real `chooseMove`'s depth-1 score on that child
+11	src/book-engine.test.ts :: ABC-095 — the book in front of the engine's move choice A1 — a book hit returns one of the book's entries and calls the search exactly 0 times
+11	src/moves.test.ts :: ABC-235 cut 3 — generateCaptures is generateMoves filtered to captures, in order on every position of the walk, depth 1
+10	src/pgn.test.ts :: ABC-203 — the PGN text (A1, A2, A4–A7) A5 — lines wrap before a word that would pass 79 characters; single spaces; LF only; one final LF; printable ASCII
+10	src/evaluate.passer.test.ts :: ABC-271 K1 (e) — the memo: a hit returns what a fresh pawnStructure returns, the two passer words included cold miss, then hit, each equal to the fresh call; the words name exactly QE's frontmost pas
+10	src/engine.test.ts :: ABC-230 A3 and A4 — no prior keys is base, node for node, and the doors take none the three test-only doors ignore prior keys: node-equal with and without them
+10	src/engine.test.ts :: ABC-170 A5 — the limits only shorten; the ceiling still holds on an infinite budget and a 10 000 ms counting clock, maxDepth 1000 returns within the same consultation count
+10	src/quiescence.test.ts :: ABC-228 — the rule rows (`ADR-0053` decision 9; each reds a planted fault) a mate found in quiescence survives the table's store and restore: MATE_SCORE − 3 at every depth
+9	src/engine.test.ts :: ABC-282 A1 — no iteration starts that the clock says cannot finish (b) under the soft limit iteration d + 1 is started
+9	src/moves.castling.hardening.test.ts :: ABC-009 A13 — the occupant BYTE of a home square, quantified over the WHOLE space measures the 13-value byte domain and accounts for EVERY value in exactly one bucket
+9	src/cli.real-engine.test.ts :: ABC-119 — the real-engine lane's child is the delivered composition (default lane; spawns nothing) the deep child runs the delivered entry point with no --import, loader or hook, and an empty environ
+9	src/san.test.ts :: ABC-013 acceptance A18 — purity: `toFen` is byte-identical across every call, in both forms
+9	src/search.test.ts :: A1 — pruned and unpruned scores are identical startpos at depth 2
+9	src/search.pvs-lmr.test.ts :: PVS identity — searchWithoutReductions scores what searchWithoutPvsOrReductions scores kp-vs-k at depth 4 — the default lane's standing guard
+9	src/quiescence.test.ts :: ABC-229 — the doors: searchWithoutQuietPromotions and chooseMoveWithoutQuietPromotions chooseMoveWithoutTaper reads the INFO row the same way at depth 8; its door does not see the queen
+9	src/render-seam.test.ts :: ABC-096 — the opening name in the message region A9 — the loop's message items win: byte-identical frames and 0 lookups; [] looks once and shows the name
+9	src/engine.test.ts :: ABC-282 A2 — a partial iteration's move is played only if it beat the incumbent (b) stopped before any root move beat it, the incumbent is played
+9	src/quiescence.test.ts :: ABC-228 A3 — a capture that mates scores mate, at the right sign and distance Q1: Qxf7 mates at qply 1: quiesce reads 29999, the brute force agrees, the pre-ticket rules do not
+9	src/perft.test.ts :: ABC-006 acceptance — exact perft counts position-3 perft(4) = 43238
+8	src/turn-loop.nfr.test.ts :: NFR-002 — the loop derives once per ply, spied at A17's three ply counts derives EXACTLY once per ply at 120 plies
+8	src/history-pane.test.ts :: ABC-028 acceptance A4 — no write reaches the caller's graph during a render, at all ten lengths
+8	src/levels.test.ts :: ABC-242 — a blunder scores a root move that makes the third occurrence exactly 0 A5: on every A1 fixture the move played is the strict second-best of the new list
+8	src/book-engine.test.ts :: ABC-095 — the book in front of the engine's move choice A4 — the frame where the game leaves book has the same rows and no extra message line as the one before it
+8	src/pgn.test.ts :: ABC-203 — the PGN text (A1, A2, A4–A7) A1 — the eight outcomes: Result tag and token per the table, Termination normal
+8	src/levels.test.ts :: ABC-242 — a blunder scores a root move that makes the third occurrence exactly 0 A6: a non-blunder draw at level 1 is chooseMove's on the same keys, node for node
+8	src/transposition.test.ts :: A3 — iterative deepening with the table visits <= 70% of the nodes it visits without position-3 deepened to depth 4 — the default lane's standing guard
+8	src/engine.test.ts :: ABC-170 A5 — the limits only shorten; the ceiling still holds at budgetMs 5, maxDepth 50 returns the same depth and move as no maxDepth
+8	src/search.null-move.test.ts :: A2 — the instrumented search makes 0 null moves in check, and 0 below three non-pawn pieces the pawn-only endgames: no null move at all, in either recursion, to depth 6
+8	src/book-engine.test.ts :: ABC-095 — the book in front of the engine's move choice A3 — out of book, the search is called exactly once, its move is returned, and nothing is written or warned
+8	src/engine.test.ts :: ABC-282 A2 — a partial iteration's move is played only if it beat the incumbent D12: a fail high above an exact incumbent stands while the next pass is aborted
+8	src/turn-loop.nfr.test.ts :: NFR-002 — the loop derives once per ply, spied at A17's three ply counts derives EXACTLY once per ply at 40 plies
+8	src/render-seam.test.ts :: ABC-096 — the opening name in the message region A1 — the shipped book: key 75a8cd2e62c99edd shows Ruy Lopez, and the line to it shows each position's own family
+7	src/search.pvs-lmr.test.ts :: PVS identity — searchWithoutReductions scores what searchWithoutPvsOrReductions scores the corpus is the ruling's 190 positions
+7	src/evaluate.taper.test.ts :: ABC-269 cut C1 P2 — the phase oracle walk: phaseAfterMove is phaseOf after every make, unmake and null move the perft set to depth 2, and the targeted rows' boards: 0 mismatches, and every move kind s
+7	src/book.test.ts :: ABC-094 A4 — the weights are used 8:1:1 over 1,000 draws from seed 42: each share within ±5 pp, exact counts recorded
+7	src/legal.test.ts :: ABC-206 A2 — the faster pieces equal what they replace legalCaptures(p) is legalMoves(p).filter(capture), as the same ordered list
+7	src/engine.test.ts :: ABC-230 A9 and A5 — the clock and the 100-key cap bound what the search reads A9: on the A1 fixtures with the root clock set to 0, the same keys are node-equal to base
+7	src/uci-session.test.ts :: ABC-230 A2, A3, A5 — the session hands the search the game's prior keys A2: `position startpos moves …` hands the replayed keys, trimmed, and the search reads them
+7	src/legal.test.ts :: ABC-206 A2 — the faster pieces equal what they replace hasLegalMove(p) === legalMoves(p).length > 0, and p is unchanged
+7	src/gameend.test.ts :: ABC-206 A2 — leafEndReason(p) === gameStatus(p).reason on the perft roots to depth 1 and every terminal or clock FEN; p is unchanged
+7	src/evaluate.pawns.test.ts :: ABC-235 cut 5 — the pawn memo returns what a fresh pawnStructure returns cold then warm, on every position of the walk, depth 1
+7	src/search.ordering.test.ts :: A6 — a killer is offered only at the ply it was recorded at, and only in its own search chooseMove(): one table per call, kept across its iterations, never across calls
+7	src/uci-session.test.ts :: ABC-282 — W1 acts in uci-clock-mode under a clock, and nowhere else (ADR-0071 D1, D3, D5) D5: a kept move is reported by one line, just before an unchanged info line
+7	src/engine.test.ts :: A4 — no fixed depth anywhere in the delivered engine goes DEEPER than any small hard-coded ceiling would allow — the behavioural half
+7	src/perft.test.ts :: ABC-006 — perftDivide splits Kiwipete depth 3 into one entry per legal first move that sums to the total
+7	src/uci-session.test.ts :: ABC-230 A2, A3, A5 — the session hands the search the game's prior keys A2: `position fen F moves …` then `go depth 4` plays the third occurrence at cp 0
+7	src/evaluate.pawns.test.ts :: ABC-235 cut 5 — the pawn memo returns what a fresh pawnStructure returns cold then warm, on G3's mirror corpus and every mirror
+6	src/book-engine.test.ts :: ABC-095 — the book in front of the engine's move choice A5 (game half) — no book: 10 in-book positions all go to the search, one warning, no throw
+6	src/search.capacity.test.ts :: ABC-122 A6: src/search.ts's KEY_ARRAY_CAPACITY guard, reached through search() ends a depth-200 line at ply 128 with a leaf's score: no child past it, no key written past it
+6	src/levels.test.ts :: the blunder path's edge cases (ADR-0032 decisions 1-2) scores a stalemating child 0
+6	tools/grugops/qe-hop-integrity.test.ts :: ABC-105 A9 — the security-nfr substitute is visible, not silent (real notes) ABC-073 exits 1 (its verdict sits in a folder naming ABC-072), and 0 only if grandfathered
+6	src/uci-session.test.ts :: ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) A7 — the safe share C binds a short clock tc=40/60 over 3 periods (60 000 ms, movestogo 40..1, +60 000 after moves 40 and 80): C binds on every mo
+6	src/apply.test.ts :: ABC-003 acceptance round-trips every pseudo-legal move on all six perft positions to the exact FEN
+6	src/legal.test.ts :: hasLegalEnPassant — ABC-011 the probe's precondition is pure for EVERY ep square value, not merely the reachable ones
+6	src/search.null-move.test.ts :: A2 — the instrumented search makes 0 null moves in check, and 0 below three non-pawn pieces the in-check root really is in check, and its search still finds null-window nodes to pass at
+6	src/render-seam.test.ts :: ABC-096 — the opening name in the message region A2 — known name, no name, out of book: one row count, the 23 on main before this ticket
+6	src/book.test.ts :: ABC-094 A1 — in book: a legal book move; out of book: nothing the start position returns a legal move that is one of the artifact's entries for it
+6	src/puzzle-suite.test.ts :: A6 — every puzzle carries its provenance, and the mates are the rules' answer every row names its source and its moves are legal; no added row starts in check
+6	src/see.test.ts :: ABC-279 A1 (c) — quiesce skips exactly the moves isLosingCapture names, on the stand-pat branch seePruning on: the children are the whole sorted list less the losing captures, in order
+6	src/levels.test.ts :: ABC-242 — a blunder scores a root move that makes the third occurrence exactly 0 ABC-245 — a third occurrence whose earlier two lie more than 50 plies back A1–A3: it scores exactly 0 with legal − 1 child sear
+6	src/zobrist.test.ts :: ABC-075 — zobristKeyAfterMove equals the full-scan oracle at every node A1/A2 — 0 mismatches and 0 drift within 2 plies of every perft position
+6	src/gameend.nfr.test.ts :: ABC-206 — the search leaf's game-end check stays cheap (call counts, spied) quiesce never builds the full move list: captures come from legalCaptures
+6	src/uci-session.test.ts :: ABC-171 A13a — the seed oracle floor(random() * 2^32) (QE-171-a) seededRandom(6): level 1's bestmove equals the oracle's
+6	src/search.ordering.test.ts :: A6 — a killer is offered only at the ply it was recorded at, and only in its own search search(): each search starts from its own, empty table
+6	src/evaluate.king-mobility.test.ts :: A1 — a position and its colour mirror score exactly equal, over ABC-076's 184 plus the king positions scores every mirrored pair exactly equal
+6	tools/grugops/qe-hop-integrity.test.ts :: ABC-105 A1 — it catches the measured failure (real notes) ABC-061 exits 0 out of scope on the committed snapshot, and 1 with it removed
+6	src/render-seam.test.ts :: ABC-096 — the opening name in the message region A5 — no state between frames: a take-back or a new game to an unnamed position shows nothing
+6	src/uci-session.test.ts :: ABC-171 A13a — the seed oracle floor(random() * 2^32) (QE-171-a) seededRandom(7): level 1's bestmove equals the oracle's
+6	src/render.test.ts :: ABC-101 A11 — piece polarity A11c: keeps 9 rows of 18 code points AND 18 UTF-16 units, with 0 U+001B, on every matrix cell
+6	src/uci-session.test.ts :: ABC-171 A13a — the seed oracle floor(random() * 2^32) (QE-171-a) seededRandom(2): level 1's bestmove equals the oracle's
+6	src/evaluate.pawns.test.ts :: A1 — a position and its colour mirror score exactly equal, over ABC-076's 184 plus the pawn structures scores every mirrored pair exactly equal
+6	src/zobrist.test.ts :: ABC-075 property — the ep component tracks the ep FIELD, not availability (ADR-0020) holds at every node 1 ply from every perft position
+6	src/search.ordering.test.ts :: ABC-240 (P1) — the allocation-free orderMoves equals today's map/sort/map on every node of the perft roots and terminal FENs to depth 1, five variants each
+6	src/history-pane.test.ts :: ABC-017 acceptance A9 — two renders of a history nothing has rendered are byte-identical
+6	src/see.test.ts :: ABC-279 A1 (c) — quiesce skips exactly the moves isLosingCapture names, on the stand-pat branch a record built without the field does not opt in: every capture is searched, in order
+6	src/search.qe.test.ts :: QE-G3 — the search does not give the queen away for a pawn declines the pawn that costs the queen, at depth 3
+5	src/uci-session.test.ts :: ABC-171 A13a — the seed oracle floor(random() * 2^32) (QE-171-a) seededRandom(4): level 1's bestmove equals the oracle's
+5	src/rejection.test.ts :: ABC-034 A2 — the classification is a SET DIFFERENCE over the perft corpus, asserted every legalMoves move resolves as a move — none of them is a rejection at all
+5	src/render-seam.test.ts :: ABC-041 — the render seam A1 — IS the published RenderSeam: a 4-ply game runs to checkmate through runTurnLoop
+5	src/history-pane.test.ts :: ABC-017 acceptance A9 — the caller's moves array is not mutated AT ANY POINT DURING a render
+5	src/search.pvs-lmr.test.ts :: A5 — search() visits fewer nodes than searchWithoutPvsOrReductions at depth 4 position-3 at depth 4 — the default lane's standing guard
+5	src/uci-session.test.ts :: ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) A2-A4 — whole 40/15 periods on one replayed clock A4: 120 moves over 3 periods (+900 000 ms after moves 40 and 80): >= 1 000 ms left after each, e
+5	src/evaluate.taper.test.ts :: ABC-274 A3 — the blend is live for every term family (ADR-0067 decision 8, scope 1) S1: the test's mobility count is the engine's, read with weights 1/1 and a cap that never binds
+5	src/render-seam.test.ts :: ABC-041 — the render seam A3 — one height across 10 cases, equal to frameHeight, with no row count in the module
+5	src/evaluate.taper.test.ts :: ABC-269 B1 (a) — a position and its colour mirror score exactly equal, Object.is, at every phase G3's 184 (buildCorpus)
+5	src/levels.test.ts :: QE-087-d (slice) — one draw per move: seed 1 over the first 10 of the thirty move k is a non-engine move iff the k-th draw of a fresh seededRandom(1) is below the rate
+5	tools/opening-book/book.test.ts :: the delivered artifact (data/opening-book/book.json) D1(e) — sorted keys and moves, no empty unnamed entry, no control byte, the pinned commit
+5	src/levels.test.ts :: the blunder path's edge cases (ADR-0032 decisions 1-2) scores a mating child MATE_SCORE − 1, and the mate is not played as the second best
+5	src/search.null-move.test.ts :: A2 — the shipped engine plays the recorded move in every zugzwang row, at the row's depth kpk-b6c6: chooseMove on a frozen clock to depth 8 plays b6c6
+5	src/evaluate.test.ts :: ABC-076 A1 — a position and its colour-mirrored twin score exactly equal scores all 184 mirrored pairs equal
+5	src/search.test.ts :: A1 — pruned and unpruned scores are identical position-3 at depth 2
+5	src/book.test.ts :: ABC-094 QE — gaps closed at qe-ABC-094 (each kills a mutant the suite above left green) A1: a book position whose key has a leading zero is found (the padStart in the key encoding)
+5	src/book.test.ts :: ABC-094 A1 — in book: a legal book move; out of book: nothing an absent key returns nothing and throws nothing
+5	src/engine.test.ts :: ABC-170 A1 — maxDepth stops deepening once that depth has completed is a real stop: unlimited, the same budget completes depth 6 or more
+5	src/search.futility.test.ts :: purity — each predicate leaves the position byte-identical (ADR-0061 decision 2) futilityNode on a pruning node and a guarded one, and futileMove on every legal move of five boards
+5	src/status-panel.nfr.test.ts :: ABC-016 A13 — the panel derives nothing (call counts, spied) never touches the repetition machinery, on any shape
+5	src/transposition.test.ts :: A5 — the only non-losing line repeats, and it scores exactly 0 chooseMove(), 6 ticks: depth 5, the perpetual played and scored exactly 0
+5	src/uci-session.test.ts :: ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) A11 — busy isready in the mode (ADR-0052 D7), default lane isready that arrives mid-search is answered once, after the bestmove, in order
+5	src/uci-session.test.ts :: ABC-167 A5 — the D4 time rule, read from the info line's time A5-b1: position startpos, go wtime 2000 btime 2000 winc 1000 binc 0 -> 600 ms (within 2 x 100 ms)
+5	src/search.ordering.test.ts :: A6 — a killer is offered only at the ply it was recorded at, and only in its own search search(): every killer offered was recorded at that ply of that search, and killers ARE offered
+5	src/engine.test.ts :: ABC-249 — a pre-root repetition met four plies deep scores 0 (QE-248-c) Qe5+ at ply 4 stood twice before the root: Ke1 at 441 with the keys, Kg1 at 520 without
+5	src/history-pane.test.ts :: ABC-017 acceptance A9 — neither render touches the caller's position, its move count or its ANCHOR
+5	src/san.qualifier.hardening.test.ts :: ABC-025 A4 — every legal move of a position renders to a DISTINCT string holds over all 207 corpus positions, with one shared legal list
+5	src/search.ordering.test.ts :: A1 — ordered and unordered scores are identical position-3 at depth 3
+5	src/book.test.ts :: ABC-094 QE — gaps closed at qe-ABC-094 (each kills a mutant the suite above left green) a file of exactly BOOK_MAX_BYTES is not refused for its size
+5	src/search.null-move.test.ts :: A2 — the shipped engine plays the recorded move in every zugzwang row, at the row's depth kpk-d6e6: chooseMove on a frozen clock to depth 8 plays d6e6
+5	src/evaluate.queen-on.test.ts :: ABC-270 — the queen-on pairs are data: three pairs at { 0, 0 } in src/evaluate-params.ts QE's frozen set: 7 pairs and 1 control; A and B differ only on the removed squares, which hold the subject's
+5	src/book.test.ts :: ABC-094 A1 — in book: a legal book move; out of book: nothing a present key with an empty m (kept for its name) returns nothing and throws nothing
+5	src/perft.test.ts :: ABC-006 acceptance — exact perft counts position-5 perft(3) = 62379
+5	src/search.null-move.test.ts :: A2 — the shipped engine plays the recorded move in every zugzwang row, at the row's depth kpk-c6d6: chooseMove on a frozen clock to depth 8 plays c6d6
+5	src/uci-session.test.ts :: ABC-241 A4, A5 — UCI: the prior keys are repetition keys A4: the move that makes the third occurrence scores exactly 0; with a legal ep capture, no draw
+5	src/uci-session.test.ts :: ABC-167 A7 — the D12 limits A7-i3: go wtime 1000 btime 1000 depth winc 1000 -> 550 ms
+5	tools/grugops/qe-hop-integrity.test.ts :: ABC-105 A3 — the refs-only false pass is closed (real notes) ABC-062 exits 0 on the committed snapshot, and 1 with it removed: the folder does not name it
+5	src/engine.test.ts :: ABC-282 A2 — a partial iteration's move is played only if it beat the incumbent (c) a completed mate above the incumbent is played with its own score
+5	src/search.null-move.test.ts :: A2 — the shipped engine plays the recorded move in every zugzwang row, at the row's depth kpk-e6f6: chooseMove on a frozen clock to depth 8 plays e6f6
+5	src/transposition.test.ts :: A1 — table-on and table-off scores are identical knight-g1 w - at depth 4 — G6: 939 with the table on and off
+5	src/line-input.test.ts :: ABC-037 — the production InputSeam A1 — it IS the seam, by type and by use binds into runTurnLoop as options.input with no adapter and no cast, and runs a scripted game to a terminal result
+4	src/pgn.test.ts :: ABC-203 — the PGN text (A1, A2, A4–A7) A5 — move numbers before White moves only, from fullmoveNumber; the headline comment; the token
+4	src/turn-loop.test.ts :: ABC-019 acceptance A15 — a seam resolving on a LATER MACROTASK gives an identical frame sequence and verdict
+4	src/gameend.test.ts :: ABC-241 A1 — repetitionKey, the one helper F8: at every node of a 2-ply walk from three openings that carries an ep square, the key drops the file iff the generator offers no ep capture
+4	src/perft.test.ts :: ABC-006 acceptance — exact perft counts position-6 perft(3) = 89890
+4	src/search.ordering.test.ts :: A4 — each heuristic's node count, and the delete rule position-6 at depth 2: none 10 371, MVV-LVA 3 266, + killers 3 177
+4	src/evaluate.pawns.test.ts :: A7 — one corpus and one mirror helper, shared, and no production module imports it this suite's corpus is a STRICT superset of ABC-076's 184
+4	src/render-seam.test.ts :: ABC-041 — the render seam A8 — the headline: render / status-panel / history-pane each gain a runtime consumer
+4	src/san.suffix.hardening.test.ts :: ABC-025 QE — a qualifier and a suffix on the SAME string keeps both the qualifier and the `+` at all three rungs of the ladder
+4	src/engine.test.ts :: ABC-230 A9 and A5 — the clock and the 100-key cap bound what the search reads A9 (probe H4): untrimmed prior keys at root clock 0 are node-equal to base
+4	src/evaluate.taper.test.ts :: ABC-269 — one switch, taper, and three test-only doors (ADR-0064 decision 7) the call sites: futilityNode is handed the switch and the carried phase, the leaf and the stand pat pick by the switch
+4	src/uci-session.test.ts :: ABC-167 A4 — bad input holds no position A4-a2: an echoed control character in a go value is dropped from the info string
+4	src/san.test.ts :: ABC-013 acceptance A19 — the `legal` argument changes nothing but cost
+4	src/history.test.ts :: ABC-012 acceptance rewinds the repetition history too, not just the board, when moves are taken back
+4	src/uci-session.test.ts :: ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) A6 — no movestogo go wtime 900000 btime 900000, 80 moves, no added time: C over 20 on every move, >= 1 000 ms left after each (17 205 after move 8
+4	src/perft.test.ts :: ABC-006 acceptance — exact perft counts startpos perft(3) = 8902
+4	src/evaluate.queen-on.test.ts :: ABC-270 K1 (a) — the mirror stays Object.is-exact with the queen-on pairs live G3 + TAPER_MIRROR_POSITIONS + QE's pairs, at 0 and at 2 × base: 0 mismatches
+4	src/turn-loop.test.ts :: ABC-019 — the eighteen scripted rows: fifteen with an exact reason and an exact frame count, two that throw, and row 18 a SCREEN property row 1 — mate line (Fool's mate)
+3	src/book.test.ts :: ABC-094 A6 — corrupt artifact: same outcome across the named matrix the oversize input is the real book padded with whitespace, so only its size refuses it
+3	src/transposition.test.ts :: A7 — the table holds a fixed 4 MiB, whatever the search is 2^18 slots of 16 bytes: exactly 4 MiB, before and after searches of any size
+3	src/uci-session.test.ts :: ABC-241 A4, A5 — UCI: the prior keys are repetition keys A5 (slice): on a 500 ms virtual step, the CLI level seam's injected list equals UCI's, key for key, and both play d8e8
+3	src/transposition.test.ts :: A2 — the hit rate is reported and is at least 10% position-3 at depth 4 — the default lane's standing guard
+3	src/uci-session.test.ts :: ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) A6 — no movestogo the alloc.txt shape (+900 000 ms after move 40, still no movestogo): the closest call is 117 735 ms, after move 40
+3	src/engine.test.ts :: ABC-230 A1 — a third occurrence scores exactly 0 at the root; base scores it otherwise KQ v K, Black to move: d8e8 at 0 with the prior keys, base's move without them
+3	src/engine.test.ts :: ABC-282 A2 — a partial iteration's move is played only if it beat the incumbent the incumbent is the completed iteration's best move, not an earlier iteration's
+3	src/quiescence.test.ts :: A2 — stand-pat is a lower bound on the quiescence value, never a replacement king and pawn vs king: a quiet position's quiescence value IS the static evaluation, exactly
+3	src/ladder.test.ts :: ABC-085 ladder — the claim policy and the ply cap (A3, test notes 2 and 7) a threefold repetition ends as 'threefold-repetition (claimed)' at the first offer
+3	src/evaluate.test.ts :: ABC-076 A1 — the corpus is derived and counts out to 184 holds the RIGHT 184 — distinct positions, grouped per root
+3	src/engine.test.ts :: ABC-282 A2 — a partial iteration's move is played only if it beat the incumbent (c) an incumbent scored as mated, nothing above it: iteration d's move and score
+3	src/uci-session.test.ts :: ABC-167 A6 — infinite waits for stop A6-e1: a new go writes the held bestmove first; two bestmoves in all
+3	src/levels.test.ts :: ABC-242 — a blunder scores a root move that makes the third occurrence exactly 0 A2: a second occurrence keeps base's score; every child runs and the list is base's
+3	src/evaluate.king-mobility.test.ts :: A4 — mobility: more moves score higher, and the term is bounded by ±100 cp never exceeds ±100 cp — on the four-queen rig and over the whole corpus, both colours to move
+3	src/uci-session.test.ts :: ABC-230 A2, A3, A5 — the session hands the search the game's prior keys A2: bestmove is byte-equal to the CLI level seam's move on the same game and clock
+3	src/search.qe.test.ts :: QE-G2 — the chosen move tracks the material the evaluation says is there takes the queen, not the rook, from a knight fork at depth 2
+3	src/evaluate.passer.test.ts :: ABC-271 K1 (a) — the mirror, Object.is, 0 mismatches G3 + TAPER_MIRROR_POSITIONS + QE's 12 passer positions (+ the 44 fixtures), at the shipped values
+3	src/uci-session.test.ts :: ABC-167 A6 — infinite waits for stop A6-j1: a refused position writes the held bestmove first, then its info string
+3	src/transposition.test.ts :: A6 — the per-ply key array is the search's own search() allocates ONE key array per call, whatever the depth and node count
+3	src/uci-session.test.ts :: ABC-167 A6 — infinite waits for stop A6-e5: isready, an unknown line and setoption leave the bestmove held
+3	src/engine.test.ts :: ABC-282 A2 — a partial iteration's move is played only if it beat the incumbent D12: inside an aspiration window, on two exact scores
+3	src/search.bundle.test.ts :: ABC-283 (h) — the history table (ADR-0063 decisions 1-5) a quiet cutoff gives +d² to the cutter and -d² to each quiet move before it; a capture cutter changes nothing
+3	src/levels.test.ts :: ABC-242 — a blunder scores a root move that makes the third occurrence exactly 0 A1: on QE's probe, scored[0] is {d8e8, 0} and 4 child searches run for 5 legal moves
+3	src/san.qualifier.hardening.test.ts :: ABC-025 A5 — purity and the `legal` argument over BLACK-to-move positions leaves `toFen` byte-identical and both call forms equal, over every legal move of all 23
+3	src/uci-session.test.ts :: ABC-230 A2, A3, A5 — the session hands the search the game's prior keys A5: the window starts at the last pawn move; a castling-rights change does not cut it
+3	src/engine.test.ts :: ABC-230 A1 — a third occurrence scores exactly 0 at the root; base scores it otherwise K v KQ, White to move: d1e1 at 0 with the prior keys, base's move without them
+3	src/levels.test.ts :: ABC-242 — a blunder scores a root move that makes the third occurrence exactly 0 A3: a key older than the child's clock is never counted: clock 0, the 7 keys untrimmed
+3	tools/tune/tune.test.ts :: ABC-239 — tools/tune's source pins the FEN source row: each bound row's FEN and name appear literally in its src/evaluate*.test.ts file, or its fenFile (ADR-0067 ruling (b)); 26 rows, ABC-301's PREREG
+3	src/book.test.ts :: ABC-094 A5 — artifact missing: no crash, exactly one warning constructs with 0 reads, then 50 calls throw 0, return nothing 50 times, warn exactly once
+3	src/history.test.ts :: ABC-241 A3 — the 1.e4 line: the claim at 5.Ng1 and the fivefold at 9.Ng1 A6 (game side): a game with no uncapturable ep square has a repetition-key list equal to its hash list
+3	src/gameend.test.ts :: QE review — the claim's asymmetry, the check order, and the coupling terminates the locked wall on a second no-progress line, not just A5's first-quiet one
+3	src/uci-session.test.ts :: ABC-167 A6 — infinite waits for stop A6-e4: quit writes the held bestmove and returns quit
+3	src/search.test.ts :: A3 — mate is found and the shorter mate preferred returns the mating move and a score above any non-mate score, at depth 4
+3	src/render-seam.test.ts :: ABC-096 — the opening name in the message region A6 — names on entries with an empty m; inBook / bookMove unchanged there; framing draws random 0 times
+3	src/gameend.nfr.test.ts :: NFR-001 — gameStatus stays cheap (call counts, spied) generates the legal moves EXACTLY once, on every call shape
+3	src/uci-session.test.ts :: ABC-230 A2, A3, A5 — the session hands the search the game's prior keys A5: from a 600-ply move list, only the last 100 keys before the root are handed
+3	src/cli.test.ts :: ABC-042 — the accepted set is closed A6(ii) — 1000 generated tokens, 250 per shape, every one rejected and named
+3	src/quiescence.test.ts :: ABC-228 QE-228-b — QE's Q-SET rows (qe-ABC-228), in src QE-M1: mated in quiescence with a negative sign, −(MATE_SCORE − 2), and search agrees at depths 1–3
+3	src/transposition.test.ts :: A5 — the only non-losing line repeats, and it scores exactly 0 the fixture bites: at depth 3 the repetition is past the horizon, and the rook down shows
+3	src/search.test.ts :: A5 — stalemate scores exactly 0, not a loss does not play into a stalemate one ply inside the tree
+3	src/result-screen.test.ts :: ABC-044 A5 — the full move list, exactly, in order a black-to-move anchor: the first pair is numbered from the anchor and its white cell elided
+3	src/uci-session.test.ts :: ABC-167 A5 — the D4 time rule, read from the info line's time A5-c1: position startpos, go wtime 100 btime 100 winc 1000 binc 1000 -> 50 ms (within 2 x 10 ms)
+3	src/uci-session.test.ts :: ABC-167 A7 — the D12 limits go depth 0: one info string, the token dropped, one bestmove
+3	src/cli.test.ts :: ABC-230 A1, A3 — the CLI's level seam hands the search the game's prior keys A3: a game started from a FEN has no earlier positions: the move is base's
+3	src/uci-session.test.ts :: ABC-174 A5 — UCI reads the re-cut table (ADR-0045 D4, D11, D12) at skill 3, go depth 3: one info string naming depth, a level line with no score, bestmove
+3	src/levels.test.ts :: ABC-242 — a blunder scores a root move that makes the third occurrence exactly 0 A1: with the repeat last in legalMoves order, the list is base's but for its exact 0
+3	src/move-input.test.ts :: ABC-033 A1 — both formats, one prompt, no mode switch resolves e4, e2e4, E2E4 and e2-e4 to the SAME legal move by reference
+3	tools/opening-book/book.test.ts :: A1 — two compiles of the same source are byte-identical emits the same bytes twice, with no timestamp and no absolute path
+3	src/transposition.test.ts :: A4 — a mate score is correct at every ply the position is reached at a mate-in-2 stored at ply 1 reads MATE_SCORE - 4 at ply 1 and MATE_SCORE - 6 at ply 3
+3	src/evaluate.taper.test.ts :: ABC-274 A3 — the blend is live for every term family (ADR-0067 decision 8, scope 1) MOBILITY_WEIGHT: the score is mg + trunc((Δ + offset) × (D − w) / D), exactly, on ≥ 3 positions at phases 1–23
+3	src/uci-session.test.ts :: ABC-167 A6 — infinite waits for stop go infinite holds the bestmove until stop; a second stop writes nothing
+3	src/engine.test.ts :: ABC-230 A9 and A5 — the clock and the 100-key cap bound what the search reads A5: the search reads at most the last 100 prior keys, whatever it is handed
+3	src/uci-session.test.ts :: ABC-167 A7 — the D12 limits go nodes x: one info string, the token dropped, one bestmove
+3	tools/grugops/qe-hop-integrity.test.ts :: ABC-105 A9 — the security-nfr substitute is visible, not silent (real notes) ABC-072 exits 0 with the substitute label and its secnfr-ABC-072 note
+3	src/history-pane.test.ts :: ABC-017 acceptance A1 — renders exactly HISTORY_ROWS rows at every one of the ten lengths
+3	tools/grugops/qe-hop-integrity.test.ts :: ABC-105 A2 — it passes a real QE hop (real notes) ABC-031 exits 0 and names its covering note under quality-gate-ABC-031-qe-2026-08-17/notes/
+3	src/uci-session.test.ts :: ABC-167 A7 — the D12 limits go mate 2 on the smothered mate -> score mate 2 and bestmove d5g8
+3	src/moves.castling.hardening.test.ts :: ABC-009 A11 — the impostor's PIECE TYPE, quantified over every own type offers no castle and destroys nothing when an own QUEEN stands on the king's home square: 4k3/8/8/8/8/8/8/K3Q2R w K - 
+3	src/uci-session.test.ts :: ABC-167 A7 — the D12 limits A7-i5: go depth infinite holds the bestmove until stop
+3	src/uci-session.test.ts :: ABC-167 A7 — the D12 limits go depth: one info string, the token dropped, one bestmove
+3	src/uci-session.test.ts :: ABC-171 A6 — a level change is observable (EPIC-007 M7) level 3: go wtime 60000 btime 60000 winc 1000 binc 1000 -> 330 ms (within 2 x 100 ms)
+3	src/uci-session.test.ts :: ABC-167 A7 — the D12 limits go depth 2.5: one info string, the token dropped, one bestmove
+3	src/render.test.ts :: ABC-014 QE — adversarial coverage puts every file letter in its own file's glyph column, with no padding anywhere
+3	src/uci-session.test.ts :: ABC-167 A6 — infinite waits for stop go infinite holds the bestmove until ponderhit; a second ponderhit writes nothing
+2	src/uci-session.test.ts :: ABC-167 A6 — infinite waits for stop ABC-178 R1: a hold left in one session is not released by a fresh session
+2	src/search.null-move.test.ts :: the null move — makeNullMove / unmakeNullMove and zobristKeyAfterNullMove zobristKeyAfterNullMove(zobristKey(before), undo) === zobristKey(after), ep square or not
+2	src/evaluate.taper.test.ts :: ABC-269 B1 (c) — evaluateWithoutTaper is the pre-ticket evaluate, Object.is QE's door corpus: 176 positions and their frozen pre-ticket scores
+2	src/uci-session.test.ts :: ABC-167 A7 — the D12 limits go nodes -5: one info string, the token dropped, one bestmove
+2	src/uci-session.test.ts :: ABC-167 A7 — the D12 limits A7-i6: go searchmoves e2e4 infinite holds the bestmove until stop
+2	src/uci-session.test.ts :: ABC-167 A7 — the D12 limits go mate 0: one info string, the token dropped, one bestmove
+2	tools/grugops/qe-hop-integrity.test.ts :: ABC-105 A2 — it passes a real QE hop (real notes) ABC-076 exits 0 and names its covering note under quality-gate-ABC-076-qe-2026-08-17/notes/
+2	src/gameend.test.ts :: ABC-007 acceptance reports checkmate and the winner from the fool's-mate position
+2	src/quiescence.test.ts :: A5 — the node-count multiplier on kiwipete and position-6 is reported, and bounded per ADR-0024 kiwipete at depth 1 — the default lane's cheap reading, level 180x
+2	src/history-pane.test.ts :: ABC-017 acceptance A2 — every row is exactly HISTORY_COLS characters at every one of the ten lengths
+2	src/search.futility.test.ts :: FUTILITY_MARGIN reads [0, 150, 350, 550], is module-private, and no line in src/ writes it after load no production module assigns to it, to an element of it, or calls a mutating method on it
+2	src/san.parse.test.ts :: A1 — the round-trip property over the whole perft corpus startpos: every legal move survives toSan -> parseSan by reference
+2	src/engine.test.ts :: ABC-230 A9 and A5 — the clock and the 100-key cap bound what the search reads A5: a prior key older than the root clock is never matched
+2	src/engine.test.ts :: A6 — the implementation IS an EngineSeam, and runTurnLoop drives it plays a scripted game to end-of-input with the loop driving it
+2	src/uci-session.test.ts :: ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) A3-A5 — whole periods on one replayed clock A3: one 40/15 period from 900 000 ms, movestogo 40..1, no book: T on every move, 18 760 ms left, 97.9 
+2	src/uci-session.test.ts :: ABC-241 A4, A5 — UCI: the prior keys are repetition keys A6: a FEN carrying an uncapturable ep square: its own key counts, d1e1 scores exactly 0; base's list does not
+2	src/turn-loop.test.ts :: ABC-019 acceptance A20 — after EVERY redraw the screen equals the frame, at `W`(frame 1) and at 80 columns
+2	src/engine.test.ts :: ABC-170 A2 — maxNodes aborts, and the last COMPLETED iteration is played still completes the first iteration at maxNodes 1: non-null, legal, depth 1
+2	src/frame.test.ts :: ABC-018 acceptance — writing and redraw writes 80 frames to a NON-TTY sink with zero escape bytes, each frame in full
+2	src/uci-session.test.ts :: ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) A3-A5 — whole periods on one replayed clock A4: the same period with its first 6 moves from the book: 83.2 % used, every move leaves >= 18 000 ms
+2	src/frame.test.ts :: ABC-027 acceptance — the in-place writer clears each row as it writes it A5 — both APPEND strategies and every frame VALUE are untouched: zero escape bytes in either
+2	src/search.futility.test.ts :: QE-268-b — a futile node returns the best score among the moves it searched, fail-soft: below its alpha, never alpha itself the fixture bites: the node is futile at the window its parent hands it, an
+2	src/history-pane.nfr.test.ts :: A11 — the pane derives nothing, and this is a CALL COUNT never derives: gameStatusOf / repetitionCounts / keyHistory / gameStatus are 0 at every length
+2	src/search.qe.test.ts :: QE-G3 — the search does not give the queen away for a pawn declines the pawn that costs the queen, at depth 2
+2	src/render.test.ts :: ABC-014 acceptance — the board frame draws 64 cells, the file row a..h and the rank labels 8..1 with white at the bottom
+2	src/render.test.ts :: ABC-014 acceptance — the board frame shades adjacent squares differently and gives a1 and h8 the same (dark) character
+2	src/startup-questions.test.ts :: ABC-200 — the startup questions A1 — both questions, both answered asks colour then difficulty, writes nothing else before the second answer, and resolves black / 1
+2	src/search.futility.test.ts :: QE-268-b — a futile node returns the best score among the moves it searched, fail-soft: below its alpha, never alpha itself chooseMoveWithoutTaper deepened to 3: the futile node's entry is an upper b
+2	src/engine.test.ts :: ABC-230 A8 — a second occurrence before the root is not a draw (probe H2) KQ v K, Black to move: d8e8 would stand a second time; node-equal to base
+2	src/evaluate.passer.test.ts :: ABC-271 — the source rows (ADR-0070 decisions 2–4) the seams passerTermsForTest and pawnStructureForTest are called from test files only: no other file under src/, no tools/ file, no script (QE-271-g
+2	src/legal.test.ts :: ABC-005 acceptance never leaves the mover's own king in check, for every legal move on every perft position
+2	src/engine.test.ts :: ABC-230 A8 — a second occurrence before the root is not a draw (probe H2) K v KQ, White to move: d1e1 would stand a second time; node-equal to base
+2	src/uci.real-engine.test.ts :: ABC-168 — the UCI lane's child is the delivered entry point (default lane; spawns nothing) the child runs src/uci.ts with only the heap token, no --import, loader or hook, and an empty environment
+2	src/render.test.ts :: ABC-014 QE — adversarial coverage emits no ANSI escape and no control character in any frame
+2	src/levels.test.ts :: Security/NFR R1 (QE-087-c) — the level clamps its own total to HARD_CEILING_MS a blundering level at twice the ceiling spends at most the ceiling plus a few readings
+2	src/gameend.test.ts :: ABC-020 acceptance A5 — the locked wall still terminates, on the 75-move backstop, with no claim made
+2	src/uci-session.test.ts :: ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) A3-A5 — whole periods on one replayed clock A5: no movestogo, 40 moves from 900 000 ms: every move leaves >= 1 000 ms, >= 75 % used; T binds for 2
+2	src/evaluate.passer.test.ts :: ABC-271 K1 (c) — the structure through the seam, per side (QE-271-a), at ADR-0070 d1's probed values U is 400 exactly where the square names it at phase 0, never netted (U7-both: 400 each side), else
+2	src/history.test.ts :: ABC-012 acceptance reaches the same position by forward apply as by replay, byte-identically at 120 plies
+2	src/san.test.ts :: ABC-013 acceptance A1 — the base case, exhaustively: the 20 start-position moves as an exact set
+2	src/evaluate.taper.test.ts :: ABC-269 cut C1 P2 — the phase oracle walk: phaseAfterMove is phaseOf after every make, unmake and null move phaseOf is ADR-0064 d1's raw phase, unclamped, over G3's 184 and QE's frozen sets
+2	src/cli.test.ts :: this file's own instruments the instruments themselves are not blind — every derived view is WATCHED losing its evidence
+2	src/cli.test.ts :: ABC-042 — a human can run it A1 — `npm run chess` writes the start position and exits 0
+2	src/pgn.test.ts :: ABC-203 — the PGN text (A1, A2, A4–A7) A6 — round trip: every SAN word resolves to one legal move, the moves equal the history, the final FEN equals
+2	src/cli.test.ts :: ABC-042 — the accepted set is closed A6(i) — the near-miss family, COMPLETE OVER POSITION, is rejected in its legal position
+2	src/moves.castling.test.ts :: ABC-009 acceptance — A1/A2, the reproduction FEN A1 leaves the position untouched and offers no castle
+2	src/gameend.test.ts :: ABC-241 A1 — repetitionKey, the one helper is pure: the position is byte-identical after the call, on every case
+2	src/search.test.ts :: A5 — stalemate scores exactly 0, not a loss K+Q smothering the lone king scores 0 at depth 0
+2	src/uci-session.test.ts :: ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) A2-A4 — whole 40/15 periods on one replayed clock A2: one period from 900 000 ms, movestogo 40..1, no book: min(59 500, C) on every move, >= 1 000
+2	src/engine.test.ts :: ABC-230 A1 — a third occurrence scores exactly 0 at the root; base scores it otherwise K v KR, White to move: d1e1 at 0 with the prior keys, base's move without them
+2	src/levels.test.ts :: ABC-230 — the level hands the game's prior keys on (ADR-0054 decision 2) A1: a blunder hands every child search the prior keys plus the root's key, one list
+2	src/engine.test.ts :: ABC-230 A1 — a third occurrence scores exactly 0 at the root; base scores it otherwise KR v K, Black to move: d8e8 at 0 with the prior keys, base's move without them
+2	src/evaluate.taper.test.ts :: ABC-274 A3 — the blend is live for every term family (ADR-0067 decision 8, scope 1) S2: a throwing run and a throwing loader each throw out of the seam, and every score after is Object.is the score be
+2	src/history-pane.test.ts :: ABC-028 acceptance A4 arming — the instrument reports a write to every slot A4 names
+2	src/book.test.ts :: ABC-094 A6 — corrupt artifact: same outcome across the named matrix valid JSON, not an object: 50 calls throw 0, return nothing, warn exactly once
+2	src/moves.test.ts :: ABC-002 acceptance returns exactly 20 moves from the starting position
+2	src/evaluate.passer.test.ts :: ABC-271 — the E4a terms are data: four exports, every half 0 (ADR-0070 decision 1) PASSED_KING_ENEMY, PASSED_KING_OWN, PASSED_FREE: by own rank in PASSED's shape, every half 0
+2	src/pgn.test.ts :: ABC-203 — the PGN text (A1, A2, A4–A7) A4 — exactly ten tags, in order, then exactly one empty line
+2	src/legal.test.ts :: ABC-005 acceptance returns exactly 20 legal moves from the starting position
+2	src/evaluate.taper.test.ts :: ABC-269 B1 (b) — at phase 24, evaluate equals evaluateWithoutTaper exactly every G3 position whose phase is >= 24
+2	tools/opening-book/book.test.ts :: ABC-145 — the source bytes are checked against pinned sha256 values before a write A1/A2 — refuses a source altered by one byte and writes nothing; unaltered, it writes
+2	src/search.qe.test.ts :: QE-G1 — omitting the depth argument yields no move (RISK-002, by behaviour) search(position) — with no depth — cannot return a move
+2	src/cli.test.ts :: ABC-192 — setup hands the guard process.stdout, and a vitest bump names its re-run list A1 — setup's one guard(…) call passes process.stdout (QE-176-a)
+2	src/uci-session.test.ts :: ABC-221 — TimeMode uci-clock-mode over UCI (ADR-0052 D4) A2-A4 — whole 40/15 periods on one replayed clock A3: the same period with its first 6 moves from the book: the banked time is spent, >= 1 000 ms 
+2	src/turn-loop.test.ts :: ABC-019 — the eighteen scripted rows: fifteen with an exact reason and an exact frame count, two that throw, and row 18 a SCREEN property row 4 — fivefold repetition, on the FIFTH occurrence
+2	src/move-input.test.ts :: fixtures — every FEN in this file round-trips through toFen round-trips rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1
+2	src/status-panel.test.ts :: ABC-016 acceptance A1 — names the side to move, both ways, and never both
+2	src/evaluate.taper.test.ts :: ABC-269 cut C1 P3 (in file) — evaluate is evaluateAtPhase at phaseOf, Object.is over G3's 184, QE's frozen sets, the passer pairs and the K+P endings
+2	src/quiescence.test.ts :: A1 — the losing capture is not chosen in >= 19 of 20, and the bare leaf is strictly worse carries at least 20 positions, none of them in check for the side to move
+2	src/frame.test.ts :: ABC-018 acceptance — the assembled frame truncates 10 candidates that do NOT fit with (+N more), N counted from the INPUT
+2	src/evaluate.taper.test.ts :: ABC-274 A3 — the blend is live for every term family (ADR-0067 decision 8, scope 1) S3: only src/evaluate.ts and src/*.test.ts name the seam, no tools/ file does, and loadParameters( runs at load and 
+2	src/transposition.shared.test.ts :: ABC-265 A1 — the layout: four Uint32 words a slot over one SharedArrayBuffer the storage is one SharedArrayBuffer of 4 194 304 bytes (2^18 x 16), viewed as Uint32
+2	src/turn-loop.nfr.test.ts :: NFR-002 — the loop derives once per ply, spied at A17's three ply counts derives ZERO times on a `rejected` prompt outcome
+2	src/history.test.ts :: ABC-241 A3 — the 1.e4 line: the claim at 5.Ng1 and the fivefold at 9.Ng1 the threefold claim after 5.Ng1 (base 7.Ng1) and the fivefold after 9.Ng1 (base 11.Ng1)
+2	src/uci-session.test.ts :: ABC-220 — TimeMode simple-tournament over UCI (ADR-0052) A8 — levels unchanged (EPIC-009 M3) TimeMode unset, Skill Level 1: A3's period gives base's budget on every go, row for row
+2	src/perft.test.ts :: ABC-006 acceptance — exact perft counts startpos perft(1) = 20
+2	src/frame.test.ts :: ABC-018 acceptance — writing and redraw redraws IN PLACE on a 24-row TTY: cursor home, the frame, exactly one erase to end of screen
+2	src/zobrist.nfr.test.ts :: NFR-005 — zobristKey never consults hasLegalEnPassant (structural since ADR-0020, spied) asks nothing on any input, with or without an ep square
+2	src/uci-session.test.ts :: ABC-171 A9 — a bad book read throws: three gos each write one legal bestmove, never throw, warn exactly once
+2	src/result-screen.test.ts :: ABC-044 A1 — all eight reasons, each named, each distinct names each of the eight rules in the vocabulary the criterion asks for
