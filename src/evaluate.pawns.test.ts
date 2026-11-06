@@ -14,8 +14,10 @@
  * `ABC-291` (E4b, `ADR-0075`) K1's rows are the last blocks of this file. K1 (b)'s off-door rows are
  * `ABC-271` and `ABC-270` K1 (b) in `src/evaluate.passer.test.ts` and `src/evaluate.queen-on.test.ts`,
  * `evaluateWithoutTaper`'s is `ABC-269` B1 (c), and K1 (f) is `ABC-274` A9 in
- * `src/evaluate.taper.test.ts`. No QE freeze of K1's fixtures is on record: `SEAM_ROWS` is the
- * Engineer's, hand-worked from d1's words, and `PAWN_SHAPE_POSITIONS` is the probe's offered 16.
+ * `src/evaluate.taper.test.ts`. QE's freeze of K1's fixtures came AFTER the build, not before it
+ * (`qe-ABC-291-k1` `…2e186a33`), so it stands as a blind check and not as a prior one. `SEAM_ROWS`'
+ * first 36 rows are the Engineer's, hand-worked from d1's words, and the rows after them are QE's.
+ * `PAWN_SHAPE_POSITIONS` is the probe's offered 16.
  */
 
 import { readdirSync, readFileSync } from "node:fs";
@@ -707,12 +709,126 @@ const SEAM_ROWS: ReadonlyArray<
   ],
   // d1's exclusions.
   [
-    "a backward rear pawn of a doubled pair still pays: d2",
+    "a backward rear pawn of a doubled pair pays backward: d2; the seam holds no DOUBLED part",
     "4k3/8/8/8/2PPp3/8/3P4/4K3 w - - 0 1",
     [0, 4, 10],
     [0, 0, 0],
   ],
+  // QE's rows (`qe-ABC-291-k1` `…b850a2ad`): ids, words and values as `raw/k1-rows.mjs` has them.
+  // K1 (c)'s letter: the double step and en passant are not read.
+  [
+    "N13: exclusion: double step not read, target attacked",
+    "4k3/8/8/2p5/4P3/8/3P4/4K3 w - - 0 1",
+    [0, 0, 0],
+    [0, 0, 0],
+  ],
+  [
+    "N14: exclusion: double step not read, target holds an enemy",
+    "4k3/8/8/8/3pP3/8/3P4/4K3 w - - 0 1",
+    [0, 0, 0],
+    [0, 0, 0],
+  ],
+  [
+    "N16: exclusion: en passant not read, field set",
+    "4k3/8/4P3/8/2pP4/8/8/4K3 b - d3 0 1",
+    [0, 0, 0],
+    [0, 0, 0],
+  ],
+  ["N17: N16 with the field clear", "4k3/8/4P3/8/2pP4/8/8/4K3 b - - 0 1", [0, 0, 0], [0, 0, 0]],
+  // Clause (b): a neighbour two or more ranks behind.
+  [
+    "L4: (b) alone: neighbour two behind, neither connected nor phalanx",
+    "4k3/8/8/3p4/3P4/8/4P3/4K3 w - - 0 1",
+    [0, 0, 0],
+    [0, 0, 0],
+  ],
+  // Clause (c): the arms' reach, friends on the stop, pawns only.
+  [
+    "D2: both of a doubled pair: the stop attacked though a friend stands on it",
+    "4k3/8/8/2p1P3/4p3/3P4/3P4/4K3 w - - 0 1",
+    [0, 0, 20],
+    [0, 0, 0],
+  ],
+  [
+    "D3: friend on the stop, stop attacked",
+    "4k3/8/4P3/2p5/3P4/3P4/8/4K3 w - - 0 1",
+    [0, 0, 10],
+    [0, 0, 0],
+  ],
+  ["N2: (c) alone: enemy on (f, R+2)", "4k3/8/8/3pP3/8/3P4/8/4K3 w - - 0 1", [0, 0, 0], [0, 0, 0]],
+  [
+    "N5: (c) alone: enemy on (f-1, R+3)",
+    "4k3/8/2p5/4P3/8/3P4/8/4K3 w - - 0 1",
+    [0, 0, 0],
+    [0, 0, 0],
+  ],
+  [
+    "N6: (c) alone: enemy on (f+1, R+3)",
+    "4k3/8/4p3/2P5/8/3P4/8/4K3 w - - 0 1",
+    [0, 0, 0],
+    [0, 0, 0],
+  ],
+  [
+    "N11: (c) alone: an enemy knight on the stop, pawns only",
+    "4k3/8/8/4P3/3n4/3P4/8/4K3 w - - 0 1",
+    [0, 0, 0],
+    [0, 0, 0],
+  ],
+  [
+    "N12: (c) alone: an enemy bishop on the attacker's square, pawns only",
+    "4k3/8/8/2b1P3/8/3P4/8/4K3 w - - 0 1",
+    [0, 0, 0],
+    [0, 0, 0],
+  ],
+  // The a- and h-files are not neighbours.
+  ["W1: wrap: h3 +9 lands on a5", "4k3/8/8/P7/8/7P/8/4K3 w - - 0 1", [0, 0, 0], [0, 0, 0]],
+  ["W2: wrap: a3 +7 lands on h3", "4k3/8/8/8/8/P6P/8/4K3 w - - 0 1", [0, 0, 0], [0, 0, 0]],
+  ["W3: wrap: h4 +1 lands on a5", "4k3/8/8/P7/7P/8/8/4K3 w - - 0 1", [0, 0, 0], [0, 0, 0]],
+  ["W4: wrap: a4 -1 lands on h3", "4k3/8/8/8/P7/7P/8/4K3 w - - 0 1", [0, 0, 0], [0, 0, 0]],
+  [
+    "W5: wrap on (a): an h-file pawn is no neighbour of an a-file pawn",
+    "4k3/8/8/p6P/P7/8/8/4K3 w - - 0 1",
+    [0, 0, 0],
+    [0, 0, 0],
+  ],
+  [
+    "W6: wrap on (c): h4 does not attack a4",
+    "4k3/8/1P6/8/7p/P7/8/4K3 w - - 0 1",
+    [0, 0, 0],
+    [0, 0, 0],
+  ],
+  [
+    "W7: wrap on (c): a6 does not attack h4",
+    "4k3/8/p5P1/8/8/7P/8/4K3 w - - 0 1",
+    [0, 0, 0],
+    [0, 0, 0],
+  ],
+  // The table at phalanx R5; backward by the edge stop arm, at R3 and at R5.
+  ["P4: phalanx R5", "4k3/8/3PP3/8/8/8/8/4K3 w - - 0 1", [0, 16, 0], [0, 0, 0]],
+  ["B9: backward, a-file, stop arm", "4k3/8/8/8/1P6/p7/P7/4K3 w - - 0 1", [0, 0, 10], [0, 0, 0]],
+  ["B11: backward, h-file, stop arm", "4k3/8/8/8/6P1/7p/7P/4K3 w - - 0 1", [0, 0, 10], [0, 0, 0]],
+  [
+    "A5: (a) alone: enemy pawns are no neighbour; black's e5 is backward to d3",
+    "4k3/8/8/4p3/3p4/3P4/8/4K3 w - - 0 1",
+    [0, 0, 0],
+    [10, 0, 10],
+  ],
+  [
+    "B7: backward at R5 by stop; it still defends e7",
+    "4k3/3pP3/3P4/8/8/8/8/4K3 w - - 0 1",
+    [28, 0, 10],
+    [0, 0, 0],
+  ],
 ];
+
+/** The same position with its files flipped, a to h. No castling right survives the flip. */
+const fileFlip = (fen: string): string => {
+  const [board = "", side = "", , ep = "-", ...clocks] = fen.split(" ");
+  const ranks = board.split("/").map((rank) => [...rank].reverse().join(""));
+  const flipped =
+    ep === "-" ? ep : `${"hgfedcba"["abcdefgh".indexOf(ep.charAt(0))]}${ep.charAt(1)}`;
+  return [ranks.join("/"), side, "-", flipped, ...clocks].join(" ");
+};
 
 /** Sums the seam's parts for one half, in `SEAM_ROWS`' order. */
 const sums = (
@@ -757,6 +873,12 @@ describe("ABC-291 K1 (c) — the seam by arithmetic, per side (ADR-0075 d1 and d
       // The colour mirror swaps the two sides, part for part.
       const mirrored = pawnShapeForTest(mirrorPosition(position));
       expect([sums(mirrored.white, "mg"), sums(mirrored.black, "mg")]).toEqual([black, white]);
+      // The file flip keeps both sides' sums: QE's four images, and the other wing of each row.
+      const flipped = parseFen(fileFlip(fen));
+      const wing = pawnShapeForTest(flipped);
+      expect([sums(wing.white, "mg"), sums(wing.black, "mg")]).toEqual([white, black]);
+      const both = pawnShapeForTest(mirrorPosition(flipped));
+      expect([sums(both.white, "eg"), sums(both.black, "eg")]).toEqual([black, white]);
     });
   }
 });
