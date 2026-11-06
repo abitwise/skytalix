@@ -1,0 +1,13 @@
+s1	exit=0	secs=8	bytes=1858	errbytes=0	start=2026-11-06T17:57:14Z	load1=0.53->0.65	busy_node_before=0	busy_node_after=0
+nodes	exit=0	secs=8	bytes=559	errbytes=0	start=2026-11-06T17:57:22Z	load1=0.65->0.70	busy_node_before=0	busy_node_after=0
+reach	exit=0	secs=45	bytes=226	errbytes=0	start=2026-11-06T17:57:30Z	load1=0.70->0.99	busy_node_before=0	busy_node_after=0
+drift	exit=0	secs=22	bytes=638	errbytes=0	start=2026-11-06T17:58:15Z	load1=0.99->0.99	busy_node_before=0	busy_node_after=0
+bytes	exit=0	secs=0	bytes=12	errbytes=0	start=2026-11-06T17:58:37Z	load1=0.99->0.99	busy_node_before=0	busy_node_after=0
+forms	exit=0	secs=0	bytes=99	errbytes=0	start=2026-11-06T17:58:37Z	load1=0.99->0.99	busy_node_before=0	busy_node_after=0
+forms2	exit=0	secs=1	bytes=61	errbytes=0	start=2026-11-06T17:58:37Z	load1=0.99->0.99	busy_node_before=0	busy_node_after=0
+floor	exit=0	secs=12	bytes=473	errbytes=0	start=2026-11-06T17:58:38Z	load1=0.99->1.15	busy_node_before=0	busy_node_after=0
+zug	exit=0	secs=3	bytes=660	errbytes=0	start=2026-11-06T17:58:50Z	load1=1.15->1.14	busy_node_before=0	busy_node_after=0
+g1	exit=0	secs=2	bytes=237	errbytes=0	start=2026-11-06T17:58:53Z	load1=1.14->1.14	busy_node_before=0	busy_node_after=0
+DONE 2026-11-06T17:58:55Z
+s2	exit=0	secs=241	bytes=6679	errbytes=0	start=2026-11-06T17:58:59Z	load1=1.05->1.31	busy_node_before=0	busy_node_after=0
+DONE 2026-11-06T18:03:00Z

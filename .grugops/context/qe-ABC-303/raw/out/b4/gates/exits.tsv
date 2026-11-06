@@ -1,0 +1,56 @@
+typecheck	exit=0	secs=4	bytes=44	
+lint	exit=0	secs=1	bytes=86	
+build	exit=0	secs=2	bytes=54	
+npmtest	exit=0	secs=24	bytes=5976	 Tests 2734 passed (2734)
+skip-count	0
+integrity	exit=0	secs=0	bytes=13	
+inventory	exit=0	secs=0	bytes=61	
+bundle-default	exit=0	secs=1	bytes=7662	 Tests 39 passed (39)
+bundle-deep	exit=0	secs=16	bytes=12313	 Tests 49 passed (49)
+t-rr-248	exit=0	secs=1	bytes=264	 Tests 4 passed | 266 skipped (270)
+t-rr-248	want=4
+t-rr-281R1	exit=0	secs=1	bytes=262	 Tests 1 passed | 45 skipped (46)
+t-rr-281R1	want=1
+t-rr-281R2	exit=0	secs=2	bytes=264	 Tests 1 passed | 104 skipped (105)
+t-rr-281R2	want=1
+t-rr-281R3	exit=0	secs=0	bytes=262	 Tests 1 passed | 57 skipped (58)
+t-rr-281R3	want=1
+t-R1	exit=0	secs=1	bytes=262	 Tests 1 passed | 45 skipped (46)
+t-R1	want=1
+t-R2	exit=0	secs=1	bytes=264	 Tests 1 passed | 269 skipped (270)
+t-R2	want=1
+t-R3	exit=0	secs=1	bytes=262	 Tests 1 passed | 52 skipped (53)
+t-R3	want=1
+t-R4	exit=0	secs=1	bytes=261	 Tests 1 passed | 33 skipped (34)
+t-R4	want=1
+t-R5	exit=0	secs=1	bytes=264	 Tests 1 passed | 104 skipped (105)
+t-R5	want=1
+t-R6	exit=0	secs=0	bytes=262	 Tests 1 passed | 57 skipped (58)
+t-R6	want=1
+t-R7	exit=0	secs=1	bytes=262	 Tests 1 passed | 57 skipped (58)
+t-R7	want=1
+t-R8	exit=0	secs=1	bytes=264	 Tests 1 passed | 269 skipped (270)
+t-R8	want=1
+t-R9	exit=0	secs=1	bytes=260	 Tests 1 passed | 1 skipped (2)
+t-R9	want=1
+t-Q1	exit=0	secs=1	bytes=261	 Tests 1 passed | 35 skipped (36)
+t-Q1	want=1
+t-Q2	exit=0	secs=0	bytes=261	 Tests 1 passed | 35 skipped (36)
+t-Q2	want=1
+t-Q3	exit=0	secs=1	bytes=261	 Tests 1 passed | 35 skipped (36)
+t-Q3	want=1
+t-L1	exit=0	secs=1	bytes=264	 Tests 1 passed | 269 skipped (270)
+t-L1	want=1
+t-L2	exit=0	secs=1	bytes=264	 Tests 1 passed | 269 skipped (270)
+t-L2	want=1
+t-L3	exit=0	secs=1	bytes=264	 Tests 1 passed | 269 skipped (270)
+t-L3	want=1
+t-C1	exit=0	secs=1	bytes=264	 Tests 1 passed | 269 skipped (270)
+t-C1	want=1
+t-C2	exit=0	secs=1	bytes=264	 Tests 1 passed | 269 skipped (270)
+t-C2	want=1
+t-B1	exit=0	secs=0	bytes=261	 Tests 1 passed | 35 skipped (36)
+t-B1	want=1
+t-F1	exit=0	secs=1	bytes=261	 Tests 1 passed | 35 skipped (36)
+t-F1	want=1
+DONE 2026-11-06T18:04:41Z
