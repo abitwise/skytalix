@@ -1,3 +1,4 @@
+_Updated: 2026-11-06T19:05:19Z — se-ABC-289 STOP: DP2 red on the joint tree, exact build; Architect reads it._
 _Updated: 2026-11-06T18:35:53Z — B5 merged: ADR-0072, 0073 in force; Levels line confirmed; later reads carry …28283e48. se-ABC-289 building._
 _Updated: 2026-11-06T18:28:05Z — **ABC-303 Done**, merged 434fa171, gates green; ADR-0072, 0073 in force on B5's line; se-ABC-289 builds._
 _Updated: 2026-11-06T17:54:44Z — **bundle 1 MET**, C2′ 55.5 of 100, verdict …ebefbfa2; qe-ABC-303-b4 reads the merged tree._
@@ -1563,7 +1564,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 ## In Development (WIP 1/3)
-- [ABC-289] Q2 delta pruning (ADR-0074 ACCEPTED, in force at merge; DoR 10/10, S, P3). `se-ABC-289` builds; its own C2′ reads alone after.
+- [ABC-289] Q2 delta pruning (ADR-0074 ACCEPTED; DoR 10/10, S, P3). STOP on an exact build (b42706b3, do not merge): DP2 red on the joint tree, drift 34 of 30, G1 53 of 54. `arch-ABC-289-joint` reads F1 and F7.
 
 
 
