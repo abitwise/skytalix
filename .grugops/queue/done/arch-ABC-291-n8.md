@@ -30,3 +30,4 @@ Publish: sealed notes (contextRoot = the worktree's .grugops/context, `at` from 
 - **5 (grader):** one state line from § 5's four legs; x(k) added to NOT MET; flags read; the old line renamed; the budget compared on a rounded value. Today 11 of 60 exact +0.10 s differences read OVER by floating-point error.
 - **Every ms and second of forecast is an estimate,** on `se-ABC-305`'s census at `35a694ee`. No remnant is built and no mutant is read.
 - **Owed:** the Orchestrator: `…61a939d3` § For the Orchestrator, six items. BA/PM, if ruled: `ABC-291`'s page, and a budget line or a stated none on the three term pages.
+- **Path check:** `node tools/grugops/records-path-check.js --base main` exit 0 at `4b41b30a`, before this last commit.
