@@ -1,3 +1,4 @@
+_Updated: 2026-11-06T13:12:25Z — ABC-305 N8-LANE read stands, A5 MET → In Review, qe-ABC-305._
 _Updated: 2026-11-05T22:06:46Z — se-ABC-305-main done: ABC-305 ready to read; window asked of the owner._
 _Updated: 2026-11-05T21:57:22Z — A10 and Architect records merged; K5 reading confirmed; R-N8H-1 LOW, R-CEN-1 MEDIUM carried. Timing reads wait on the owner's quiet-host word._
 _Updated: 2026-11-05T21:55:22Z — **ABC-307 Done**, merged bce24018, gates green; A10 and Architect records running; se-ABC-305-main takes main in and stops before its read._
@@ -1553,8 +1554,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 2/3)
-- [ABC-305] Tools-only landing from b297ab89: main in (98f4b142), gates and lanes green, PREREG …987ae6ca sealed. N8-LANE read waits on the owner's quiet-host word.
+## In Development (WIP 1/3)
 - [ABC-303] Bundle 1, ABC-286 + ABC-288 (ADR-0072, 0073 ACCEPTED over missed premises; DoR 10/10, M, P3). Code only for now (`se-ABC-303`); C2′ only after ABC-282 and ABC-301 settle.
 
 
@@ -1583,7 +1583,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 0/3)
+## In Review (WIP 1/3)
+- [ABC-305] Tools-only landing from b297ab89: A5 MET (H 9.085 s, H − B −0.110 s, 0 of 8 flagged). `qe-ABC-305` reads the page.
 
 
 
