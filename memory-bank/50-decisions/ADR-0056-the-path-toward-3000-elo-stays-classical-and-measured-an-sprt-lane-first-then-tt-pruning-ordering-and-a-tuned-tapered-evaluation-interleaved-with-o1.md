@@ -2217,6 +2217,7 @@ changes form, not place.***
 - `ABC-272` (E7a): any order after E1, one at a time on the same files, as before.
 - **The reads queue behind each other.** A value-changing merge stales the read after it, so a term's C2′ follows `ABC-303` and
   `ABC-289`. Its ADR and probe need not wait for them, only for the host.
+  *Dated 2026-11-06 (`arch-ABC-291-stop`, records only at `main` `48993089`; owed by `arch-records-1106` `…860a0dbd`; nothing run): `ABC-303` merged at `434fa171`. `ABC-289` is recorded NOT MET on an exact build and stays unmerged (`…7c297147`, `…40ef8351`). So no merge is left to stale a term's read, and the wait this line names is met. The rule stands for the terms: each value-changing merge stales the read after it. `ABC-289` is not closed. OQ-0074-2 is with the owner, and if he opens a route, `ABC-291`'s read goes first or waits, as `ADR-0075` § Consequences' Order line says. No order, value or bar moved.*
 - **What a hand value must show:** the term's page, form (b). Values fixed by a stated rule in its ADR before any row is read,
   which the owner accepts; `ADR-0064` d7's safety rows, `zugzwang.001` among them; `G2` at the ADR's ratio; `G6` under `Q-3K-4` (b);
   C2′ GAIN ≥ 50.0 of 100, since evaluation rows fire at 100 ms; S′; the Levels lane. A miss is not merged and not re-played.
