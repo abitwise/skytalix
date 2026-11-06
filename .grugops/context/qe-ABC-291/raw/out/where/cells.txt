@@ -1,0 +1,8 @@
+cell = this file's class, previous file's class on the lane; mean residual ms per file, per-round; count per run
+file P after P: n/run 12.5; H-B +3.60 H2-B +1.32 both +2.46 se 1.84 pos 5/8; worker ms at that count +31
+file P after K: n/run 11.8; H-B +2.09 H2-B +2.99 both +2.54 se 1.27 pos 7/8; worker ms at that count +30
+file K after P: n/run 13.3; H-B +3.29 H2-B +2.13 both +2.71 se 1.95 pos 5/8; worker ms at that count +36
+file K after K: n/run 27.3; H-B +1.73 H2-B +0.79 both +1.26 se 1.07 pos 6/8; worker ms at that count +34
+effect of a P predecessor, ms per following file: +0.69 se 1.40 pos 6/8
+effect of being a P file, ms per file: +0.52 se 1.33 pos 4/8
+control gap + slot, wall ms: both +49.1 se 23.7

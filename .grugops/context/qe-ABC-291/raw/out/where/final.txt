@@ -1,0 +1,65 @@
+WHOLE RUN, worker ms (wall column is half, except the rows marked)
+2 x span                                       B   17683 | H   +332 (med  +295, 7/8) | H2   +190 (med  +351, 6/8) | both   +261 se  107 (7/8) | wall  +130 ms | twin sd  279
+gaps                                           B   11783 | H   +225 (med  +150, 7/8) | H2   +127 (med  +143, 6/8) | both   +176 se   78 (6/8) | wall   +88 ms | twin sd  210
+slots                                          B    5789 | H   +120 (med  +137, 6/8) | H2    +51 (med   -33, 3/8) | both    +85 se   61 (5/8) | wall   +43 ms | twin sd  172
+lane end difference                            B      41 | H    -12 (med    -0, 4/8) | H2    +12 (med    +4, 4/8) | both     -0 se   20 (4/8) | wall    -0 ms | twin sd   85
+
+GAPS BY VITEST'S OWN PHASE LINE
+import (sum of file collect)                   B    6735 | H    +90 (med  +120, 6/8) | H2    +28 (med   +90, 5/8) | both    +59 se   59 (5/8) | wall   +29 ms | twin sd  159
+gaps less import                               B    4987 | H   +135 (med  +124, 5/8) | H2    +99 (med  +123, 5/8) | both   +117 se   73 (5/8) | wall   +58 ms | twin sd  178
+environment                                    B       5 | H     +0 (med    +0, 1/8) | H2     +0 (med    +0, 1/8) | both     +0 se    0 (2/8) | wall    +0 ms | twin sd    1
+transform                                      B       0 | H     +0 (med    +0, 0/8) | H2     +0 (med    +0, 0/8) | both     +0 se    0 (0/8) | wall    +0 ms | twin sd    0
+setup                                          B       0 | H     +0 (med    +0, 0/8) | H2     +0 (med    +0, 0/8) | both     +0 se    0 (0/8) | wall    +0 ms | twin sd    0
+
+OUTSIDE THE LANES, real ms, not halved
+wall                                           B    9130 | H   +175 (med  +155, 7/8) | H2    +90 (med  +180, 6/8) | both   +132 se   56 (6/8) | wall   +66 ms | twin sd  142
+wall less vitest duration                      B     275 | H     +1 (med    -5, 3/8) | H2     -5 (med   -10, 3/8) | both     -2 se    8 (3/8) | wall    -1 ms | twin sd   29
+duration less span                             B      -5 | H     +8 (med    +4, 8/8) | H2     -0 (med    +2, 5/8) | both     +4 se    2 (6/8) | wall    +2 ms | twin sd    9
+
+BY CLASS
+files per class {'C': 1, 'P': 27, 'T': 1, 'K': 42}
+gap C                                          B    3593 | H    +32 (med    +4, 4/8) | H2     +7 (med   +20, 4/8) | both    +20 se   26 (5/8) | wall   +10 ms | twin sd  121
+gap P                                          B    3551 | H    +98 (med   +73, 6/8) | H2    +71 (med   +67, 6/8) | both    +84 se   34 (6/8) | wall   +42 ms | twin sd  159
+gap T                                          B      88 | H     +3 (med    +5, 5/8) | H2     +4 (med    +3, 6/8) | both     +4 se    4 (5/8) | wall    +2 ms | twin sd   11
+gap K                                          B    4543 | H    +91 (med   +82, 6/8) | H2    +45 (med   +47, 5/8) | both    +68 se   45 (6/8) | wall   +34 ms | twin sd  184
+slot C                                         B     433 | H    +12 (med   +26, 5/8) | H2    -11 (med   -10, 2/8) | both     +1 se    9 (4/8) | wall    +0 ms | twin sd   60
+slot P                                         B    4218 | H    +80 (med   +83, 5/8) | H2    +29 (med   -18, 3/8) | both    +55 se   56 (5/8) | wall   +27 ms | twin sd  159
+slot T                                         B       5 | H     -0 (med    -0, 4/8) | H2     -0 (med    -0, 4/8) | both     -0 se    0 (4/8) | wall    -0 ms | twin sd    1
+slot K                                         B    1118 | H    +28 (med   +16, 6/8) | H2    +33 (med   +31, 7/8) | both    +30 se    9 (7/8) | wall   +15 ms | twin sd   58
+added rows, in-thread                          B       0 | H    +36 (med   +34, 8/8) | H2    +38 (med   +37, 8/8) | both    +37 se    1 (8/8) | wall   +18 ms | twin sd    5
+slot P less added rows                         B    4218 | H    +44 (med   +46, 5/8) | H2     -8 (med   -55, 3/8) | both    +18 se   56 (4/8) | wall    +9 ms | twin sd  156
+slot T less added rows                         B       5 | H     -0 (med    -0, 4/8) | H2     -0 (med    -0, 4/8) | both     -0 se    0 (4/8) | wall    -0 ms | twin sd    1
+
+PER-FILE GAP, P against K
+P per file less K per file: H +1.45 H2 +1.57 both +1.51 ms se 1.57, positive 3/8
+  P per file: both +3.12 ms se 1.27
+  K per file: both +1.62 ms se 1.07
+
+K GAP BY PREDECESSOR ON THE LANE, mean ms per file
+B {'P': (107.0, 106), 'K': (110.4, 216), 'other': (105.5, 14)}
+H {'P': (111.4, 108), 'K': (111.2, 217), 'other': (112.6, 11)}
+H2 {'P': (113.0, 106), 'K': (109.3, 222), 'other': (98.5, 8)}
+
+K SLOT BY WHETHER CLI'S START OVERLAPS, mean ms per file
+B during 100.42 17 after 22.67 319
+H during 103.84 14 after 23.93 322
+H2 during 116.6 13 after 23.8 323
+
+src/uci-session.test.ts, the +83 ms
+slot uci-session                               B    1482 | H    +38 (med   +71, 5/8) | H2    +46 (med   +72, 5/8) | both    +42 se   49 (5/8) | wall   +21 ms | twin sd   70
+gap uci-session                                B     266 | H    +20 (med   +20, 6/8) | H2     +1 (med    -4, 3/8) | both    +11 se    9 (6/8) | wall    +5 ms | twin sd   36
+
+CPU, s
+cpu_s: H +0.756 med +0.760; H2 +0.586 med +0.405; both +0.671 se 0.173
+user_s: H +0.731 med +0.740; H2 +0.576 med +0.385; both +0.654 se 0.162
+sys_s: H +0.025 med +0.020; H2 +0.010 med +0.030; both +0.018 se 0.023
+
+THE FIGURES
+sd of one pair: H 0.186 H2 0.161; both-arm per-round mean +0.133 sd 0.159 se 0.056 t 2.36; 95 % t(7) -0.000 to +0.265
+bootstrap median of 8 from H-B: sd 0.085, 2.5-97.5 % +0.040 to +0.390, share <= +0.10: 0.16
+bootstrap median of 8 from H2-B: sd 0.075, 2.5-97.5 % -0.100 to +0.190, share <= +0.10: 0.18
+bootstrap median of 8 from 16 pairs: sd 0.063, 2.5-97.5 % -0.030 to +0.245, share <= +0.10: 0.18
+centre +0.133: Architect's form, sigma 0.060: 0.29; centre also uncertain by se 0.056: sigma 0.082: 0.34
+centre +0.155: Architect's form, sigma 0.060: 0.18; centre also uncertain by se 0.056: sigma 0.082: 0.25
+centre +0.165: Architect's form, sigma 0.060: 0.14; centre also uncertain by se 0.056: sigma 0.082: 0.21
+centre +0.175: Architect's form, sigma 0.060: 0.11; centre also uncertain by se 0.056: sigma 0.082: 0.18

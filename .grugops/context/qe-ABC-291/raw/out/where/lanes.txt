@@ -1,0 +1,11 @@
+iter 0 change 1419.2
+iter 1 change 124.6
+iter 2 change 42.3
+iter 3 change 12.5
+iter 4 change 2.3
+iter 5 change 1.3
+iter 6 change 0.0
+lane ends per run (count must be 2): [2]
+min gap over all runs 69.8
+cli gap {'B': [3633, 3599, 3613, 3586, 3523, 3540, 3444, 3605], 'H': [3593, 3505, 3519, 3735, 3493, 3579, 3632, 3749], 'H2': [3546, 3597, 3577, 3495, 3584, 3630, 3487, 3685]}
+largest sd of a file's gap over 24 runs: [(76, 'src/cli.test.ts'), (28, 'src/search.bundle.test.ts'), (24, 'src/uci-session.test.ts'), (24, 'src/engine.test.ts'), (21, 'src/turn-loop.test.ts'), (20, 'src/search.futility.test.ts'), (20, 'src/search.ordering.test.ts'), (19, 'src/ladder.test.ts')]

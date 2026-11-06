@@ -1,0 +1,41 @@
+control files, slot: B median, H-B mean, H2-B mean, both pos of 16
+ +14.3 H  +17.2 H2  +11.3 B   96.0 pos 14/16 src/history-pane.nfr.test.ts
+  +5.6 H   +4.0 H2   +7.1 B   38.7 pos 13/16 src/moves.castling.hardening.test.ts
+  +5.1 H   +3.2 H2   +6.9 B   39.2 pos 10/16 src/zobrist.test.ts
+  +4.3 H   +0.9 H2   +7.6 B   68.8 pos 10/16 src/san.test.ts
+  +3.7 H   +7.8 H2   -0.4 B  145.7 pos 9/16 src/legal.test.ts
+  +3.5 H   +1.6 H2   +5.4 B   31.7 pos 10/16 src/pgn.test.ts
+  +3.2 H   +2.7 H2   +3.7 B   40.4 pos 10/16 src/history-pane.test.ts
+  +2.3 H   +2.6 H2   +2.0 B   65.4 pos 8/16 src/perft.test.ts
+  +2.2 H   +1.5 H2   +2.9 B   15.9 pos 10/16 tools/opening-book/book.test.ts
+  +2.0 H   +2.2 H2   +1.8 B   32.8 pos 9/16 src/moves.enpassant.hardening.test.ts
+  +1.8 H   +2.1 H2   +1.5 B   15.9 pos 10/16 src/history.test.ts
+  +1.4 H   +0.2 H2   +2.6 B   41.0 pos 11/16 src/command-input.test.ts
+  +1.4 H   +0.3 H2   +2.4 B   16.2 pos 10/16 src/moves.enpassant.test.ts
+  +1.4 H   +0.8 H2   +2.0 B   39.5 pos 9/16 src/san.qualifier.hardening.test.ts
+  +1.4 H   +4.5 H2   -1.8 B   43.3 pos 8/16 src/turn-loop.nfr.test.ts
+  +1.3 H   +1.4 H2   +1.1 B    9.2 pos 11/16 src/coordinate-move.test.ts
+...
+  -1.0 H   -0.6 H2   -1.3 B   16.3 pos 7/16 src/move-input.test.ts
+  -1.7 H   -1.7 H2   -1.8 B   15.8 pos 5/16 src/startup-questions.test.ts
+  -2.1 H   -2.3 H2   -1.9 B   51.2 pos 5/16 src/render-seam.test.ts
+  -3.4 H   -3.9 H2   -2.9 B   63.2 pos 6/16 tools/grugops/qe-hop-integrity.test.ts
+  -3.8 H   -1.8 H2   -5.9 B   43.5 pos 4/16 src/turn-loop.test.ts
+sum of control mean slot change 44.6 files with change > 0: 30 of 43
+
+control rows by mean change (ms)
++13.76 H +16.30 H2 +11.22 B  85.96 pos 14/16 history-pane.nfr.test.ts :: A11 — the pane derives nothing, and this is a CALL COUNT evaluates history.ts's module bod
+ +4.17 H  +2.71 H2  +5.64 B  20.91 pos 12/16 zobrist.test.ts :: ABC-011 QE — zobristKey returns the position exactly as it found it is byte-pure at every 
+ +1.76 H  +1.43 H2  +2.10 B  24.12 pos 12/16 san.qualifier.hardening.test.ts :: ABC-025 A1 — the qualifier is the shortest ladder entry that names exactly one move holds 
+ +1.67 H  -1.05 H2  +4.39 B  39.23 pos 11/16 san.test.ts :: toSan — the logic beneath the table emits only strings of the SAN grammar
+ +1.62 H  +2.92 H2  +0.31 B  23.86 pos 9/16 turn-loop.nfr.test.ts :: NFR-002 — the loop derives once per ply, spied at A17's three ply counts derives EXACTLY o
+ +1.57 H  +4.58 H2  -1.43 B  80.14 pos 5/16 legal.test.ts :: ABC-206 A2 — the faster pieces equal what they replace givesCheck(p, m) equals make, isInC
+ +1.48 H  +1.20 H2  +1.77 B   9.21 pos 13/16 san.test.ts :: toSan — the logic beneath the table gives every legal move of a position a DISTINCT string
+ +1.31 H  +0.94 H2  +1.69 B   7.60 pos 12/16 history-pane.test.ts :: ABC-028 acceptance A4 — no write reaches the caller's graph during a render, at all ten le
+ +1.11 H  +1.23 H2  +0.99 B   7.41 pos 11/16 moves.castling.hardening.test.ts :: ABC-009 A13 — the occupant BYTE of a home square, quantified over the WHOLE space measures
+ +1.00 H  +0.74 H2  +1.26 B   5.50 pos 12/16 zobrist.test.ts :: ABC-075 — zobristKeyAfterMove equals the full-scan oracle at every node A1/A2 — 0 mismatch
+ +0.88 H  +0.14 H2  +1.61 B   2.00 pos 8/16 frame.test.ts :: ABC-018 acceptance — writing and redraw writes 80 frames to a NON-TTY sink with zero escap
+ +0.77 H  +0.74 H2  +0.81 B  20.18 pos 9/16 legal.test.ts :: ABC-254 A1 — the lazy filters equal the full make/test/unmake filters on ABC-206's roots t
+ +0.76 H  +1.16 H2  +0.35 B   6.69 pos 9/16 perft.test.ts :: ABC-006 acceptance — exact perft counts position-3 perft(4) = 43238
+ +0.74 H  +1.23 H2  +0.26 B   9.95 pos 12/16 frame.test.ts :: ABC-018 acceptance — the assembled frame keeps one row count at EVERY ply of a game played
+rows in control 1520 sum of mean change 42.3

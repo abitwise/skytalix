@@ -1,0 +1,575 @@
+{
+"cls": {
+"src/search.null-move.test.ts": "2 test file changed, reaches changed production",
+"src/uci-session.test.ts": "2 test file changed, reaches changed production",
+"src/engine.test.ts": "2 test file changed, reaches changed production",
+"src/levels.test.ts": "4 test file same, reaches changed production",
+"src/search.bundle.test.ts": "2 test file changed, reaches changed production",
+"src/quiescence.test.ts": "2 test file changed, reaches changed production",
+"src/search.ordering.test.ts": "4 test file same, reaches changed production",
+"src/search.test.ts": "2 test file changed, reaches changed production",
+"src/legal.test.ts": "5 test file same, no changed production (control)",
+"src/book.test.ts": "4 test file same, reaches changed production",
+"src/history-pane.nfr.test.ts": "5 test file same, no changed production (control)",
+"src/transposition.test.ts": "4 test file same, reaches changed production",
+"src/evaluate.taper.test.ts": "2 test file changed, reaches changed production",
+"src/san.test.ts": "5 test file same, no changed production (control)",
+"src/perft.test.ts": "5 test file same, no changed production (control)",
+"src/search.pvs-lmr.test.ts": "4 test file same, reaches changed production",
+"src/cli.test.ts": "1 cli.test.ts",
+"src/evaluate.pawns.test.ts": "2 test file changed, reaches changed production",
+"tools/grugops/qe-hop-integrity.test.ts": "5 test file same, no changed production (control)",
+"src/moves.castling.hardening.test.ts": "5 test file same, no changed production (control)",
+"src/render-seam.test.ts": "5 test file same, no changed production (control)",
+"src/evaluate.king-mobility.test.ts": "4 test file same, reaches changed production",
+"src/search.futility.test.ts": "2 test file changed, reaches changed production",
+"src/turn-loop.nfr.test.ts": "5 test file same, no changed production (control)",
+"src/engine.capacity.test.ts": "4 test file same, reaches changed production",
+"src/history-pane.test.ts": "5 test file same, no changed production (control)",
+"src/zobrist.test.ts": "5 test file same, no changed production (control)",
+"src/command-input.test.ts": "5 test file same, no changed production (control)",
+"src/turn-loop.test.ts": "5 test file same, no changed production (control)",
+"src/moves.enpassant.hardening.test.ts": "5 test file same, no changed production (control)",
+"src/frame.test.ts": "5 test file same, no changed production (control)",
+"src/pgn.test.ts": "5 test file same, no changed production (control)",
+"src/san.qualifier.hardening.test.ts": "5 test file same, no changed production (control)",
+"src/puzzle-suite.test.ts": "4 test file same, reaches changed production",
+"src/render.test.ts": "5 test file same, no changed production (control)",
+"src/book-engine.test.ts": "4 test file same, reaches changed production",
+"src/evaluate.passer.test.ts": "2 test file changed, reaches changed production",
+"src/moves.test.ts": "5 test file same, no changed production (control)",
+"src/gameend.test.ts": "5 test file same, no changed production (control)",
+"src/evaluate.queen-on.test.ts": "2 test file changed, reaches changed production",
+"src/see.test.ts": "2 test file changed, reaches changed production",
+"tools/opening-book/book.test.ts": "5 test file same, no changed production (control)",
+"src/moves.enpassant.test.ts": "5 test file same, no changed production (control)",
+"src/search.qe.test.ts": "4 test file same, reaches changed production",
+"src/rejection.test.ts": "5 test file same, no changed production (control)",
+"src/line-input.test.ts": "5 test file same, no changed production (control)",
+"src/evaluate.test.ts": "4 test file same, reaches changed production",
+"src/move-input.test.ts": "5 test file same, no changed production (control)",
+"src/history.test.ts": "5 test file same, no changed production (control)",
+"src/san.parse.test.ts": "5 test file same, no changed production (control)",
+"src/cli.real-engine.test.ts": "5 test file same, no changed production (control)",
+"src/fen.test.ts": "5 test file same, no changed production (control)",
+"src/startup-questions.test.ts": "5 test file same, no changed production (control)",
+"src/status-panel.test.ts": "5 test file same, no changed production (control)",
+"src/gameend.nfr.test.ts": "4 test file same, reaches changed production",
+"src/status-panel.nfr.test.ts": "5 test file same, no changed production (control)",
+"src/result-screen.test.ts": "5 test file same, no changed production (control)",
+"src/ladder.test.ts": "4 test file same, reaches changed production",
+"src/apply.test.ts": "5 test file same, no changed production (control)",
+"src/moves.castling.test.ts": "5 test file same, no changed production (control)",
+"src/frame.overflow-bound.test.ts": "5 test file same, no changed production (control)",
+"src/coordinate-move.test.ts": "5 test file same, no changed production (control)",
+"src/search.capacity.test.ts": "4 test file same, reaches changed production",
+"src/san.suffix.hardening.test.ts": "5 test file same, no changed production (control)",
+"src/transposition.shared.test.ts": "5 test file same, no changed production (control)",
+"tools/tune/tune.test.ts": "3 test file changed, no changed production",
+"src/glyph-mode.test.ts": "5 test file same, no changed production (control)",
+"src/zobrist.nfr.test.ts": "5 test file same, no changed production (control)",
+"src/glyph-mode.nfr.test.ts": "5 test file same, no changed production (control)",
+"src/san.nfr.test.ts": "5 test file same, no changed production (control)",
+"src/uci.real-engine.test.ts": "5 test file same, no changed production (control)"
+},
+"info": {
+"src/search.null-move.test.ts": {
+"bytesB": 343748,
+"bytesH": 354415,
+"prod": [
+"src/engine.ts",
+"src/evaluate-params.ts",
+"src/evaluate.ts",
+"src/quiescence.ts",
+"src/search.ts"
+]
+},
+"src/uci-session.test.ts": {
+"bytesB": 492590,
+"bytesH": 503366,
+"prod": [
+"src/engine.ts",
+"src/evaluate-params.ts",
+"src/evaluate.ts",
+"src/quiescence.ts",
+"src/search.ts"
+]
+},
+"src/engine.test.ts": {
+"bytesB": 474399,
+"bytesH": 486058,
+"prod": [
+"src/engine.ts",
+"src/evaluate-params.ts",
+"src/evaluate.ts",
+"src/quiescence.ts",
+"src/search.ts"
+]
+},
+"src/levels.test.ts": {
+"bytesB": 372623,
+"bytesH": 383206,
+"prod": [
+"src/engine.ts",
+"src/evaluate-params.ts",
+"src/evaluate.ts",
+"src/quiescence.ts",
+"src/search.ts"
+]
+},
+"src/search.bundle.test.ts": {
+"bytesB": 342736,
+"bytesH": 353665,
+"prod": [
+"src/engine.ts",
+"src/evaluate-params.ts",
+"src/evaluate.ts",
+"src/quiescence.ts",
+"src/search.ts"
+]
+},
+"src/quiescence.test.ts": {
+"bytesB": 399498,
+"bytesH": 410185,
+"prod": [
+"src/engine.ts",
+"src/evaluate-params.ts",
+"src/evaluate.ts",
+"src/quiescence.ts",
+"src/search.ts"
+]
+},
+"src/search.ordering.test.ts": {
+"bytesB": 336224,
+"bytesH": 346807,
+"prod": [
+"src/engine.ts",
+"src/evaluate-params.ts",
+"src/evaluate.ts",
+"src/quiescence.ts",
+"src/search.ts"
+]
+},
+"src/search.test.ts": {
+"bytesB": 271124,
+"bytesH": 280257,
+"prod": [
+"src/evaluate-params.ts",
+"src/evaluate.ts",
+"src/quiescence.ts",
+"src/search.ts"
+]
+},
+"src/legal.test.ts": {
+"bytesB": 115201,
+"bytesH": 115201,
+"prod": []
+},
+"src/book.test.ts": {
+"bytesB": 331274,
+"bytesH": 341857,
+"prod": [
+"src/engine.ts",
+"src/evaluate-params.ts",
+"src/evaluate.ts",
+"src/quiescence.ts",
+"src/search.ts"
+]
+},
+"src/history-pane.nfr.test.ts": {
+"bytesB": 161422,
+"bytesH": 161422,
+"prod": []
+},
+"src/transposition.test.ts": {
+"bytesB": 329238,
+"bytesH": 339821,
+"prod": [
+"src/engine.ts",
+"src/evaluate-params.ts",
+"src/evaluate.ts",
+"src/quiescence.ts",
+"src/search.ts"
+]
+},
+"src/evaluate.taper.test.ts": {
+"bytesB": 409057,
+"bytesH": 421321,
+"prod": [
+"src/engine.ts",
+"src/evaluate-params.ts",
+"src/evaluate.ts",
+"src/quiescence.ts",
+"src/search.ts"
+]
+},
+"src/san.test.ts": {
+"bytesB": 90645,
+"bytesH": 90645,
+"prod": []
+},
+"src/perft.test.ts": {
+"bytesB": 71558,
+"bytesH": 71558,
+"prod": []
+},
+"src/search.pvs-lmr.test.ts": {
+"bytesB": 340095,
+"bytesH": 350678,
+"prod": [
+"src/engine.ts",
+"src/evaluate-params.ts",
+"src/evaluate.ts",
+"src/quiescence.ts",
+"src/search.ts"
+]
+},
+"src/cli.test.ts": {
+"bytesB": 774340,
+"bytesH": 784923,
+"prod": [
+"src/engine.ts",
+"src/evaluate-params.ts",
+"src/evaluate.ts",
+"src/quiescence.ts",
+"src/search.ts"
+]
+},
+"src/evaluate.pawns.test.ts": {
+"bytesB": 144808,
+"bytesH": 218774,
+"prod": [
+"src/evaluate-params.ts",
+"src/evaluate.ts"
+]
+},
+"tools/grugops/qe-hop-integrity.test.ts": {
+"bytesB": 35909,
+"bytesH": 35909,
+"prod": []
+},
+"src/moves.castling.hardening.test.ts": {
+"bytesB": 157702,
+"bytesH": 157702,
+"prod": []
+},
+"src/render-seam.test.ts": {
+"bytesB": 223408,
+"bytesH": 223408,
+"prod": []
+},
+"src/evaluate.king-mobility.test.ts": {
+"bytesB": 133594,
+"bytesH": 140540,
+"prod": [
+"src/evaluate-params.ts",
+"src/evaluate.ts"
+]
+},
+"src/search.futility.test.ts": {
+"bytesB": 348212,
+"bytesH": 358972,
+"prod": [
+"src/engine.ts",
+"src/evaluate-params.ts",
+"src/evaluate.ts",
+"src/quiescence.ts",
+"src/search.ts"
+]
+},
+"src/turn-loop.nfr.test.ts": {
+"bytesB": 142412,
+"bytesH": 142412,
+"prod": []
+},
+"src/engine.capacity.test.ts": {
+"bytesB": 301218,
+"bytesH": 311801,
+"prod": [
+"src/engine.ts",
+"src/evaluate-params.ts",
+"src/evaluate.ts",
+"src/quiescence.ts",
+"src/search.ts"
+]
+},
+"src/history-pane.test.ts": {
+"bytesB": 163817,
+"bytesH": 163817,
+"prod": []
+},
+"src/zobrist.test.ts": {
+"bytesB": 95856,
+"bytesH": 95856,
+"prod": []
+},
+"src/command-input.test.ts": {
+"bytesB": 292899,
+"bytesH": 292899,
+"prod": []
+},
+"src/turn-loop.test.ts": {
+"bytesB": 268126,
+"bytesH": 268126,
+"prod": []
+},
+"src/moves.enpassant.hardening.test.ts": {
+"bytesB": 75246,
+"bytesH": 75246,
+"prod": []
+},
+"src/frame.test.ts": {
+"bytesB": 167812,
+"bytesH": 167812,
+"prod": []
+},
+"src/pgn.test.ts": {
+"bytesB": 146971,
+"bytesH": 146971,
+"prod": []
+},
+"src/san.qualifier.hardening.test.ts": {
+"bytesB": 105839,
+"bytesH": 105839,
+"prod": []
+},
+"src/puzzle-suite.test.ts": {
+"bytesB": 158507,
+"bytesH": 165453,
+"prod": [
+"src/evaluate-params.ts",
+"src/evaluate.ts"
+]
+},
+"src/render.test.ts": {
+"bytesB": 67638,
+"bytesH": 67638,
+"prod": []
+},
+"src/book-engine.test.ts": {
+"bytesB": 413024,
+"bytesH": 423607,
+"prod": [
+"src/engine.ts",
+"src/evaluate-params.ts",
+"src/evaluate.ts",
+"src/quiescence.ts",
+"src/search.ts"
+]
+},
+"src/evaluate.passer.test.ts": {
+"bytesB": 369147,
+"bytesH": 380002,
+"prod": [
+"src/engine.ts",
+"src/evaluate-params.ts",
+"src/evaluate.ts",
+"src/quiescence.ts",
+"src/search.ts"
+]
+},
+"src/moves.test.ts": {
+"bytesB": 82741,
+"bytesH": 82741,
+"prod": []
+},
+"src/gameend.test.ts": {
+"bytesB": 114910,
+"bytesH": 114910,
+"prod": []
+},
+"src/evaluate.queen-on.test.ts": {
+"bytesB": 192510,
+"bytesH": 199736,
+"prod": [
+"src/evaluate-params.ts",
+"src/evaluate.ts"
+]
+},
+"src/see.test.ts": {
+"bytesB": 352319,
+"bytesH": 362944,
+"prod": [
+"src/engine.ts",
+"src/evaluate-params.ts",
+"src/evaluate.ts",
+"src/quiescence.ts",
+"src/search.ts"
+]
+},
+"tools/opening-book/book.test.ts": {
+"bytesB": 107713,
+"bytesH": 107713,
+"prod": []
+},
+"src/moves.enpassant.test.ts": {
+"bytesB": 73997,
+"bytesH": 73997,
+"prod": []
+},
+"src/search.qe.test.ts": {
+"bytesB": 243665,
+"bytesH": 252766,
+"prod": [
+"src/evaluate-params.ts",
+"src/evaluate.ts",
+"src/quiescence.ts",
+"src/search.ts"
+]
+},
+"src/rejection.test.ts": {
+"bytesB": 184710,
+"bytesH": 184710,
+"prod": []
+},
+"src/line-input.test.ts": {
+"bytesB": 248587,
+"bytesH": 248587,
+"prod": []
+},
+"src/evaluate.test.ts": {
+"bytesB": 138255,
+"bytesH": 145201,
+"prod": [
+"src/evaluate-params.ts",
+"src/evaluate.ts"
+]
+},
+"src/move-input.test.ts": {
+"bytesB": 199384,
+"bytesH": 199384,
+"prod": []
+},
+"src/history.test.ts": {
+"bytesB": 110574,
+"bytesH": 110574,
+"prod": []
+},
+"src/san.parse.test.ts": {
+"bytesB": 100137,
+"bytesH": 100137,
+"prod": []
+},
+"src/cli.real-engine.test.ts": {
+"bytesB": 242196,
+"bytesH": 242196,
+"prod": []
+},
+"src/fen.test.ts": {
+"bytesB": 45581,
+"bytesH": 45581,
+"prod": []
+},
+"src/startup-questions.test.ts": {
+"bytesB": 239866,
+"bytesH": 239866,
+"prod": []
+},
+"src/status-panel.test.ts": {
+"bytesB": 127444,
+"bytesH": 127444,
+"prod": []
+},
+"src/gameend.nfr.test.ts": {
+"bytesB": 253820,
+"bytesH": 262921,
+"prod": [
+"src/evaluate-params.ts",
+"src/evaluate.ts",
+"src/quiescence.ts",
+"src/search.ts"
+]
+},
+"src/status-panel.nfr.test.ts": {
+"bytesB": 125221,
+"bytesH": 125221,
+"prod": []
+},
+"src/result-screen.test.ts": {
+"bytesB": 128281,
+"bytesH": 128281,
+"prod": []
+},
+"src/ladder.test.ts": {
+"bytesB": 341854,
+"bytesH": 352437,
+"prod": [
+"src/engine.ts",
+"src/evaluate-params.ts",
+"src/evaluate.ts",
+"src/quiescence.ts",
+"src/search.ts"
+]
+},
+"src/apply.test.ts": {
+"bytesB": 56037,
+"bytesH": 56037,
+"prod": []
+},
+"src/moves.castling.test.ts": {
+"bytesB": 73515,
+"bytesH": 73515,
+"prod": []
+},
+"src/frame.overflow-bound.test.ts": {
+"bytesB": 177921,
+"bytesH": 177921,
+"prod": []
+},
+"src/coordinate-move.test.ts": {
+"bytesB": 84285,
+"bytesH": 84285,
+"prod": []
+},
+"src/search.capacity.test.ts": {
+"bytesB": 242502,
+"bytesH": 251603,
+"prod": [
+"src/evaluate-params.ts",
+"src/evaluate.ts",
+"src/quiescence.ts",
+"src/search.ts"
+]
+},
+"src/san.suffix.hardening.test.ts": {
+"bytesB": 84908,
+"bytesH": 84908,
+"prod": []
+},
+"src/transposition.shared.test.ts": {
+"bytesB": 19057,
+"bytesH": 19057,
+"prod": []
+},
+"tools/tune/tune.test.ts": {
+"bytesB": 35632,
+"bytesH": 38195,
+"prod": []
+},
+"src/glyph-mode.test.ts": {
+"bytesB": 24702,
+"bytesH": 24702,
+"prod": []
+},
+"src/zobrist.nfr.test.ts": {
+"bytesB": 78741,
+"bytesH": 78741,
+"prod": []
+},
+"src/glyph-mode.nfr.test.ts": {
+"bytesB": 13458,
+"bytesH": 13458,
+"prod": []
+},
+"src/san.nfr.test.ts": {
+"bytesB": 82336,
+"bytesH": 82336,
+"prod": []
+},
+"src/uci.real-engine.test.ts": {
+"bytesB": 83445,
+"bytesH": 83445,
+"prod": []
+}
+}
+}

@@ -1,0 +1,55 @@
+identity check, largest error ms: 0.0
+2 x span (first dispatch to last row end, worker ms)     B   17683 | H-B   +295 mean   +332 7/8 | H2-B   +351 mean   +190 6/8 | both mean   +261 se  107 med   +315 7/8 | twin H2-H mean   -142 sd  279
+sum of gaps                                              B   11783 | H-B   +150 mean   +225 7/8 | H2-B   +143 mean   +127 6/8 | both mean   +176 se   78 med   +173 6/8 | twin H2-H mean    -98 sd  210
+sum of slots                                             B    5789 | H-B   +137 mean   +120 6/8 | H2-B    -33 mean    +51 3/8 | both mean    +85 se   61 med    +58 5/8 | twin H2-H mean    -68 sd  172
+lane end difference                                      B      41 | H-B     -0 mean    -12 4/8 | H2-B     +4 mean    +12 4/8 | both mean     -0 se   20 med     +8 4/8 | twin H2-H mean    +25 sd   85
+
+gap: 1 cli.test.ts (1)                                             B    3593 | H-B     +4 mean    +32 4/8 | H2-B    +20 mean     +7 4/8 | both mean    +20 se   26 med    +22 5/8 | twin H2-H mean    -26 sd  121
+gap: 2 test file changed, reaches changed production (12)          B    1742 | H-B    +87 mean    +69 6/8 | H2-B    +30 mean    +46 7/8 | both mean    +57 se   20 med    +66 7/8 | twin H2-H mean    -23 sd  125
+gap: 3 test file changed, no changed production (1)                B      88 | H-B     +5 mean     +3 5/8 | H2-B     +3 mean     +4 6/8 | both mean     +4 se    4 med     +7 5/8 | twin H2-H mean     +1 sd   11
+gap: 4 test file same, reaches changed production (14)             B    1674 | H-B    +28 mean    +36 6/8 | H2-B    +31 mean    +31 5/8 | both mean    +34 se   21 med    +34 5/8 | twin H2-H mean     -5 sd   75
+gap: 5 test file same, no changed production (control) (43)        B    4678 | H-B    +62 mean    +83 5/8 | H2-B    +40 mean    +39 5/8 | both mean    +61 se   53 med    +69 5/8 | twin H2-H mean    -45 sd  186
+
+slot: 1 cli.test.ts (1)                                            B     433 | H-B    +26 mean    +12 5/8 | H2-B    -10 mean    -11 2/8 | both mean     +1 se    9 med     -2 4/8 | twin H2-H mean    -23 sd   60
+slot: 2 test file changed, reaches changed production (12)         B    3226 | H-B    +59 mean    +39 6/8 | H2-B    +10 mean    +30 4/8 | both mean    +34 se   52 med    +24 5/8 | twin H2-H mean    -10 sd  122
+slot: 3 test file changed, no changed production (1)               B       5 | H-B     -0 mean     -0 4/8 | H2-B     -0 mean     -0 4/8 | both mean     -0 se    0 med     -0 4/8 | twin H2-H mean     +0 sd    1
+slot: 4 test file same, reaches changed production (14)            B     894 | H-B    +28 mean    +24 6/8 | H2-B    -24 mean    -12 3/8 | both mean     +6 se   13 med     +6 4/8 | twin H2-H mean    -36 sd   45
+slot: 5 test file same, no changed production (control) (43)       B    1212 | H-B    +43 mean    +45 7/8 | H2-B    +50 mean    +44 7/8 | both mean    +45 se   11 med    +42 8/8 | twin H2-H mean     -0 sd   44
+
+largest per-file gap change, both arms, mean ms
+  +19.6 H   +32.5 H2    +6.8 B   3593 class 1 dbytes  +10583 src/cli.test.ts
+  +15.0 H   +21.0 H2    +9.0 B    114 class 4 dbytes  +10583 src/ladder.test.ts
+  +13.6 H   +12.5 H2   +14.7 B    113 class 2 dbytes  +12264 src/evaluate.taper.test.ts
+  +12.2 H   +12.2 H2   +12.3 B     88 class 2 dbytes   +9133 src/search.test.ts
+  +10.9 H   +12.6 H2    +9.1 B     88 class 5 dbytes      +0 src/fen.test.ts
+  +10.8 H   +20.1 H2    +1.4 B    266 class 2 dbytes  +10776 src/uci-session.test.ts
+   +9.3 H   +11.3 H2    +7.4 B    131 class 4 dbytes  +10583 src/search.ordering.test.ts
+   +9.1 H   +10.1 H2    +8.1 B     97 class 2 dbytes  +73966 src/evaluate.pawns.test.ts
+   +9.0 H   +10.5 H2    +7.6 B    118 class 2 dbytes  +10855 src/evaluate.passer.test.ts
+   +7.7 H    +2.2 H2   +13.2 B    103 class 4 dbytes  +10583 src/book.test.ts
+   +7.7 H    +4.8 H2   +10.6 B     95 class 4 dbytes   +9101 src/search.qe.test.ts
+   +7.3 H   +10.0 H2    +4.6 B     95 class 4 dbytes   +6946 src/evaluate.king-mobility.test.ts
+   +6.6 H    +3.8 H2    +9.3 B    195 class 5 dbytes      +0 src/pgn.test.ts
+   +6.3 H    +7.5 H2    +5.1 B     86 class 5 dbytes      +0 src/moves.enpassant.test.ts
+   -6.9 H    -0.4 H2   -13.3 B    152 class 5 dbytes      +0 src/turn-loop.test.ts
+   -7.5 H    -6.1 H2    -8.8 B    154 class 4 dbytes  +10583 src/levels.test.ts
+   -7.5 H   -11.9 H2    -3.0 B     97 class 5 dbytes      +0 src/uci.real-engine.test.ts
+   -7.7 H    -7.7 H2    -7.8 B     99 class 5 dbytes      +0 src/glyph-mode.test.ts
+   -8.7 H    -3.8 H2   -13.6 B    149 class 2 dbytes  +10760 src/search.futility.test.ts
+  -10.6 H    -7.1 H2   -14.0 B    139 class 4 dbytes   +6946 src/puzzle-suite.test.ts
+
+same-sign count, H and H2 mean gap change: 54 of 71 ; positive both: 37 ; negative both: 17
+across 71 files, correlation of H and H2 mean gap change: 0.404
+
+B, 70 files: gap = 84.7 ms + 0.166 ms/KiB of statically loaded source; r 0.593; bytes median 154 KiB, max 481
+added source over those files: 317 KiB in all loads; predicted worker ms +53
+  1 cli.test.ts: 1 files, added KiB in loads 10, predicted +2 ms
+  2 test file changed, reaches changed production: 12 files, added KiB in loads 185, predicted +31 ms
+  3 test file changed, no changed production: 1 files, added KiB in loads 3, predicted +0 ms
+  4 test file same, reaches changed production: 14 files, added KiB in loads 130, predicted +22 ms
+  5 test file same, no changed production (control): 43 files, added KiB in loads 0, predicted +0 ms
+1 cli.test.ts : ['cli.test.ts']
+2 test file changed, reaches changed production : ['search.null-move.test.ts', 'uci-session.test.ts', 'engine.test.ts', 'search.bundle.test.ts', 'quiescence.test.ts', 'search.test.ts', 'evaluate.taper.test.ts', 'evaluate.pawns.test.ts', 'search.futility.test.ts', 'evaluate.passer.test.ts', 'evaluate.queen-on.test.ts', 'see.test.ts']
+3 test file changed, no changed production : ['tools/tune/tune.test.ts']
+4 test file same, reaches changed production : ['levels.test.ts', 'search.ordering.test.ts', 'book.test.ts', 'transposition.test.ts', 'search.pvs-lmr.test.ts', 'evaluate.king-mobility.test.ts', 'engine.capacity.test.ts', 'puzzle-suite.test.ts', 'book-engine.test.ts', 'search.qe.test.ts', 'evaluate.test.ts', 'gameend.nfr.test.ts', 'ladder.test.ts', 'search.capacity.test.ts']
+5 test file same, no changed production (control) : ['legal.test.ts', 'history-pane.nfr.test.ts', 'san.test.ts', 'perft.test.ts', 'tools/grugops/qe-hop-integrity.test.ts', 'moves.castling.hardening.test.ts', 'render-seam.test.ts', 'turn-loop.nfr.test.ts', 'history-pane.test.ts', 'zobrist.test.ts', 'command-input.test.ts', 'turn-loop.test.ts', 'moves.enpassant.hardening.test.ts', 'frame.test.ts', 'pgn.test.ts', 'san.qualifier.hardening.test.ts', 'render.test.ts', 'moves.test.ts', 'gameend.test.ts', 'tools/opening-book/book.test.ts', 'moves.enpassant.test.ts', 'rejection.test.ts', 'line-input.test.ts', 'move-input.test.ts', 'history.test.ts', 'san.parse.test.ts', 'cli.real-engine.test.ts', 'fen.test.ts', 'startup-questions.test.ts', 'status-panel.test.ts', 'status-panel.nfr.test.ts', 'result-screen.test.ts', 'apply.test.ts', 'moves.castling.test.ts', 'frame.overflow-bound.test.ts', 'coordinate-move.test.ts', 'san.suffix.hardening.test.ts', 'transposition.shared.test.ts', 'glyph-mode.test.ts', 'zobrist.nfr.test.ts', 'glyph-mode.nfr.test.ts', 'san.nfr.test.ts', 'uci.real-engine.test.ts']
