@@ -1,0 +1,49 @@
+2026-11-06T16:59:03Z G6 session start
+2026-11-06T16:59:03Z g6 r1 kiwipete foreign vitest pid(s) <blanked>: waiting on kill -0
+2026-11-06T16:59:33Z g6 r1 kiwipete foreign vitest gone after 30 s
+2026-11-06T16:59:33Z g6 r1 kiwipete wait poll=2 load1=4.23 vitest=0 cutechess=0 tctl=60.4
+2026-11-06T16:59:48Z g6 r1 kiwipete wait poll=3 load1=4.11 vitest=0 cutechess=0 tctl=57.6
+2026-11-06T17:00:03Z g6 r1 kiwipete wait poll=4 load1=3.20 vitest=0 cutechess=0 tctl=49.1
+2026-11-06T17:00:18Z g6 r1 kiwipete wait poll=5 load1=2.63 vitest=0 cutechess=0 tctl=52.3
+2026-11-06T17:00:33Z g6 r1 kiwipete wait poll=6 load1=2.05 vitest=0 cutechess=0 tctl=47.5
+2026-11-06T17:00:48Z g6 r1 kiwipete clear after poll 7 load1=1.74 tctl=46.4
+2026-11-06T17:00:52Z g6 r1 kiwipete wait poll=1 load1=1.68 vitest=0 cutechess=0 tctl=72.1
+2026-11-06T17:01:07Z g6 r1 kiwipete clear after poll 2 load1=1.39 tctl=51.8
+2026-11-06T17:01:11Z g6 r1 position-6 wait poll=1 load1=1.39 vitest=0 cutechess=0 tctl=71.1
+2026-11-06T17:01:26Z g6 r1 position-6 clear after poll 2 load1=1.14 tctl=50.8
+2026-11-06T17:01:30Z g6 r1 position-6 wait poll=1 load1=1.13 vitest=0 cutechess=0 tctl=70.8
+2026-11-06T17:01:45Z g6 r1 position-6 clear after poll 2 load1=0.96 tctl=48.3
+2026-11-06T17:01:49Z g6 r2 kiwipete wait poll=1 load1=0.97 vitest=0 cutechess=0 tctl=68.9
+2026-11-06T17:02:04Z g6 r2 kiwipete clear after poll 2 load1=0.75 tctl=47.9
+2026-11-06T17:02:09Z g6 r2 kiwipete wait poll=1 load1=0.77 vitest=0 cutechess=0 tctl=70.8
+2026-11-06T17:02:24Z g6 r2 kiwipete clear after poll 2 load1=0.67 tctl=46.1
+2026-11-06T17:02:28Z g6 r2 position-6 wait poll=1 load1=0.70 vitest=0 cutechess=0 tctl=72.0
+2026-11-06T17:02:43Z g6 r2 position-6 clear after poll 2 load1=0.62 tctl=45.5
+2026-11-06T17:02:47Z g6 r2 position-6 wait poll=1 load1=0.62 vitest=0 cutechess=0 tctl=69.5
+2026-11-06T17:03:02Z g6 r2 position-6 clear after poll 2 load1=0.63 tctl=45.0
+2026-11-06T17:03:06Z g6 r3 kiwipete wait poll=1 load1=0.66 vitest=0 cutechess=0 tctl=71.1
+2026-11-06T17:03:21Z g6 r3 kiwipete clear after poll 2 load1=0.59 tctl=43.0
+2026-11-06T17:03:25Z g6 r3 kiwipete wait poll=1 load1=0.79 vitest=0 cutechess=0 tctl=71.8
+2026-11-06T17:03:40Z g6 r3 kiwipete clear after poll 2 load1=0.68 tctl=43.3
+2026-11-06T17:03:44Z g6 r3 position-6 wait poll=1 load1=0.71 vitest=0 cutechess=0 tctl=71.6
+2026-11-06T17:03:59Z g6 r3 position-6 clear after poll 2 load1=0.71 tctl=42.1
+2026-11-06T17:04:03Z g6 r3 position-6 wait poll=1 load1=0.73 vitest=0 cutechess=0 tctl=69.5
+2026-11-06T17:04:19Z g6 r3 position-6 clear after poll 2 load1=0.57 tctl=41.1
+2026-11-06T17:04:23Z g6 r4 kiwipete wait poll=1 load1=0.60 vitest=0 cutechess=0 tctl=69.4
+2026-11-06T17:04:38Z g6 r4 kiwipete clear after poll 2 load1=0.54 tctl=41.1
+2026-11-06T17:04:42Z g6 r4 kiwipete wait poll=1 load1=0.54 vitest=0 cutechess=0 tctl=68.8
+2026-11-06T17:04:57Z g6 r4 kiwipete clear after poll 2 load1=0.50 tctl=43.1
+2026-11-06T17:05:01Z g6 r4 position-6 wait poll=1 load1=0.62 vitest=0 cutechess=0 tctl=68.9
+2026-11-06T17:05:16Z g6 r4 position-6 clear after poll 2 load1=0.62 tctl=46.1
+2026-11-06T17:05:20Z g6 r4 position-6 wait poll=1 load1=0.65 vitest=0 cutechess=0 tctl=68.3
+2026-11-06T17:05:35Z g6 r4 position-6 clear after poll 2 load1=0.74 tctl=47.9
+2026-11-06T17:05:39Z g6 r5 kiwipete wait poll=1 load1=0.76 vitest=0 cutechess=0 tctl=68.3
+2026-11-06T17:05:54Z g6 r5 kiwipete clear after poll 2 load1=0.59 tctl=48.0
+2026-11-06T17:05:58Z g6 r5 kiwipete wait poll=1 load1=0.63 vitest=0 cutechess=0 tctl=69.8
+2026-11-06T17:06:13Z g6 r5 kiwipete clear after poll 2 load1=0.63 tctl=46.8
+2026-11-06T17:06:17Z g6 r5 position-6 wait poll=1 load1=0.66 vitest=0 cutechess=0 tctl=67.4
+2026-11-06T17:06:32Z g6 r5 position-6 clear after poll 2 load1=0.51 tctl=45.6
+2026-11-06T17:06:37Z g6 r5 position-6 wait poll=1 load1=0.51 vitest=0 cutechess=0 tctl=68.4
+2026-11-06T17:06:52Z g6 r5 position-6 clear after poll 2 load1=0.54 tctl=44.6
+2026-11-06T17:06:56Z G6 session end
+2026-11-06T17:06:56Z tctl over reads: median 59.8 max 72.5
