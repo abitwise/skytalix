@@ -6,6 +6,13 @@ id: ADR-0072
 
 ## Status
 
+***Dated 2026-11-06 (`arch-ABC-303-b5`, records only at `main` `063ca870`; nothing run): IN FORCE on `main`, as a part of bundle 1.*** This is `ADR-0056` B5's line. `ABC-303` (`ABC-286` + `ABC-288`) merged at `434fa171` on QE's verdict `…ebefbfa2`: MET, PASS_WITH_GAPS, no blocking gap.
+- **The read:** `bb0cc134` against `38914841`, under PREREG `…53858301` and addendum `…79bd6622`. C2′ 47 / 36 / 17, 55.5 / 100 against 50.0. S′ 9.0 / 10 at E 1 810. The Levels deep lane 58 / 58. FL governed, because W was dropped before the first game (`…318c9e3b`).
+- **B4:** `…9e2facfa` read the merged tree. The stale rule's diff is empty and every count row equals the earlier read.
+- **Credit is to the bundle (B5). No per-part Elo is stated or inferred.** The bundle counts as one value-changing merge. The read does not prove a gain: +38.4 ± 63.0 spans 0 (`…ebefbfa2`, gap 1).
+- **The premise stays overridden, not met, and F1 stays fired, as written below.** L2's drift and audit stay missed. Table 3 reports them at the figures he was shown, and no verdict rides on them. R-BUNDLE-1 and the two risks this override adds stand.
+- **What this line replaces:** "not in force until the bundle merges on its read" below, and nothing else. B6 did not fire. § Rollback's "After it ships" now applies.
+
 **ACCEPTED 2026-11-04 BY THE OWNER'S WORD, OVER A MISSED PREMISE. THE PREMISE IS NOT MET AND F1 STAYS FIRED. Part of bundle
 1; not in force until the bundle merges on its read.** Recorded by Architect/Design (task `arch-owner-answers-1104b`, records
 only, on `grugops/arch-owner-answers-1104b` from `main` `65e28f95`). Nothing was run.
@@ -66,6 +73,7 @@ played.
 | 2026-11-04 | Owner | (a): override both missed premises and build both; OQ-0072-1 answered | `orch-2026-10-30a` `…3e73f9f9` |
 | 2026-11-04 | Architect/Design | **ACCEPTED over a missed premise, not in force.** F1 stays fired. The rows the read holds are ruled in `ADR-0056` | `arch-owner-answers-1104b` |
 | 2026-11-05 | Architect/Design | W1's rows with the bundle on: dated lines under d7 and d11. No bar, door or production line moves | `arch-ABC-303-w1-rows` `…0f8a4f82` |
+| 2026-11-06 | Architect/Design | **IN FORCE,** a part of bundle 1: `ABC-303` merged `434fa171`, QE `…ebefbfa2`, B4 `…9e2facfa`. Credit to the bundle, no per-part Elo. The premise stays overridden and F1 stays fired | `arch-ABC-303-b5` |
 
 ## Context
 
