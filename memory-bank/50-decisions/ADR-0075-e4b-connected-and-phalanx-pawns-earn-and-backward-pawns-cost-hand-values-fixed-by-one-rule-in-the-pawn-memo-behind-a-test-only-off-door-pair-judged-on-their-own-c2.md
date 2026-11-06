@@ -19,6 +19,8 @@ id: ADR-0075
 - **Still owed, unchanged:** § Consequences' lines. `ABC-305` comes before the build.
 - ***Dated 2026-11-05 (`arch-ABC-291-probe`): the probe ran, once. The premise stands under rule 3 and the work does not stop.*** PR1 to PR7 and PR9 hold. PR8 reads R = 1.04287, above 1.03, so the build carries d5's named cut. K2's list is written, and no value, rule, definition, ratio, intent or bar moved. See § The probe's reading.
 - ***Dated 2026-11-05 (`arch-ABC-307-records`, records only): the memo lines are dated, and F2's K5 half is written.*** Every "640 KiB" reads d3's form before the cut. A run below depth 6 on the build is F2's second miss. No value, rule, definition, ratio, intent, bar or level moved. See § What would falsify this.
+- ***Dated 2026-11-06 (`arch-records-1106`, records only at `main` `8e115110`): a `G1` miss on `ABC-291` is class B, and F3 reads as written.*** The Order line is dated for `ABC-289`'s NOT MET. No value, rule, definition, ratio, intent, bar or level moved. See § What would falsify this and § Consequences.
+- ***Dated 2026-11-06 (`arch-ABC-291-stop`, records only at `main` `48993089`; nothing run): `se-ABC-291`'s STOP is ruled.*** `ABC-282` A0-3's six rows are pins, re-pinned to the lines in `ADR-0071` D8's dated line. No build that holds d4 can meet K1 (h)'s letter for one export, so the row reads the off branches, and one real read is added. The `ABC-303` depth-8 re-point and `QUIET_RULES`' `pawnShape: true` are confirmed. No value, rule, definition, ratio, intent or level moved. K1 (h) is the one place a bar's words do not hold as written, and its dated line says why. See d4, K1 (h), K2 and d11 (a).
 
 *Before acceptance:* **PROPOSED 2026-11-05.** Recorded by Architect/Design (task `arch-ABC-291`, records only, on `grugops/arch-ABC-291` from `main` `148fd329`).
 **Nothing was run:** no test, build, engine or probe. A timing read (`ABC-282`'s A4) held the host. Every figure below is arithmetic on
@@ -46,6 +48,8 @@ dated lines; `ADR-0067`'s dated blocks; `ADR-0070`; `ADR-0064` d3–d8; `ADR-002
 | 2026-11-05 | Architect/Design | The probe, once, under PREREG `…2a579895` (`d033ea0e`): premise stands under rule 3, PR8 R = 1.04287, PR9 14.72 %. K0 (c)'s counts and K2's list by dated line. No value, rule, definition, ratio, intent or bar moved | `arch-ABC-291-probe` `…65c7a9c9`, `…2926c26b` |
 | 2026-11-05 | Architect/Design | The 640 KiB lines dated; F2's K5 half written, as a reading open to the Orchestrator until K4's PREREG seals. No value, rule, definition, ratio, intent, bar or level moved. Nothing run | `arch-ABC-307-records` |
 | 2026-11-06 | Architect/Design | Dated pointers to `…43e6d8fd` 3 on d11 (d)'s list and on "What stays open". No value, rule, definition, ratio, intent, bar or level moved. Nothing run | `arch-ABC-303-b5` |
+| 2026-11-06 | Architect/Design | `G1`'s class on `ABC-291` ruled from `ADR-0034` d2's letter: class B, F3 as written. The Order line dated for `ABC-289`'s NOT MET. No value, rule, definition, ratio, intent, bar or level moved. Nothing run | `arch-records-1106` |
+| 2026-11-06 | Architect/Design | `se-ABC-291`'s STOP ruled: A0-3's six pins, K1 (h) against d4 with one real read added, the `ABC-303` depth-8 re-point, `QUIET_RULES`. No value, rule, definition, ratio, intent or level moved. Nothing run | `arch-ABC-291-stop` |
 
 ## Context
 
@@ -139,6 +143,7 @@ Notation: R is the pawn's own rank index, as in `PASSED`. 1 is its start rank, 6
    - **Rows follow `ADR-0064` d7 by reference.** A shipped-side row whose other side is an older door re-points to the new door, with its figures
      unchanged. A pinned value that moves is re-pinned, old → new in the PR. A lost fixture property is re-found under `ADR-0028` d2. A level
      that reddens follows `ADR-0028`. **No zugzwang depth is re-pinned.**
+     *Dated 2026-11-06 (`arch-ABC-291-stop`; `se-ABC-291` `…cb124720`): **a count row titled for an earlier ticket's tree re-points too.** `src/search.bundle.test.ts` "`ABC-303` — the bundle's own counts at depth 8", 2 rows, has no older door on its other side, so the first clause above does not name it, and "a pinned value that moves" would re-pin it. It re-points to `searchWithoutPawnShape` and `chooseMoveWithoutPawnShape`, figures unchanged. Its title says the counts are the bundle's and that it is "information, not a bar". A re-pin would make that title false, and the off door is the merge-base node for node (K0 (a), all four figures). `ABC-304` and `ADR-0072` d7 took this form. It reaches only a row whose figures belong to a named earlier tree. A row that pins the shipped path's own value still re-pins, and the head's counts stay K0 (c)'s.*
 
 5. **Cost: `G2` ≤ 1.03 × the base, per call.**
    - **What a call adds on a hit:** one typed-array read, one add, one branch. There is no new walk and no new board read.
@@ -177,12 +182,19 @@ Notation: R is the pawn's own rank index, as in `PASSED`. 1 is its start rank, 6
      - (f) `ABC-274` A9's bound reads the three pairs (8 × (largest connected + largest phalanx + backward) per side);
      - (g) the memo: a hit returns what a fresh `pawnStructure` returns, shape part included, on a forced collision too, and on an on-then-off read of one slot;
      - (h) a source row: `pawnShapeForTest` and `evaluateAtPhaseWithoutPawnShape` are called from test files only.
+       *Dated 2026-11-06 (`arch-ABC-291-stop`; `se-ABC-291` `…a8daf408` § 2): **no build that holds d4 can meet this row's letter for `evaluateAtPhaseWithoutPawnShape`. This line says so, and it adds a read.** d4 is `ADR-0064` d7's form: the switch picks the evaluation at the recursions' three call sites, two in `src/search.ts` and one in `src/quiescence.ts`, where `evaluateWithoutTaper` stands on `main`. So the evaluation the doors call has source callers by construction. The letter fits a seam, as `ADR-0070`'s line for `passerTermsForTest` does, and this export is not a seam.*
+       - ***For this export the row reads:** its only callers outside test files are those three off branches, and no shipped search takes one. `pawnShapeForTest` keeps the letter.*
+       - ***The real read, one default-lane source row, no search:** `pawnShape: true` stands exactly twice in `src/search.ts` and twice in `src/engine.ts`, in `RULES_PAWN_SHAPE` and in `search()`'s or `chooseMove`'s own record. It stands in no other non-test file under `src/`. Under `tools/`, only `QUIET_RULES` and its name carry it. Today no row reads d4's "on in `search()` and `chooseMove` only".*
+       - ***Form (b), the switch passed into the evaluation, is not taken.** It drops d4's sentence and changes `evaluateAtPhase`'s signature on the hot path, after PR8 and before K4, which has one read left.*
+       - ***What stands:** no production line moves, so K0, K2's list and K3 are not read again. If the Orchestrator or the owner reads this as a bar loosened after Ready, the line comes back here.*
    - **K2, the re-pins.** Two byte rows, 589 824 → 655 360: `src/evaluate.pawns.test.ts` (with its slot formula) and `src/transposition.test.ts`. They
      record a structure's size. **The value rows and the re-point list are `UNKNOWN - verify` until PR11's lane report.** That list joins this
      decision by a dated line before Ready. A re-pin outside it is a defect.
      *Dated 2026-11-05 (`arch-ABC-291-probe`): the list is in § The probe's reading. With d5's cut in the build, the two byte rows do not move.*
+     *Dated 2026-11-06 (`arch-ABC-291-stop`): **re-derived at `8e115110` by § The probe's reading's own line: 64 rows (`se-ABC-291` `…cb124720`), with K0 (c)'s two sets in `…f0c9e801`. Six deep pins join the list:** `ABC-282` A0-3 in `src/uci-session.test.ts`, at the lines in `ADR-0071` D8's dated line of this task, as `…69ee96e7` ruling 2 asks. The deep re-points, figures unchanged, are `ABC-303`'s depth-8 counts, 2, `ABC-282` A0-1, 6, and A0-2, 4.*
    - **K3, safety (`ADR-0064` d7's rows):** mate floor 0 violations, door d4 → head d5 and d5 → d5 on the 287; zugzwang **7 / 7** at recorded depths with
      `zugzwang.001` among them; `G1` no NEWLY-MISSED line. All read all-on. No depth moves, and no expected result is rewritten.
+     *Dated 2026-11-06 (`arch-records-1106`): a `G1` miss on this diff has no drift class. Every missed row is class B, and F3 governs. See § What would falsify this.*
    - **K4, `G2` ≤ 1.03 ×** (d5). The endgame report set is reported beside it.
    - **K5, `G6` under `Q-3K-4` (b):** every run at depth ≥ 6, depth 7 a WARN, "≥ base" reported, not graded.
      *Dated 2026-11-05 (`arch-ABC-307-records`): the bar stands as written. A run below depth 6 on the build is F2's second miss. See § What would falsify this.*
@@ -264,6 +276,7 @@ Notation: R is the pawn's own rank index, as in `PASSED`. 1 is its start rank, 6
         reading of d1 on the hot path, the class `QE-271-h` found. That has worth with no pull at all.
       - **The form.** `tools/tune` gains the three terms' counts in the tracer and the three exports in the emitter, **traced and held, not free**, as `T_UN` is (`ADR-0070` d7). 17 → 20 exports. No
         fit, no emission to `src/`, and `src/` gains no tracing code. K7 reads it. The line is the last commit on the branch: it holds no production line, so it stales no read.
+        *Dated 2026-11-06 (`arch-ABC-291-stop`; `se-ABC-291` `…d68ef14e` item 5): **`QUIET_RULES` gains `pawnShape: true`, and the line is confirmed.** The fact above named two reds, and the build found a third. `isQuiet` compares a full-window `quiesce` with the shipped `evaluate`. A record with no field stands pat on the off evaluation, so every position the part touches reads as not quiet, and K7 cannot read green. **The record follows the evaluation, as its `taper: true` does.** `ADR-0069` d6 and `ADR-0074` d6 keep pruning switches out of it, so that no data set moves. Those switches change what `quiesce` searches. This one changes what `evaluate` reads, so this merge moves the filter with or without the field. `seePruning` stays out. d4's "on in `search()` and `chooseMove` only" speaks of the shipped recursions, and a tool's own record is not one. `QUIET_RULES_NAME` changes with it, so a later pull's manifest shows the filter it ran. No pull is open and no `src/` line follows. The test-only commits after this line (`e76d22f3`, and the STOP's repair) hold no production line, so its reason for "last" stands.*
       - **What this supersedes.** On this term, the pages' "each new export is owed to that pull's emitter change". `…6ccd8243` item 3 spoke of E4a at 0, before any row read the exports.
       - **Order.** `ABC-291`'s build follows `ABC-305`'s merge. If E2 closes for good, no tool line is owed by any later term.
     - **(b) How `ABC-306` reaches a fit: only on a yes that names it. The Architect writes the route at that yes.**
@@ -397,11 +410,30 @@ A pass means "not seen worse", not "proven better". A term worth nothing still p
   *Dated 2026-11-06 (`arch-ABC-303-b5`): no longer open. `…43e6d8fd` 3 ruled it: a second K5 miss is a miss under d11 (d). See d11 (d)'s dated line. The ruling stays open to the owner's overruling.*
 - **How near.** `G6` on this term is `UNKNOWN - verify`. `qe-ABC-271` read kiwipete at 9 and position-6 at 12 on every run (`…3e1cc3ff`), and PR10, on the form before the cut, read 0.988 of `main`'s ns per node on 3.45 % more nodes. By reading, the floor is far off.
 
+*Dated 2026-11-06 (`arch-records-1106`, records only at `main` `8e115110`; nothing run): **`G1`'s class on `ABC-291`.** BA/PM held it open (`…cd04f470` J1, `…710dc7ec`) against `…7c297147` § 4 item 5. It is ruled from the letter, before QE seals, without opening `se-ABC-291`'s build or figures.*
+
+- **The ruling: every `G1` row missed on `ABC-291` is class B. This diff has no class D and no class L, whatever a ladder would show. F3 reads as written.**
+- **The letter.** `ADR-0034` d2: "A diff that touches any other trigger-list file has **no drift class here**. Every missed row is class B." Its instrument: "Decisions 3 and 4 apply only if every printed line is `src/evaluate*.ts`."
+- **This diff.** d4 puts `pawnShape` in `src/search.ts`'s `Switches`, `src/engine.ts`'s `Heuristics` and quiescence's rules record, and § Consequences names the three files. All three pass the instrument's filter at `8e115110`. `ADR-0034`'s control `ABC-079` prints the same three: "still all B, as decision 2 intends".
+- **No figure can change this.** A build whose instrument printed `src/evaluate*.ts` alone would lack d4's switch, and that is F1's. So on an exact build the class does not wait on the diff.
+- **d2 tests the diff, not the term.** `ADR-0034` § Context's first mark of drift is "the diff touches no search code". The READING under d2 sets aside test files and test-only fixtures, and nothing else. A switch is loaded search code. `ADR-0050`, `ADR-0051` and `ADR-0074`'s F7 line read d2 the same way.
+- **`…7c297147` § 4 item 5's class sentence is withdrawn.** "An evaluation-only diff has a drift class" is true of such a diff, and this is not one. The note's "`G1` is thin" half stands, and so does the rest of the note.
+- **What a miss does.** The red stays a QE FAIL (`ADR-0034` d1). Then F3 runs, with two outcomes:
+  - **A defect.** d2 sends a not-a-defect argument to `ADR-0026` d10's oracle, "not through this ADR". My reading: on this ticket that oracle is d7's K rows, so a red in K3 cannot clear itself. A defect is F1's, and a fix that restores d1 or d2 is not a miss (d8, d11 (d)).
+  - **No defect: the miss is real.** Growth on an exact build is not a defect, and F3 has no third outcome. NOT MET, not merged, and a miss under d11 (d). d10's rule 2 read PR7 the same way.
+- **Not routes on this diff:**
+  - `ADR-0034` d3's table, and its line "Any other row goes to the owner as a depth cost". Decision 3 does not apply here. A rung may be reported beside the red, as evidence for the defect check. It classes nothing.
+  - d4's fixture and level lines. K3 reads `ADR-0064` d7's rows, d7 keeps "zugzwang, the mate rows and `G1`" on the shipped path, and K3 says "no expected result is rewritten".
+- **The row's name.** `…40ef8351`'s "if a later term reds it, F7 governs" is `ADR-0074`'s F7. On `ABC-291` that row is F3.
+- **What it costs, stated.** Row 1632 uses 16 838 of 20 534 nodes on `main`, and `main` misses it at 0.8×. If the build pushes it over, this term can end NOT MET on a row it cannot touch, with no second set of values. Whether it does is `UNKNOWN - verify`. Those are the bars he accepted. His word can still move a count, the corpus or the budget (`ABC-084` A7), but this ADR offers that as no route, and QE puts no D row to him.
+- **What does not move.** K3, F3, d11 (d), `G1`'s bar, and `ADR-0034`. A class is a red's route, not a bar. No value, rule, definition, ratio, intent, bar or level moved.
+
 ## Consequences
 
 - **Play:** every position with pawns can move. The start position stays 0 by symmetry. No read exists. The bars above are the first.
 - **Host.** The probe, then a build, `G2`, `G6`, safety rows and C2′ at about 25 min, S′ and the Levels lane. Runs over 1 h need his word, as usual. None is planned.
 - **Order.** `ABC-305`'s merge, then the build. C2′ follows `ABC-303` and `ABC-289`, because a value-changing merge stales the read after it. The probe needs only the host.
+  *Dated 2026-11-06 (`arch-records-1106`, records only; nothing run): `ABC-305` is Done, and `ABC-303` merged at `434fa171`. `ABC-289` is recorded NOT MET on an exact build and stays unmerged (`…7c297147`, `…40ef8351`), and the Orchestrator lifted `…69ee96e7`'s `ABC-289` clause. So the build goes on `main`, with bundle 1 in and no `…WithoutDeltaPruning`, and d4's "those `ABC-303` and `ABC-289` add" reads `ABC-303`'s only. C2′ waits only for `ABC-289`'s outcome to be recorded, and that record meets this line: no merge is left to stale the read. `ABC-289` is not closed: OQ-0074-2 is with the owner. If he opens a route, `ABC-291`'s read goes first or waits. He was shown "after `ABC-303` and `ABC-289`", so the Orchestrator tells him if it goes first (`…40ef8351`). No value, rule, definition, ratio, intent, bar or level moved.*
 - **Third pull.** A merge on its own read meets `ADR-0067`'s trigger. Asking stays a new call for him. If he says yes, the term may enter the free set, and d2's values are its start.
 - **NFRs.** `NFR-009`: +65 536 bytes, 640 KiB. `NFR-001` / `G2`: K4. `NFR-005`: K5. `NFR-008`: K1 rows are units with no search. Their cost in the lane is `UNKNOWN - verify`, and the row census the Orchestrator placed after A4 gates the merge. No new NFR file. `plans/nfr-catalog.md` is untouched.
   *Dated 2026-11-05 (`arch-ABC-307-records`): `NFR-009` reads +0 bytes, 576 KiB, with d5's cut (`…2926c26b` call 3, `…69ee96e7` ruling 3). No level moves. `plans/nfr-catalog.md` stays untouched.*

@@ -1,3 +1,6 @@
+_Updated: 2026-11-06T20:34:10Z — arch-ABC-291-stop merged: A0-3 re-pins, K1 (h) form (a), both SE calls confirmed; se-ABC-291-repair and bapm-ABC-291-stop-lines running; qe-ABC-291-k1 reading._
+_Updated: 2026-11-06T20:22:07Z — se-ABC-291 STOP at 63af973e: six deep pins and K1 (h) to the Architect; qe-ABC-291-k1 reads K1's fixtures and drift. ABC-291 stays In Development._
+_Updated: 2026-11-06T19:40:07Z — arch-records-1106 merged: G1 on ABC-291 is class B, F3 stands, no owner route. se-ABC-291 building._
 _Updated: 2026-11-06T19:32:10Z — bapm-lines-1106b merged; se-ABC-291 and arch-records-1106 running._
 _Updated: 2026-11-06T19:23:48Z — ABC-289 NOT MET, OQ-0074-2 asked; ABC-291 to build; bapm-lines-1106b first._
 _Updated: 2026-11-06T19:05:19Z — se-ABC-289 STOP: DP2 red on the joint tree, exact build; Architect reads it._
@@ -1565,7 +1568,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 ## In Development (WIP 1/3)
-- [ABC-291] E4b pawn structure (ADR-0075 ACCEPTED, in force at merge; DoR 10/10, M, P2). `se-ABC-291` builds on main; `arch-records-1106` rules G1's class before QE seals.
+- [ABC-291] E4b pawn structure (ADR-0075 ACCEPTED, in force at merge; DoR 10/10, M, P2). `se-ABC-291` builds on main;
 
 
 

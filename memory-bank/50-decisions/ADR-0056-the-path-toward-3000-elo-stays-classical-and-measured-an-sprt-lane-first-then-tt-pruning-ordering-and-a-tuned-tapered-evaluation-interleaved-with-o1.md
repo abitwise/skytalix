@@ -263,6 +263,16 @@ and `ADR-0073` are ACCEPTED, not in force. D5's dated block of this task states 
 against `ABC-289`. `ADR-0074` is ACCEPTED ("2. OQ-0074-1: yes accept."), not in force. D2's dated line of this task gives
 the rows. No line of B1–B7 changes.
 
+**Folded 2026-11-06** (task `arch-records-1106`, records only, on `grugops/arch-records-1106` from `main` `8e115110`; nothing
+run): after `ABC-303`'s merge `434fa171` (QE MET, PASS_WITH_GAPS `…ebefbfa2`; B4 `…9e2facfa`). Owed by `arch-ABC-303-b5`
+`…28283e48` § 2.
+
+- **`ADR-0072` and `ADR-0073` are in force on `main`,** as the parts of bundle 1. Each ADR's § Status carries B5's line. "ACCEPTED,
+  not in force" above no longer reads for those two. Credit is to the bundle, with no per-part Elo. The premises stay overridden.
+- **`ADR-0074` stays ACCEPTED, not in force.** `ABC-289` is recorded NOT MET on an exact build. D2's dated line of this task gives
+  the rows.
+- **New, open (his):** OQ-0074-2, which blocks nothing.
+
 *2026-11-05, dated line by Architect/Design (task `arch-owner-answers-1105b`, records only at `main` `6ff2554e`; his word `…0f1ab02e`, verbatim "1. yes;
 2. yes; 3. yes").* **CF1–CF10 reach every later C2′ read, of one change or of a bundle. A term merged inside a bundle meets `ADR-0067`'s
 third-pull trigger. CF7 is owner-accepted.** D5's dated block of this task holds the reach. No bar moves.
@@ -735,6 +745,19 @@ Orchestrator's `…5ec6c124` 5 and `…0edae6fd` 1; `arch-bundle-1` released the
 - **Row Q2: `ADR-0074` ACCEPTED.** It supersedes "`ADR-0074` is PROPOSED" in the dated line above. `ADR-0024` d4 is amended (its
   § Status and d4 carry the pointers), in force at `ABC-289`'s merge.
 - **The order:** bundle 1, then `ABC-289`, alone. D5's dated block of this task gives the reason.
+
+*Dated 2026-11-06 (`arch-records-1106`, records only at `main` `8e115110`; owed by `arch-ABC-303-b5` `…28283e48` § 2 and
+`arch-ABC-289-joint` `…7c297147` § 6): rows P4, O2c and Q2.*
+- **Rows P4 and O2c: in force on `main` at `434fa171`,** in bundle 1 (`ABC-303`, QE `…ebefbfa2`). The cells stay as written, and
+  their "not in force" reads through this line. The one read was the bundle's: C2′ 55.5 / 100 against 50.0 at 100 ms, all on. No
+  reading splits it by row. The rows' Elo estimates stay estimates.
+- **Row Q2: `ABC-289` is recorded NOT MET on an exact build,** by `ADR-0074` F1 and F7 (`…7c297147`, `…40ef8351`). With P4 on, drift
+  read 34 cp against ≤ 30, and `G1` 53 / 58 against 54, row 1632 newly missed. No game was played. `ADR-0074` stays ACCEPTED, not in
+  force, so `ADR-0024` d4's amendment is not in force either. Branch `grugops/ABC-289` at `b42706b3` is kept, unmerged.
+  - **The cell's "premise met on `main`"** is `0cc9afd1`'s record, not re-read (`…7c297147` § 1). Its "not in force until `ABC-289`
+    merges" stands. The row's +5–20 stays an estimate, unmeasured.
+  - **Not closed.** OQ-0074-2 is with the owner and blocks nothing. The ticket closes on (a) or on no answer. Only he can open (b)
+    to (d). No bar moved, nothing was re-pinned, and no row retired.
 
 *Dated 2026-11-05 (`arch-owner-answers-1105`, records only at `main` `a44aa057`; his word `…b836b85c`, verbatim "1. yes; 2. yes;
 3. wait"): rows E2, E3, E4, E5 and E6.*
@@ -1659,6 +1682,13 @@ of 10; below that, 10 more games and ≥ 7.0 of 20). Then **the Levels deep lane
   target, an estimate. Whether the rows exist is `UNKNOWN - verify` until the census reads.
 - **Both orders' re-reads.** Whichever lands second carries the first's instrument re-read, `ADR-0072` d9 or `ADR-0074` d12.
   The slots against `ABC-282` and `ABC-301` stay the Orchestrator's.
+- *Dated 2026-11-06 (`arch-records-1106`, records only at `main` `8e115110`; for `ABC-289`'s NOT MET):* **the order ran, and the cost
+  it named came.** Bundle 1 read first and merged at `434fa171`. `ABC-289` built on it and read red before any game (`…7c297147`).
+  Drift read 34 cp against ≤ 30, so `ADR-0074` F1 governed and no bar moved, as "What it costs" says. `G1` also read red, under F7,
+  which that line did not name. "No probe has had P4 and Q2 both on" is now read once, on `b42706b3`: both reds are P4 with Q2
+  (`…d61479af`). The pay half stays as `…7c297147` § 1 leaves it. `ABC-289`'s read is not played, and the later terms' reads no longer
+  wait on it (`ADR-0075`'s Order line). If the owner opens a route on OQ-0074-2, it is ordered against `ABC-291`'s read then. This
+  block's reasons stand as written.
 
 #### Dated 2026-11-04 (`arch-ABC-303-open`, records only at `main` `c118a5cf`): `ABC-303` § Open 1 and 2, and the moved base. No bar moves
 
@@ -1701,6 +1731,9 @@ at its writing, not a level.
 - **The lower edge is close.** At 40 games, a next merged S′ below 5.5 / 10 leaves the band. 5.0 gives 23.5 / 40 = 58.8 %,
   so E′ = 1 700 by the rule. That step is the owner's question, and without his word E stays 1 810. The upper edge cannot fire
   at 40 games.
+  *Dated 2026-11-06 (`arch-records-1106`; `…28283e48` § 5): superseded by the read. `ABC-303`'s S′ merged at 9 / 1 / 0, 9.0 / 10, so the
+  lower edge did not bite. The pool reads 27.5 / 40 = 68.75 %, inside 60–85 %, X = +137.0. This is the 40-game trigger read: no step
+  fires, no owner question arises, and E stays 1 810. `ABC-289` adds no S′, so `ABC-291` seals at 1 810.*
 - **A step before the seal** is a dated line here, which then governs, and a dated line on `ABC-303`'s page (BA/PM).
 - **A step after the seal does not reach this read.** It plays at the sealed E. An S′ at a superseded E does not pool.
 
@@ -1946,6 +1979,12 @@ Reach line's: `ABC-282`, closed reads and every read that is not a C2′ read ke
 Levels red is CF7's, read by `ADR-0028`, and W spans it because § 6 runs it third. Q2's order is the Orchestrator's ruling, not this
 block's.
 
+*Dated 2026-11-06 (`arch-records-1106`; `…28283e48` § 3 (d), confirmed by `…aaeffb04` 1):* **the Levels lane now has its line.** In a C2′
+read's PREREG, "alone" for the Levels lane means alone under the host lock. Foreign load during the lane changes no line of the read,
+and no run is voided for it. The lane is graded as played, and a red is CF7's. QE reports the lane's `fsample.sh` count and largest load1
+beside it, by class and count, and no verdict rides on them. Each PREREG states this before the first game, in `…28283e48` § 3 (d)'s
+words. It adds no bar and moves no word of CF7 or FL. It does not reach `G6`, K4, K5 or `NFR-008`, which keep their own void lines.
+
 ### D6. The order proposed (speed and algorithms interleaved)
 
 Ordered by expected Elo per cost, by file collisions (`ADR-0055` D2), and by what each step needs measured.
@@ -2178,6 +2217,7 @@ changes form, not place.***
 - `ABC-272` (E7a): any order after E1, one at a time on the same files, as before.
 - **The reads queue behind each other.** A value-changing merge stales the read after it, so a term's C2′ follows `ABC-303` and
   `ABC-289`. Its ADR and probe need not wait for them, only for the host.
+  *Dated 2026-11-06 (`arch-ABC-291-stop`, records only at `main` `48993089`; owed by `arch-records-1106` `…860a0dbd`; nothing run): `ABC-303` merged at `434fa171`. `ABC-289` is recorded NOT MET on an exact build and stays unmerged (`…7c297147`, `…40ef8351`). So no merge is left to stale a term's read, and the wait this line names is met. The rule stands for the terms: each value-changing merge stales the read after it. `ABC-289` is not closed. OQ-0074-2 is with the owner, and if he opens a route, `ABC-291`'s read goes first or waits, as `ADR-0075` § Consequences' Order line says. No order, value or bar moved.*
 - **What a hand value must show:** the term's page, form (b). Values fixed by a stated rule in its ADR before any row is read,
   which the owner accepts; `ADR-0064` d7's safety rows, `zugzwang.001` among them; `G2` at the ADR's ratio; `G6` under `Q-3K-4` (b);
   C2′ GAIN ≥ 50.0 of 100, since evaluation rows fire at 100 ms; S′; the Levels lane. A miss is not merged and not re-played.
