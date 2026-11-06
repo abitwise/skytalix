@@ -1,0 +1,51 @@
+# qe-ABC-303 count rows: every count row of tables 1 and 2 is met, and table 3's count rows equal the figures on `0cc9afd1`. P6 and P7 are not read, so table 2 is not whole and the read may not start
+
+QE/E2E, task `qe-ABC-303`, under PREREG `…53858301`, on H = `bb0cc134` against B = `38914841`. QE's own driver (`raw/scripts/drv.ts`), each mode its own process and its own lock hold, on one core. Every output file was non-empty before it was read. Raw: `raw/out/`. **These rows are graded as sealed; no verdict comes from them.**
+
+**Table 1.**
+| row | bar | read | state |
+|---|---|---|---|
+| S1 | exact | 12 of 12, nodes, score, move and depth; d8 523 847 / 234 214, 707 548 / 101 425 | met |
+| S2 | exact | 58 of 58: 17 `search` and 12 `chooseMove` doors, 0 lost; 6 new doors | met |
+| S3 | 0 on each | B1 0 / 191; B2 0 / 189; B3 0 / 190, 189, 190, 189, 163; 0 / 188 | met |
+| S4 | 7 / 7 | 7 / 7 at recorded depths | met |
+| S5 | ≥ 54 / 58, none new | 54 / 58, none newly missed | met |
+| S6 | 0 | 0 sign changes and 0 mate flips: all on against all-off, P4's door and O2c's door, both recursions | met |
+| S7 | ≥ 95 %, none beyond 25 cp | 100 %, 9 cp / 100 %, 4 cp | met |
+
+**Table 2.**
+| row | bar | read | state |
+|---|---|---|---|
+| P1 | present and green | 39 / 39 default, 49 / 49 `SEARCH_DEEP`, 24 of them `ABC-303`'s; 3 door pairs | met |
+| P2 | M3 and C1 as written | source of both recursions read against `ADR-0072` d1–d3 and `ADR-0073` d1–d6; direct calls: T 4 / 7 / 12, 0 at d0, d4, the root, a wide window, a mate window, two non-pawn pieces and in check | met |
+| P3 | ≤ 0.89 × on each | 0.6039 / 0.8170 / 0.7509 / 0.8363 | met |
+| P4 | ≥ door + 0.10 | +0.1158, printed +0.116 (6.900 → 7.0158; 33 deeper, 13 shallower) | met |
+| P5 | 3 072 bytes | 3 072 | met |
+| P6 | "≥ base", every run ≥ depth 6 | **not read** | `UNKNOWN - verify` |
+| P7 | ≤ 10 s and ≤ +0.10 s | **not read** | `UNKNOWN - verify` |
+| P8 | as the gates state | typecheck, lint, build 0; `npm test` 71 files, 2 734 / 2 734; skip count 0; `No findings.` twice; **23 of 23** `-t` lines by count, `ABC-167` A5 4, every other 1. `F1`'s line reads 1 passed, its first run by name | met |
+
+**Table 3, beside the figure on `0cc9afd1`; no verdict.** Every one equals it.
+| row | read | on `0cc9afd1` |
+|---|---|---|
+| R1 | 93.58 %, 80 cp / 94.12 %, 79 cp, on P4's door and all on | the same |
+| R2 | 288 of 1 886, 15.27 %; 29, 9, 0; 285 fail low; d1 212 / 923, d2 44 / 753, d3 32 / 210 | the same |
+| R3 | 1.0031 / 0.9999 / 1.0935 / 0.9989; 0.9848 / 0.9922 / 0.9298 / 1.1190 | the same |
+| R4 | 0 / 209; `krk` 0 / 17, 17, 29 | the same |
+| R5 | **not read**, a timing | 0.9921 / 1.0537, mean 1.0229 |
+| R6 | 0.5947 / 0.8106 / 0.6982 / 0.9358; +0.1474 (7.0158 − 6.8684); P4 fires at 5.91 per 1 000, 7.47 % of eligible, 24.2 skipped; order changed 8.74 %, countermove in the list 33.55 % | the same; the printed +0.148 subtracts rounded means, and the depths behind it are equal |
+| R7 | d8 311 546 / 163 523, 573 518 / 94 911; reach 7.016 | the same |
+
+**The moved base.** `ABC-282` `a6ae8227` is the one value-changing merge since `0cc9afd1`. The door's d8 counts, R1 and R2 read the same on both, so the two sets in the PR are equal and no count is re-derived.
+
+**Two faults of mine, both corrected, neither a red.**
+- `gates.sh`'s default bundle line had no heap prefix, so `heap-guard` refused it before any test ran: exit 1, "no tests". Re-run with the prefix: 39 / 39 (`raw/out/gates/bundle-default.txt`, `bundle-default2.txt`).
+- `forms`' `inCheckFen` position was not in check, so its 7 proved nothing. `raw/scripts/forms2.ts`, with a real check: 0 in check, 7 with the same material out of check.
+
+**Limits.**
+- R2's reader is QE's, and its hooks are the engineer's (PREREG § 2). Arm A's reach depth and fired count agree with H and with `…bd60978c`.
+- `npm test`'s wall was on one core and is no reading of P7.
+- `se-ABC-303-main`'s `exits.txt` seconds include lock waits, so my 17-minute forecast ran high: the rows took 6 min 32 s. The stage ran 13:57:07Z to 14:05:13Z, 8 min 6 s, plus about 10 s for the two re-runs.
+- `se-ABC-303`'s note says three doors read at d3. Its own output shows two, and QE read those two.
+
+**Foreign load, recorded only, class and count.** load1 0.46 to 2.08. A busy node-class process in 2 of 26 samples around the holds, at the first start and the last end, source not attributed, none touched. No count can move with it.
