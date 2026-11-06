@@ -1,3 +1,4 @@
+_Updated: 2026-11-06T22:56:46Z — qe-ABC-291-where done; NFR-008 route with the owner: games first, moved leg, or rows. ABC-291 waits._
 _Updated: 2026-11-06T22:44:22Z — arch-ABC-291-n8 merged: rows alone reach only the edge; qe-ABC-291-where reads QE's run files; owner's call follows._
 _Updated: 2026-11-06T22:30:13Z — qe-ABC-291-read: K4, K5 met; NFR-008 UNRESOLVED (+0.155 s), so no game; host released; arch-ABC-291-n8 reads the route._
 _Updated: 2026-11-06T22:06:10Z — owner holds the whole host; qe-ABC-291-read runs timing, then games, with W._
