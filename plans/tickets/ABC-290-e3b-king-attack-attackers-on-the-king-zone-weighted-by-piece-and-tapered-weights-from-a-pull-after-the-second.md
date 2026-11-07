@@ -24,6 +24,7 @@ adr: "owed (the Architect's): a new ADR on main's tapered evaluation, form (b): 
 > - **Order:** E4b (`ABC-291`), then E5 without per-piece mobility (`ABC-292`), then E3b (`ABC-290`), then E6 (`ABC-293`). The order is the
 >   Architect's recommendation, accepted by the Orchestrator (`ADR-0056` D6's reorder rule, with the owner told).
 >   **This page is third.**
+>   *2026-11-07 (`bapm-terms-after-291`; `…8cc32a89` § 2, `ADR-0056` D6's dated line of `arch-ABC-291-closed`, `…aab9afd1`): **E4b is spent, NOT MET. The order now reads E5 (`ABC-292`), then E3b (`ABC-290`), then E6 (`ABC-293`). This page is second of the three,** still after `ABC-292`'s read. The order stays the Orchestrator's, with the owner told.*
 > - No bar is new. **DoR 9/10, unchanged: the ADR is owed. Backlog.** The board move is the Orchestrator's.
 
 > **Cut 2026-11-04 by BA/PM: DoR 9/10, Backlog** (task `bapm-epic011-areas`, records only, at `main` `b274711c`;
@@ -62,6 +63,7 @@ adr: "owed (the Architect's): a new ADR on main's tapered evaluation, form (b): 
   switch and an off-door pair; a `G2` ratio with its reason and its blind spot; a probe with rows, a sealed form, and a line for what it can and cannot change; K rows reading the term's own part; CF's
   table filled; the tool line at the merge; no second set after a miss. It sets its own ratio, and d12 binds none of its values. "No second set" binds it only if he accepts that in this term's own ADR
   (`…c1623ae7`). If E2 closes for good, no tool line is owed by any later term.*
+  *2026-11-07 (`bapm-terms-after-291`; `ADR-0075`'s dated block of `arch-ABC-291-closed`, `…8cc32a89` § 1, `…aab9afd1`): **"in force at `ABC-291`'s merge" has no merge left to wait for.** `ABC-291` is NOT MET, and `ADR-0075` stays accepted, not in force. **This line stands, not struck, by the Orchestrator's ruling:** d11 (a) and d12 are not tree lines, so the emitter line stays superseded and this term's ADR still follows d12's pattern. `ABC-291` landed no tool line, so nothing is owed from it, and this term's tool line is its own, at its own merge. "No second set" still binds this term only if he accepts that in this term's own ADR.*
 
 ## Scope
 
@@ -116,6 +118,7 @@ The ADR fixes exact counts before Ready. None is loosened after Ready. Form (b) 
 ## Test notes
 
 1. QE freezes the seam fixtures and the (b) rows before the build.
+   *2026-11-07 (`bapm-terms-after-291`; `…aab9afd1`, `…32c023cc`, `ADR-0075`'s dated block of `arch-ABC-291-closed`): **the freeze is a gate before the build.** This term's build waits for QE's freeze of the seam fixtures and the (b) rows, and the Orchestrator checks this ticket for it before any build dispatch. `ABC-291`'s freeze came after its build (K1 (c)), the fourth such miss. The gate is on the dispatch: it adds no bar and no DoR row, and this note's words stand.*
 2. UAT is owed (production lines); the QE verdict signs it.
 
 ## Size and priority
@@ -127,6 +130,7 @@ The ADR fixes exact counts before Ready. None is loosened after Ready. Form (b) 
 - **The ADR,** then the owner's acceptance. DoR row 10. Its probe runs on the host after `ABC-282`'s A4; it need not wait for `ABC-303` or `ABC-289`,
   only for the host (`ADR-0056` D6's dated line).
 - **Third of the four, after `ABC-292`'s read.**
+  *2026-11-07 (`bapm-terms-after-291`; `…8cc32a89` § 2, `…aab9afd1`): `ABC-291`'s read is played, NOT MET, so this page is **second of the three left, still after `ABC-292`'s read.** QE's freeze goes before its build (test note 1).*
 - **The read queues.** A value-changing merge stales the read after it, so this term's C2′ follows `ABC-303` and `ABC-289`.
   *2026-11-06 (`bapm-lines-1106b`; `…7c297147` § 4 item 2, `…40ef8351`): **met.** `ABC-303` merged at `434fa171`, and `ABC-289`'s recorded outcome, NOT MET on an exact build with nothing merged, meets it. This term's place in the order does not change.*
 - **A bundle with `ABC-293`** (`…a5d74f70`) stays lawful under B1. A term merged inside it can open `ADR-0067`'s third-pull door, and CF1–CF10 reach
@@ -144,7 +148,7 @@ The ADR fixes exact counts before Ready. None is loosened after Ready. Form (b) 
 | 2 | scope and out-of-scope | ✅ scope 1–3; storms, shelter, tuning out |
 | 3 | INVEST | ✅ M; one term |
 | 4 | testable, measurable acceptance | ✅ form (b): seam rows, safety rows, `G2` at the ADR's ratio, `G6`, C2′ ≥ 50.0. Counts owed with the ADR |
-| 5 | dependencies known | ✅ the ADR; third of the four; its read after `ABC-303` and `ABC-289` *(met 2026-11-06, `bapm-lines-1106b`; `…7c297147` § 4)*; the shared files |
+| 5 | dependencies known | ✅ the ADR; third of the four *(2026-11-07, `bapm-terms-after-291`: second of the three left, `ABC-291` NOT MET)*; its read after `ABC-303` and `ABC-289` *(met 2026-11-06, `bapm-lines-1106b`; `…7c297147` § 4)*; the shared files |
 | 6 | NFR triggers with targets | ✅ `G2` at the ADR's ratio; `NFR-005` `G6`; `NFR-008` ≤ 10 s |
 | 7 | test notes | ✅ 1–2 |
 | 8 | size | ✅ M |

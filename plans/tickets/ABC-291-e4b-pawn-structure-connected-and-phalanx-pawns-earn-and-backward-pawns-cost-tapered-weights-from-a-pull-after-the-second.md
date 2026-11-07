@@ -2,7 +2,8 @@
 id: ABC-291
 title: "E4b: pawn structure. Connected and phalanx pawns earn a tapered bonus and backward pawns a tapered penalty, with hand values fixed by a stated rule and judged on its own C2′. First of the four terms on the tuning wait. NOT MET on C2′, 46.0 of 100 against ≥ 50.0, clean, by F4 through CF5. Nothing merged; d11 (d) applies"
 status: dropped
-column: Blocked
+column: Done
+closed: "2026-11-07, CLOSED NOT MET, not merged, not shipped: C2′ 46.0 of 100 against ≥ 50.0, 36 / 44 / 20, clean, ADR-0075 F4 by CF5 (qe-ABC-291 …211fb87a, …6bea8618); not re-played; S′ and the Levels lane not played; NFR-008 UNRESOLVED and moot on this tree; K1 (c) in two halves, never as met; UAT not signed. ADR-0075 accepted, not in force; d11 (d) applies, no second set of values. Settled for Phase 4 by the Orchestrator's ruling (…aab9afd1). main keeps none of it; grugops/ABC-291 (candidate 70d931ab, tip 9e496e4a) and grugops/qe-ABC-291 stay kept, unmerged. Front matter and dated lines by bapm-terms-after-291"
 size: M
 priority: P2
 epic: EPIC-011
@@ -11,6 +12,13 @@ adr: "ADR-0075, accepted by the owner 2026-11-05 (…c1623ae7), in force at this
 ---
 
 # ABC-291: connected, phalanx and backward pawns (E4b)
+
+> **CLOSED NOT MET; A NOT MET SETTLES THIS TICKET; COLUMN DONE; STATUS STAYS `dropped`, 2026-11-07, by BA/PM** (task `bapm-terms-after-291`, records only, at `main` `44f031b7`; nothing run).
+> Sources: the Orchestrator's `…aab9afd1`, `arch-ABC-291-closed` `…8cc32a89` and `…ad069f2f`, and `arch-ABC-301-miss` `…2b3440cf`.
+> - **Phase 4's "settled" reads yes, by the Orchestrator's ruling.** `…2b3440cf` closes Phase 4 when `ABC-272` and `ABC-290`–`ABC-294` settle, and a NOT MET settles this ticket. The ruling names this ticket only. The other five stay open, and which tickets close Phase 4 stays the Orchestrator's.
+> - **Front matter:** column Done, a `closed:` line, status `dropped`, as `ABC-301`'s page reads. The block below says no `closed:` until the close: this is the close. The board card moves to Done with this hop's merge, and that move is the Orchestrator's.
+> - **The block below's in-flight pointers are answered.** `ADR-0075` stays accepted, not in force, and its tree's lines lapse. d11 (a) to (c) and d12 stand, not struck, by the Orchestrator's ruling. The order reads E5 (`ABC-292`), E3b (`ABC-290`), E6 (`ABC-293`). The budget for later terms stays ≤ +0.10 s, the Orchestrator's line, and the Architect's two plain questions go to the owner with `ABC-292`'s ADR. Neither is this page's.
+> - **Not changed:** the verdict and every row of § The read as played, K1 (c)'s two halves, `NFR-008` UNRESOLVED and moot on this tree, d11 (d), and the two kept branches. UAT stays unsigned. **No value, rule, definition, ratio, intent, level or bar moved.** No DoR row moves.
 
 > **NOT MET ON C2′, 46.0 OF 100; F4 BY CF5; NOTHING MERGED; NOT RE-PLAYED; d11 (d) APPLIES; `NFR-008` UNRESOLVED AND MOOT ON THIS TREE, 2026-11-07, by BA/PM** (task `bapm-ABC-291-closed`, records only, at `main` `78f13b30`, `grugops/qe-ABC-291` read at `66ca8de0`, read only; nothing run).
 > Sources: `qe-ABC-291` `…211fb87a`, `…6bea8618`, `…f1d180b8` and `…a207a827`, and the Orchestrator's `…ef659beb`. QE's notes sit only on `grugops/qe-ABC-291`, not on `main`, so they depend on that branch being kept.
@@ -368,6 +376,7 @@ adr: "ADR-0075, accepted by the owner 2026-11-05 (…c1623ae7), in force at this
 - **`ABC-301` closed NOT MET:** the trigger is met. *2026-11-05: "E2's second pull merged or closed" is gone as a wait.*
 - **One at a time on `src/evaluate.ts` / `src/evaluate-params.ts`** with `ABC-272`, `ABC-290`, `ABC-292`–`ABC-294`.
 - *2026-11-07 (`bapm-ABC-291-closed`; `…211fb87a`, `…ef659beb`):* **the waits above are spent.** The ticket read and merged nothing, so `ADR-0075` did not come into force and no value-changing merge stales a later read. OQ-0074-2 stays open, and `ABC-291`'s read went first: the Orchestrator's line to the owner on that stands if he opens a route (`…40ef8351`). This term merged nothing, so it is not on the tree any route would read. `ABC-292` stands where it stood (d11 (d)). What the miss means for the order, the wait and `ADR-0056` D5 is `arch-ABC-291-closed`'s, in flight.
+  *2026-11-07 (`bapm-terms-after-291`; `…8cc32a89` § 2, `…aab9afd1`): answered. Nothing moved by rule: the order reads E5, E3b, E6, tuning waits, and CF1–CF10, FL and Reach stand. This ticket is closed.*
 
 ## `UNKNOWN - verify`
 
@@ -407,3 +416,4 @@ adr: "ADR-0075, accepted by the owner 2026-11-05 (…c1623ae7), in force at this
 *2026-11-06 (`bapm-ABC-291-stop-lines`; `…860a0dbd`): the class question is ruled, class B, F3 as written, and it leaves that line. Row 7 reads 1–5. DoR 10/10, unchanged. Status and column read In Development.*
 *2026-11-06 (`bapm-ABC-291-k1-lines`): DoR 10/10, unchanged. Row 10's A2 (b) fixture is re-found (§ `UNKNOWN - verify`). K1 (c)'s order was missed at dispatch, after Ready, and no row here reads it.*
 *2026-11-07 (`bapm-ABC-291-closed`): the rows stand as the record of what was Ready. The ticket reads NOT MET on C2′, status `dropped`, column Blocked. No DoR row moves.*
+*2026-11-07 (`bapm-terms-after-291`; `…aab9afd1`): closed. Status `dropped`, column Done. No DoR row moves.*
