@@ -76,6 +76,7 @@ build may start on PROPOSED. Nothing here is in force until `ABC-282` merges on 
 | 2026-11-05 | Architect/Design | Status restated as in force. QE-282-l ruled: no decision moves, dated lines under D11 and § Consequences. D12 item 5 written in `ADR-0066` | `arch-ABC-282-close` |
 | 2026-11-05 | Architect/Design | The 19 rows with bundle 1 on: dated lines under D8, D9 and D12 item 4. No decision, bar or production line moves, and F1 and F2 do not fire | `arch-ABC-303-w1-rows` `…0f8a4f82` |
 | 2026-11-06 | Architect/Design | A0 on `ABC-291`'s tree: dated line under D8. No decision, bar or production line moves, and F1 does not fire. Nothing run | `arch-ABC-291-stop` |
+| 2026-11-07 | Architect/Design | `ABC-291` NOT MET and not merged: D8's dated line of `arch-ABC-291-stop` lapses with its tree. No decision, bar, row or production line moves, and F1 does not fire. Nothing run | `arch-ABC-291-closed` |
 
 ## Context
 
@@ -353,6 +354,11 @@ second, so A0 takes this form on `ABC-303`. The rows bind and no decision moves.
 - **D12 item 6 stands:** no row hands a door `softMs`. A0-1's `softMs: 1` read stays on `chooseMove`.
 - **F1 does not fire.** The figures moved because the evaluation did, not because W1 acted.
 - **These lines bind on `ABC-291`'s production files at `63af973e`.** A fix that moves a production line voids them, and the new lines come back to the Architect before they land.
+
+*Dated 2026-11-07 (`arch-ABC-291-closed`, records only at `main` `78f13b30`; nothing run): **the block above lapses with its tree. No row moved, and no decision moves.** `ABC-291` is NOT MET by `ADR-0075` F4 (`…211fb87a`) and did not merge.*
+- **What `main` reads.** `src/uci-session.test.ts` keeps the old column: `D8` cp 45, `D7` cp 43, `D6` cp 87, nodes 10513. A0-1 and A0-2 keep the form of `arch-ABC-303-w1-rows`' block, and `chooseMoveWithoutPawnShape` does not exist. That block is A0's form on `main`.
+- **What the lapsed block keeps.** Its table is what that tree read, and nothing more. "The margin is one clock read" was that tree's. On `main` the bundle's 14 stands.
+- **A later value-changing term** writes its own lines here, as both blocks did. Its figures and its margin come from its own tree. Nothing carries from this block.
 
 ### D9. A1 and A2: fixtures, corpus and clock
 
