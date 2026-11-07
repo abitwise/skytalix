@@ -780,6 +780,8 @@ only, and only on his acceptance. It also sets the pattern `ABC-292`, `ABC-290` 
 *Dated 2026-11-07 (`arch-ABC-291-closed`, records only at `main` `78f13b30`; nothing run): row E4 (E4b).* **`ABC-291` is NOT MET: C2′ 46.0 of 100 against 50.0, clean, `ADR-0075` F4 by CF5** (`…211fb87a`). Nothing merged, and the branch is kept. "`ADR-0075` is ACCEPTED" reads accepted, not in force. Row E4's +20–60 stays an estimate and stays unclaimed, and this read cannot size it: −27.9 ± 61.6 spans 0. E4a stands at 0, so row E4 adds nothing to `main`'s score today.
 d11 (d) now applies, to this term only. "It also sets the pattern" stands as a list for the next ADRs: each states its own lines and he accepts them there, so the list does not wait on `ADR-0075` being in force (its dated block of this task). **No bar moves.**
 
+*Dated 2026-11-07 (`arch-ABC-292`, records only at `main` `b1227f2b`; nothing run): row E5.* **`ADR-0076` is PROPOSED, form (b), and acceptance is the owner's.** The bishop pair and the rook file terms go on one read, on hand values fixed by one rule before any row is read. Outposts split off and wait, by the page's split rule, and per-piece mobility stays `ABC-306`. Row E5's +30–80 stays an estimate for the whole row, and these two terms' share is `UNKNOWN - verify`. Nothing here is in force until his answer and `ABC-292`'s merge. **No bar moves.**
+
 ### D3. Is 3 000 reachable without a neural network?
 
 - **For a classical engine, yes, in principle.** Stockfish 11, the last hand-crafted Stockfish, reads ≈ 3 430 CCRL
