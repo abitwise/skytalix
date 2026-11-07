@@ -963,6 +963,8 @@ bundle meets the trigger. No bar moves, and nothing is fitted.***
 - **The trigger did not fire.** E4b has not merged and cannot. `…e5a5ac0c`'s one clean form now reads E3b, E5 or E6, on its own read or in a bundle.
 - **This is not a miss on row E2.** The cap counts pulls: two are spent, and "a third miss on this row" means a third pull. A term's miss neither spends it nor closes tuning.
 
+*Dated 2026-11-07 (`arch-ABC-292`, records only at `main` `b1227f2b`; nothing run; `ADR-0076` PROPOSED): **"E5" at the door, if he accepts the split. No bar moves, and nothing is fitted.** `ADR-0076` d1 takes outposts off `ABC-292`, so `ADR-0075` d11 (c)'s "each merged part counts" applies. The bishop pair and rook file terms count if they merge, and outposts count only if they merge one day on their own read. Test 4 is unchanged: one door, one fit. Each read is one more draw at the door, by `…8cc32a89` § 2's arithmetic. The reading stays open to overruling at any third-pull call.
+
 ## What would falsify this
 
 | # | clause | what would falsify it | if it fires |
