@@ -28,3 +28,4 @@ Publish: sealed notes (contextRoot = the worktree's .grugops/context, `at` from 
 - **Not written:** the +0.10 s line on the term pages. `…8cc32a89` § 4 gives it to BA/PM when each ADR is written. The owner's two questions have no row yet.
 - **Left (`…ecab6432`):** `ABC-291`'s board card, which moves with this merge; `ABC-286` and `ABC-288`'s pages and cards; "one at a time … with `ABC-291`" on the term pages.
 - **Notes:** `…43c2c47e`, `…ecab6432`.
+- **Path check:** `node tools/grugops/records-path-check.js --base main` exit 0 at `db71432f`, before this last commit.
