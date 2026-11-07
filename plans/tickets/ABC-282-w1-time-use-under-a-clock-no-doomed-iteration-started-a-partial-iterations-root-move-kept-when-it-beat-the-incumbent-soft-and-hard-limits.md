@@ -216,6 +216,8 @@ Ready.
     *Scope 4's row reads 69 705 nodes on the base and 32 165 at the head (depth 7), so `softMs` IS handed in (`…e4b8527a`).*
 
     *2026-11-06 (`bapm-ABC-291-stop-lines`; `…2d2c2bad` § 1, `…0f8a4f82`): **the table above is this ticket's base, and it stays as read.** `ADR-0071` D8: "The rows bind; the numbers are the base's." The session has no door, so A0-3's lines re-pin on a tree that moves them. On `ABC-303`'s they read cp 45 on the four `D8` rows, cp 43 on the `D7` row, and cp 87, nodes 10 513 on `go depth 6`. On `ABC-291`'s they read cp 74, cp 88, and cp 99, nodes 10 614. `ADR-0071` D8's dated lines hold each literal, and `ABC-291`'s land only with its merge. A0-3's sentence and `bestmove c3d5` stand, no row retires, and F1 does not fire.*
+
+    *2026-11-07 (`bapm-ABC-291-closed`; `…211fb87a`, `…ef659beb`): **`ABC-291`'s figures above were for a tree that did not merge.** `ABC-291` is NOT MET on C2′, and its merge will not come on that tree. So cp 74, cp 88, and cp 99, nodes 10 614 sit on `grugops/ABC-291` only, unmerged, and they are no pin on `main`. `main`'s `src/uci-session.test.ts` reads `ABC-303`'s at `78f13b30`: cp 45 on the four `D8` rows, cp 43 on the `D7` row, and cp 87, nodes 10 513 on `go depth 6`. A0-3's sentence and `bestmove c3d5` stand, and no bar moved. How `ADR-0071` D8's dated re-pins read now is `arch-ABC-291-closed`'s, in flight.*
 - **A1 (no doomed iteration; default-lane units on a virtual clock, no real time):**
   - (a) **Given** a virtual clock on which the rule predicts that iteration d + 1 cannot finish before the soft limit,
     **then** the search returns after iteration d, and **0 nodes** of iteration d + 1 are visited.
