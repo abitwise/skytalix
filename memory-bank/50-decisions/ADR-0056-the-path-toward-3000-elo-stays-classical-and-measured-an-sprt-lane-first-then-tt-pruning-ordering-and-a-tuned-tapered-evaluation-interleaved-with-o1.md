@@ -777,6 +777,9 @@ Orchestrator's `…5ec6c124` 5 and `…0edae6fd` 1; `arch-bundle-1` released the
 are fixed before any row is read, and its probe is written and not run. Row E4's +20–60 stays an estimate. d11 (d), "no second set of values after a miss", narrows C2′'s "a changed form may come back" for this term
 only, and only on his acceptance. It also sets the pattern `ABC-292`, `ABC-290` and `ABC-293` copy. **No bar moves.**
 
+*Dated 2026-11-07 (`arch-ABC-291-closed`, records only at `main` `78f13b30`; nothing run): row E4 (E4b).* **`ABC-291` is NOT MET: C2′ 46.0 of 100 against 50.0, clean, `ADR-0075` F4 by CF5** (`…211fb87a`). Nothing merged, and the branch is kept. "`ADR-0075` is ACCEPTED" reads accepted, not in force. Row E4's +20–60 stays an estimate and stays unclaimed, and this read cannot size it: −27.9 ± 61.6 spans 0. E4a stands at 0, so row E4 adds nothing to `main`'s score today.
+d11 (d) now applies, to this term only. "It also sets the pattern" stands as a list for the next ADRs: each states its own lines and he accepts them there, so the list does not wait on `ADR-0075` being in force (its dated block of this task). **No bar moves.**
+
 ### D3. Is 3 000 reachable without a neural network?
 
 - **For a classical engine, yes, in principle.** Stockfish 11, the last hand-crafted Stockfish, reads ≈ 3 430 CCRL
@@ -1689,6 +1692,7 @@ of 10; below that, 10 more games and ≥ 7.0 of 20). Then **the Levels deep lane
   (`…d61479af`). The pay half stays as `…7c297147` § 1 leaves it. `ABC-289`'s read is not played, and the later terms' reads no longer
   wait on it (`ADR-0075`'s Order line). If the owner opens a route on OQ-0074-2, it is ordered against `ABC-291`'s read then. This
   block's reasons stand as written.
+  *Dated 2026-11-07 (`arch-ABC-291-closed`):* `ABC-291`'s read is played and closed, NOT MET, so it went first. A route on OQ-0074-2, if he opens one, is ordered against the next read then.
 
 #### Dated 2026-11-04 (`arch-ABC-303-open`, records only at `main` `c118a5cf`): `ABC-303` § Open 1 and 2, and the moved base. No bar moves
 
@@ -1734,6 +1738,7 @@ at its writing, not a level.
   *Dated 2026-11-06 (`arch-records-1106`; `…28283e48` § 5): superseded by the read. `ABC-303`'s S′ merged at 9 / 1 / 0, 9.0 / 10, so the
   lower edge did not bite. The pool reads 27.5 / 40 = 68.75 %, inside 60–85 %, X = +137.0. This is the 40-game trigger read: no step
   fires, no owner question arises, and E stays 1 810. `ABC-289` adds no S′, so `ABC-291` seals at 1 810.*
+  *Dated 2026-11-07 (`arch-ABC-291-closed`): `ABC-291` sealed at 1 810 and played no S′ (`…a207a827` § 5, `…ef659beb`). Nothing pools: 27.5 / 40 stands, no step fires, and the next read seals at 1 810.*
 - **A step before the seal** is a dated line here, which then governs, and a dated line on `ABC-303`'s page (BA/PM).
 - **A step after the seal does not reach this read.** It plays at the sealed E. An S′ at a superseded E does not pool.
 
@@ -1985,6 +1990,11 @@ and no run is voided for it. The lane is graded as played, and a red is CF7's. Q
 beside it, by class and count, and no verdict rides on them. Each PREREG states this before the first game, in `…28283e48` § 3 (d)'s
 words. It adds no bar and moves no word of CF7 or FL. It does not reach `G6`, K4, K5 or `NFR-008`, which keep their own void lines.
 
+*Dated 2026-11-07 (`arch-ABC-291-closed`, records only at `main` `78f13b30`; nothing run):* **`ABC-291`'s read, under these lines. No bar moves, and no word of CF1–CF10, FL or the Reach line moves.**
+- **Reach.** E4b's read ran under CF1–CF10 and FL, and CF5 ended it. It is now a closed read, which the Reach line does not re-open. E5, E3b and E6 stay reached.
+- **FL governed, with no void.** W was dropped by a recorded line (`…70f8b0c2`) before the first game. The first foreign sample reads 19:38:48Z, about five minutes and 21 games after the 19:33:55Z start. The read was graded as played, largest move 105 / 105 ms, 0 past 150 ms.
+- **What W could and could not have changed.** It could not have changed how this load is graded: its last sentence gives load after the first game to FL. It could have changed the rest. It is a launch condition, so kept, no game starts without his word that the whole host is quiet, which `…70f8b0c2` says he did not give. And a held window is what keeps load off: the held timing stage read 0 foreign vitest samples of 219 (`…024bbd63`). Whether it would have kept this load off, and how load moves a score, stay `UNKNOWN - verify`. Neither is a ground for a void or a re-read. W stays the Orchestrator's, read by read.
+
 ### D6. The order proposed (speed and algorithms interleaved)
 
 Ordered by expected Elo per cost, by file collisions (`ADR-0055` D2), and by what each step needs measured.
@@ -2218,6 +2228,11 @@ changes form, not place.***
 - **The reads queue behind each other.** A value-changing merge stales the read after it, so a term's C2′ follows `ABC-303` and
   `ABC-289`. Its ADR and probe need not wait for them, only for the host.
   *Dated 2026-11-06 (`arch-ABC-291-stop`, records only at `main` `48993089`; owed by `arch-records-1106` `…860a0dbd`; nothing run): `ABC-303` merged at `434fa171`. `ABC-289` is recorded NOT MET on an exact build and stays unmerged (`…7c297147`, `…40ef8351`). So no merge is left to stale a term's read, and the wait this line names is met. The rule stands for the terms: each value-changing merge stales the read after it. `ABC-289` is not closed. OQ-0074-2 is with the owner, and if he opens a route, `ABC-291`'s read goes first or waits, as `ADR-0075` § Consequences' Order line says. No order, value or bar moved.*
+  *Dated 2026-11-07 (`arch-ABC-291-closed`, records only at `main` `78f13b30`; nothing run): **step 3's first term is spent, NOT MET (`…211fb87a`). It holds nothing behind it, and no order, value or bar moved.***
+  - **E5 (`ABC-292`) is next, then E3b (`ABC-290`), then E6 (`ABC-293`).** `ADR-0075` d11 (d): a miss there leaves `ABC-292` where it stands. Each ADR is still owed, and each is his to accept. The order stays the Orchestrator's by this section's reorder rule, with the owner told.
+  - **Item 4:** E4b can no longer open the door. It rests on E5, E3b and E6. This is no miss on row E2, and tuning waits as it did (`ADR-0067`'s dated line of this task).
+  - **The queue:** no read waits. `main`'s `src` and `tools` read as `780d9021`, so the next term's base is `main` as it stands.
+  - **`ABC-289`'s NOT MET is row Q2's.** It counts neither for nor against a term here. OQ-0074-2 stands as `…40ef8351` left it.
 - **What a hand value must show:** the term's page, form (b). Values fixed by a stated rule in its ADR before any row is read,
   which the owner accepts; `ADR-0064` d7's safety rows, `zugzwang.001` among them; `G2` at the ADR's ratio; `G6` under `Q-3K-4` (b);
   C2′ GAIN ≥ 50.0 of 100, since evaluation rows fire at 100 ms; S′; the Levels lane. A miss is not merged and not re-played.

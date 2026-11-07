@@ -127,6 +127,7 @@ Architect/Design (task `arch-owner-answers-1103`, records only, on `grugops/arch
 | 2026-11-05 | Owner | A term merged inside a bundle meets the third-pull trigger ("2. yes"). Every other limit stands | `orch-2026-10-30a` `…0f1ab02e` |
 | 2026-11-05 | Architect/Design | The four tests read for a bundle term. No bar moved | `arch-owner-answers-1105b` |
 | 2026-11-05 | Architect/Design | Three lines on the wait, as accepted with `ADR-0075`: the tool line at a term's merge, `ABC-306`'s route, "E5" at the door. No bar moved | `arch-ABC-291` |
+| 2026-11-07 | Architect/Design | `ABC-291` NOT MET: the three lines stand, the trigger did not fire, E4b leaves the door, and this is no miss on row E2. No bar moved. Nothing run | `arch-ABC-291-closed` |
 
 ## Context
 
@@ -956,6 +957,11 @@ bundle meets the trigger. No bar moves, and nothing is fitted.***
   not model reddens `TUNE_DEEP` at the identity gate. This keeps d5's "`TUNE_DEEP` green at the fit commit" true without a pull. It is not a fit.
 - **`ABC-306` (d11 (b)).** It reaches a fit only on a yes that names it, by a value-identical landing at the shared weight. It would have no read of its own, so test 2 does not pass it by default.
 - **"E5" at the door (d11 (c)).** It names the row, so `ABC-292`'s terms count, and each merged part counts if they split. The Architect's reading, open to overruling at any third-pull call. Asking is still not a yes.
+
+*Dated 2026-11-07 (`arch-ABC-291-closed`, records only at `main` `78f13b30`; nothing run): **`ABC-291` is NOT MET (`ADR-0075` F4, `…211fb87a`). The wait stands as his word left it. No bar moves, and nothing is fitted.***
+- **These three lines stand.** They do not rest on that merge, and `ADR-0075` § Rollback's strike is not taken (its dated block of this task, a reading open to the Orchestrator). `tools/tune` gained nothing, because `main` gained no term.
+- **The trigger did not fire.** E4b has not merged and cannot. `…e5a5ac0c`'s one clean form now reads E3b, E5 or E6, on its own read or in a bundle.
+- **This is not a miss on row E2.** The cap counts pulls: two are spent, and "a third miss on this row" means a third pull. A term's miss neither spends it nor closes tuning.
 
 ## What would falsify this
 
