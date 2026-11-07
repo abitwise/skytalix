@@ -1,3 +1,4 @@
+_Updated: 2026-11-07T20:18:15Z — bapm-terms-after-291 merged; ABC-291 closed to Done; ABC-292 In Design, arch-ABC-292 running._
 _Updated: 2026-11-07T20:10:51Z — arch-ABC-291-closed merged: F4 fired, order E5, E3b, E6, budget ≤ +0.10 s stays; bapm-terms-after-291 closes the pages._
 _Updated: 2026-11-07T19:59:29Z — **ABC-291 NOT MET**, C2′ 46.0 of 100, not re-played; arch- and bapm-ABC-291-closed record it._
 _Updated: 2026-11-07T19:30:13Z — W dropped on the owner's line; qe-ABC-291-games runs C2′, S′, Levels under FL; NFR-008 stays UNRESOLVED._
@@ -1575,7 +1576,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## In Analysis (WIP 0/2)
 
 
-## In Design (WIP 0/2)
+## In Design (WIP 1/2)
+- [ABC-292] E5 piece terms: arch-ABC-292 writes the owed ADR, PROPOSED; no build before his acceptance and QE's freeze.
 
 
 ## Ready for Dev (WIP 0/6)
@@ -1669,6 +1671,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready to Release (WIP 0/4)
 
 ## Done (WIP unlimited)
+- [ABC-291] E4b pawn structure: closed NOT MET, C2′ 46.0 of 100 (…211fb87a), F4; not merged, d11 (d) applies. Branches grugops/ABC-291, grugops/qe-ABC-291 kept.
 - [ABC-303] Bundle 1, ABC-286 + ABC-288: merged 434fa171. C2′ 55.5, S′ 9.0, Levels 58/58, P6, P7 met; QE MET …ebefbfa2, B4 …9e2facfa, UAT signed. Gates 2 734 and bundle, Levels, engine, uci deep lanes green.
 - [ABC-305] Tools-only landing from b297ab89: merged d00164ce. A5 MET, QE PASS …482f3e67, UAT waived by A3. Gates 2 710, tune 25, passer 29 green; dd88560f out of main.
 - [ABC-307] Nine rows to deep lanes: merged bce24018. A9 graded 9.085 s, H − B −0.350 s, QE PASS …bec57958, UAT waived. Gates and four deep lanes green. A10 rides in `secnfr-ABC-307-a10`.
@@ -1987,7 +1990,6 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 - [ABC-142] `npm test` keeps the failing test's name on disk when the console is truncated  (BA/PM, XS, P2, since: 2026-10-10, DoR 10/10; cut from QE-141-a + QE-093-e, two unnamed one-test flakes) **2026-10-10: cut → Ready → Ready for Dev → pulled → In Development (pass-through); build `ticket-to-pr-ABC-142`; zero `src/` expected.** **2026-10-10: engineer STOPPED pre-code — premise stale: `src/cli.test.ts:1665–1686` (ABC-042 A10) pins `scripts.test`; A5 forbade the one test line. Orchestrator routes option 1 (update the pin, zero production lines) → BA/PM amend `bapm-amend-abc142-2026-10-10`, then the build resumes.** **2026-10-10: A5 amended (merged `a559ca34`, DoR 10/10; new A6 keeps the pin exact) → build resumed.** **2026-10-10: BUILT `41abc389`/`ab8d0088`: A1–A6 met; 53/1680; `.test-results/last-run.json` names the failing test even through `| tail -3`. One deviation: vitest adds one console line (`JSON report written to …`) — Orchestrator reads it as acceptable IF no console consumer breaks (QE to verify) → In Review, QE `qe-ABC-142`.** **2026-10-10: QE PASS_WITH_GAPS (`8b0685de`; no console consumer breaks — the extra `JSON report written to …` line is ACCEPTED by the Orchestrator) → merged `addbc328` → Done (UAT WAIVED: test-only `src/`). Follow-ups next session (BA/PM): QE-142-a MEDIUM (unhandled error → exit 1 but file says success), QE-142-b/c LOW.**
 
 ## Blocked (visible, time-tracked)
-- [ABC-291] E4b pawn structure: NOT MET, C2′ 46.0 of 100 (…211fb87a), F4 by CF5; not re-played; d11 (d) applies. Branches grugops/ABC-291 and grugops/qe-ABC-291 kept, unmerged. Back to BA/PM.
 - [ABC-289] Q2 delta pruning: NOT MET on an exact build …7c297147, DP2 red with P4 in. Branch b42706b3 kept, unmerged. OQ-0074-2 with the owner; blocks nothing.
 - ~~[ABC-283]~~ unblocked 2026-11-04T14:25Z (K3). Was: mate floor (ADR-0064 d7) lost on KRK by the history part (se-ABC-283 …0b0b135f); SEE ordering and aspiration clean. → arch-ABC-283-mate (…19583086).
 - [ABC-266] TH-2: Lazy SMP worker pool behind UCI Threads (default 1); read Threads N vs Threads 1 as a hardware gain (EPIC-011 threads; size: L; P2; DoR 9/10 — ADR amending ADR-0044 D3/D5 owed; after ABC-265) **2026-11-02 PARKED (Orchestrator, on evidence): D12 MISS and re-proposal NO WIN (…b6305641) — plain pools run in lockstep (depth 7 = 7); only skip+deeper+perturbation adds a ply and it costs move quality. Threads stay 1. Re-open: owner-funded ~30 min probe (≥ 60 positions, ≥ 1 s load windows) or a new premise.**
