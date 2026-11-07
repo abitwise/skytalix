@@ -1,3 +1,4 @@
+_Updated: 2026-11-07T20:37:55Z — ADR-0076 PROPOSED merged; acceptance and four questions with the owner; ABC-292 stays In Design._
 _Updated: 2026-11-07T20:18:15Z — bapm-terms-after-291 merged; ABC-291 closed to Done; ABC-292 In Design, arch-ABC-292 running._
 _Updated: 2026-11-07T20:10:51Z — arch-ABC-291-closed merged: F4 fired, order E5, E3b, E6, budget ≤ +0.10 s stays; bapm-terms-after-291 closes the pages._
 _Updated: 2026-11-07T19:59:29Z — **ABC-291 NOT MET**, C2′ 46.0 of 100, not re-played; arch- and bapm-ABC-291-closed record it._
