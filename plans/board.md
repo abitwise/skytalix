@@ -1,3 +1,4 @@
+_Updated: 2026-11-07T19:30:13Z — W dropped on the owner's line; qe-ABC-291-games runs C2′, S′, Levels under FL; NFR-008 stays UNRESOLVED._
 _Updated: 2026-11-07T10:10:22Z — owner: route (a), games first on ABC-291; W asked; NFR-008 stays UNRESOLVED._
 _Updated: 2026-11-06T22:56:46Z — qe-ABC-291-where done; NFR-008 route with the owner: games first, moved leg, or rows. ABC-291 waits._
 _Updated: 2026-11-06T22:44:22Z — arch-ABC-291-n8 merged: rows alone reach only the edge; qe-ABC-291-where reads QE's run files; owner's call follows._
