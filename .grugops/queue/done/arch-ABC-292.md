@@ -34,3 +34,4 @@ Publish: sealed notes (contextRoot = the worktree's .grugops/context, `at` from 
 - **Flagged, not ruled alone:** `ABC-083` A4's first row and A3 (b) cannot hold as written on any exact build. I read both as lost fixture properties, re-found in QE's freeze, with no bar moved. If that reads as a bar loosened, it comes back before the seal.
 - **Stopped at:** any `NFR-008` figure above +0.10 s. None is proposed.
 - **Owed:** the Orchestrator: `…b8d265fc` § For the Orchestrator. BA/PM, after his answer: `ADR-0076` § Consequences.
+- **Path check:** `node tools/grugops/records-path-check.js --base main`, clean, exit 0, before this commit.
