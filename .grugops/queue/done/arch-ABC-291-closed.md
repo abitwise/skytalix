@@ -27,3 +27,4 @@ Publish: sealed notes (contextRoot = the worktree's .grugops/context, `at` from 
 - **4 (the budget): stopped at any figure above +0.10 s.** That moves a bar, and none is proposed. The question waits for `ABC-292`'s ADR. `…61a939d3`'s table started from 9.30 s; `main` sits near 9.13 s, restated in `…8cc32a89`.
 - **For the owner, two plain questions, with `ABC-292`'s ADR, in `…8cc32a89`:** whether the pawn terms may return at the same numbers in a bundle (recommended no); whether a later term's games may go first if it reads over budget (recommended yes). Neither is urgent.
 - **Owed:** the Orchestrator: `…8cc32a89` § For the Orchestrator, four items. BA/PM: `ABC-290`, `ABC-292`, `ABC-293` and `ABC-306` read "in force at `ABC-291`'s merge", outside `bapm-ABC-291-closed`'s fence.
+- **Path check:** `node tools/grugops/records-path-check.js --base main` exit 0 at `4fb2b47c`, before this last commit.
