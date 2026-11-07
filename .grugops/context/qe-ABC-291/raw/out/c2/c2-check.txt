@@ -1,0 +1,5 @@
+pgn games 100; skytalix W/L/D 36/44/20; unfinished 0; score 46.0; terminations {'none': 100}; plies max 254
+finished lines 100
+bad finished lines 0
+any log line (not engine info) matching 0
+warnings 0
