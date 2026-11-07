@@ -29,3 +29,4 @@ Publish: sealed notes (contextRoot = the worktree's .grugops/context, `at` from 
 - **One addition beyond the brief's words:** the title gains the outcome at its end, as `ABC-289`'s does (`…406b2739` J1).
 - **Left stale, outside the list (`…017e36a9`):** `EPIC-011` rows 57, 59, 44 and Phases row Q2; the pages of `ABC-290`, `ABC-292`, `ABC-293`.
 - **Notes:** `…406b2739`, `…017e36a9`.
+- **Path check:** `node tools/grugops/records-path-check.js --base main` exit 0 at `c0c547a6`, before this last commit.
