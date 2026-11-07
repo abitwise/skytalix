@@ -47,6 +47,7 @@ The ADR fixes exact counts before Ready. None is loosened after Ready.
   change and one dated line beside `ADR-0056` D2's supersession, since it is form (a) in substance. It would have no read of its own, so it fails `ADR-0067` test 2 as written: his yes must name it, or it stays
   out of the free set. Whether the tracer's single `clamp(W · m)` fits a weight per piece is `UNKNOWN - verify`, that ADR's. **So the re-open trigger's "a third pull he has said yes to" reads "a yes that names
   this term" on this route; the ADR holds.***
+  *2026-11-07 (`bapm-terms-after-291`; `ADR-0075`'s dated block of `arch-ABC-291-closed`, `…8cc32a89` § 1, `…aab9afd1`): **"in force at `ABC-291`'s merge" has no merge left to wait for.** `ABC-291` is NOT MET, and `ADR-0075` stays accepted, not in force. **d11 (b) stands, not struck, by the Orchestrator's ruling,** so the route above stays this page's and the struck words do not return. The hold and the re-open trigger are unchanged. d11's readings stay open to overruling at any third-pull call.*
 
 ## NFR triggers
 
@@ -56,6 +57,7 @@ The ADR fixes exact counts before Ready. None is loosened after Ready.
 ## Test notes
 
 1. QE freezes the seam fixtures and the rows before the build.
+   *2026-11-07 (`bapm-terms-after-291`; `…aab9afd1`, `…32c023cc`, `ADR-0075`'s dated block of `arch-ABC-291-closed`): **the freeze is a gate before the build.** This term's build waits for QE's freeze of the seam fixtures and the rows, and the Orchestrator checks this ticket for it before any build dispatch. `ABC-291`'s freeze came after its build (K1 (c)), the fourth such miss. The gate is on the dispatch: it adds no bar and no DoR row, and this note's words stand.*
 2. UAT is owed (production lines); the QE verdict signs it.
 
 ## Size and priority
