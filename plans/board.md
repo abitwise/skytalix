@@ -1,3 +1,4 @@
+_Updated: 2026-11-07T20:10:51Z — arch-ABC-291-closed merged: F4 fired, order E5, E3b, E6, budget ≤ +0.10 s stays; bapm-terms-after-291 closes the pages._
 _Updated: 2026-11-07T19:59:29Z — **ABC-291 NOT MET**, C2′ 46.0 of 100, not re-played; arch- and bapm-ABC-291-closed record it._
 _Updated: 2026-11-07T19:30:13Z — W dropped on the owner's line; qe-ABC-291-games runs C2′, S′, Levels under FL; NFR-008 stays UNRESOLVED._
 _Updated: 2026-11-07T10:10:22Z — owner: route (a), games first on ABC-291; W asked; NFR-008 stays UNRESOLVED._
