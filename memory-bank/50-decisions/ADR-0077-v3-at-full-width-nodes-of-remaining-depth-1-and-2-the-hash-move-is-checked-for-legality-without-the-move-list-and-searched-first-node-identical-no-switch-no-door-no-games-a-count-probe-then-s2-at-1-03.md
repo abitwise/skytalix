@@ -6,7 +6,13 @@ id: ADR-0077
 
 ## Status
 
-**PROPOSED 2026-11-08.** Recorded by Architect/Design (task `arch-ABC-298`, records only, on `grugops/arch-ABC-298` from `main` `36baff11`, `src/` tree `bba42fb7`).
+**ACCEPTED 2026-11-08 by the owner. In force only at `ABC-298`'s merge.** Recorded by Architect/Design (task `arch-ABC-298-accept`, records only, on `grugops/arch-ABC-298-accept` from `main` `3458e31c`). Nothing was run.
+- **His word, verbatim** (`orch-2026-10-30a` `…44810861`): *"accept ADR-0077 ; yes"*. Question 1, accept this ADR: yes. Question 2, a stop or a miss ends V3: yes. Both were the recommendations he was shown (`…b517ced2`).
+- **What it settles:** d1–d12 as written. **No gate, form, value, bar, spread rule, stop rule or order step changes with this acceptance.** The count probe stays written and not run.
+- **Question 2 is his ruling now.** A count-probe STOP (F5), a miss on SG3 (F4) or identity not kept (d12, F2) ends V3. No wider form without a new ADR and his word. See d12's dated line.
+- **d9's order, step 2:** this status, the decision log and the dated lines at d12 and `ADR-0056` D2 (row V3) are the Architect's half. `ABC-298`'s page is BA/PM's half (`bapm-ABC-298-accept`). Step 3, the count probe (`arch-ABC-298-probe`), comes next.
+
+*As proposed:* **PROPOSED 2026-11-08.** Recorded by Architect/Design (task `arch-ABC-298`, records only, on `grugops/arch-ABC-298` from `main` `36baff11`, `src/` tree `bba42fb7`).
 **Nothing was run:** no test, build, engine, probe, profile or game. Every figure below is quoted from a named record or is arithmetic on `src/` at that tree. Anything that needs a reading is marked `UNKNOWN - verify`.
 
 - **Acceptance is the owner's.** This is a new ADR, as `ABC-298`'s front matter allows (reading (b)). His questions are § The owner's questions. It is not in force until `ABC-298` merges.
@@ -46,6 +52,8 @@ id: ADR-0077
 | date (UTC) | by | what | record |
 |---|---|---|---|
 | 2026-11-08 | Architect/Design | PROPOSED: the form with the depth-1–2 gate, the legality seam, the identity duty, captures-first out, SG0–SG3 with SG3's bar and spread rule, the count probe and its stop rule, no games, the order with the freeze first, `kingExposure` out, `NFR-008` line, the stop. Nothing run | `arch-ABC-298` |
+| 2026-11-08 | Owner | ACCEPTED ("accept ADR-0077 ; yes"), in force only at `ABC-298`'s merge. Question 1 yes; question 2 yes: a count-probe STOP, an SG3 miss or identity not kept ends V3, and no wider form comes without a new ADR and his word | `orch-2026-10-30a` `…44810861` |
+| 2026-11-08 | Architect/Design | Status and this log. Dated lines at d12 (his question 2) and in `ADR-0056` D2, row V3. No gate, form, value, bar, spread rule, stop rule or order step moved. Nothing run | `arch-ABC-298-accept` |
 
 ## Context
 
@@ -301,6 +309,7 @@ At a node where the hash move exists and does not cut off, V3 pays for the check
       - "Cannot be kept" means an SG1 or SG2 row that reads red after a defect check, where no fix inside d1 and d2 makes it green.
       - A fix that changes the order, the keys, the gate or which moves are searched is outside d1. So it is a stop, not a fix.
       - The probe's STOP closes V3 the same way.
+      - *Dated 2026-11-08 (`arch-ABC-298-accept`; his word `…44810861`, question 2, "yes"): **the stop is his ruling.** A count-probe STOP (d9, F5), a miss on SG3 (d7, F4) or identity not kept (above, F2) ends V3. **No wider form follows without a new ADR and his word:** not captures before quiets (d4), not the hash move first at remaining depth 3 or more (d1's gate), and not the value-changing staged generator (§ Alternatives). A VOID or VOID-LOAD reading is not a miss and may be re-read as d7 says, which is what his question 2 told him ("a reading spoiled by other programs running is not a miss"). No gate, bar or order step moved.*
 
 ## The pins this ticket moves
 
