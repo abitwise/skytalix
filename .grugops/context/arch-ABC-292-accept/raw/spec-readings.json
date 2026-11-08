@@ -1,0 +1,7 @@
+{ "refs": ["arch-ABC-292-accept"],
+  "notes": [
+    { "kind": "observation",
+      "confidence": "high on what the records hold; items 1, 3 and 5 are readings of the brief and his word, open to the Orchestrator's overruling; nothing run",
+      "bodyFile": "notes/note-readings.md",
+      "refs": ["arch-ABC-292-accept", "ABC-292", "ADR-0076", "ADR-0056", "ADR-0067", "ADR-0074", "ADR-0075", "ADR-0024", "ABC-289", "OQ-0074-2"] }
+  ] }
