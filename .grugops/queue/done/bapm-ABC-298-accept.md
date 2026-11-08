@@ -25,3 +25,4 @@ Publish: sealed notes (contextRoot = the worktree's .grugops/context, `at` from 
 - **3 (`EPIC-011`):** Phases rows P1 and V3; § Tickets rows 36 and 50; § Owner questions: this round answered (`Q-3K-12` option 2, P1 skipped, V3 accepted), `Q-3K-12` struck, four rows born answered (`ADR-0060` L6 q1 and q4, `ADR-0077` q1 and q2). Open now: Q-3K-6, Q-3K-8 and the Q-3K-1 wording row.
 - **Left (`…8247500c`):** `ABC-298`'s board card text; the stop's reach over `ABC-306` and E7, unanswered and not a row; `ADR-0077` d8's "400-game" against `ABC-299`'s 200 games, for the Architect; `EPIC-011` § Dependencies' search-side line still says `ABC-298` waits on its ADR.
 - **Notes:** `…2a5572ff`, `…8247500c`.
+- **Path check:** `node tools/grugops/records-path-check.js --base main` exit 0 at `104b7c9f`, before this last commit.
