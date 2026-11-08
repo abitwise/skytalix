@@ -12,6 +12,17 @@ adr: "owed (the Architect's), when the hold lifts: a new ADR on main's tapered e
 
 # ABC-308: outposts (E5c)
 
+> **HELD UNDER THE OWNER'S STOP ON HAND VALUES; THE OUTPOSTS LINE, RULED, 2026-11-08, by BA/PM** (task `bapm-ABC-292-closed`, records only, at `main` `6b8dd230`; nothing run). Sources: the
+> Orchestrator's `…e63ff24f` and `…5bc9e701`, `arch-ABC-292-probe` `…22e36b63`, and the owner's ruling `…23d30c72`.
+> - **The outposts line, owed from `…e63ff24f`:** the Orchestrator ruled that **the stop covers outposts on hand values.** The Orchestrator had asked the owner "if this term misses, is that the stop for hand
+>   values?" and the owner agreed. Outposts on hand values are on that path. A re-open inside a tuning pull would not be a hand-valued term, but that pull's door needs a merged term. This is the
+>   Orchestrator's reading of the owner's words, not a new question. The banner below's "not ruled on any record" is answered by it.
+> - **The stop has fired.** `ABC-292` missed at its probe (`ADR-0076` d13 rule 2, a d14 (c) miss). So this page does not re-open on hand values without his new word. No term has merged, so no
+>   third-pull door is open, and the pull route is moot for now.
+> - **`ADR-0076` d14 (c) still does not bar outposts,** which have not been read. The stop is his ruling, not d14 (c), and it holds the build, not the page.
+> - **This page stands, and nothing on it moves:** no value, rule, bar or DoR row. Backlog, held, DoR 9/10. What comes next on the evaluation side is his question, open as `Q-3K-12` on `EPIC-011`
+>   § Owner questions, asked on the Architect's options read (`arch-ABC-292-closed`). A board card change, if any, is the Orchestrator's.
+
 > **Split from `ABC-292` 2026-11-08 by BA/PM: DoR 9/10, Backlog, HELD, NO BUILD** (task `bapm-ABC-292-accept`, records only, at `main` `6eaeee01`; nothing run). Source: `ADR-0076` d1,
 > accepted by the owner (`orch-2026-10-30a` `…23d30c72`): "The split rule fires … BA/PM cuts outposts as a held page in `ABC-306`'s form." The id was checked free on every local ref
 > and every worktree at the cut. "E5c" follows `ABC-292`'s split rule (E5a…E5d), with E5d already `ABC-306`.
@@ -22,6 +33,7 @@ adr: "owed (the Architect's), when the hold lifts: a new ADR on main's tapered e
 > - **Re-open trigger:** a yes to a third pull that names it, or a case of its own the Architect records. Neither exists today. **No date.** Nothing here rules that it will never come.
 > - **The owner's stop ruling** (`…23d30c72`) names `ABC-290` and `ABC-293`, not this page. `ADR-0076` d14 (c) does not bar outposts, which have not been read. **Whether a re-open on
 >   hand values sits on "the hand-valued path" after a miss on `ABC-292` is not ruled on any record**, and this page does not rule it: it is the Orchestrator's to read, or the owner's.
+>   *2026-11-08 (`bapm-ABC-292-closed`; `…e63ff24f`): **ruled by the Orchestrator: the stop covers it on hand values** (the banner above).*
 > - **The board move is the Orchestrator's.**
 
 ## Problem
@@ -68,6 +80,7 @@ The ADR fixes exact counts before Ready. None is loosened after Ready.
 
 - **The re-open trigger above. The ADR.** DoR row 10.
 - **Not on `ABC-292`:** nothing there waits on this page, and this page waits on nothing there except where the owner's stop ruling may reach it (the banner).
+  *2026-11-08 (`bapm-ABC-292-closed`; `…e63ff24f`, `…22e36b63`): it reaches it on hand values, and it has fired. Held for his new word.*
 - **One at a time on `src/evaluate.ts` / `src/evaluate-params.ts`** with `ABC-272`, `ABC-290`, `ABC-292`, `ABC-293`, `ABC-294`, `ABC-306`.
 
 ## Definition of Ready
