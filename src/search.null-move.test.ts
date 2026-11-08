@@ -373,10 +373,17 @@ describe("both recursions try the null move through the predicate, at null-windo
         path,
       ).toHaveLength(1);
       expect(flags.filter((flag) => flag === "false").length, path).toBe(flags.length - 1);
-      // The cut: beta, never the null score, and no table store between the gate and the moves.
+      // The cut: beta, never the null score, and no table store in the null move's block. The one store between it and the moves is the hash move's cutoff (ADR-0077 d1 step 5, d3 item 10).
       expect(flat, path).toContain("if (nullScore >= beta) return beta;");
       const block = flat.slice(flat.indexOf(`if (${on} &&`), flat.indexOf("legalMoves(position);"));
-      expect(block, path).not.toContain("storeEntry(");
+      const v3 = block.indexOf("const gated =");
+      expect(block.indexOf("if (nullScore >= beta) return beta;"), path).toBeGreaterThan(-1);
+      expect(v3, path).toBeGreaterThan(block.indexOf("if (nullScore >= beta) return beta;"));
+      expect(block.slice(0, v3), path).not.toContain("storeEntry(");
+      expect(block.match(/storeEntry\(/g) ?? [], path).toHaveLength(1);
+      expect(block.slice(v3), path).toContain(
+        `storeEntry(key, ${depth}, boundOf(hashScore, alpha, beta), hashScore, ply, hashFirst); return hashScore;`,
+      );
       expect(block, path).not.toMatch(/return nullScore/);
     });
   }

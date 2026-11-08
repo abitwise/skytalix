@@ -259,8 +259,14 @@ describe("ABC-283 (h) — the history table (ADR-0063 decisions 1-5)", () => {
     expect(engine).toContain(
       "if (alpha >= beta) { if (budget.history) { recordHistoryCutoff( position, list, index - 1, remaining, futile, previousCut, firstSkipped, ); } budget.killers.record(ply, move); break; }",
     );
-    expect(search.match(/recordHistoryCutoff\(/g)).toHaveLength(2); // the declaration and negamax
-    expect(engine.match(/recordHistoryCutoff\(/g)).toHaveLength(1);
+    expect(search.match(/recordHistoryCutoff\(/g)).toHaveLength(3); // the declaration, the loop's cutoff, the hash move's cutoff (ADR-0077 d3 item 10)
+    expect(engine.match(/recordHistoryCutoff\(/g)).toHaveLength(2); // the loop's cutoff, the hash move's cutoff
+    expect(search).toContain(
+      "if (prune && Math.max(alpha, hashScore) >= beta) { if (switches.history) { HASH_CUTTER[0] = hashFirst; recordHistoryCutoff(position, HASH_CUTTER, 0, depth, false, previousCut); } killers.record(ply, hashFirst); storeEntry(key, depth, boundOf(hashScore, alpha, beta), hashScore, ply, hashFirst); return hashScore; }",
+    );
+    expect(engine).toContain(
+      "if (Math.max(alpha, hashScore) >= beta) { if (budget.history) { HASH_CUTTER[0] = hashFirst; recordHistoryCutoff(position, HASH_CUTTER, 0, remaining, false, previousCut); } budget.killers.record(ply, hashFirst); storeEntry(key, remaining, boundOf(hashScore, alpha, beta), hashScore, ply, hashFirst); return hashScore; }",
+    );
     expect(search).toContain(
       "if (switches.table) clearTable(); if (switches.history) clearHistory(switches.countermove);",
     );
