@@ -1,16 +1,21 @@
 ---
 id: ABC-288
 title: "O2c: the countermove. Quiet moves are also ordered by the move that answered the opponent's last move, on top of the history table, behind a test-only off-door pair. ADR-0073 ACCEPTED over a missed premise, form C1; built and read in bundle 1 (ABC-303)"
-status: backlog
-column: Backlog
+status: done
+column: Done
 size: M
 priority: P3
 epic: EPIC-011
 feature: —
-adr: "ADR-0073 ACCEPTED 2026-11-04 by the owner's word, OVER A MISSED PREMISE (OQ-0073-1, option (a); orch-2026-10-30a …3e73f9f9; Status line arch-owner-answers-1104b …88ca95bd). Form C1, the countermove alone; CH3 stays missed and F1 stays fired. Not in force until bundle 1 (ABC-303) merges on its read; on NOT MET, B6 returns it to PROPOSED, premise not met, and this page to held. (Was: PROPOSED, premise not met; arch-bundle-1.)"
+adr: "ADR-0073 ACCEPTED 2026-11-04 by the owner's word, OVER A MISSED PREMISE (OQ-0073-1, option (a); orch-2026-10-30a …3e73f9f9; Status line arch-owner-answers-1104b …88ca95bd). Form C1, the countermove alone; CH3 stays missed and F1 stays fired. Not in force until bundle 1 (ABC-303) merges on its read; on NOT MET, B6 returns it to PROPOSED, premise not met, and this page to held. (Was: PROPOSED, premise not met; arch-bundle-1.) 2026-11-08 (bapm-ABC-292-accept): delivered by ABC-303, merged 434fa171; ADR-0073 IN FORCE on main as a part of bundle 1 (ADR-0073 § Status, arch-ABC-303-b5 …28283e48); B6 did not fire"
 ---
 
 # ABC-288: the countermove (O2c)
+
+> **DONE 2026-11-08: DELIVERED BY `ABC-303` (MERGED `434fa171`), by BA/PM** (task `bapm-ABC-292-accept`, records only, at `main` `6eaeee01`; nothing run). Source: the Orchestrator's
+> ruling in the brief `bapm-ABC-292-accept`, item 5. O2c was built and read only as `ABC-303`, bundle 1, which merged at `434fa171` on QE's verdict `…ebefbfa2` (C2′ 55.5 / 100); `ADR-0073` is in
+> force on `main` as a part of bundle 1, and B6 did not fire (`arch-ABC-303-b5` `…28283e48`). The credit is the bundle's: no reading isolates this part's share. Front matter reads Done, as
+> `ABC-233`'s did for `ABC-283`. Nothing else on this page moves. The board card's move is the Orchestrator's.
 
 > **`ADR-0073` ACCEPTED OVER A MISSED PREMISE (THE OWNER, OQ-0073-1, OPTION (a)); THE PAGE NARROWS TO THE COUNTERMOVE; IT STAYS A
 > DESIGN PAGE; THE BUILD AND THE READ ARE `ABC-303`, 2026-11-04, by BA/PM** (task `bapm-bundle-1-cut`, records only, at `main` `3ad21218`;
@@ -160,4 +165,4 @@ The ADR fixes exact counts and bars before Ready. None is loosened after Ready.
 
 ~~**DoR 9/10. Backlog, held.**~~
 **DoR 10/10 as a design page** (2026-11-04, `bapm-bundle-1-cut`). `ABC-303` carries the Ready state; this page is not pulled on its own. The
-board move is the Orchestrator's.
+board move is the Orchestrator's. *2026-11-08 (`bapm-ABC-292-accept`): **Done, delivered by `ABC-303`** (merged `434fa171`).*

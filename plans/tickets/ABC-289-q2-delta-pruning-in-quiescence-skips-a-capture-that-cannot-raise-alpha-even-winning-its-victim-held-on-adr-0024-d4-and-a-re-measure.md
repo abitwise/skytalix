@@ -1,8 +1,9 @@
 ---
 id: ABC-289
-title: "Q2: delta pruning in quiescence. Out of check, a capture is skipped when the stand-pat score plus its victim's value and 200 cp cannot raise alpha, and the skip raises the node's value to that bound, behind a test-only off-door pair. NOT MET on an exact build: with P4 in the tree, DP2 reads drift 34 cp against 30 and G1 53 / 58 against 54. Nothing merged; OQ-0074-2 open"
+title: "Q2: delta pruning in quiescence. Out of check, a capture is skipped when the stand-pat score plus its victim's value and 200 cp cannot raise alpha, and the skip raises the node's value to that bound, behind a test-only off-door pair. NOT MET on an exact build: with P4 in the tree, DP2 reads drift 34 cp against 30 and G1 53 / 58 against 54. Nothing merged. OQ-0074-2 answered (a): closed NOT MET"
 status: dropped
-column: Blocked
+column: Done
+closed: "2026-11-08, CLOSED NOT MET on OQ-0074-2 (a), the owner's word (orch-2026-10-30a …23d30c72): not merged, not shipped. With P4 in the tree, DP2 read drift 34 cp against 30 and G1 53 / 58 against 54, on an exact build (…7c297147, …40ef8351); DP4 not played; no S′. ADR-0074 accepted, not in force. Routes (b) to (d) not taken. main keeps none of it; grugops/ABC-289 (b42706b3) stays kept, unmerged. Front matter and dated lines by bapm-ABC-292-accept"
 size: S
 priority: P3
 epic: EPIC-011
@@ -11,6 +12,15 @@ adr: "ADR-0074 ACCEPTED 2026-11-04 (the owner, OQ-0074-1; orch-2026-10-30a …3e
 ---
 
 # ABC-289: delta pruning in quiescence (Q2)
+
+> **CLOSED NOT MET ON OQ-0074-2 (a); NOTHING MERGED; `grugops/ABC-289` KEPT, UNMERGED; COLUMN DONE; STATUS STAYS `dropped`, 2026-11-08, by BA/PM** (task `bapm-ABC-292-accept`, records only,
+> at `main` `6eaeee01`; nothing run). Source: the owner's "agree" to the Orchestrator's recommendation (a) (`orch-2026-10-30a` `…23d30c72`): "`ABC-289` closes NOT MET. Branch `grugops/ABC-289` kept,
+> unmerged."
+> - **The verdict and every row below stand as written.** The build was exact, DP2 is red on the joint tree, and DP4 was not played. Nothing was merged, and nothing is re-played.
+> - **Routes (b) to (d) are not taken.** Only he could open them, and he chose (a). The block below's "the ticket closes on (a) or on no answer" is met.
+> - **Front matter:** column Done and a `closed:` line, status `dropped`, as `ABC-291`'s page reads. The block below held both for the close: this is the close. The board card moves with this
+>   hop's merge, and that move is the Orchestrator's.
+> - **`ADR-0074` stays accepted, not in force.** Its § Status is the Architect's. The block below's "Re-open" line is not touched here. **No value, rule, bar or DoR row moved.**
 
 > **NOT MET ON AN EXACT BUILD; NOTHING MERGED; `b42706b3` KEPT; OQ-0074-2 OPEN, 2026-11-06, by BA/PM** (task `bapm-lines-1106b`, records only, at `main` `bc2bb953`; nothing run). Sources: `arch-ABC-289-joint` `…7c297147` and `…d61479af`, the Orchestrator's
 > `…40ef8351`, and `se-ABC-289` `…0e380b06`, `…4ad7c049` and `…8b80f592`, which sit on `grugops/ABC-289`.
@@ -220,7 +230,7 @@ The re-measure and the ADR fix exact counts before Ready. None is loosened after
     F2 of `ADR-0074` governs.
   - **`ABC-282`, in either case:** whichever of W1 and this ticket lands second re-reads b = 2.3 by P1's method and reports it
     to the Orchestrator. Any change to b is its own ticket.
-- *2026-11-06 (`bapm-lines-1106b`; `…40ef8351`, `…7c297147` § 4):* **OQ-0074-2** (the owner's) is open and blocks nothing. `ABC-291` does not wait on it: `…69ee96e7`'s `ABC-289` clause is lifted, and this ticket's recorded outcome meets the read queue on `ABC-291`, `ABC-292`, `ABC-290` and `ABC-293`.
+- *2026-11-06 (`bapm-lines-1106b`; `…40ef8351`, `…7c297147` § 4):* **OQ-0074-2** (the owner's) ~~is open and blocks nothing~~ *2026-11-08 (`bapm-ABC-292-accept`; `…23d30c72`): **answered (a):** the ticket closes NOT MET.* `ABC-291` does not wait on it: `…69ee96e7`'s `ABC-289` clause is lifted, and this ticket's recorded outcome meets the read queue on `ABC-291`, `ABC-292`, `ABC-290` and `ABC-293`.
 
 ## Definition of Ready
 
@@ -240,4 +250,4 @@ The re-measure and the ADR fix exact counts before Ready. None is loosened after
 ~~**DoR 9/10. Backlog, held** (2026-11-04: on the Architect's re-measure over Q1 and its ADR only).~~
 **DoR 10/10: Ready** (2026-11-04, `bapm-lines-1104`). ~~The merge waits on OQ-0074-1 and DP4.~~ *2026-11-04 (`bapm-bundle-1-cut`): the build
 waits on `ABC-303`'s merge or `failed-attempt`; the merge waits on DP4.* The column move and the build slot are the
-Orchestrator's. *2026-11-06 (`bapm-lines-1106b`): the rows stand as the record of what was Ready. The build was exact, and the ticket reads NOT MET, with OQ-0074-2 open.*
+Orchestrator's. *2026-11-06 (`bapm-lines-1106b`): the rows stand as the record of what was Ready. The build was exact, and the ticket reads NOT MET, with OQ-0074-2 open.* *2026-11-08 (`bapm-ABC-292-accept`; `…23d30c72`): **closed NOT MET on OQ-0074-2 (a).** Column Done, status `dropped`. `grugops/ABC-289` stays kept, unmerged.*
