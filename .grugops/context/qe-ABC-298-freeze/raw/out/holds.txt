@@ -1,0 +1,10 @@
+# qe-ABC-298-freeze: each hold of the host lock (flock), start and end UTC, for lock use only. One core, one process at a time.
+# Per-part windows were logged in scratch and are not kept: this hop takes no timing figure.
+1 2026-11-08T20:35:39Z 2026-11-08T20:35:47Z batch A: perft (default, PERFT_DEEP=1), SG1 (a), G4 corpus
+2 2026-11-08T20:36:07Z 2026-11-08T20:37:08Z G4 lists, choose, search
+3 2026-11-08T20:37:31Z 2026-11-08T20:47:46Z G4 doors, unpruned, sample, ordering 0/16
+4 2026-11-08T20:49:17Z 2026-11-08T20:49:32Z batch C, first pass: refused (heap guard on the default lane; A06 parse), outputs discarded
+5 2026-11-08T20:50:07Z 2026-11-08T20:51:02Z batch C: SG2 oracle and plant, SG2 (c) reference, default lane, every lane listed
+6 2026-11-08T20:52:12Z 2026-11-08T21:16:50Z G4 ordering 1/16 .. 15/16
+7 2026-11-08T21:17:03Z 2026-11-08T21:27:30Z the pin lanes: PUZZLE_DEEP puzzle-suite, SEARCH_DEEP search.bundle, ENGINE_DEEP engine, ENGINE_DEEP uci-session
+# held in all: 47 min 39 s, inside the owner's 1 h line. Nothing else ran under these holds from this hop.

@@ -1,0 +1,15 @@
+# qe-ABC-298-freeze: every file on main 69a8abf6 (src/ bba42fb7) that mocks ./legal.ts or ./transposition.ts (ADR-0077 d3 item 14, d9 step 4).
+# Found by: grep -n -E 'vi\.(mock|doMock)\(' src/*.ts, filtered to the two modules; no vi.spyOn on either module exists. Each must stay green and byte-unchanged at the head.
+# file | module | what the mock replaces (calls through unless said) | blob | sha256
+src/command-input.test.ts | ./legal.ts | automock { spy: true }: every export spied, calls through | ef9ba91829c29677633b9518d642a85d5f808617 | 0d2dc4c6af2b68e992af720f71271d6865bc3b2695ffc54c6277d98e3c378175
+src/engine.capacity.test.ts | ./legal.ts | legalMoves NARROWED to its first move (real(...).slice(0, 1)); d3 item 14 | e69319d61a7a16d52f7975a433bdbe85ffe0e2f0 | f7d0c0a2ff6e1f6ab1e88013b02354bc698b2a4ad81bf8908409e5e5c9bf2bdb
+src/gameend.nfr.test.ts | ./legal.ts | legalMoves, hasLegalMove, legalCaptures, legalCapturesAndQueenPromotions wrapped in vi.fn (call counts) | 78120e83807eb827f7cdea83e42a32d704de69e1 | 98b2190009efc4818308b4fd299b5a53bc4a6847b9874cef6ba7a7f445e5ae3f
+src/render-seam.test.ts | ./legal.ts | automock { spy: true }: every export spied, calls through | 9eb1079a9999e52f9ea5035799915d0fd8358ed4 | d81fc332a7678b48246249a59d690096fd272d70c1f1dd1c1be3c5ca3a92d00b
+src/san.nfr.test.ts | ./legal.ts | legalMoves wrapped in vi.fn (call counts) | 55809bf34a9d8b2eb3f93ba6b6f3dd873df9eda6 | 8b312a86b7b56e0aa45713634fa1343c1c13fd714aeb7017988cc088242d6a22
+src/search.capacity.test.ts | ./legal.ts | legalMoves NARROWED to its first move (real(...).slice(0, 1)); d3 item 14 | 8516300f36eb5d764b4a31e62f15d85b9efd6615 | d856b4194a58d07b07df5ee66cfcc1504d52bb91f363022a460ba819e57f25c1
+src/status-panel.nfr.test.ts | ./legal.ts | automock { spy: true }: every export spied, calls through | 99c0145b99091e75a4a79bdba4e515d40c5253f3 | a85d53f65f314e7258ab1c7a7ebf8e9173c4aab621558155752d8abab9159a61
+src/zobrist.nfr.test.ts | ./legal.ts | hasLegalEnPassant wrapped in vi.fn (call counts) | 6cd90cbb9910e97b1400c8ecfb30145943c01d58 | d2d37a85acdc894ee797fae51234ac1dd663bbd310d9458632ca3de1c1ba2ff5
+src/search.bundle.test.ts | ./transposition.ts | storeEntry wrapped: logs root stores (ply 0), calls through | 6729037387b207d8e4b93c37b60d9ab0242e47dc | 1dabd728fee769685e18d028f3c30c1ce75230962d7ed388cb46c5d7f64706dc
+src/search.null-move.test.ts | ./transposition.ts | probeTable wrapped: a watch hook per key, calls through | 97b669599696f035efa9f3b307dd34469b1aa35e | b4f7a9a2eee9b473c1ed55b5c50f9fbeefa2504d2bb4aaa0fa6c96724ac21d26
+src/search.pvs-lmr.test.ts | ./transposition.ts | boundOf and storeEntry wrapped: trace of windows and stores, calls through | 5098b132a98fda093cd409ea10e3feeb52756394 | 98aa511b9ec2d897a337bebbcf7ce856f6d093abb2487e3315897c89f4b635ba
+src/transposition.test.ts | ./transposition.ts | probeTable can return -1 (seen.off: the table read as empty), counts probes and hits; storeEntry skipped while seen.off | 69333ba2e37313da46cbaf1f184f2b614b42e905 | 807a998ae2bac873ab9ea1745b522d2a0762514f2942d379fda91ddbb56e21d0

@@ -1,0 +1,35 @@
+PASS default collected 2734 door-titled 76
+PASS CLI_DEEP-cli.real-engine collected 11 deep 10 door-titled 0
+PASS ENGINE_DEEP-book collected 36 deep 1 door-titled 0
+PASS ENGINE_DEEP-engine.capacity collected 2 deep 1 door-titled 0
+PASS ENGINE_DEEP-engine collected 105 deep 26 door-titled 11
+PASS ENGINE_DEEP-evaluate.pawns collected 44 deep 1 door-titled 0
+PASS ENGINE_DEEP-gameend collected 58 deep 1 door-titled 0
+PASS ENGINE_DEEP-legal collected 50 deep 6 door-titled 0
+PASS ENGINE_DEEP-levels collected 58 deep 11 door-titled 0
+PASS ENGINE_DEEP-moves collected 38 deep 1 door-titled 0
+PASS ENGINE_DEEP-quiescence collected 99 deep 1 door-titled 0
+PASS ENGINE_DEEP-search.ordering collected 30 deep 1 door-titled 0
+PASS ENGINE_DEEP-search.pvs-lmr collected 21 deep 1 door-titled 0
+PASS ENGINE_DEEP-transposition collected 26 deep 1 door-titled 0
+PASS ENGINE_DEEP-uci-session collected 270 deep 25 door-titled 0
+PASS INPUT_DEEP-line-input collected 34 deep 4 door-titled 0
+PASS LADDER_DEEP-ladder collected 18 deep 6 door-titled 0
+PASS LADDER_DEEP-verdict-ladder collected 17 deep 5 door-titled 0
+PASS PERFT_DEEP-perft collected 32 deep 8 door-titled 0
+PASS PUZZLE_DEEP-puzzle-suite collected 18 deep 6 door-titled 0
+PASS PUZZLE_DEEP-weakened-puzzle-suite collected 14 deep 2 door-titled 0
+PASS SEARCH_DEEP-evaluate.passer collected 29 deep 7 door-titled 0
+PASS SEARCH_DEEP-evaluate.taper collected 170 deep 10 door-titled 9
+PASS SEARCH_DEEP-quiescence collected 116 deep 18 door-titled 10
+PASS SEARCH_DEEP-search.bundle collected 49 deep 10 door-titled 8
+PASS SEARCH_DEEP-search.futility collected 53 deep 17 door-titled 17
+PASS SEARCH_DEEP-search collected 57 deep 29 door-titled 0
+PASS SEARCH_DEEP-search.null-move collected 46 deep 8 door-titled 4
+PASS SEARCH_DEEP-search.ordering collected 43 deep 14 door-titled 0
+PASS SEARCH_DEEP-search.pvs-lmr collected 29 deep 9 door-titled 8
+PASS SEARCH_DEEP-see collected 52 deep 9 door-titled 9
+PASS SEARCH_DEEP-transposition collected 40 deep 15 door-titled 0
+PASS UCI_DEEP-uci.real-engine collected 13 deep 12 door-titled 0
+PASS ZOBRIST_DEEP-zobrist collected 34 deep 2 door-titled 0
+lanes 34 deep rows 278 (door-titled 76) fail 0

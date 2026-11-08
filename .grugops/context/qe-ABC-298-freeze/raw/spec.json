@@ -1,0 +1,12 @@
+{ "refs": ["qe-ABC-298-freeze"],
+  "notes": [
+    { "kind": "decision",
+      "confidence": "high: every figure read on main 69a8abf6 (src/ bba42fb7) under the host lock, one core, deterministic; SG2's answers worked by hand, then equal to main's oracle (38 / 38, planted 38 / 38 FAIL) and SG2 (c) reached on main (8 / 8); the build's readings are UNKNOWN - verify",
+      "bodyFile": "notes/note-freeze.md",
+      "refs": ["qe-ABC-298-freeze", "ABC-298", "ADR-0077", "ADR-0077 d9 step 4", "arch-ABC-298-probe/20261108T202637Z-architect-design-decision-d097e25f", "69a8abf6", "bba42fb7",
+        "sha256:b65f747aa16b40d9f71c343520026796b2c64260e06af10fadb6269a2131af34"] },
+    { "kind": "observation",
+      "confidence": "high on the readings stated (each from ADR-0077's text, qe-ABC-254's harness and main's files); where SG2 (c) lives is the Engineer's",
+      "bodyFile": "notes/note-gaps.md",
+      "refs": ["qe-ABC-298-freeze", "ABC-298", "ADR-0077", "ADR-0077 d9 step 4", "69a8abf6", "bba42fb7"] }
+  ] }

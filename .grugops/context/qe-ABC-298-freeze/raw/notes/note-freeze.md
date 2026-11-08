@@ -1,0 +1,157 @@
+# qe-ABC-298-freeze: ADR-0077 d9 step 4, the freeze, on `main` `69a8abf6` (`src/` tree `bba42fb7`), before any V3 code exists. SG1 (a)'s table, base's SG1 (b) digest, perft's blob with the deep read 32 / 32, every door and deep row by file and title, the 12 mocking files, and SG2's hand cases
+
+QE, task `qe-ABC-298-freeze`, on `grugops/qe-ABC-298-freeze` from `main` `69a8abf6` (`src/` tree `bba42fb7`, the tree of the ADR and of the probe). This is `ADR-0077` d9 step 4, on the probe's GO (`arch-ABC-298-probe` `…d097e25f`).
+- **No patch exists, and none was read or written. No `src/` file changed.** No build, timing figure or game.
+- Every run was under the host lock, on one core, one process at a time; vitest ran with one worker. Lock windows are in `raw/out/holds.txt`, start and end UTC only, for lock use.
+- **The freeze commit is the commit that adds this note.** The Result names it, so that step 5's `git merge-base --is-ancestor <freeze commit> main` can run.
+
+## 1. SG1 (a): the shipped path, frozen (`raw/out/sg1a.jsonl`)
+
+`search()` at depth 8. `chooseMove` with `maxDepth`, `now: () => 0` and `budgetMs` 1e9 (the `deepenTo` form in `src/search.bundle.test.ts`). Every row came back with the position byte-identical (FEN and Zobrist key).
+
+| row | board | depth | nodes | root move | score | on `main` already |
+|---|---|---|---|---|---|---|
+| `search()` | kiwipete | 8 | 311 546 | e2a6 (20-80) | −81 | `ABC-303` depth-8 row pins the nodes |
+| `search()` | position-6 | 8 | 163 523 | c3d5 (34-67) | 71 | `ABC-303` depth-8 row pins the nodes |
+| `chooseMove` | kiwipete | 8 | 573 518 | e2a6 | −114 | `ABC-303` depth-8 row pins the nodes |
+| `chooseMove` | kiwipete | 9 | 1 320 857 | e2a6 | −128 | none (equals the probe's `main` copy) |
+| `chooseMove` | position-6 | 8 | 94 911 | c3d5 | 45 | `ABC-303` depth-8 row pins the nodes |
+| `chooseMove` | position-6 | 9 | 234 984 | c3d5 | 34 | none (equals the probe's `main` copy) |
+| `chooseMove` | position-6 | 10 | 523 610 | c3d5 | 64 | none |
+
+- **What each row expects at the head:** nodes, root move and score exactly as above. The `chooseMove` rows also expect the depth reached and the clock reads (568, 1 299, 102, 240, 523).
+- **The depth-8 rows are the `ABC-303` rows** in `src/search.bundle.test.ts` ("ABC-303 — the bundle's own counts at depth 8 …"), figures unchanged. They pin nodes only, so the root move and score here are the freeze's.
+- **The depth-9 and depth-10 rows are new.** The build adds them as `SEARCH_DEEP` rows in an existing file, pinned to these figures.
+
+## 2. SG1 (b): base's outputs, as a digest (`raw/out/g4.jsonl.gz`, `raw/out/g4-sample.jsonl.gz`, `raw/out/g4-digest.txt`)
+
+**The form:** `ABC-254` A3's `G4`, by reference: `qe-ABC-254`'s `g4.mjs`, its corpus construction byte for byte. QE-298-a to c in this task's gaps note say how it was read.
+- **Corpus:** the `ABC-078` A3 corpus and `ABC-121`'s 190, deduped to 301.
+- **Doors:** every search door at fixed depth 5 (unpruned doors at depth 2, and at depth 5 on the 132-position sample). Every `chooseMove` door at budgets 3 and 5 on a clock ticking by 1 (`tickingClock(1)`). Each row records move, score, depth, nodes and clock reads, plus the lists part.
+- **The door sets walked equal the sets `main` exports:** 21 search entries and 16 `chooseMove` entries. Both sets are printed inside the digest.
+
+| file | lines | sha256 |
+|---|---|---|
+| `g4.jsonl` (corpus, lists, choose, search, doors, unpruned, ordering ×16, in name order) | 16 558 | `b65f747aa16b40d9f71c343520026796b2c64260e06af10fadb6269a2131af34` |
+| `g4-sample.jsonl` (unpruned doors at depth 5 on the sample) | 264 | `2e1534f05adbc493b195a665fcf61f290ef4434f998e47856a1a1ae19ec0e744` |
+
+- **Every row came back with the position unchanged:** 0 rows read `pure:false` in either file.
+- **Nodes, INFO:** 2 030 536 114 in `g4.jsonl` and 202 091 899 in the sample. The ordering door is 1 814 733 467 of them, equal node for node to `qe-ABC-254`'s ordering rows. Rows by part: corpus 304, lists 301, choose 9 632 (301 × 16 entries × 2 budgets), search 1 204 (301 × 4), doors 4 214 (301 × 14), unpruned 602, ordering 301 in 16 shards.
+- **What it expects at the head:** run `run-g4.sh` on a `git archive` of the head with every part, then `join.sh`. Both joined files must be byte-equal to these: `cmp` and sha256. The parts' own hashes are in `g4-digest.txt`, to find a difference fast.
+- **Base is `main` `69a8abf6`.** If the build's merge-base carries another `src/` tree, step 5 reruns this step first.
+
+## 3. SG0: perft (`raw/out/reads.txt`)
+
+- `src/perft.test.ts` on `main`: blob `8fe75ef0a0c2e3fff757ae955848103c4fce6a30`, sha256 `9d928a2a0a1114fea4567cae8f07f296120d3772f3585992b14035e4e50d2d4e`.
+- Default lane: 24 / 24. **`PERFT_DEEP=1`: 32 / 32.** Each was run alone in its own vitest process, with exit 0, 0 failed and 0 skipped.
+- **What it expects at the head:** the same blob, and 32 / 32 with `PERFT_DEEP=1`.
+
+## 4. Every door and deep row on `main`, by file and title, with its figures (`raw/out/rows.jsonl`, `raw/out/lanes.txt`, `raw/test-blobs.txt`)
+
+**The inventory.**
+- **Default lane: 2 734 rows in 71 files**, collected by `vitest list`. It was also run whole with one worker: 2 734 / 2 734 passed, 0 failed, 0 skipped.
+- **Deep lanes: 33 collected, 278 deep rows.** A deep row is a title the file's default lane does not hold. The ladder's two lanes are among them (11 rows), listed only.
+- **Door-titled rows** (a title naming a `…Without…` entry or a door): 76 in the default lane and 76 deep. This tag is INFO; SG1 (c) covers every row.
+- No lane collected 0 rows.
+
+**The figures.**
+- A row's figure is in its title, when the title interpolates it; the inventory keeps titles as collected.
+- Every literal figure is in its file. `raw/test-blobs.txt` gives the git blob and sha256 of all 68 `src/*.test.ts` files on `main`.
+
+**The deep lanes `ADR-0077` § The pins this ticket moves names, run on `main`** (one file, one worker, `NODE_OPTIONS=--max-old-space-size=400`; `raw/out/pins.txt`):
+
+| lane | file | rows | deep rows | the `ADR-0077` pins inside it, all passed |
+|---|---|---|---|---|
+| `ENGINE_DEEP=1` | `src/engine.test.ts` | 105 / 105 | 26 | `ABC-282` A0-1 (kiwipete, position-6 at maxDepth 6, 7, 8) and A0-2 (50 and 200 virtual ms) |
+| `ENGINE_DEEP=1` | `src/uci-session.test.ts` | 270 / 270 | 25 | `ABC-282` A0-3: the session's lines in level, simple-tournament and uci-clock-mode, and D3's row |
+| `SEARCH_DEEP=1` | `src/search.bundle.test.ts` | 49 / 49 | 10 | `ABC-283` P0 and the bundle's counts; `ABC-303`'s depth-8 counts (SG1 (a)'s four depth-8 rows); the same-depth mate floor on the 287, both recursions: `search()` d5 0 of 191, `chooseMove` d5 0 of 189 violated |
+| `PUZZLE_DEEP=1` | `src/puzzle-suite.test.ts` | 18 / 18 | 6 | `G1`: solved 54 / 58, baseline 54 / 58 |
+
+Each exited 0, with 0 failed and 0 skipped. The rows are in `raw/out/pins.txt`.
+
+**What it expects at the head (SG1 (c)):**
+- every row above is collected and green, and none is removed;
+- `git diff <freeze>..<head> -- 'src/*.test.ts'` adds lines and changes none;
+- a changed blob is read line by line against this list.
+- The other deep lanes are listed, not run on `main` (QE-298-d). The ladder's are never run (QE-298-e).
+
+## 5. The files that mock `./legal.ts` or `./transposition.ts` (`raw/mocks.txt`)
+
+**12 files.** No `vi.spyOn` on either module exists.
+- **`./legal.ts`:** `command-input`, `engine.capacity`, `gameend.nfr`, `render-seam`, `san.nfr`, `search.capacity`, `status-panel.nfr`, `zobrist.nfr`.
+- **`./transposition.ts`:** `search.bundle`, `search.null-move`, `search.pvs-lmr`, `transposition`.
+- Two of them narrow `legalMoves` to its first move: `engine.capacity` and `search.capacity` (d3 item 14). `transposition.test.ts` can read the table as empty.
+- **What it expects at the head:** each file byte-unchanged (blob in `mocks.txt`) and green.
+
+## 6. SG2's hand cases (`raw/sg2-cases.json`)
+
+They were written from `ADR-0077`'s words alone, with no patch in the world, and every expected answer was worked by hand first.
+
+**SG2 (a): 38 cases**, covering d6's list:
+- a legal castle (A01–A03), and a castle through an attacked square, with its control (A04, A05);
+- a castle whose rook is absent (A06, through `parseFenGrammarOnly`, QE-298-f);
+- legal en passant, both colours, and stale en-passant bits (A07–A09), and an en passant that exposes the king along the rank, with its control (A10, A11);
+- a pinned piece leaving its line and moving along it (A12–A15);
+- a king stepping into attack, including x-rayed through its own square, with controls (A16–A20);
+- under-promotions, with capture and black (A21–A24), and no promotion field on a last-rank push (A25);
+- a promotion field on a non-promotion move, with its control (A26–A28);
+- an empty, enemy and off-board from-square (A29–A31);
+- a slider through a blocker (A32, A33);
+- a non-evasion in check, with its control (A34, A35);
+- a non-king move in double check, with the king's move as control (A36–A38).
+
+Plus the per-square generator's oracle row: exactly `generateMoves(position).filter((m) => m.from === square)`, in order, field for field, on every square of these FENs, the six perft roots and the 301.
+
+**The check on `main`** (`raw/out/sg2-oracle.jsonl`): `entryMove(slot, legalMoves(position))`, the bits put in by `main`'s `storeEntry`.
+- All 38 hand answers equal the oracle, field for field, with every position byte-identical after.
+- Every FEN round-trips, and in each the side not to move is not in check.
+- A copy with every expectation flipped fails 38 of 38 (`sg2-oracle-plant.jsonl`).
+
+**SG2 (c): two seeds, four searches** (`raw/sg2-cases.json` "sg2c").
+- **The node:** root `4k3/4n3/8/8/8/8/P7/4RK2 w - - 0 1`, and the node after a2-a3, where the knight on e7 is pinned.
+- **C1** seeds Ne7-c6, which is illegal. **C2** seeds a2-a4, a stale move whose from-square is empty.
+- **The searches:** `search(root, 2)` and `search(root, 3)`; `chooseMove` at `maxDepth` 2 and 3.
+- **Read on `main`** (`raw/out/sg2c-ref.txt`, 8 / 8): every case's node probe hit, and `entryMove` read the seeded slot at remaining 1 (S1, S3), 2 (S2) and both (S4). The seed was made 0 times. The root's move is legal (Kf1-f2), and the position was restored.
+- **What it expects at the head:** the same cases, with the precondition of QE-298-g. The seed is never made, the move is legal, and the root is restored.
+
+## Frozen files (sha256)
+
+| file (under `.grugops/context/qe-ABC-298-freeze/raw/`) | sha256 |
+|---|---|
+| `out/sg1a.jsonl` | `e5f51b7c232bc3212d7c0c59f1fcae2a335f7904a289d258de9b45bf8abfb0ed` |
+| `out/g4.jsonl.gz` (content: `b65f747aa16b40d9f71c343520026796b2c64260e06af10fadb6269a2131af34`) | `be3b175b6f40a43119e8c59442bcd8f1d5dad36b940d960631278f3123b8fa46` |
+| `out/g4-sample.jsonl.gz` (content: `2e1534f05adbc493b195a665fcf61f290ef4434f998e47856a1a1ae19ec0e744`) | `5164e8bacfbb0ce4c6a24fdc4b0f6499ec20681f1c29cac076babfeee6a32fd5` |
+| `out/g4-digest.txt` | `2c563f96ffce37c3e502edf29b389de6034fb97084899db28d2f46d6db6a0a6e` |
+| `out/reads.txt` | `e64f392ef4665f23be13229371d2a5d6154bc7d7f9cf13871233c209d82c41e8` |
+| `out/rows.jsonl.gz` (content: `e706206e7a941035bf74f7e4f2e47ffca4a23f095d6cd4df895872e86c75c1b2`) | `84ba72b0df3e861f3c12f5f99d7357b7c947f449495d31fc78e41acf4c097dd2` |
+| `out/lanes.txt` | `67c1655606c5bde7cb46877f4bcecf64bd149ed7987bf8f87bb1ba294cea9664` |
+| `out/pins.txt` | `8c62d32a30f1e9cbf236b16ee085aa5389d791075cb74c1867b12c67037fff6f` |
+| `out/sg2-oracle.jsonl` | `6668ad059afd90202ab4d8619e3077636a0f0390278b31207a5a07ff6ba9f3a3` |
+| `out/sg2-oracle-plant.jsonl` | `7cdb32bb159fb5ed8270d3988399fee0abc3adad9cde8e7adb9a94419aaceeef` |
+| `out/sg2c-ref.txt` | `6a0561f9038f13dcb0752f343a772742f4b66c82432957b2eee997d29b327660` |
+| `out/holds.txt` | `ee05a5b437ed075c8be9fd84acdfff3aa4cdf9785fa0ef33e311de472bc636ba` |
+| `out/exits.txt` | `6eadf30383bd1e70d8bf144850b6808438bb463d7bc5fb393b9e26ab152dee76` |
+| `test-blobs.txt` | `5472b8a746ab3cdadb73086336b52b27d63730afd159cb62d04aafd097b671b9` |
+| `mocks.txt` | `b7cfa34541cbb0c8a595367bad89ba424cb76b21be953fe867011984f65ed0b6` |
+| `sg2-cases.json` | `683b9ab5c5ff015157b6fedb970b567ff39c2161085d6934430b7d36eb78061f` |
+| `scripts/batch-a.sh` | `acacc7e649e7428028a0c94ccb0ae2b2c69db57f3f65b83b8c5625f0db5630a6` |
+| `scripts/batch-c.sh` | `6d3ca4d95c58a903bfd1b7b0f2b9badf454815e70bad8e63b4088922395e0e24` |
+| `scripts/deep.sh` | `be0741fe4e1fcbc20e8981fde67a5f149c9b9eb8251a5af674d6da4008f928de` |
+| `scripts/g4.mjs` | `4f492c5400051e049798b0ec854c4e2260a42d9af5f461265a6575a8e80022bb` |
+| `scripts/inventory.mjs` | `f358f7b77494678dd3aac49fa8a531bbc4607ac12b08961f9884eaebad7855d5` |
+| `scripts/join.sh` | `3cafea046077e8aa1a152179d78f16246948d22ad69960f47139d1c53d7a9e86` |
+| `scripts/list.sh` | `57dc82d30278f181ae97ffc1635103c07c459c527cd3486c961fb3e8e467f500` |
+| `scripts/run-g4.sh` | `e65b34d4b1c8530f455995d7f9e2d700488491873a691a3a443c720300a7a20a` |
+| `scripts/sg1a.mjs` | `8fe608d6f4cac06cfb358c1ac8fc077cd9913050354934e9f8787367c3233629` |
+| `scripts/sg2c.ref.ts` | `33c3ddc4d39af60c7d2839a6db063b568dad2a77ed4171f87f16124d67d02448` |
+| `scripts/sg2-oracle.mjs` | `9167251fe380e333e98c320d2dbf935aceb04dfcfe6322441c83236c043667c6` |
+| `scripts/summarise.mjs` | `0cfb3fb2a6e025739ff36ff26f511cdb0f8353b2efee11879e30a33aa5041b6e` |
+| `seal.mjs` | `290f016e6880547588662eb7735838e9b57e3d99196b86da1f460c32c0067d91` |
+
+The test files on `main`: `raw/test-blobs.txt`, 68 blobs. The mocking files: `raw/mocks.txt`, 12 blobs.
+
+## Next, by d9
+
+- **Step 5, the Orchestrator's check.** Before any build dispatch: `git merge-base --is-ancestor <freeze commit> main`, `main`'s `src/` tree is `bba42fb7`, and the build brief cites this note's id.
+- **Step 7, QE's stage 0,** re-reads the hashes above and the build's ancestry.
+- No `src/`, ADR, ticket, EPIC or board line was touched.
