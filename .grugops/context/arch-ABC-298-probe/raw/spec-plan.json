@@ -1,0 +1,12 @@
+{ "refs": ["arch-ABC-298-probe"],
+  "notes": [
+    { "kind": "decision",
+      "confidence": "high (pre-registration; nothing measured yet: the patch and a load-only smoke only)",
+      "bodyFile": "notes/note-plan.md",
+      "refs": ["arch-ABC-298-probe", "ABC-298", "ADR-0077", "ADR-0077 d9 step 3", "090e17d1", "bba42fb7", "33478ae4",
+        "sha256:020666075e67a9d642d2a9fc4323fe9f3db30c33ed0a643fa203947376f96129",
+        "sha256:bed557ffe9143f4447d5e33ca3f623381ec99b832e0546be4ba6e6b2ae371d40",
+        "sha256:54c87bb8eb0753268ba73c71f110686736a1776ec4d967bad44a8f7233ded1da",
+        "sha256:fddb26d20a40c22987176cafbcbddd991de70faf983ec49850c2eab4fa7e3cfe",
+        "sha256:96e492e8c1001b496c29d4b99d8f58b2cce4f245c41d8f2bc3539f5799d28a03"] }
+  ] }
