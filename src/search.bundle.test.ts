@@ -746,3 +746,72 @@ if (RUN_DEEP) {
     }
   });
 }
+
+// ---------------------------------------------------------------------------
+// ABC-298 SG1 (a) (`ADR-0077` d6): the shipped path at QE's frozen figures (qe-ABC-298-freeze,
+// `sg1a.jsonl`, on `main` `69a8abf6`, `src/` tree `bba42fb7`). V3 is node-identical, so every
+// figure is `main`'s: nodes, root move and score, and for `chooseMove` the depth reached and the
+// clock reads. The depth-8 node counts are the ABC-303 rows above, unchanged; depths 9 and 10 are
+// new. Every row leaves the position byte-identical.
+// ---------------------------------------------------------------------------
+
+if (RUN_DEEP) {
+  describe("ABC-298 SG1 (a) — the shipped path equals the freeze, node for node [deep, SEARCH_DEEP=1]", () => {
+    const state = (position: Position): string =>
+      [
+        position.board.join(","),
+        position.blackToMove,
+        position.castling,
+        position.epSquare,
+        position.halfmoveClock,
+        position.fullmoveNumber,
+      ].join("|");
+    const SEARCH_ROWS = [
+      ["kiwipete", KIWIPETE, 311_546, "e2a6", -81],
+      ["position-6", POSITION_6, 163_523, "c3d5", 71],
+    ] as const;
+    for (const [name, fen, nodes, move, score] of SEARCH_ROWS) {
+      it(`search() ${name} at depth 8: ${nodes} nodes, ${move}, ${score} [deep, SEARCH_DEEP=1]`, () => {
+        const position = parseFen(fen);
+        const before = state(position);
+        const result = search(position, 8);
+        expect([result.nodes, label(result.move as Move), result.score]).toEqual([
+          nodes,
+          move,
+          score,
+        ]);
+        expect(state(position)).toBe(before);
+      }, 300_000);
+    }
+    const CHOOSE_ROWS = [
+      ["kiwipete", KIWIPETE, 8, 573_518, "e2a6", -114, 568],
+      ["kiwipete", KIWIPETE, 9, 1_320_857, "e2a6", -128, 1_299],
+      ["position-6", POSITION_6, 8, 94_911, "c3d5", 45, 102],
+      ["position-6", POSITION_6, 9, 234_984, "c3d5", 34, 240],
+      ["position-6", POSITION_6, 10, 523_610, "c3d5", 64, 523],
+    ] as const;
+    for (const [name, fen, depth, nodes, move, score, reads] of CHOOSE_ROWS) {
+      it(`chooseMove ${name} at maxDepth ${depth}: ${nodes} nodes, ${move}, ${score}, ${reads} clock reads [deep, SEARCH_DEEP=1]`, () => {
+        const position = parseFen(fen);
+        const before = state(position);
+        let clockReads = 0;
+        const choice = chooseMove(position, {
+          budgetMs: 1e9,
+          now: () => {
+            clockReads++;
+            return 0;
+          },
+          maxDepth: depth,
+        }) as EngineChoice;
+        expect([choice.depth, choice.nodes, label(choice.move), choice.score, clockReads]).toEqual([
+          depth,
+          nodes,
+          move,
+          score,
+          reads,
+        ]);
+        expect(state(position)).toBe(before);
+      }, 300_000);
+    }
+  });
+}
