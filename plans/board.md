@@ -1,3 +1,4 @@
+_Updated: 2026-11-08T09:30:12Z — **ABC-292 NOT MET at its probe** (PR7, rule 2), not built; owner's stop fires on the hand-valued path; arch- and bapm-ABC-292-closed running; owner told._
 _Updated: 2026-11-08T09:09:24Z — qe-ABC-292-freeze merged (1faefe3f, freeze e88e91f9, d10 step 3 met); arch-ABC-292-probe stage A (untimed rows) running; PR8 timing waits on a held host._
 _Updated: 2026-11-08T08:53:42Z — bapm-ABC-292-accept merged (ABC-286, 288, 289 Done; ABC-308 held); d10 step 2 met; qe-ABC-292-freeze running (step 3)._
 _Updated: 2026-11-08T08:46:23Z — arch-ABC-292-accept merged: ADR-0076 ACCEPTED, stop ruling and ABC-289 close in the ADRs; bapm-ABC-292-accept running._
