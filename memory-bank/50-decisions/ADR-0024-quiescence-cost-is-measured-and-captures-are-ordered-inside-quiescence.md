@@ -65,6 +65,11 @@ kind: adr
 > victim + 200 cp ≤ alpha, and the skip raises the node's value to that bound; in check, every evasion is searched. Quiet
 > checks stay on d4's list. In force on `main` at `ABC-289`'s merge, which waits on its own read (`ADR-0074` decision 13). No
 > other decision here moves: the MVV-LVA order (d2) and the cap of 8 (d5) are unchanged.
+> - *Dated 2026-11-08 (`arch-ABC-292-probe`, records only; the Orchestrator's `…89b7220c`; the owner's `…23d30c72`,
+>   OQ-0074-2 (a)): "In force on `main` at `ABC-289`'s merge" will not come. `ABC-289` closed NOT MET, its branch stays
+>   unmerged, and `ADR-0074` stays accepted, not in force (its own dated line of `arch-ABC-292-accept`). So this
+>   amendment never took force, and d4 stands as written: delta pruning and quiet checks stay on its list. No other
+>   decision here moves.*
 
 **accepted** — by the project owner Olger Oeselg in session, 2026-09-19, verbatim: *"I accept ADR-0024"*. Transcribed by the Orchestrator (`human_admission` is `off`; a hand-authored record of a human's word, not a stamp). The re-hop that carries it (`grugops/ABC-079-quiescence` @ `fa80923`) is UNMERGED at the time of this flip: its default lane is green and every `A5` level holds, but `SEARCH_DEEP=1 npx vitest run src/search.test.ts` reads exit 1 (4 timeouts — the unpruned oracle opens a full-window quiescence at every leaf), which this ADR's own collateral ruling makes a merge condition. That is a further Architect/Design ruling, not a reversal of this one. One known deviation from the table below: the shipped `mvvLvaKey` carries a promotion term the probe lacked, so kiwipete counts read 5 878 / 10 249 / 405 945 (levels unaffected).
 
@@ -187,6 +192,9 @@ in different places.
    stays on this list until that ADR amends it. Quiet checks stay on it.)*
    *(2026-11-04: amended by `ADR-0074`, accepted by the owner (`…3e73f9f9`). Delta pruning leaves this list, by `ADR-0074`
    decisions 1–5. Quiet checks stay on it. In force at `ABC-289`'s merge (§ Status, the fifth block).)*
+   *(2026-11-08, `arch-ABC-292-probe`, `…89b7220c`: that merge will not come. `ABC-289` closed NOT MET (`…23d30c72`,
+   OQ-0074-2 (a)), so `ADR-0074`'s amendment is not in force, and this decision stands as written: delta pruning and
+   quiet checks stay on this list (§ Status, the fifth block's dated line).)*
 
 5. **The cap of 8 stays, as a guard, with its binding recorded.** Ordered, kiwipete still puts
    ~25% of its quiescence nodes at ply 8 (depth 3) and the capped depth-1 score differs from the

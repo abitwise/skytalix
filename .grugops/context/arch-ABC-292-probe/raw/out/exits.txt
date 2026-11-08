@@ -1,0 +1,3 @@
+S-tsc-cand exit 2
+S-tsc-cut exit 2
+S-load exit 0
