@@ -44,3 +44,4 @@ Publish: sealed notes (contextRoot = the worktree's .grugops/context, `at` from 
 - **`NFR-008`:** ≤ +0.10 s stands. No deep pin moves.
 - **The stop:** if identity cannot hold, V3 stops as "none".
 - **Owner:** 1, accept `ADR-0077`: yes. 2, a stop or a miss ends V3: yes.
+- **Path check:** `node tools/grugops/records-path-check.js --base main` exit 0 at `c4636c29`, before this last commit.
