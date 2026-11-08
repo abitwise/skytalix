@@ -34,3 +34,4 @@ Publish: sealed notes (contextRoot = the worktree's .grugops/context, `at` from 
 
 - **Lock:** under 15 s in all. Every run was under the lock, alone, on one core. No held host was taken. The scratch copies are deleted.
 - **Next:** d9 step 4, `qe-ABC-298-freeze`, on `main`'s tip, under the lock. Then the Orchestrator's check (step 5) before any build dispatch.
+- **Path check:** `node tools/grugops/records-path-check.js --base main` exit 0 at `b371a8d3`, before this last commit.
