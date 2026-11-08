@@ -133,6 +133,8 @@ import {
   boundOf,
   clearTable,
   entryMove,
+  entryMoveLegal,
+  HASH_FIRST_DEPTH_LIMIT,
   MATE_FLOOR,
   probeTable,
   storeEntry,
@@ -367,6 +369,13 @@ export function recordHistoryCutoff(
     addHistory(move, 0 - bonus);
   }
 }
+
+/**
+ * The hash move's cutoff before any list (`ABC-298`, `ADR-0077` d3 item 10) hands
+ * `recordHistoryCutoff` its cutter in this one-entry scratch, at index 0, so no list is allocated
+ * per cutoff. Index 0 has no move before it, so the call makes exactly the cutter's writes.
+ */
+const HASH_CUTTER: Move[] = [];
 
 /** A capture is losing for ordering below this static exchange (`ADR-0065` decision 2): -50 cp. */
 const SEE_ORDER_THRESHOLD = -50;
@@ -900,31 +909,84 @@ function negamax(
     }
   }
 
+  const previousCut = switches.countermove ? previous : null;
+  // Read before any child, as before `ABC-298` (`ADR-0077` d3 item 3).
+  const countermove = previousCut === null ? 0 : countermoveAt(previousCut);
+
+  // `ABC-298` (`ADR-0077` d1): at remaining depth 1 or 2, a probe hit's move is checked for
+  // legality without the list (one live read of word 2) and searched first, as index 0 of the loop
+  // below would search it. A cutoff makes index 0's writes, stores and returns: nothing is
+  // generated. Otherwise the list is built and ordered as before, and the loop resumes at index 1.
+  const gated = slot !== -1 && depth <= HASH_FIRST_DEPTH_LIMIT && switches.ordering === "full";
+  const hashFirst = gated ? entryMoveLegal(slot, position) : null;
+  let hashScore = Number.NEGATIVE_INFINITY;
+  if (hashFirst !== null) {
+    const undo = makeMove(position, hashFirst);
+    keys[ply + 1] = zobristKeyAfterMove(key, position, hashFirst, undo);
+    hashScore = searchMove(
+      position,
+      depth,
+      alpha,
+      beta,
+      ply,
+      0,
+      0, // the late-move reduction at index 0
+      switches,
+      counter,
+      killers,
+      keys,
+      phaseAfterMove(phase, hashFirst),
+      hashFirst,
+    );
+    unmakeMove(position, hashFirst, undo);
+    // Index 0's cutoff test: alpha raised to the score reaches beta. `alpha` is still the entry alpha.
+    if (prune && Math.max(alpha, hashScore) >= beta) {
+      if (switches.history) {
+        HASH_CUTTER[0] = hashFirst;
+        recordHistoryCutoff(position, HASH_CUTTER, 0, depth, false, previousCut);
+      }
+      killers.record(ply, hashFirst);
+      storeEntry(key, depth, boundOf(hashScore, alpha, beta), hashScore, ply, hashFirst);
+      return hashScore;
+    }
+  }
+
   const moves = legalMoves(position);
   if (moves.length === 0) {
     // Mate or stalemate, decided from the move list already in hand. `-(MATE_SCORE - ply)` when
     // the king is attacked; otherwise EXACTLY 0 — stalemate is a draw, not a loss, and scoring
-    // it as a mate is the classic negamax bug this project's `A5` exists to catch.
+    // it as a mate is the classic negamax bug this project's `A5` exists to catch. Never reached
+    // after a legal hash move, which proves the list is not empty.
     return isInCheck(position) ? 0 - (MATE_SCORE - ply) : 0;
   }
 
   const alphaIn = alpha;
-  const hashMove = slot === -1 ? null : entryMove(slot, moves);
+  // A gated node never re-reads word 2: the hash move's subtree may have stored into its slot.
+  const hashMove = slot === -1 ? null : gated ? hashFirst : entryMove(slot, moves);
   // Futility (`ABC-268`): once per node, with the entry window; a skipped move still takes its index.
   const futile =
     switches.futility && futilityNode(position, depth, ply, alphaIn, beta, switches.taper, phase);
   let best = Number.NEGATIVE_INFINITY;
   let bestMove = moves[0] as Move;
   let index = 0;
-  const previousCut = switches.countermove ? previous : null;
-  const countermove = previousCut === null ? 0 : countermoveAt(previousCut);
   const list = ordered(position, moves, ply, switches, killers, hashMove, countermove);
   // Move-count pruning (`ABC-303`): the tail is read here, before any recursion reuses the keys.
   const moveLimit = switches.moveCount ? moveCountNode(position, depth, ply, alphaIn, beta) : 0;
   const zeroFrom = moveLimit > 0 ? moveCountFrom(list.length) : 0;
   let searchedQuiets = 0;
   let firstSkipped = -1;
-  for (const move of list) {
+  if (hashFirst !== null) {
+    // `ABC-298`: index 0, the hash move searched above, is the list's first entry (`HASH_MOVE_KEY`
+    // is the unique top key). Its bookkeeping, as the loop would have kept it; the loop takes the rest.
+    if (moveLimit > 0 && hashFirst.captured === EMPTY && hashFirst.promotion === EMPTY) {
+      searchedQuiets++;
+    }
+    index++;
+    best = hashScore;
+    bestMove = hashFirst;
+    if (prune && best > alpha) alpha = best;
+  }
+  for (const move of hashFirst === null ? list : list.slice(1)) {
     if (futile && futileMove(position, move, index)) {
       index++;
       continue;

@@ -27,6 +27,7 @@ import {
   FLAG_PROMOTION,
   generateCaptures,
   generateMoves,
+  generateMovesFrom,
   isSquareAttackedBy,
   type Move,
 } from "./moves.ts";
@@ -332,6 +333,33 @@ function filterLazily(position: Position, moves: Move[]): Move[] {
 
   moves.length = kept;
   return moves;
+}
+
+/**
+ * ABC-298 (`ADR-0077` d2): the legal move from `from` to `to` with promotion type `promotion`
+ * (EMPTY for none), or `null` when the side to move has none — the same answer, with the same six
+ * fields, as finding it in `legalMoves(position)`, without building that list. The candidate comes
+ * from `generateMovesFrom` (the generator's own helpers); no two of one square's moves share `to`
+ * and `promotion`, so the first match is the only one. It then ALWAYS takes the test (`staysSafe`,
+ * ADR-0003 (1-A)): it skips none of the four classes, so it answers as the full filter does. It uses
+ * no pin scratch. The position is byte-identical on return.
+ */
+export function legalMoveFrom(
+  position: Position,
+  from: number,
+  to: number,
+  promotion: number,
+): Move | null {
+  for (const move of generateMovesFrom(position, from)) {
+    if (move.to !== to || move.promotion !== promotion) continue;
+    const moverIsBlack = position.blackToMove;
+    const kingSquare =
+      move.piece === (KING | (moverIsBlack ? BLACK : 0))
+        ? move.to
+        : kingSquareOf(position, moverIsBlack);
+    return staysSafe(position, move, kingSquare, moverIsBlack) ? move : null;
+  }
+  return null;
 }
 
 /**

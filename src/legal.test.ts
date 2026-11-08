@@ -12,6 +12,7 @@ import {
   isInCheck,
   legalCaptures,
   legalCapturesAndQueenPromotions,
+  legalMoveFrom,
   legalMoves,
 } from "./legal.ts";
 import {
@@ -22,6 +23,14 @@ import {
   type Move,
 } from "./moves.ts";
 import { BLACK, EMPTY, KING, PAWN, type Position, parseSquareName, QUEEN } from "./position.ts";
+import {
+  BOUND_EXACT,
+  clearTable,
+  entryMove,
+  entryMoveLegal,
+  probeTable,
+  storeEntry,
+} from "./transposition.ts";
 import { zobristKey } from "./zobrist.ts";
 
 const START_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
@@ -910,3 +919,491 @@ describe("ABC-262 — legalCapturesAndQueenPromotions in check tests black's qui
     }
   });
 });
+
+// ---------------------------------------------------------------------------
+// ABC-298 SG2 (ADR-0077 d2, d6): the legality check without the move list. `legalMoveFrom` and the
+// table's `entryMoveLegal` return what `entryMove(slot, legalMoves(position))` returns — null, or
+// the listed move with the same six fields — and leave the position byte-identical (FEN, Zobrist
+// key). (a) QE's 38 hand cases (qe-ABC-298-freeze, `sg2-cases.json`), each answer worked by hand
+// and pinned here. (b) under `ENGINE_DEEP=1` only (`ADR-0077` d6, d11): ABC-254 A1's two walks,
+// every legal move's bits and every legal move of the parent's bits (a natural stale set), at
+// every position.
+// ---------------------------------------------------------------------------
+
+/** A move's six fields, for a field-for-field comparison. */
+const sixFields = (move: Move | null): number[] | null =>
+  move === null
+    ? null
+    : [move.from, move.to, move.piece, move.captured, move.flags, move.promotion];
+
+/** A dummy key: the check reads only the slot's move bits, so any key that probes back serves. */
+const SG2_KEY = 0x2980_0000_0000_0001n;
+
+/** Stores `from`/`to`/`promotion` as a slot's move bits and returns that slot (a verified hit). */
+function slotHolding(from: number, to: number, promotion: number): number {
+  const bits: Move = { from, to, piece: EMPTY, captured: EMPTY, flags: FLAG_NONE, promotion };
+  storeEntry(SG2_KEY, 1, BOUND_EXACT, 0, 0, bits);
+  return probeTable(SG2_KEY);
+}
+
+/** [id, what, FEN, from, to, promotion, the hand answer: null or the twin's six fields]. */
+const SG2A_CASES: ReadonlyArray<
+  readonly [string, string, string, number, number, number, readonly number[] | null]
+> = [
+  [
+    "A01",
+    "a legal castle, white O-O",
+    "r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 1",
+    4,
+    6,
+    0,
+    [4, 6, 6, 0, 2, 0],
+  ],
+  [
+    "A02",
+    "a legal castle, white O-O-O",
+    "r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 1",
+    4,
+    2,
+    0,
+    [4, 2, 6, 0, 2, 0],
+  ],
+  [
+    "A03",
+    "a legal castle, black O-O-O",
+    "r3k2r/8/8/8/8/8/8/R3K2R b KQkq - 0 1",
+    116,
+    114,
+    0,
+    [116, 114, 14, 0, 2, 0],
+  ],
+  [
+    "A04",
+    "a castle whose right is set but which passes an attacked square: O-O, f1 attacked by the bishop on h3",
+    "4k3/8/8/8/8/7b/8/R3K2R w KQ - 0 1",
+    4,
+    6,
+    0,
+    null,
+  ],
+  [
+    "A05",
+    "control for A04: O-O-O on the same board passes no attacked square",
+    "4k3/8/8/8/8/7b/8/R3K2R w KQ - 0 1",
+    4,
+    2,
+    0,
+    [4, 2, 6, 0, 2, 0],
+  ],
+  [
+    "A06",
+    "a castle whose right is set but whose rook is absent: O-O-O, the Q right with no rook on a1",
+    "4k3/8/8/8/8/8/8/4K2R w KQ - 0 1",
+    4,
+    2,
+    0,
+    null,
+  ],
+  [
+    "A07",
+    "a legal en passant, white e5xd6",
+    "4k3/8/8/3pP3/8/8/8/4K3 w - d6 0 1",
+    68,
+    83,
+    0,
+    [68, 83, 1, 9, 1, 0],
+  ],
+  [
+    "A08",
+    "a legal en passant, black e4xd3",
+    "4k3/8/8/8/3Pp3/8/8/4K3 b - d3 0 1",
+    52,
+    35,
+    0,
+    [52, 35, 9, 1, 1, 0],
+  ],
+  [
+    "A09",
+    "en passant bits with no en-passant square set (stale): e5xd6 onto an empty square",
+    "4k3/8/8/3pP3/8/8/8/4K3 w - - 0 1",
+    68,
+    83,
+    0,
+    null,
+  ],
+  [
+    "A10",
+    "an en passant that exposes the king along the rank: e5xd6 empties d5 and e5, rook h5 hits Ka5",
+    "8/8/8/K2pP2r/8/8/8/4k3 w - d6 0 1",
+    68,
+    83,
+    0,
+    null,
+  ],
+  [
+    "A11",
+    "control for A10: the push e5e6 on the same board",
+    "8/8/8/K2pP2r/8/8/8/4k3 w - d6 0 1",
+    68,
+    84,
+    0,
+    [68, 84, 1, 0, 0, 0],
+  ],
+  [
+    "A12",
+    "a pinned piece leaving its line: Re2-d2, pinned by Re7 to Ke1",
+    "4k3/4r3/8/8/8/8/4R3/4K3 w - - 0 1",
+    20,
+    19,
+    0,
+    null,
+  ],
+  [
+    "A13",
+    "a pinned piece along its line: Re2-e5",
+    "4k3/4r3/8/8/8/8/4R3/4K3 w - - 0 1",
+    20,
+    68,
+    0,
+    [20, 68, 4, 0, 0, 0],
+  ],
+  [
+    "A14",
+    "a pinned piece along its line, capturing the pinner: Re2xe7",
+    "4k3/4r3/8/8/8/8/4R3/4K3 w - - 0 1",
+    20,
+    100,
+    0,
+    [20, 100, 4, 12, 0, 0],
+  ],
+  [
+    "A15",
+    "a pinned knight leaving its line: Ne2-c3",
+    "4k3/4r3/8/8/8/8/4N3/4K3 w - - 0 1",
+    20,
+    34,
+    0,
+    null,
+  ],
+  [
+    "A16",
+    "a king stepping into attack: Ke1-e2, rank 2 held by Rd2",
+    "4k3/8/8/8/8/8/3r4/4K3 w - - 0 1",
+    4,
+    20,
+    0,
+    null,
+  ],
+  [
+    "A17",
+    "a king stepping into attack: Ke1-d1, the d-file held by Rd2",
+    "4k3/8/8/8/8/8/3r4/4K3 w - - 0 1",
+    4,
+    3,
+    0,
+    null,
+  ],
+  [
+    "A18",
+    "control for A16: Ke1xd2, the rook undefended",
+    "4k3/8/8/8/8/8/3r4/4K3 w - - 0 1",
+    4,
+    19,
+    0,
+    [4, 19, 6, 12, 0, 0],
+  ],
+  [
+    "A19",
+    "a king stepping into attack x-rayed through its own square: Ke1-f1 along Ra1's check",
+    "4k3/8/8/8/8/8/8/r3K3 w - - 0 1",
+    4,
+    5,
+    0,
+    null,
+  ],
+  [
+    "A20",
+    "control for A19: Ke1-e2 leaves the rank",
+    "4k3/8/8/8/8/8/8/r3K3 w - - 0 1",
+    4,
+    20,
+    0,
+    [4, 20, 6, 0, 0, 0],
+  ],
+  [
+    "A21",
+    "an under-promotion: a7-a8=N",
+    "8/P7/8/8/8/8/8/k1K5 w - - 0 1",
+    96,
+    112,
+    2,
+    [96, 112, 1, 0, 4, 2],
+  ],
+  [
+    "A22",
+    "an under-promotion: a7-a8=B",
+    "8/P7/8/8/8/8/8/k1K5 w - - 0 1",
+    96,
+    112,
+    3,
+    [96, 112, 1, 0, 4, 3],
+  ],
+  [
+    "A23",
+    "an under-promotion with capture: a7xb8=N",
+    "1r6/P7/8/8/8/8/8/k1K5 w - - 0 1",
+    96,
+    113,
+    2,
+    [96, 113, 1, 12, 4, 2],
+  ],
+  [
+    "A24",
+    "an under-promotion, black: a2-a1=R",
+    "K1k5/8/8/8/8/8/p7/8 b - - 0 1",
+    16,
+    0,
+    4,
+    [16, 0, 9, 0, 4, 4],
+  ],
+  [
+    "A25",
+    "no promotion field on a last-rank push: a7-a8 with promotion 0",
+    "8/P7/8/8/8/8/8/k1K5 w - - 0 1",
+    96,
+    112,
+    0,
+    null,
+  ],
+  [
+    "A26",
+    "a promotion field on a non-promotion move: Ng1-f3 with promotion QUEEN",
+    "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    6,
+    37,
+    5,
+    null,
+  ],
+  [
+    "A27",
+    "a promotion field on a non-promotion pawn push: e2-e4 with promotion QUEEN",
+    "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    20,
+    52,
+    5,
+    null,
+  ],
+  [
+    "A28",
+    "control for A26: Ng1-f3 with promotion 0",
+    "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    6,
+    37,
+    0,
+    [6, 37, 2, 0, 0, 0],
+  ],
+  [
+    "A29",
+    "an empty from-square: e4-e5 at the start",
+    "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    52,
+    68,
+    0,
+    null,
+  ],
+  [
+    "A30",
+    "an enemy from-square: e7-e5 with white to move",
+    "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    100,
+    68,
+    0,
+    null,
+  ],
+  [
+    "A31",
+    "an off-board from-square (0x88 square 8), extra to d6's list",
+    "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    8,
+    24,
+    0,
+    null,
+  ],
+  [
+    "A32",
+    "a slider through a blocker: Ra1-a3 through a2",
+    "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    0,
+    32,
+    0,
+    null,
+  ],
+  [
+    "A33",
+    "a slider through a blocker: Bc1-e3 through d2",
+    "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    2,
+    36,
+    0,
+    null,
+  ],
+  [
+    "A34",
+    "a non-evasion in check: Ra2-a3 while Re7 checks Ke1",
+    "4k3/4r3/8/8/8/8/R7/4K3 w - - 0 1",
+    16,
+    32,
+    0,
+    null,
+  ],
+  [
+    "A35",
+    "control for A34: the block Ra2-e2",
+    "4k3/4r3/8/8/8/8/R7/4K3 w - - 0 1",
+    16,
+    20,
+    0,
+    [16, 20, 4, 0, 0, 0],
+  ],
+  [
+    "A36",
+    "a non-king move in double check: Ra2-e2 blocks Re7 but not Bh4",
+    "4k3/4r3/8/8/7b/8/R7/4K3 w - - 0 1",
+    16,
+    20,
+    0,
+    null,
+  ],
+  [
+    "A37",
+    "a non-king move in double check: Ra2-f2 blocks Bh4 but not Re7",
+    "4k3/4r3/8/8/7b/8/R7/4K3 w - - 0 1",
+    16,
+    21,
+    0,
+    null,
+  ],
+  [
+    "A38",
+    "control for A36: the king move Ke1-d1 in double check",
+    "4k3/4r3/8/8/7b/8/R7/4K3 w - - 0 1",
+    4,
+    3,
+    0,
+    [4, 3, 6, 0, 0, 0],
+  ],
+];
+
+describe("ABC-298 SG2 (a) — the check without the list, by hand (ADR-0077 d6)", () => {
+  it.each(SG2A_CASES)("%s: %s", (_id, _what, fen, from, to, promotion, want) => {
+    clearTable();
+    const position = parseFen(fen);
+    const fenBefore = toFen(position);
+    const keyBefore = zobristKey(position);
+
+    const slot = slotHolding(from, to, promotion);
+    expect(slot).not.toBe(-1);
+    const oracle = sixFields(entryMove(slot, legalMoves(position)));
+    expect(oracle).toEqual(want);
+    expect(sixFields(legalMoveFrom(position, from, to, promotion))).toEqual(want);
+    expect(sixFields(entryMoveLegal(slot, position))).toEqual(want);
+
+    expect(toFen(position)).toBe(fenBefore);
+    expect(zobristKey(position)).toBe(keyBefore);
+  });
+
+  it("holds all 38 cases: 18 legal moves and 20 that are not", () => {
+    expect(SG2A_CASES).toHaveLength(38);
+    expect(SG2A_CASES.filter((row) => row[6] !== null)).toHaveLength(18);
+  });
+});
+
+/** SG2 (b)'s tally: the checks made, and the mismatches and mutations found (both must be 0). */
+interface Sg2bTally {
+  nodes: number;
+  twins: number;
+  stale: number;
+  staleLegal: number;
+  mismatches: string[];
+  mutations: string[];
+}
+
+/** At one node: every move's bits in `bitsFrom` answer the oracle through the table, p unchanged. */
+function checkBitsAt(
+  position: Position,
+  where: string,
+  bitsFrom: readonly Move[],
+  legal: readonly Move[],
+  tally: Sg2bTally,
+  twins: boolean,
+): void {
+  for (const bits of bitsFrom) {
+    const slot = slotHolding(bits.from, bits.to, bits.promotion);
+    const want = sixFields(entryMove(slot, legal));
+    const got = sixFields(entryMoveLegal(slot, position));
+    if (String(got) !== String(want)) {
+      tally.mismatches.push(`${where} ${bits.from}-${bits.to}-${bits.promotion}`);
+    }
+    if (twins) tally.twins++;
+    else {
+      tally.stale++;
+      if (want !== null) tally.staleLegal++;
+    }
+  }
+}
+
+/** Walks `roots` to `depthOf(name)` plies by the FULL filter, checking the bits at every node. */
+function walkSg2b(
+  roots: ReadonlyArray<readonly [name: string, fen: string]>,
+  depthOf: (name: string) => number,
+): Sg2bTally {
+  const tally: Sg2bTally = {
+    nodes: 0,
+    twins: 0,
+    stale: 0,
+    staleLegal: 0,
+    mismatches: [],
+    mutations: [],
+  };
+  const walk = (position: Position, where: string, left: number, parent: readonly Move[]) => {
+    const before = fullState(position);
+    const legal = fullLegalMoves(position);
+    checkBitsAt(position, where, legal, legal, tally, true);
+    checkBitsAt(position, where, parent, legal, tally, false);
+    if (fullState(position) !== before) tally.mutations.push(where);
+    tally.nodes++;
+    if (left === 0) return;
+    for (const move of legal) {
+      const undo = makeMove(position, move);
+      walk(position, `${where} ${move.from}-${move.to}`, left - 1, legal);
+      unmakeMove(position, move, undo);
+    }
+  };
+  clearTable();
+  for (const [name, fen] of roots) walk(parseFen(fen), name, depthOf(name), []);
+  return tally;
+}
+
+if (RUN_DEEP) {
+  describe("ABC-298 SG2 (b) — the check without the list, by walk (ADR-0077 d6) [deep, ENGINE_DEEP=1]", () => {
+    it("on ABC-206's 285 074-position walk to depth 3, 0 mismatches, 0 mutations [deep, ENGINE_DEEP=1]", () => {
+      const tally = walkSg2b([...PERFT_POSITIONS, ...A2_TERMINAL_FENS], () => 3);
+      console.log(
+        `ABC-298 SG2 (b) ABC-206 walk: ${JSON.stringify({ ...tally, mismatches: tally.mismatches.length, mutations: tally.mutations.length })}`,
+      );
+      expect(tally.nodes).toBe(285_074);
+      expect(tally.mismatches).toEqual([]);
+      expect(tally.mutations).toEqual([]);
+    }, 600_000);
+
+    it("on the six perft roots, ADR-0003's 518 474-node walk, 0 mismatches, 0 mutations [deep, ENGINE_DEEP=1]", () => {
+      const tally = walkSg2b(PERFT_POSITIONS, (name) => ADR_0003_WALK_DEPTHS[name] as number);
+      console.log(
+        `ABC-298 SG2 (b) ADR-0003 walk: ${JSON.stringify({ ...tally, mismatches: tally.mismatches.length, mutations: tally.mutations.length })}`,
+      );
+      expect(tally.nodes).toBe(518_474);
+      expect(tally.mismatches).toEqual([]);
+      expect(tally.mutations).toEqual([]);
+    }, 600_000);
+  });
+}

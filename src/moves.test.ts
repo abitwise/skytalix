@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { makeMove, unmakeMove } from "./apply.ts";
 import { parseFen, parseFenGrammarOnly, toFen } from "./fen.ts";
+import { gameStatus } from "./gameend.ts";
 import { legalMoves } from "./legal.ts";
 import {
   FLAG_CASTLE,
@@ -8,6 +9,7 @@ import {
   FLAG_PROMOTION,
   generateCaptures,
   generateMoves,
+  generateMovesFrom,
   isSquareAttackedBy,
   type Move,
 } from "./moves.ts";
@@ -25,6 +27,7 @@ import {
   ROOK,
   squareName,
 } from "./position.ts";
+import { zobristKey } from "./zobrist.ts";
 
 const START_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
@@ -458,5 +461,133 @@ describe("ABC-235 cut 3 — generateCaptures is generateMoves filtered to captur
 
   if (process.env.ENGINE_DEEP === "1") {
     it("on every position of the walk, depth 3 [deep, ENGINE_DEEP=1]", walkRow(3), 600_000);
+  }
+});
+
+// ---------------------------------------------------------------------------
+// ABC-298 (ADR-0077 d2, d6 SG2 (a)): `generateMovesFrom` is `generateMoves(p).filter(from)`, in the
+// SAME ORDER, field for field, on every 0x88 square (an off-board or empty square, or an enemy
+// piece, yields none; a king's castles follow its steps). The positions are QE's (qe-ABC-298-freeze
+// `sg2a_per_square_row`): the boards of SG2 (a)'s hand cases and the six perft roots in the lane, and
+// under `ENGINE_DEEP=1` the `G4` corpus of 301 positions, built as `qe-ABC-254`'s `g4.mjs` builds it.
+// ---------------------------------------------------------------------------
+
+/** The distinct boards of SG2 (a)'s 38 hand cases (`src/legal.test.ts`). */
+const SG2A_FENS: readonly string[] = [
+  "r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 1",
+  "r3k2r/8/8/8/8/8/8/R3K2R b KQkq - 0 1",
+  "4k3/8/8/8/8/7b/8/R3K2R w KQ - 0 1",
+  "4k3/8/8/8/8/8/8/4K2R w KQ - 0 1",
+  "4k3/8/8/3pP3/8/8/8/4K3 w - d6 0 1",
+  "4k3/8/8/8/3Pp3/8/8/4K3 b - d3 0 1",
+  "4k3/8/8/3pP3/8/8/8/4K3 w - - 0 1",
+  "8/8/8/K2pP2r/8/8/8/4k3 w - d6 0 1",
+  "4k3/4r3/8/8/8/8/4R3/4K3 w - - 0 1",
+  "4k3/4r3/8/8/8/8/4N3/4K3 w - - 0 1",
+  "4k3/8/8/8/8/8/3r4/4K3 w - - 0 1",
+  "4k3/8/8/8/8/8/8/r3K3 w - - 0 1",
+  "8/P7/8/8/8/8/8/k1K5 w - - 0 1",
+  "1r6/P7/8/8/8/8/8/k1K5 w - - 0 1",
+  "K1k5/8/8/8/8/8/p7/8 b - - 0 1",
+  "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+  "4k3/4r3/8/8/8/8/R7/4K3 w - - 0 1",
+  "4k3/4r3/8/8/7b/8/R7/4K3 w - - 0 1",
+];
+
+/** ABC-078 A3's six endgames, as `g4.mjs` names them. */
+const G4_ENDGAMES: ReadonlyArray<readonly [string, string]> = [
+  ["kq-corner", "k7/8/1K6/8/8/8/8/1Q6 w - - 0 1"],
+  ["kr-corner", "k7/8/1K6/8/8/8/8/1R6 w - - 0 1"],
+  ["kqk-h8", "7k/8/6K1/8/8/8/8/6Q1 w - - 0 1"],
+  ["kp-vs-k", "8/8/8/4k3/8/8/4P3/4K3 w - - 0 1"],
+  ["krk-a-file", "8/8/8/8/8/k7/8/KR6 w - - 0 1"],
+  ["pawn-race", "8/6p1/8/8/8/8/1P6/k1K5 w - - 0 1"],
+];
+
+/** Every position `plies` legal moves or fewer from `fen` (root excluded), as `[path, FEN]`. */
+function expandG4(name: string, fen: string, plies: number): [string, string][] {
+  const out: [string, string][] = [];
+  const position = parseFen(fen);
+  const walk = (path: string, left: number): void => {
+    if (left === 0) return;
+    for (const move of legalMoves(position)) {
+      const undo = makeMove(position, move);
+      const child = `${path}/${move.from}-${move.to}-${move.promotion}`;
+      out.push([child, toFen(position)]);
+      walk(child, left - 1);
+      unmakeMove(position, move, undo);
+    }
+  };
+  walk(name, plies);
+  return out;
+}
+
+/** The `G4` corpus: ABC-078 A3's (endgames, broad, position-3's sample) then ABC-121's 190, deduped by FEN. */
+function g4Corpus(): string[] {
+  const roots = CUT3_ROOTS.slice(0, 6).map((fen, i): [string, string] => [`root-${i}`, fen]);
+  const live = ([, fen]: [string, string]): boolean =>
+    gameStatus(parseFen(fen)).result === "in-progress";
+  const a3: [string, string][] = [];
+  for (const [name, fen] of G4_ENDGAMES)
+    a3.push([name, fen], ...expandG4(name, fen, 1).filter(live));
+  const broad = roots.flatMap(([name, fen]) => [
+    [name, fen] as [string, string],
+    ...expandG4(name, fen, 1),
+  ]);
+  const sample = expandG4("position-3", CUT3_ROOTS[2] as string, 2)
+    .filter(([path]) => path.split("/").length === 3)
+    .filter((_, i) => i % 5 === 0)
+    .slice(0, 25);
+  a3.push(...[...broad, ...sample].filter(live));
+  const c190 = [
+    ...roots.flatMap(([name, fen]) => [
+      [name, fen] as [string, string],
+      ...expandG4(name, fen, 1).filter(live),
+    ]),
+    ...G4_ENDGAMES.map(([name, fen]): [string, string] => [name, fen]),
+  ];
+  return [...new Set([...a3, ...c190].map(([, fen]) => fen))];
+}
+
+/** The oracle at every 0x88 square of `fen`, the position unchanged; returns [moves, castles]. */
+function expectPerSquareMatch(fen: string): [number, number] {
+  const position = parseFenGrammarOnly(fen);
+  const fenBefore = toFen(position);
+  const keyBefore = zobristKey(position);
+  const all = generateMoves(position);
+  const got: Move[][] = [];
+  const want: Move[][] = [];
+  for (let square = 0; square < 128; square++) {
+    got.push(generateMovesFrom(position, square));
+    want.push(all.filter((move) => move.from === square));
+  }
+  expect(got, fen).toEqual(want);
+  expect(toFen(position), fen).toBe(fenBefore);
+  expect(zobristKey(position), fen).toBe(keyBefore);
+  return [all.length, all.filter((move) => move.flags === FLAG_CASTLE).length];
+}
+
+describe("ABC-298 — generateMovesFrom is generateMoves filtered to one square, in order", () => {
+  it("on every 0x88 square of SG2 (a)'s boards and the six perft roots", () => {
+    let moves = 0;
+    let castles = 0;
+    for (const fen of [...SG2A_FENS, ...CUT3_ROOTS.slice(0, 6)]) {
+      const [count, castling] = expectPerSquareMatch(fen);
+      moves += count;
+      castles += castling;
+    }
+    // The denominators, asserted: a sweep over nothing is green.
+    expect(moves).toBeGreaterThan(300);
+    expect(castles).toBeGreaterThan(5);
+  });
+
+  if (process.env.ENGINE_DEEP === "1") {
+    it("on every 0x88 square of the 301 positions of G4 [deep, ENGINE_DEEP=1]", () => {
+      const corpus = g4Corpus();
+      expect(corpus).toHaveLength(301);
+      let moves = 0;
+      for (const fen of corpus) moves += (expectPerSquareMatch(fen) as [number, number])[0];
+      expect(moves).toBeGreaterThan(5_000);
+    });
   }
 });

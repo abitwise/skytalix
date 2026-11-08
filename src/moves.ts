@@ -384,6 +384,37 @@ export function generateMoves(position: Position): Move[] {
 }
 
 /**
+ * ABC-298 (`ADR-0077` d2): the moves `generateMoves` emits for the piece on `from`, and nothing
+ * else — exactly `generateMoves(position).filter((move) => move.from === from)`, in the SAME ORDER,
+ * field for field. An off-board, empty or enemy square yields none. It calls the same per-piece
+ * helpers `generateMoves` calls, then `addCastlingMoves` for a king, as `generateMoves` does after
+ * every square (so a king's steps come before its castles); that helper emits a castle only from
+ * the king's home square. `generateMoves` is untouched, so perft and NFR-001's perft half are
+ * untouched; `src/moves.test.ts`'s oracle row holds the two together.
+ */
+export function generateMovesFrom(position: Position, from: number): Move[] {
+  const moves: Move[] = [];
+  if (!isOnBoard(from)) return moves;
+
+  const black = position.blackToMove;
+  const piece = position.board[from] as number;
+  if (piece === EMPTY || isBlack(piece) !== black) return moves;
+
+  const type = pieceType(piece);
+  if (type === PAWN) {
+    addPawnMoves(moves, position, from, piece, black);
+    return moves;
+  }
+
+  const steps = STEPS[type];
+  if (steps !== undefined) addStepMoves(moves, position, from, piece, black, steps);
+  else addRayMoves(moves, position, from, piece, black, RAYS[type] as readonly number[]);
+
+  if (type === KING) addCastlingMoves(moves, position, black);
+  return moves;
+}
+
+/**
  * ABC-235 cut 3: the CAPTURES of `generateMoves`, and nothing else — exactly
  * `generateMoves(position).filter((move) => move.captured !== EMPTY)`, in the SAME ORDER. Quiescence
  * sorts its captures with a stable MVV-LVA sort, so ties keep generation order (ABC-206); a

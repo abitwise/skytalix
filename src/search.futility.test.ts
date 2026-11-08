@@ -76,6 +76,74 @@ vi.mock("./evaluate.ts", async (importOriginal) => {
   };
 });
 
+/**
+ * `ABC-298` SG2 (c) (`ADR-0077` d6), its instrument: two call-through module mocks, idle unless a
+ * seed is set. With `sg2c.seed` set, the table holds the seed's move bits in the node's slot at
+ * every visit (stored after every `clearTable` at depth 0, which `tableCutoff` never cuts on, and
+ * in place of the move of every store for the node's key), and `makeMove` counts any make of the
+ * seed on the node. `probeTable` and `tableCutoff` record that the node was reached at remaining
+ * 1 or 2 with its slot hit and no table cutoff (QE-298-g's precondition, true on both trees).
+ */
+const sg2c = vi.hoisted(() => ({
+  seed: null as { from: number; to: number; promotion: number } | null,
+  nodeKey: 0n,
+  keyOf: null as ((position: Position) => bigint) | null,
+  hitSlot: -1,
+  reached: [] as number[],
+  made: 0,
+}));
+vi.mock("./transposition.ts", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("./transposition.ts")>();
+  const seedMove = (): Move => {
+    const seed = sg2c.seed as { from: number; to: number; promotion: number };
+    return { ...seed, piece: 0, captured: 0, flags: 0 };
+  };
+  return {
+    ...actual,
+    clearTable: () => {
+      actual.clearTable();
+      if (sg2c.seed) actual.storeEntry(sg2c.nodeKey, 0, actual.BOUND_LOWER, 0, 0, seedMove());
+    },
+    storeEntry: (...args: Parameters<typeof actual.storeEntry>) => {
+      const [key, depth, bound, score, ply, move] = args;
+      const kept = sg2c.seed && key === sg2c.nodeKey ? seedMove() : move;
+      actual.storeEntry(key, depth, bound, score, ply, kept);
+    },
+    probeTable: (key: bigint) => {
+      const slot = actual.probeTable(key);
+      sg2c.hitSlot = sg2c.seed && key === sg2c.nodeKey ? slot : -1;
+      return slot;
+    },
+    tableCutoff: (...args: Parameters<typeof actual.tableCutoff>) => {
+      const settled = actual.tableCutoff(...args);
+      if (sg2c.hitSlot !== -1 && args[0] === sg2c.hitSlot && settled === null) {
+        sg2c.reached.push(args[1]);
+      }
+      return settled;
+    },
+  };
+});
+vi.mock("./apply.ts", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("./apply.ts")>();
+  return {
+    ...actual,
+    makeMove: (...args: Parameters<typeof actual.makeMove>) => {
+      const [position, move] = args;
+      const seed = sg2c.seed;
+      if (
+        seed &&
+        move.from === seed.from &&
+        move.to === seed.to &&
+        move.promotion === seed.promotion &&
+        sg2c.keyOf?.(position) === sg2c.nodeKey
+      ) {
+        sg2c.made++;
+      }
+      return actual.makeMove(...args);
+    },
+  };
+});
+
 afterEach(() => {
   evalStub.value = null;
   evalStub.calls = 0;
@@ -927,3 +995,66 @@ if (RUN_DEEP) {
     }, 600_000);
   });
 }
+
+// ---------------------------------------------------------------------------
+// `ABC-298` SG2 (c) (`ADR-0077` d6): never played. QE's two seeds (qe-ABC-298-freeze `sg2c`) at a
+// node of remaining depth 1 or 2 — after a2-a3, black's knight on e7 is pinned to its king by the
+// rook on e1 — an illegal move (Ne7-c6) and a stale one (a2-a4, a parent's move, its from-square
+// empty here). By four searches each, both recursions: the seed is never made, the move returned
+// is legal, and the root is restored. The instrument is the two mocks at the top of this file.
+// ---------------------------------------------------------------------------
+
+describe("ABC-298 SG2 (c) — a stale or illegal hash move at remaining depth 1 or 2 is never made (ADR-0077 d6)", () => {
+  const ROOT = "4k3/4n3/8/8/8/8/P7/4RK2 w - - 0 1";
+  const NODE = "4k3/4n3/8/8/8/P7/8/4RK2 b - - 0 1";
+  const SEEDS = [
+    { id: "C1, illegal Ne7-c6", from: 100, to: 82, promotion: 0 },
+    { id: "C2, stale a2-a4", from: 16, to: 48, promotion: 0 },
+  ] as const;
+  const RUNS: ReadonlyArray<
+    readonly [string, (position: Position) => { move: Move | null }, readonly number[]]
+  > = [
+    ["search(root, 2)", (position) => search(position, 2), [1]],
+    ["search(root, 3)", (position) => search(position, 3), [2]],
+    [
+      "chooseMove(root, maxDepth 2)",
+      (position) =>
+        chooseMove(position, { budgetMs: 1e9, now: () => 0, maxDepth: 2 }) as EngineChoice,
+      [1],
+    ],
+    [
+      "chooseMove(root, maxDepth 3)",
+      (position) =>
+        chooseMove(position, { budgetMs: 1e9, now: () => 0, maxDepth: 3 }) as EngineChoice,
+      [1, 2],
+    ],
+  ];
+  const six = (move: Move): string =>
+    [move.from, move.to, move.piece, move.captured, move.flags, move.promotion].join(",");
+
+  for (const seed of SEEDS) {
+    for (const [what, run, depths] of RUNS) {
+      it(`${seed.id}: ${what} reaches the node at remaining ${depths.join(" and ")}, never makes the seed, returns a legal move`, () => {
+        const root = parseFen(ROOT);
+        const keyBefore = zobristKey(root);
+        sg2c.keyOf = zobristKey;
+        sg2c.nodeKey = zobristKey(parseFen(NODE));
+        sg2c.reached = [];
+        sg2c.made = 0;
+        sg2c.seed = { from: seed.from, to: seed.to, promotion: seed.promotion };
+        let result: { move: Move | null };
+        try {
+          result = run(root);
+        } finally {
+          sg2c.seed = null;
+        }
+        for (const depth of depths) expect(sg2c.reached).toContain(depth);
+        expect(sg2c.made).toBe(0);
+        expect(result.move).not.toBeNull();
+        expect(legalMoves(parseFen(ROOT)).map(six)).toContain(six(result.move as Move));
+        expect(toFen(root)).toBe(ROOT);
+        expect(zobristKey(root)).toBe(keyBefore);
+      });
+    }
+  }
+});

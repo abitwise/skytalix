@@ -44,7 +44,9 @@
  * score words the probe verified, never a second read of the slot (the verified copy, below).
  */
 
+import { legalMoveFrom } from "./legal.ts";
 import type { Move } from "./moves.ts";
+import type { Position } from "./position.ts";
 
 /** log2 of the slot count. The one constant to change for `ADR-0025` falsifier `T2`'s A/B. */
 const TABLE_BITS = 18;
@@ -152,6 +154,27 @@ export function entryMove(slot: number, moves: readonly Move[]): Move | null {
     if (packMove(move) === packed) return move;
   }
   return null;
+}
+
+/**
+ * ABC-298 (`ADR-0077` d1): the deepest remaining depth at which a full-width node, in both
+ * recursions, searches its hash move BEFORE building its move list. It is 2, and part of node
+ * identity, not a tuning knob: a node with side S to move sorts on history and countermove cells
+ * that only nodes with S to move write, and below remaining depth d the hash move's subtree holds
+ * such a node only when d ≥ 3. So at 1 and 2 the sort after the hash move reads the keys it read
+ * before; at 3 it would not.
+ */
+export const HASH_FIRST_DEPTH_LIMIT = 2;
+
+/**
+ * ABC-298 (`ADR-0077` d2): the entry's best move if it is legal in `position`, found WITHOUT the
+ * move list, else `null` — the same answer as `entryMove(slot, legalMoves(position))`, with the
+ * same six fields. A live read of word 2, as `entryMove`'s (`ADR-0025`), never the verified copy;
+ * the bits are unpacked here, beside `packMove`, and checked by `legalMoveFrom`.
+ */
+export function entryMoveLegal(slot: number, position: Position): Move | null {
+  const packed = (table[(slot << 2) + 2] as number) & MOVE_BITS;
+  return legalMoveFrom(position, packed & 0x7f, (packed >>> 7) & 0x7f, packed >>> 14);
 }
 
 /** From and to are 0x88 squares (7 bits each); the promotion is a piece type (3 bits). */
