@@ -789,6 +789,12 @@ d11 (d) now applies, to this term only. "It also sets the pattern" stands as a l
 
 *Dated 2026-11-07 (`arch-ABC-292`, records only at `main` `b1227f2b`; nothing run): row E5.* **`ADR-0076` is ACCEPTED, form (b), and acceptance is the owner's.** The bishop pair and the rook file terms go on one read, on hand values fixed by one rule before any row is read. Outposts split off and wait, by the page's split rule, and per-piece mobility stays `ABC-306`. Row E5's +30–80 stays an estimate for the whole row, and these two terms' share is `UNKNOWN - verify`. Nothing here is in force until his answer and `ABC-292`'s merge. **No bar moves.**
 
+*Dated 2026-11-08 (`arch-ABC-292-closed`, records only at `main` `6b8dd230`; nothing run): rows E3 (E3b), E5 and E6.* **`ABC-292` is NOT MET at its probe, by `ADR-0076` d13 rule 2: PR7, one NEWLY-MISSED `G1` line, real after the defect check (`…22e36b63`). Nothing was built and nothing merged. "`ADR-0076` is ACCEPTED" reads accepted, not in force, and its d14 (c) applies. His stop has fired (`…23d30c72`): E3b (`ABC-290`) and E6 (`ABC-293`) are not built without a new word from him, nor outposts (`ABC-308`) on hand values (`…e63ff24f`).**
+- Row E5's +30–80 stays an estimate, unclaimed: the probe read no play. Rows E3 and E6 keep theirs, unread. E3a and E4a stand at 0, so rows E3 to E6 add nothing to `main`'s score today. The evaluation on `main` is E1's rule-made table.
+- `ABC-306` (per-piece mobility) is not named in his ruling. Its page already holds it for a fit or a case of its own. By `…e63ff24f`'s reading, a case of its own on hand values would be on the stopped path. That is a reading, the Orchestrator's to confirm.
+- Row E7 (`ABC-272`, `ABC-294`) is not named in his ruling and was not in the 2026-11-05 list of hand-valued terms. Whether the stop reaches it is his. It is evaluation on values set by hand, so I would ask him before it is built (this task's decision note `…569849c4`).
+- **No bar moves**, and no row retires.
+
 ### D3. Is 3 000 reachable without a neural network?
 
 - **For a classical engine, yes, in principle.** Stockfish 11, the last hand-crafted Stockfish, reads ≈ 3 430 CCRL
@@ -2005,6 +2011,11 @@ words. It adds no bar and moves no word of CF7 or FL. It does not reach `G6`, K4
 - **FL governed, with no void.** W was dropped by a recorded line (`…70f8b0c2`) before the first game. The first foreign sample reads 19:38:48Z, about five minutes and 21 games after the 19:33:55Z start. The read was graded as played, largest move 105 / 105 ms, 0 past 150 ms.
 - **What W could and could not have changed.** It could not have changed how this load is graded: its last sentence gives load after the first game to FL. It could have changed the rest. It is a launch condition, so kept, no game starts without his word that the whole host is quiet, which `…70f8b0c2` says he did not give. And a held window is what keeps load off: the held timing stage read 0 foreign vitest samples of 219 (`…024bbd63`). Whether it would have kept this load off, and how load moves a score, stay `UNKNOWN - verify`. Neither is a ground for a void or a re-read. W stays the Orchestrator's, read by read.
 
+*Dated 2026-11-08 (`arch-ABC-292-closed`, records only at `main` `6b8dd230`; nothing run):* **`ABC-292` played no read under these lines. No bar moves, and no word of CF1–CF10, FL or the Reach line moves.**
+- **No C2′ read began.** The term ended at its premise probe (`…22e36b63`), so CF1–CF10, FL, W and `ADR-0076` d11's table were not reached, and no host window was held for it. Its probe used under 1 min of lock.
+- **Reach.** E3b and E6 stay reached by the Reach line, if they are ever built. After his stop they are not built without his new word (D6's dated line of this task), so no read of theirs is in view.
+- **A probe miss is not a C2′ miss.** It is `ADR-0076` F5, not B6 or F4. Its effect is d14 (c)'s and his ruling's, which are the same here: NOT MET, not re-played, no second set of values.
+
 ### D6. The order proposed (speed and algorithms interleaved)
 
 Ordered by expected Elo per cost, by file collisions (`ADR-0055` D2), and by what each step needs measured.
@@ -2248,6 +2259,11 @@ changes form, not place.***
   - **Before the read, and on a pass,** E5, then E3b, then E6 stands, the Orchestrator's by this section's reorder rule, with the owner told. Each later ADR is still owed and is still his to accept.
   - **`ABC-289` closes NOT MET (OQ-0074-2 (a)).** "`ABC-289` is not closed" and "OQ-0074-2 stands as `…40ef8351` left it", above, are answered. The clauses that waited on a route for it lapse, and no read is ordered against it. Its NOT MET stays row Q2's, and counts neither for nor against a term.
   - No value, rule, bar, definition or ratio moved.
+  *Dated 2026-11-08 (`arch-ABC-292-closed`, records only at `main` `6b8dd230`; nothing run; `…22e36b63`, the Orchestrator's `…5bc9e701`): **the stop has fired. `ABC-292` missed at its probe, by `ADR-0076` d13 rule 2, a miss in d14 (c)'s list.***
+  - **Step 3 is spent on both its first terms,** E4b and E5, each NOT MET. E3b (`ABC-290`) and E6 (`ABC-293`) are not built without a new word from him, and outposts (`ABC-308`) not on hand values (`…e63ff24f`). This line holds them; it does not close their pages, which is BA/PM's.
+  - **Step 4 cannot be asked for:** no term has merged, by its own read or in a bundle (`ADR-0067`'s dated line of this task). Tuning waits as his word left it, and this is no miss on row E2.
+  - **What Phase 4 does next is his.** Which tickets close it stays the Orchestrator's ruling. An options read for him, across `EPIC-011`, is in this task's decision note `…569849c4`.
+  - No order, value, rule, bar, definition or ratio moved.
 - **What a hand value must show:** the term's page, form (b). Values fixed by a stated rule in its ADR before any row is read,
   which the owner accepts; `ADR-0064` d7's safety rows, `zugzwang.001` among them; `G2` at the ADR's ratio; `G6` under `Q-3K-4` (b);
   C2′ GAIN ≥ 50.0 of 100, since evaluation rows fire at 100 ms; S′; the Levels lane. A miss is not merged and not re-played.
