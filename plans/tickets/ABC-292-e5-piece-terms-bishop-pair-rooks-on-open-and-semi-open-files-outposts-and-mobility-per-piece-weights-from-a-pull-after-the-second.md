@@ -1,16 +1,40 @@
 ---
 id: ABC-292
-title: "E5, narrowed by ADR-0076: a bishop pair bonus and rooks on open and semi-open files, with hand values fixed by one stated rule and judged on their own C2′. Outposts are split off as ABC-308, held; per-piece mobility (a re-try of dropped ABC-207) is ABC-306; rook activity was fenced out of EPIC-010"
-status: in-design
-column: In Design
+title: "E5, narrowed by ADR-0076: a bishop pair bonus and rooks on open and semi-open files, with hand values fixed by one stated rule and judged on their own C2′. Outposts are split off as ABC-308, held; per-piece mobility (a re-try of dropped ABC-207) is ABC-306; rook activity was fenced out of EPIC-010. NOT MET at its premise probe by ADR-0076 d13 rule 2: G1 (PR7) newly misses \"win material, seed 1700\", real after the defect check. Not built, not re-played; d14 (c) applies; closed NOT MET"
+status: dropped
+column: Done
+closed: "2026-11-08, CLOSED NOT MET AT THE PROBE, not built, not merged, not shipped: ADR-0076 d13 rule 2 by PR7, G1 ON 53 / 58 against OFF 54 / 58, \"win material, seed 1700\" newly missed, none newly solved; the defect check, its form sealed first, found no defect (arch-ABC-292-probe …22e36b63, …d277788e; PREREG …e158a4a0, addendum 1 …9e29be9d). PR1–PR6 held; PR8–PR11 and stage B not run. No re-play, no second set of values, no subset (d14 (c)). ADR-0076 accepted, not in force (F5). The owner's stop fires (…23d30c72). main keeps none of it: no build branch exists. Front matter and dated lines by bapm-ABC-292-closed"
 size: S–M
 priority: P2
 epic: EPIC-011
 feature: —
-adr: "ADR-0076, accepted by the owner 2026-11-08 (orch-2026-10-30a …23d30c72), in force only at this ticket's merge: form (b) on main's tapered evaluation. Two terms on one read, outposts split off d1; definitions d2; one rule and the hand values it gives d3; the pawn memo's file word, 576 KiB, d4; one switch and a test-only off-door pair d5; G2 ≤ 1.05 × with a 1.03 tripwire and a named cut d6; NFR-008 ≤ +0.10 s d7; intent GAIN d8; bars K0–K7 d9; the order before the build d10; the probe d13; the tool line and no second set of values d14. K0 (c), K2's list and the deep pins join it by a dated line before Ready (d10 step 5). Its § Status is the Architect's"
+adr: "ADR-0076, accepted by the owner 2026-11-08 (orch-2026-10-30a …23d30c72), in force only at this ticket's merge: form (b) on main's tapered evaluation. Two terms on one read, outposts split off d1; definitions d2; one rule and the hand values it gives d3; the pawn memo's file word, 576 KiB, d4; one switch and a test-only off-door pair d5; G2 ≤ 1.05 × with a 1.03 tripwire and a named cut d6; NFR-008 ≤ +0.10 s d7; intent GAIN d8; bars K0–K7 d9; the order before the build d10; the probe d13; the tool line and no second set of values d14. K0 (c), K2's list and the deep pins join it by a dated line before Ready (d10 step 5). Its § Status is the Architect's. 2026-11-08 (bapm-ABC-292-closed): NOT MET at the probe by d13 rule 2 (…22e36b63), so F5 fires: accepted, not in force; d14 (c) applies; d10 step 5 is not reached. F5's dated line and § Status are arch-ABC-292-closed's"
 ---
 
 # ABC-292: the bishop pair and rook files (E5, narrowed; outposts and per-piece mobility split off)
+
+> **CLOSED NOT MET AT THE PROBE (`ADR-0076` d13 RULE 2, PR7); NOT BUILT; NOT RE-PLAYED; d14 (c) APPLIES; THE OWNER'S STOP FIRES; COLUMN DONE; STATUS `dropped`, 2026-11-08, by
+> BA/PM** (task `bapm-ABC-292-closed`, records only, at `main` `6b8dd230`; nothing run). Sources: `arch-ABC-292-probe` `…22e36b63` and `…d277788e` (PREREG `…e158a4a0`, addendum 1 `…9e29be9d`),
+> the Orchestrator's `…5bc9e701` and `…e63ff24f`, and the owner's ruling `…23d30c72`.
+> - **The miss:** PR7, K3's `G1` row, reads ON 53 / 58 against OFF 54 / 58. "Win material, seed 1700" is NEWLY-MISSED against OFF and against the baseline, and no line is newly solved. The bar is
+>   "no NEWLY-MISSED line". The defect check, its form sealed before it ran, found no defect: the instrument is the suite's, the miss reproduces in a fresh process (ON plays g6d6, OFF g6g7, both at
+>   depth 6), the source is d5's, and the seam is exact on 19 145 positions of the puzzle's tree. **The miss is real, so the premise is NOT MET by rule 2.**
+> - **Rule 2's words apply:** this ticket is not built, and it comes back to BA/PM. No number changes to pass. There is no subset fallback: no term is dropped after a safety read. PR1 to PR6 held,
+>   and that does not change it. PR8 to PR11 and stage B were not run, so every cost, firing, drift, reach and K2 figure stays `UNKNOWN - verify`.
+> - **d14 (c) applies, by its own list ("the probe's rule 2"):** `BISHOP_PAIR`, `ROOK_OPEN_FILE` and `ROOK_SEMI_OPEN_FILE` get no second set of values by hand. A new form needs a new definition, a
+>   reason drawn from no missed read, its own ADR and his acceptance. **Not re-played:** the probe cannot be re-run after a miss (§ The premise probe).
+> - **F5 fires:** `ADR-0076` reads accepted, not in force. F5's dated line and the ADR's § Status are `arch-ABC-292-closed`'s.
+> - **The owner's stop fires** (`…23d30c72`): the hand-valued path stops. `ABC-290` (E3b) and `ABC-293` (E6) are not built without his new word, nor `ABC-308` (outposts) on hand values
+>   (`…e63ff24f`). Their pages carry the line. What `EPIC-011` does next on the evaluation side is his question, open as `Q-3K-12` on `EPIC-011` § Owner questions, asked on the Architect's options
+>   read (`arch-ABC-292-closed`).
+> - **What the miss says, plainly:** one puzzle line out of 58, at depth 6, decides it, as K3 and d13 wrote before any reading. It says little about play, and the terms' worth in games stays
+>   unknown. It is still the bar he accepted, sealed first, and no line here sets it aside (`…5bc9e701`).
+> - **Front matter:** column Done, a `closed:` line, status `dropped`, as `ABC-291`'s and `ABC-289`'s pages read. The title keeps its first half and gains the outcome. The file name keeps its
+>   as-cut slug. The board card moves with this hop's merge, and that move is the Orchestrator's.
+> - **Not changed:** d2's definitions, d3's values, d4, d5, d6's ratio and cut, d8's intent, K0 to K7, QE's freeze (`qe-ABC-292-freeze` `…277b648a`, freeze commit `e88e91f9`, records only) and the
+>   term order. **No value, rule, bar or DoR row moved.** DoR stays 9/10: row 10's d10 step 5 is not reached. UAT is not owed, because nothing was built.
+> - **d6's named cut** ("worth having whatever happens to the term") is not this page's. Whether it is worth a ticket of its own is the Orchestrator's, with the Architect's short answer
+>   (`arch-ABC-292-closed` item 3). Its cost is `UNKNOWN - verify`.
 
 > **`ADR-0076` ACCEPTED, IN FORCE ONLY AT THIS TICKET'S MERGE; NARROWED TO THE BISHOP PAIR AND THE ROOK FILES; OUTPOSTS SPLIT OFF AS `ABC-308`, HELD; A MISS HERE STOPS THE
 > HAND-VALUED PATH; IN DESIGN, 2026-11-08, by BA/PM** (task `bapm-ABC-292-accept`, records only, at `main` `6eaeee01`; nothing run). Sources: the owner's "agree" (`orch-2026-10-30a`
@@ -204,6 +228,8 @@ adr: "ADR-0076, accepted by the owner 2026-11-08 (orch-2026-10-30a …23d30c72),
 
 ### The premise probe (d13): written, not run
 
+*2026-11-08 (`bapm-ABC-292-closed`; `…22e36b63`, `…d277788e`): **run once, stage A only, under `arch-ABC-292-probe`** (PREREG `…e158a4a0` at `e9e23d8f`, a descendant of the freeze `e88e91f9`). Rule 2 fired on PR7, and the probe ended there. The lines below stand as written. See the banner.*
+
 - **It runs on the host after QE's freeze (d10 step 3),** once, under the host lock, on one core, under its own task (the Architect's). It plays no games. PR8 and PR10's lane read need the
   owner's word that the host is held. Its rows are PR1–PR11, sealed in a `decision` note before any measured run. Under 30 min by estimate, `UNKNOWN - verify`.
 - **It can change:** K0 (c)'s counts; K2's list and the deep pins' new figures; d6's and d7's forecasts, replaced by readings; whether the cut is in the build; and whether this ticket is built at all.
@@ -240,6 +266,7 @@ adr: "ADR-0076, accepted by the owner 2026-11-08 (orch-2026-10-30a …23d30c72),
 - **The owner's stop ruling** (`…23d30c72`): **a miss here, any d14 (c) miss above, is the stop for the hand-valued path.** `ABC-290` (E3b) and `ABC-293` (E6) are not built after it without his
   new word. How it sits beside d14 (c)'s "a miss here leaves `ABC-290` where it stands" is the Architect's line (`arch-ABC-292-accept`). On these pages his ruling governs: those pages
   stand, and their builds wait for his word.
+  *2026-11-08 (`bapm-ABC-292-closed`; `…22e36b63`, `…5bc9e701`): **fired.** The probe's rule 2 is a d14 (c) miss. `ABC-290` and `ABC-293` are held, and `ABC-308` on hand values (`…e63ff24f`).*
 
 ## NFR triggers
 
@@ -263,6 +290,7 @@ adr: "ADR-0076, accepted by the owner 2026-11-08 (orch-2026-10-30a …23d30c72),
    the sha256s. A missed order is F7. The freeze does not hold K0 (c) or K2, which need a tree. A fixture QE finds wrong before the build is a dated addendum to its own note; after the build it is
    F1's defect check, and no fixture changes to fit code. This note's words stand, and it adds no bar and no DoR row.*
 2. UAT is owed (production lines); the QE verdict signs it.
+   *2026-11-08 (`bapm-ABC-292-closed`): not owed. Nothing was built, so there is nothing to sign.*
 
 ## Size and priority
 
@@ -280,6 +308,7 @@ adr: "ADR-0076, accepted by the owner 2026-11-08 (orch-2026-10-30a …23d30c72),
   the build. DoR row 10. The held windows are the Orchestrator's to ask and the owner's to give.
 - **Outposts are `ABC-308`, held** (`ADR-0076` d1). Nothing here waits on it, and it waits on nothing here.
 - **The stop** (§ Acceptance criteria): a miss on this ticket holds the builds of `ABC-290` and `ABC-293` for the owner's new word.
+  *2026-11-08 (`bapm-ABC-292-closed`): **the miss came, at the probe.** Those builds, and `ABC-308` on hand values, wait for his word.*
 - **Second of the four, after `ABC-291`'s read.**
   *2026-11-07 (`bapm-terms-after-291`; `…8cc32a89` § 2, `…aab9afd1`): **that read is played, NOT MET, so this page is first of the three left and no read waits.** The read's base is `main` as it stands. This term's ADR is next, after these pages merge, unless the owner redirects. QE's freeze goes before its build (test note 1).*
 - **The read queues.** A value-changing merge stales the read after it, so this term's C2′ follows `ABC-303` and `ABC-289`.
@@ -314,6 +343,6 @@ adr: "ADR-0076, accepted by the owner 2026-11-08 (orch-2026-10-30a …23d30c72),
 | 7 | test notes | ✅ 1–2 |
 | 8 | size | ✅ ~~M~~ S–M *(2026-11-08)* |
 | 9 | priority | ✅ P2 |
-| 10 | no major unresolved blocker | ❌ ~~**the ADR is owed**~~ *2026-11-08 (`bapm-ABC-292-accept`): `ADR-0076` is accepted.* **d10 steps 3 to 5 are owed:** QE's freeze, the probe, then K0 (c), K2's list and the deep pins by the Architect's dated line |
+| 10 | no major unresolved blocker | ❌ ~~**the ADR is owed**~~ *2026-11-08 (`bapm-ABC-292-accept`): `ADR-0076` is accepted.* **d10 steps 3 to 5 are owed:** QE's freeze, the probe, then K0 (c), K2's list and the deep pins by the Architect's dated line *2026-11-08 (`bapm-ABC-292-closed`): step 3 met (`e88e91f9`); step 4, the probe, ended NOT MET by rule 2 (`…22e36b63`); step 5 is not reached. Closed, so nothing is owed on this row* |
 
-~~**DoR 9/10. Backlog.**~~ **DoR 9/10. In Design** *(2026-11-08, `bapm-ABC-292-accept`)*. Row 10 closes at d10 step 5, not before. The board move is the Orchestrator's.
+~~**DoR 9/10. Backlog.**~~ ~~**DoR 9/10. In Design** *(2026-11-08, `bapm-ABC-292-accept`)*. Row 10 closes at d10 step 5, not before.~~ **DoR 9/10. Done, closed NOT MET at the probe** *(2026-11-08, `bapm-ABC-292-closed`)*. The board move is the Orchestrator's.
