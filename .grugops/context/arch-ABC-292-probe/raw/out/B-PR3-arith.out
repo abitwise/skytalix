@@ -1,0 +1,6 @@
+{"handRows":6,"handBad":0}
+{"frozen":"QE k1c 39 + K2 boards 3, each with its mirror","rowsRead":84,"frozenMismatches":0,"qeStmFieldBad":0,"k1dRelationBad":0,"labellerVsQE":0,"ex":[]}
+{"set":"G3","positions":184,"labelledNonZero":184,"mismatches":0,"hot":0,"ex":[]}
+{"set":"taper-mirror","positions":30,"labelledNonZero":25,"mismatches":0,"hot":0,"ex":[]}
+{"set":"frozen","positions":114,"labelledNonZero":96,"mismatches":0,"hot":0,"ex":[]}
+{"set":"games","positions":27896,"labelledNonZero":21779,"mismatches":0,"hot":0,"ex":[]}

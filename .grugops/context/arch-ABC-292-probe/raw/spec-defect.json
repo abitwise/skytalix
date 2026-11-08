@@ -1,0 +1,7 @@
+{ "refs": ["arch-ABC-292-probe"],
+  "notes": [
+    { "kind": "decision",
+      "confidence": "high on the form (fixed before the check runs); the check's outcome is UNKNOWN - verify until batch K reads",
+      "bodyFile": "notes/note-defect-check.md",
+      "refs": ["arch-ABC-292-probe", "ABC-292", "ADR-0076", "ADR-0076 d13", "ADR-0076 K3", "G1", "arch-ABC-292-probe/20261108T092441Z-architect-design-decision-e158a4a0"] }
+  ] }
