@@ -1,0 +1,8 @@
+PASS ENGINE_DEEP-engine suites 41 tests 105 passed 105 failed 0 other 0 deep 26
+PASS ENGINE_DEEP-uci-session suites 62 tests 270 passed 270 failed 0 other 0 deep 25
+PASS PERFT_DEEP-perft suites 4 tests 32 passed 32 failed 0 other 0 deep 8
+PASS PUZZLE_DEEP-puzzle-suite suites 5 tests 18 passed 18 failed 0 other 0 deep 6
+PASS SEARCH_DEEP-search.bundle suites 12 tests 49 passed 49 failed 0 other 0 deep 10
+PASS default-perft suites 4 tests 24 passed 24 failed 0 other 0 deep 0
+PASS default suites 594 tests 2734 passed 2734 failed 0 other 0 deep 0
+lanes 7 fail 0

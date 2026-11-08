@@ -1,0 +1,41 @@
+---
+id: 20261108T212842Z-qe-e2e-observation-1ba0ac40
+kind: observation
+by: qe-e2e
+at: 2026-11-08T21:28:42Z
+verified_by: 
+confidence: high on the readings stated (each from ADR-0077's text, qe-ABC-254's harness and main's files); where SG2 (c) lives is the Engineer's
+refs:
+  - qe-ABC-298-freeze
+  - ABC-298
+  - ADR-0077
+  - ADR-0077 d9 step 4
+  - 69a8abf6
+  - bba42fb7
+supersedes: 
+seal: sha256:afdcbcc648c622a5e74a70fc0f4c68c00022b1fef4a28fb5dd535a0fa157109d
+---
+
+# qe-ABC-298-freeze readings and gaps: nine notes for the Orchestrator's step 5, the build and QE's stage 0 (INFO). None blocks step 5, and nothing in `ADR-0077` d9 step 4 was found to read two ways
+
+QE, task `qe-ABC-298-freeze`, beside the freeze note of the same task. Each line is a reading QE took, or a limit of what was frozen, said plainly so that the build and QE's stage 0 read it the same way. No bar moves.
+
+## Readings
+
+- **QE-298-a: the `G4` form "by reference" is `qe-ABC-254`'s harness.** SG1 (b) cites "`ABC-254` A3's `G4` form, by reference". The freeze runs `qe-ABC-254`'s own `g4.mjs`, its corpus construction byte for byte (the `ABC-078` A3 corpus and `ABC-121`'s 190, deduped by FEN to 301). Two points carry over from that harness, and both are that hop's own:
+  - The two unpruned doors (`searchWithoutPruning`, `searchWithoutPruningOrQuiescence`) run at depth 2 on all 301, and at depth 5 on the sample (the six endgames and `position-3`'s family, 132 positions). Every other search door runs at depth 5 on all 301.
+  - The `lists` part (each position's legal, capture and capture-plus-queen-promotion lists, `hasLegalMove`, check, en passant and both evaluations) rides along. It is cheap, and V3 must not move it, because `generateMoves` and `legalMoves` are not edited (d1, d2).
+- **QE-298-b: "every door" is every door exported on `main` today.** That is 21 search entries (`search` and 20 `searchWithout…`) and 16 `chooseMove` entries (`chooseMove` and 15 `chooseMoveWithout…`). ABC-254 had 13 and 6. The `corpus` part prints the exported sets beside the walked lists, so they sit inside the digest. d5 says V3 adds no door, so a head whose export set differs fails the digest. That is meant.
+- **QE-298-c: the ordering door is its own part.** `searchWithoutOrdering` was split out of `doors` into 16 shards, because it is about 89 % of the nodes (1 814 733 467 of 2 030 536 114, equal node for node to `qe-ABC-254`'s ordering rows). Its rows are the same rows. The head's run must use `run-g4.sh` and `join.sh` as frozen, so the layout is the same.
+
+## Limits of what was frozen
+
+- **QE-298-d: deep lanes are listed, and only the ADR's pin lanes were run.** d9 step 4 asks for "the list of every door and deep row on `main`, by file and title, with its figures". The list is `vitest list` per lane (titles carry their interpolated figures), plus every test file's blob and sha256, which pin every literal figure.
+  - **Run on `main`:** perft in both lanes; the default lane, whole, with one worker; and the four deep lanes `ADR-0077` § The pins this ticket moves names (ENGINE_DEEP `engine`, `uci-session`; SEARCH_DEEP `search.bundle`; PUZZLE_DEEP `puzzle-suite`).
+  - **Listed only:** the other deep lanes. Running them all would have taken this session over the owner's 1 h line. The step does not ask for it.
+  - **What this leaves for stage 0:** if a listed deep row reads red at the head, QE reads it at the base before calling it F2. A row red at both is not V3's.
+- **QE-298-e: `LADDER_DEEP` is listed and never run.** Its deep lanes play games (`src/ladder.test.ts`). V3 owes no games (d8), so the build does not run them either. Their 11 rows are in the inventory for completeness only.
+- **QE-298-f: A06 needs `parseFenGrammarOnly`.** `parseFen` refuses a castling right the board contradicts ("castling right "Q" is inconsistent with the board: no white rook on a1"). Such a board reaches the check only by that route, never from play: `apply.ts` clears a right when its rook leaves or is taken. The case still matters because the per-square export carries `addCastlingMoves`' rook-identity test.
+- **QE-298-g: SG2 (c)'s precondition at the head.** On `main` the reference shows the seeded slot read by `entryMove` at remaining 1 and 2. At the head, a gated node may read the bits through the new export and never call `entryMove`. So the head's row must use the precondition that holds on both: `probeTable(nodeKey)` hit, then `tableCutoff` at remaining 1 or 2 returned null. Node identity makes those visits the same on both trees. The seeds are stored after every `clearTable` and on every store to the node's key, so the slot holds the seed at every visit.
+- **QE-298-h: where SG2 (c) can live.** d11 puts SG2 (a) and (c) in existing default-lane files, with no new file. SG2 (c) needs `vi.mock("./transposition.ts")` and `vi.mock("./apply.ts")` calling through. Four files already mock `./transposition.ts` (`search.bundle`, `search.null-move`, `search.pvs-lmr`, `transposition`), and three already mock `./apply.ts` (`search.null-move`, `search.ordering`, `gameend.nfr`). One module takes one mock per file, so adding the rows there means extending an existing mock. SG1 (c) forbids changing any existing expected figure, and d3 item 14 asks that the mocking files stay green unchanged. Where the rows go is the Engineer's call. QE's stage 0 reads `git diff <freeze>..<head> -- 'src/*.test.ts'` for any changed line in those files, as SG1 (c) says.
+- **QE-298-i: the per-square row is a specification, not a reading.** No per-square export exists on `main`, so its oracle row (`sg2a_per_square_row`) could not be run here. On `main`, `generateMoves` emits castles after every square, so a filter by `from` keeps a king's steps before its castles. That order is part of "exactly `generateMoves(position).filter(…)`".

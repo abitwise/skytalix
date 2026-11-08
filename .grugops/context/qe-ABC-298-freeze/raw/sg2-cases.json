@@ -1,0 +1,80 @@
+{
+  "what": "qe-ABC-298-freeze: SG2's hand cases (ADR-0077 d6, SG2 (a) and (c)), written from ADR-0077's words alone, with no patch in the world and none read. Every expected answer was worked by hand, then checked against main's own oracle (sg2-oracle.mjs, sg2c.ref.ts).",
+  "conventions": {
+    "square": "0x88: rank * 16 + file, rank 0 = rank 1 (a1 0, e1 4, g1 6, c1 2, a2 16, e2 20, a8 112, e8 116, g8 118, c8 114)",
+    "piece": "PAWN 1, KNIGHT 2, BISHOP 3, ROOK 4, QUEEN 5, KING 6; black adds 8; EMPTY 0",
+    "flags": "FLAG_NONE 0, FLAG_EN_PASSANT 1, FLAG_CASTLE 2, FLAG_PROMOTION 4",
+    "bits": "the move bits a table slot holds: packMove = from | to << 7 | promotion << 14 (src/transposition.ts). A case gives from, to, promotion; bits is that word",
+    "oracle": "entryMove(slot, legalMoves(position)) on main (ADR-0077 d2): null when no legal move packs to the bits, else the listed Move. 'expect' is null or the twin's six fields [from, to, piece, captured, flags, promotion]",
+    "parse": "a case marked grammarOnly is built with parseFenGrammarOnly (src/fen.ts): parseFen refuses a castling right the board contradicts (A06), so such a board reaches the check only that way; every other case uses parseFen",
+    "every case": "the check returns the oracle's answer, field-equal, and the position is byte-identical after the call: toFen and zobristKey equal to before (SG2 (a))"
+  },
+  "sg2a": [
+    { "id": "A01", "what": "a legal castle, white O-O", "fen": "r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 1", "from": 4, "to": 6, "promotion": 0, "expect": [4, 6, 6, 0, 2, 0] },
+    { "id": "A02", "what": "a legal castle, white O-O-O", "fen": "r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 1", "from": 4, "to": 2, "promotion": 0, "expect": [4, 2, 6, 0, 2, 0] },
+    { "id": "A03", "what": "a legal castle, black O-O-O", "fen": "r3k2r/8/8/8/8/8/8/R3K2R b KQkq - 0 1", "from": 116, "to": 114, "promotion": 0, "expect": [116, 114, 14, 0, 2, 0] },
+    { "id": "A04", "what": "a castle whose right is set but which passes an attacked square: O-O, f1 attacked by the bishop on h3", "fen": "4k3/8/8/8/8/7b/8/R3K2R w KQ - 0 1", "from": 4, "to": 6, "promotion": 0, "expect": null },
+    { "id": "A05", "what": "control for A04: O-O-O on the same board passes no attacked square", "fen": "4k3/8/8/8/8/7b/8/R3K2R w KQ - 0 1", "from": 4, "to": 2, "promotion": 0, "expect": [4, 2, 6, 0, 2, 0] },
+    { "id": "A06", "what": "a castle whose right is set but whose rook is absent: O-O-O, the Q right with no rook on a1", "fen": "4k3/8/8/8/8/8/8/4K2R w KQ - 0 1", "parse": "grammarOnly", "from": 4, "to": 2, "promotion": 0, "expect": null },
+    { "id": "A07", "what": "a legal en passant, white e5xd6", "fen": "4k3/8/8/3pP3/8/8/8/4K3 w - d6 0 1", "from": 68, "to": 83, "promotion": 0, "expect": [68, 83, 1, 9, 1, 0] },
+    { "id": "A08", "what": "a legal en passant, black e4xd3", "fen": "4k3/8/8/8/3Pp3/8/8/4K3 b - d3 0 1", "from": 52, "to": 35, "promotion": 0, "expect": [52, 35, 9, 1, 1, 0] },
+    { "id": "A09", "what": "en passant bits with no en-passant square set (stale): e5xd6 onto an empty square", "fen": "4k3/8/8/3pP3/8/8/8/4K3 w - - 0 1", "from": 68, "to": 83, "promotion": 0, "expect": null },
+    { "id": "A10", "what": "an en passant that exposes the king along the rank: e5xd6 empties d5 and e5, rook h5 hits Ka5", "fen": "8/8/8/K2pP2r/8/8/8/4k3 w - d6 0 1", "from": 68, "to": 83, "promotion": 0, "expect": null },
+    { "id": "A11", "what": "control for A10: the push e5e6 on the same board", "fen": "8/8/8/K2pP2r/8/8/8/4k3 w - d6 0 1", "from": 68, "to": 84, "promotion": 0, "expect": [68, 84, 1, 0, 0, 0] },
+    { "id": "A12", "what": "a pinned piece leaving its line: Re2-d2, pinned by Re7 to Ke1", "fen": "4k3/4r3/8/8/8/8/4R3/4K3 w - - 0 1", "from": 20, "to": 19, "promotion": 0, "expect": null },
+    { "id": "A13", "what": "a pinned piece along its line: Re2-e5", "fen": "4k3/4r3/8/8/8/8/4R3/4K3 w - - 0 1", "from": 20, "to": 68, "promotion": 0, "expect": [20, 68, 4, 0, 0, 0] },
+    { "id": "A14", "what": "a pinned piece along its line, capturing the pinner: Re2xe7", "fen": "4k3/4r3/8/8/8/8/4R3/4K3 w - - 0 1", "from": 20, "to": 100, "promotion": 0, "expect": [20, 100, 4, 12, 0, 0] },
+    { "id": "A15", "what": "a pinned knight leaving its line: Ne2-c3", "fen": "4k3/4r3/8/8/8/8/4N3/4K3 w - - 0 1", "from": 20, "to": 34, "promotion": 0, "expect": null },
+    { "id": "A16", "what": "a king stepping into attack: Ke1-e2, rank 2 held by Rd2", "fen": "4k3/8/8/8/8/8/3r4/4K3 w - - 0 1", "from": 4, "to": 20, "promotion": 0, "expect": null },
+    { "id": "A17", "what": "a king stepping into attack: Ke1-d1, the d-file held by Rd2", "fen": "4k3/8/8/8/8/8/3r4/4K3 w - - 0 1", "from": 4, "to": 3, "promotion": 0, "expect": null },
+    { "id": "A18", "what": "control for A16: Ke1xd2, the rook undefended", "fen": "4k3/8/8/8/8/8/3r4/4K3 w - - 0 1", "from": 4, "to": 19, "promotion": 0, "expect": [4, 19, 6, 12, 0, 0] },
+    { "id": "A19", "what": "a king stepping into attack x-rayed through its own square: Ke1-f1 along Ra1's check", "fen": "4k3/8/8/8/8/8/8/r3K3 w - - 0 1", "from": 4, "to": 5, "promotion": 0, "expect": null },
+    { "id": "A20", "what": "control for A19: Ke1-e2 leaves the rank", "fen": "4k3/8/8/8/8/8/8/r3K3 w - - 0 1", "from": 4, "to": 20, "promotion": 0, "expect": [4, 20, 6, 0, 0, 0] },
+    { "id": "A21", "what": "an under-promotion: a7-a8=N", "fen": "8/P7/8/8/8/8/8/k1K5 w - - 0 1", "from": 96, "to": 112, "promotion": 2, "expect": [96, 112, 1, 0, 4, 2] },
+    { "id": "A22", "what": "an under-promotion: a7-a8=B", "fen": "8/P7/8/8/8/8/8/k1K5 w - - 0 1", "from": 96, "to": 112, "promotion": 3, "expect": [96, 112, 1, 0, 4, 3] },
+    { "id": "A23", "what": "an under-promotion with capture: a7xb8=N", "fen": "1r6/P7/8/8/8/8/8/k1K5 w - - 0 1", "from": 96, "to": 113, "promotion": 2, "expect": [96, 113, 1, 12, 4, 2] },
+    { "id": "A24", "what": "an under-promotion, black: a2-a1=R", "fen": "K1k5/8/8/8/8/8/p7/8 b - - 0 1", "from": 16, "to": 0, "promotion": 4, "expect": [16, 0, 9, 0, 4, 4] },
+    { "id": "A25", "what": "no promotion field on a last-rank push: a7-a8 with promotion 0", "fen": "8/P7/8/8/8/8/8/k1K5 w - - 0 1", "from": 96, "to": 112, "promotion": 0, "expect": null },
+    { "id": "A26", "what": "a promotion field on a non-promotion move: Ng1-f3 with promotion QUEEN", "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", "from": 6, "to": 37, "promotion": 5, "expect": null },
+    { "id": "A27", "what": "a promotion field on a non-promotion pawn push: e2-e4 with promotion QUEEN", "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", "from": 20, "to": 52, "promotion": 5, "expect": null },
+    { "id": "A28", "what": "control for A26: Ng1-f3 with promotion 0", "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", "from": 6, "to": 37, "promotion": 0, "expect": [6, 37, 2, 0, 0, 0] },
+    { "id": "A29", "what": "an empty from-square: e4-e5 at the start", "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", "from": 52, "to": 68, "promotion": 0, "expect": null },
+    { "id": "A30", "what": "an enemy from-square: e7-e5 with white to move", "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", "from": 100, "to": 68, "promotion": 0, "expect": null },
+    { "id": "A31", "what": "an off-board from-square (0x88 square 8), extra to d6's list", "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", "from": 8, "to": 24, "promotion": 0, "expect": null },
+    { "id": "A32", "what": "a slider through a blocker: Ra1-a3 through a2", "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", "from": 0, "to": 32, "promotion": 0, "expect": null },
+    { "id": "A33", "what": "a slider through a blocker: Bc1-e3 through d2", "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", "from": 2, "to": 36, "promotion": 0, "expect": null },
+    { "id": "A34", "what": "a non-evasion in check: Ra2-a3 while Re7 checks Ke1", "fen": "4k3/4r3/8/8/8/8/R7/4K3 w - - 0 1", "from": 16, "to": 32, "promotion": 0, "expect": null },
+    { "id": "A35", "what": "control for A34: the block Ra2-e2", "fen": "4k3/4r3/8/8/8/8/R7/4K3 w - - 0 1", "from": 16, "to": 20, "promotion": 0, "expect": [16, 20, 4, 0, 0, 0] },
+    { "id": "A36", "what": "a non-king move in double check: Ra2-e2 blocks Re7 but not Bh4", "fen": "4k3/4r3/8/8/7b/8/R7/4K3 w - - 0 1", "from": 16, "to": 20, "promotion": 0, "expect": null },
+    { "id": "A37", "what": "a non-king move in double check: Ra2-f2 blocks Bh4 but not Re7", "fen": "4k3/4r3/8/8/7b/8/R7/4K3 w - - 0 1", "from": 16, "to": 21, "promotion": 0, "expect": null },
+    { "id": "A38", "what": "control for A36: the king move Ke1-d1 in double check", "fen": "4k3/4r3/8/8/7b/8/R7/4K3 w - - 0 1", "from": 4, "to": 3, "promotion": 0, "expect": [4, 3, 6, 0, 0, 0] }
+  ],
+  "sg2a_per_square_row": {
+    "what": "the per-square generator's oracle row (ADR-0077 d2, d6 SG2 (a)): for a position and a square, the new src/moves.ts export returns exactly generateMoves(position).filter((m) => m.from === square)",
+    "expect": "deep-equal, in the same order, field for field, for every on-board square (castles included for a king on its home square, as generateMoves appends them) and for every off-board 0x88 square (an empty list); the position byte-identical (toFen, zobristKey) after each call",
+    "positions": "every FEN of sg2a above, the six perft roots of src/perft.test.ts, and the G4 corpus (raw/out/g4-0-corpus.jsonl, 301 FENs)"
+  },
+  "sg2c": {
+    "what": "never played (ADR-0077 d6 SG2 (c)): a search whose table holds an illegal or stale move at a node of remaining depth 1 or 2 that it reaches never makes that move, and returns a legal move with the position restored",
+    "root": "4k3/4n3/8/8/8/8/P7/4RK2 w - - 0 1",
+    "node": { "how": "the root after a2-a3 (from 16, to 32)", "fen": "4k3/4n3/8/8/8/P7/8/4RK2 b - - 0 1", "why": "black to move; the knight on e7 is pinned to Ke8 by Re1 along the e-file" },
+    "seeds": [
+      { "id": "C1", "what": "an illegal hash move: Ne7-c6, the pinned knight leaving its line (pseudo-legal, illegal)", "from": 100, "to": 82, "promotion": 0, "oracle": null },
+      { "id": "C2", "what": "a stale hash move: a2-a4, the bits of a legal move of the parent position (its from-square is empty here)", "from": 16, "to": 48, "promotion": 0, "oracle": null }
+    ],
+    "searches": [
+      { "id": "S1", "call": "search(root, 2)", "node_remaining": 1 },
+      { "id": "S2", "call": "search(root, 3)", "node_remaining": 2 },
+      { "id": "S3", "call": "chooseMove(root, { budgetMs: 1e9, now: () => 0, maxDepth: 2 })", "node_remaining": 1 },
+      { "id": "S4", "call": "chooseMove(root, { budgetMs: 1e9, now: () => 0, maxDepth: 3 })", "node_remaining": "1 and 2" }
+    ],
+    "how_the_table_holds_it": "vi.mock('./transposition.ts') calling through: after every clearTable, storeEntry(nodeKey, 0, BOUND_LOWER, 0, 0, seed) puts the seed in the node's slot (stored depth 0, so tableCutoff, which cuts only at the exact depth, never cuts on it); and every storeEntry for nodeKey writes the seed's bits in place of the move it was given (depth, bound and score unchanged), so every later visit reads the seed too",
+    "precondition": "the case is not vacuous: during the search, probeTable(nodeKey) hit at least once and the tableCutoff call that followed it ran at remaining depth 1 or 2 (S4: both) and returned null. On main this holds for every seed and search (sg2c.ref.ts)",
+    "expect": [
+      "no makeMove call is made with the seed's from and to (and promotion) on the node (position key equal to nodeKey before the call): a vi.mock('./apply.ts') spy calling through",
+      "the result's move is field-equal to a move of legalMoves(root)",
+      "toFen(root) and zobristKey(root) equal their values before the call",
+      "on main the result (move, score, nodes) is main's for that seeded search; INFO, not a bar"
+    ]
+  }
+}

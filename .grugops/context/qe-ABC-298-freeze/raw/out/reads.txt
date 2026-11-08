@@ -1,0 +1,3 @@
+default lane (all files, one worker): success True, files 71, suites 594, tests 2734, passed 2734, failed 0, pending 0, todo 0
+perft, default lane: success True, files 1, suites 4, tests 24, passed 24, failed 0, pending 0, todo 0
+perft, PERFT_DEEP=1: success True, files 1, suites 4, tests 32, passed 32, failed 0, pending 0, todo 0

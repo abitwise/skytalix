@@ -1,0 +1,17 @@
+QE298-SG2C {"seed":"C1","call":"S1","readDepths":[1],"entryReads":[1],"made":0,"move":"5,21,6,0,0,0","score":281,"nodes":67}
+QE298-SG2C {"seed":"C1","call":"S2","readDepths":[2],"entryReads":[2],"made":0,"move":"5,21,6,0,0,0","score":309,"nodes":450}
+QE298-SG2C {"seed":"C1","call":"S3","readDepths":[1],"entryReads":[1],"made":0,"move":"5,21,6,0,0,0","score":281,"nodes":66}
+QE298-SG2C {"seed":"C1","call":"S4","readDepths":[1,2],"entryReads":[1,2],"made":0,"move":"5,21,6,0,0,0","score":309,"nodes":452}
+QE298-SG2C {"seed":"C2","call":"S1","readDepths":[1],"entryReads":[1],"made":0,"move":"5,21,6,0,0,0","score":281,"nodes":67}
+QE298-SG2C {"seed":"C2","call":"S2","readDepths":[2],"entryReads":[2],"made":0,"move":"5,21,6,0,0,0","score":309,"nodes":450}
+QE298-SG2C {"seed":"C2","call":"S3","readDepths":[1],"entryReads":[1],"made":0,"move":"5,21,6,0,0,0","score":281,"nodes":66}
+QE298-SG2C {"seed":"C2","call":"S4","readDepths":[1,2],"entryReads":[1,2],"made":0,"move":"5,21,6,0,0,0","score":309,"nodes":452}
+ ✓ src/qe298-sg2c.ref.test.ts > qe-ABC-298-freeze SG2 (c) on main: the seeded node is reached and its seed is never made > C1 S1
+ ✓ src/qe298-sg2c.ref.test.ts > qe-ABC-298-freeze SG2 (c) on main: the seeded node is reached and its seed is never made > C1 S2
+ ✓ src/qe298-sg2c.ref.test.ts > qe-ABC-298-freeze SG2 (c) on main: the seeded node is reached and its seed is never made > C1 S3
+ ✓ src/qe298-sg2c.ref.test.ts > qe-ABC-298-freeze SG2 (c) on main: the seeded node is reached and its seed is never made > C1 S4
+ ✓ src/qe298-sg2c.ref.test.ts > qe-ABC-298-freeze SG2 (c) on main: the seeded node is reached and its seed is never made > C2 S1
+ ✓ src/qe298-sg2c.ref.test.ts > qe-ABC-298-freeze SG2 (c) on main: the seeded node is reached and its seed is never made > C2 S2
+ ✓ src/qe298-sg2c.ref.test.ts > qe-ABC-298-freeze SG2 (c) on main: the seeded node is reached and its seed is never made > C2 S3
+ ✓ src/qe298-sg2c.ref.test.ts > qe-ABC-298-freeze SG2 (c) on main: the seeded node is reached and its seed is never made > C2 S4
+      Tests  8 passed (8)
