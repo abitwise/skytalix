@@ -1,0 +1,840 @@
+{
+  "task": "qe-ABC-292-freeze",
+  "row": "ADR-0076 K1 (b): evaluateAtPhaseWithoutPieceTerms (at phaseOf) === pre-ticket evaluate; evaluateWithoutTaper === pre-ticket evaluateWithoutTaper; Object.is",
+  "main": "0885de715cdfc67d05f7f2b3623c5b555dbcdb70",
+  "srcTree": "bba42fb7a8f613ee7947ddf9d570140cd4bd7f8e",
+  "sets": [
+    {
+      "name": "G3",
+      "what": "buildCorpus(): the six perft roots and every one-ply child, in buildCorpus order",
+      "count": 184,
+      "file": "src/evaluate.mirror-corpus.ts",
+      "lastCommit": "34c9c026f95b6557ec44b6ee725fa366a9e5baef",
+      "sha256": "d0762556f17de0d1bac46fb6c1c850ec5fb606a3242d171b40c2657be5cc917b"
+    },
+    {
+      "name": "TAPER_MIRROR_POSITIONS",
+      "what": "ABC-269 B1 (a)'s frozen mirror positions",
+      "count": 30,
+      "file": "src/evaluate.taper-corpus.ts",
+      "lastCommit": "d6a57653c3177865a2feba79b64f6136fe86ebcc",
+      "sha256": "05ed9e81da4ad803a41c43e12c92d8ada9c23d52e91fa7fb770c871ae6e96339"
+    },
+    {
+      "name": "TAPER_DOOR_CORPUS",
+      "what": "ABC-269's door corpus with each row's pre-ABC-269 evaluate (= evaluateWithoutTaper)",
+      "count": 176,
+      "file": "src/evaluate.taper-corpus.ts",
+      "lastCommit": "d6a57653c3177865a2feba79b64f6136fe86ebcc",
+      "sha256": "05ed9e81da4ad803a41c43e12c92d8ada9c23d52e91fa7fb770c871ae6e96339"
+    },
+    {
+      "name": "G3_CORPUS_MAIN_EVALUATE",
+      "what": "G3's pre-ABC-269 evaluate (= evaluateWithoutTaper), buildCorpus order",
+      "count": 184,
+      "file": "src/evaluate.taper-corpus.ts",
+      "lastCommit": "d6a57653c3177865a2feba79b64f6136fe86ebcc",
+      "sha256": "05ed9e81da4ad803a41c43e12c92d8ada9c23d52e91fa7fb770c871ae6e96339"
+    },
+    {
+      "name": "G3_PRE",
+      "what": "G3's evaluate, buildCorpus order (copy also in the queen-on file)",
+      "count": 184,
+      "file": "src/evaluate.passer.test.ts",
+      "lastCommit": "158bb992c42662917d8bfd166a2d34377a2ab1a7",
+      "sha256": "78d7d996305f9ef117a9c80e383f70abc5bbf8bfec22841d8de28f173db0b016"
+    },
+    {
+      "name": "DOOR_PRE",
+      "what": "TAPER_DOOR_CORPUS's evaluate, in its order",
+      "count": 176,
+      "file": "src/evaluate.passer.test.ts",
+      "lastCommit": "158bb992c42662917d8bfd166a2d34377a2ab1a7",
+      "sha256": "78d7d996305f9ef117a9c80e383f70abc5bbf8bfec22841d8de28f173db0b016"
+    },
+    {
+      "name": "QUEEN_PAIR_PRE",
+      "what": "ABC-270's queen pairs and mirrors with evaluate",
+      "count": 28,
+      "file": "src/evaluate.passer.test.ts",
+      "lastCommit": "158bb992c42662917d8bfd166a2d34377a2ab1a7",
+      "sha256": "78d7d996305f9ef117a9c80e383f70abc5bbf8bfec22841d8de28f173db0b016"
+    },
+    {
+      "name": "PASSER_PRE",
+      "what": "ABC-271's 12 + 44 positions and mirrors with evaluate",
+      "count": 112,
+      "file": "src/evaluate.passer.test.ts",
+      "lastCommit": "158bb992c42662917d8bfd166a2d34377a2ab1a7",
+      "sha256": "78d7d996305f9ef117a9c80e383f70abc5bbf8bfec22841d8de28f173db0b016"
+    },
+    {
+      "name": "queen-on copies",
+      "what": "G3_PRE / DOOR_PRE / QUEEN_PAIR_PRE as copied in the queen-on file",
+      "count": 3,
+      "file": "src/evaluate.queen-on.test.ts",
+      "lastCommit": "795a6b61ef77688c7888871d960563173942dc76",
+      "sha256": "ba6e83940b56ea0a44eb466a34a0b38fc7fac64f888a8657f7cf9d4f0af638aa"
+    }
+  ],
+  "checksOnMainNow": [
+    {
+      "set": "G3 (buildCorpus, 184) vs G3_CORPUS_MAIN_EVALUATE",
+      "fn": "evaluateWithoutTaper",
+      "n": 184,
+      "mismatches": 0,
+      "first": []
+    },
+    {
+      "set": "TAPER_DOOR_CORPUS (176) .main",
+      "fn": "evaluateWithoutTaper",
+      "n": 176,
+      "mismatches": 0,
+      "first": []
+    },
+    {
+      "set": "G3 (buildCorpus, 184) vs G3_PRE",
+      "fn": "evaluate",
+      "n": 184,
+      "mismatches": 0,
+      "first": []
+    },
+    {
+      "set": "TAPER_DOOR_CORPUS (176) vs DOOR_PRE",
+      "fn": "evaluate",
+      "n": 176,
+      "mismatches": 0,
+      "first": []
+    },
+    {
+      "set": "QUEEN_PAIR_PRE (28)",
+      "fn": "evaluate",
+      "n": 28,
+      "mismatches": 0,
+      "first": []
+    },
+    {
+      "set": "PASSER_PRE (112)",
+      "fn": "evaluate",
+      "n": 112,
+      "mismatches": 0,
+      "first": []
+    },
+    {
+      "set": "TAPER_MIRROR_POSITIONS (30): each row in TAPER_DOOR_CORPUS",
+      "fn": "membership",
+      "n": 30,
+      "mismatches": 0,
+      "first": []
+    },
+    {
+      "set": "src/evaluate.queen-on.test.ts's G3_PRE / DOOR_PRE / QUEEN_PAIR_PRE equal src/evaluate.passer.test.ts's",
+      "fn": "text",
+      "n": 3,
+      "mismatches": 0
+    }
+  ],
+  "newRows": {
+    "note": "main's readings at this tip on every position this freeze adds and its mirror; the pre-ticket entries for those rows",
+    "count": 116,
+    "mirrorMismatches": [],
+    "rows": [
+      {
+        "id": "A01",
+        "fen": "r1bq1rk1/pp2bppp/2n1pn2/3p4/2PP4/2N1PN2/PP3PPP/R1BQKB1R w KQ - 0 8",
+        "evaluate": 63,
+        "evaluateWithoutTaper": 63
+      },
+      {
+        "id": "A01~mirror",
+        "fen": "r1bqkb1r/pp3ppp/2n1pn2/2pp4/3P4/2N1PN2/PP2BPPP/R1BQ1RK1 b kq - 0 8",
+        "evaluate": 63,
+        "evaluateWithoutTaper": 63
+      },
+      {
+        "id": "A02",
+        "fen": "2r3k1/pp3ppp/2n1b3/8/8/2B5/PP3PPP/3R2K1 b - - 0 1",
+        "evaluate": 359,
+        "evaluateWithoutTaper": 359
+      },
+      {
+        "id": "A02~mirror",
+        "fen": "3r2k1/pp3ppp/2b5/8/8/2N1B3/PP3PPP/2R3K1 w - - 0 1",
+        "evaluate": 359,
+        "evaluateWithoutTaper": 359
+      },
+      {
+        "id": "A03",
+        "fen": "r4rk1/1b3ppp/p7/1p6/8/P1B5/1P3PPP/R2R2K1 w - - 0 1",
+        "evaluate": 38,
+        "evaluateWithoutTaper": 38
+      },
+      {
+        "id": "A03~mirror",
+        "fen": "r2r2k1/1p3ppp/p1b5/8/1P6/P7/1B3PPP/R4RK1 b - - 0 1",
+        "evaluate": 38,
+        "evaluateWithoutTaper": 38
+      },
+      {
+        "id": "A04",
+        "fen": "6k1/5pbp/6p1/8/8/1B6/5PPP/1B4K1 b - - 0 1",
+        "evaluate": -333,
+        "evaluateWithoutTaper": -333
+      },
+      {
+        "id": "A04~mirror",
+        "fen": "1b4k1/5ppp/1b6/8/8/6P1/5PBP/6K1 w - - 0 1",
+        "evaluate": -333,
+        "evaluateWithoutTaper": -333
+      },
+      {
+        "id": "A05",
+        "fen": "3r2k1/5ppp/8/8/8/8/5PPP/R5K1 w - - 0 1",
+        "evaluate": 0,
+        "evaluateWithoutTaper": 0
+      },
+      {
+        "id": "A05~mirror",
+        "fen": "r5k1/5ppp/8/8/8/8/5PPP/3R2K1 b - - 0 1",
+        "evaluate": 0,
+        "evaluateWithoutTaper": 0
+      },
+      {
+        "id": "A06",
+        "fen": "8/2k5/8/3b4/8/2BB4/8/4K3 w - - 0 1",
+        "evaluate": 345,
+        "evaluateWithoutTaper": 345
+      },
+      {
+        "id": "A06~mirror",
+        "fen": "4k3/8/2bb4/8/3B4/8/2K5/8 b - - 0 1",
+        "evaluate": 345,
+        "evaluateWithoutTaper": 345
+      },
+      {
+        "id": "A07",
+        "fen": "r3k2r/ppp2ppp/2n5/3q4/3P4/2N5/PPP2PPP/R2QK2R b KQkq - 0 10",
+        "evaluate": -55,
+        "evaluateWithoutTaper": -55
+      },
+      {
+        "id": "A07~mirror",
+        "fen": "r2qk2r/ppp2ppp/2n5/3p4/3Q4/2N5/PPP2PPP/R3K2R w KQkq - 0 10",
+        "evaluate": -55,
+        "evaluateWithoutTaper": -55
+      },
+      {
+        "id": "A08",
+        "fen": "4k3/8/8/3pP3/8/8/8/R3K2R w KQ d6 0 2",
+        "evaluate": 1109,
+        "evaluateWithoutTaper": 1097
+      },
+      {
+        "id": "A08~mirror",
+        "fen": "r3k2r/8/8/8/3Pp3/8/8/4K3 b kq d3 0 2",
+        "evaluate": 1109,
+        "evaluateWithoutTaper": 1097
+      },
+      {
+        "id": "A09",
+        "fen": "1r4k1/5ppp/8/8/8/8/1P3PPP/1R4K1 b - - 0 1",
+        "evaluate": -75,
+        "evaluateWithoutTaper": -71
+      },
+      {
+        "id": "A09~mirror",
+        "fen": "1r4k1/1p3ppp/8/8/8/8/5PPP/1R4K1 w - - 0 1",
+        "evaluate": -75,
+        "evaluateWithoutTaper": -71
+      },
+      {
+        "id": "A10",
+        "fen": "2b2kb1/8/8/8/8/8/4R3/4K3 w - - 0 1",
+        "evaluate": -124,
+        "evaluateWithoutTaper": -144
+      },
+      {
+        "id": "A10~mirror",
+        "fen": "4k3/4r3/8/8/8/8/8/2B2KB1 b - - 0 1",
+        "evaluate": -124,
+        "evaluateWithoutTaper": -144
+      },
+      {
+        "id": "A11",
+        "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5B2/PPPP1PP1/RNBQKBNR b KQkq - 0 3",
+        "evaluate": -255,
+        "evaluateWithoutTaper": -255
+      },
+      {
+        "id": "A11~mirror",
+        "fen": "rnbqkbnr/pppp1pp1/5b2/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 3",
+        "evaluate": -255,
+        "evaluateWithoutTaper": -255
+      },
+      {
+        "id": "A12",
+        "fen": "8/5k2/8/2r5/8/8/3K4/8 w - - 0 1",
+        "evaluate": -544,
+        "evaluateWithoutTaper": -566
+      },
+      {
+        "id": "A12~mirror",
+        "fen": "8/3k4/8/8/2R5/8/5K2/8 b - - 0 1",
+        "evaluate": -544,
+        "evaluateWithoutTaper": -566
+      },
+      {
+        "id": "A13",
+        "fen": "r2q1rk1/1b2bppp/p1n1pn2/1p6/3P4/P1NB1N2/1PQ2PPP/R1B2RK1 b - - 0 12",
+        "evaluate": -13,
+        "evaluateWithoutTaper": -13
+      },
+      {
+        "id": "A13~mirror",
+        "fen": "r1b2rk1/1pq2ppp/p1nb1n2/3p4/1P6/P1N1PN2/1B2BPPP/R2Q1RK1 w - - 0 12",
+        "evaluate": -13,
+        "evaluateWithoutTaper": -13
+      },
+      {
+        "id": "A14",
+        "fen": "5rk1/1p3ppp/p7/8/8/P7/1P3PPP/2R3K1 w - - 0 1",
+        "evaluate": 32,
+        "evaluateWithoutTaper": 32
+      },
+      {
+        "id": "A14~mirror",
+        "fen": "2r3k1/1p3ppp/p7/8/8/P7/1P3PPP/5RK1 b - - 0 1",
+        "evaluate": 32,
+        "evaluateWithoutTaper": 32
+      },
+      {
+        "id": "A15",
+        "fen": "6k1/p4ppp/8/8/8/8/1R3PPP/1R4K1 b - - 0 1",
+        "evaluate": -961,
+        "evaluateWithoutTaper": -965
+      },
+      {
+        "id": "A15~mirror",
+        "fen": "1r4k1/1r3ppp/8/8/8/8/P4PPP/6K1 w - - 0 1",
+        "evaluate": -961,
+        "evaluateWithoutTaper": -965
+      },
+      {
+        "id": "P1-W-one",
+        "fen": "4k3/8/8/8/8/8/8/2B1K3 w - - 0 1",
+        "evaluate": 343,
+        "evaluateWithoutTaper": 343
+      },
+      {
+        "id": "P1-W-one~mirror",
+        "fen": "2b1k3/8/8/8/8/8/8/4K3 b - - 0 1",
+        "evaluate": 343,
+        "evaluateWithoutTaper": 343
+      },
+      {
+        "id": "P2-W-two",
+        "fen": "4k3/8/8/8/8/8/8/2B1KB2 w - - 0 1",
+        "evaluate": 682,
+        "evaluateWithoutTaper": 682
+      },
+      {
+        "id": "P2-W-two~mirror",
+        "fen": "2b1kb2/8/8/8/8/8/8/4K3 b - - 0 1",
+        "evaluate": 682,
+        "evaluateWithoutTaper": 682
+      },
+      {
+        "id": "P3-W-three",
+        "fen": "4k3/8/8/8/8/3B4/8/2B1KB2 w - - 0 1",
+        "evaluate": 1041,
+        "evaluateWithoutTaper": 1041
+      },
+      {
+        "id": "P3-W-three~mirror",
+        "fen": "2b1kb2/8/3b4/8/8/8/8/4K3 b - - 0 1",
+        "evaluate": 1041,
+        "evaluateWithoutTaper": 1041
+      },
+      {
+        "id": "P4-W-same",
+        "fen": "4k3/8/8/8/8/4B3/8/2B1K3 w - - 0 1",
+        "evaluate": 702,
+        "evaluateWithoutTaper": 702
+      },
+      {
+        "id": "P4-W-same~mirror",
+        "fen": "2b1k3/8/4b3/8/8/8/8/4K3 b - - 0 1",
+        "evaluate": 702,
+        "evaluateWithoutTaper": 702
+      },
+      {
+        "id": "P1-B-one",
+        "fen": "2b1k3/8/8/8/8/8/8/4K3 b - - 0 1",
+        "evaluate": 343,
+        "evaluateWithoutTaper": 343
+      },
+      {
+        "id": "P1-B-one~mirror",
+        "fen": "4k3/8/8/8/8/8/8/2B1K3 w - - 0 1",
+        "evaluate": 343,
+        "evaluateWithoutTaper": 343
+      },
+      {
+        "id": "P2-B-two",
+        "fen": "2b1kb2/8/8/8/8/8/8/4K3 b - - 0 1",
+        "evaluate": 682,
+        "evaluateWithoutTaper": 682
+      },
+      {
+        "id": "P2-B-two~mirror",
+        "fen": "4k3/8/8/8/8/8/8/2B1KB2 w - - 0 1",
+        "evaluate": 682,
+        "evaluateWithoutTaper": 682
+      },
+      {
+        "id": "P3-B-three",
+        "fen": "2b1kb2/8/3b4/8/8/8/8/4K3 b - - 0 1",
+        "evaluate": 1041,
+        "evaluateWithoutTaper": 1041
+      },
+      {
+        "id": "P3-B-three~mirror",
+        "fen": "4k3/8/8/8/8/3B4/8/2B1KB2 w - - 0 1",
+        "evaluate": 1041,
+        "evaluateWithoutTaper": 1041
+      },
+      {
+        "id": "P4-B-same",
+        "fen": "2b1k3/8/4b3/8/8/8/8/4K3 w - - 0 1",
+        "evaluate": -702,
+        "evaluateWithoutTaper": -702
+      },
+      {
+        "id": "P4-B-same~mirror",
+        "fen": "4k3/8/8/8/8/4B3/8/2B1K3 b - - 0 1",
+        "evaluate": -702,
+        "evaluateWithoutTaper": -702
+      },
+      {
+        "id": "P5-both",
+        "fen": "2b1kb2/8/8/8/8/8/8/2B1KB2 w - - 0 1",
+        "evaluate": 0,
+        "evaluateWithoutTaper": 0
+      },
+      {
+        "id": "P5-both~mirror",
+        "fen": "2b1kb2/8/8/8/8/8/8/2B1KB2 b - - 0 1",
+        "evaluate": 0,
+        "evaluateWithoutTaper": 0
+      },
+      {
+        "id": "P6-BN-vs-BB",
+        "fen": "2b1kb2/8/8/8/8/8/8/2B1KN2 b - - 0 1",
+        "evaluate": 12,
+        "evaluateWithoutTaper": 12
+      },
+      {
+        "id": "P6-BN-vs-BB~mirror",
+        "fen": "2b1kn2/8/8/8/8/8/8/2B1KB2 w - - 0 1",
+        "evaluate": 12,
+        "evaluateWithoutTaper": 12
+      },
+      {
+        "id": "RO-W-a",
+        "fen": "4k3/1ppp4/8/8/8/8/1PPP4/R3K3 w - - 0 1",
+        "evaluate": 540,
+        "evaluateWithoutTaper": 540
+      },
+      {
+        "id": "RO-W-a~mirror",
+        "fen": "r3k3/1ppp4/8/8/8/8/1PPP4/4K3 b - - 0 1",
+        "evaluate": 540,
+        "evaluateWithoutTaper": 540
+      },
+      {
+        "id": "RO-W-h",
+        "fen": "4k3/4ppp1/8/8/8/8/4PPP1/4K2R w - - 0 1",
+        "evaluate": 536,
+        "evaluateWithoutTaper": 536
+      },
+      {
+        "id": "RO-W-h~mirror",
+        "fen": "4k2r/4ppp1/8/8/8/8/4PPP1/4K3 b - - 0 1",
+        "evaluate": 536,
+        "evaluateWithoutTaper": 536
+      },
+      {
+        "id": "RO-B-a",
+        "fen": "r3k3/1ppp4/8/8/8/8/1PPP4/4K3 b - - 0 1",
+        "evaluate": 540,
+        "evaluateWithoutTaper": 540
+      },
+      {
+        "id": "RO-B-a~mirror",
+        "fen": "4k3/1ppp4/8/8/8/8/1PPP4/R3K3 w - - 0 1",
+        "evaluate": 540,
+        "evaluateWithoutTaper": 540
+      },
+      {
+        "id": "RO-B-h",
+        "fen": "4k2r/4ppp1/8/8/8/8/4PPP1/4K3 w - - 0 1",
+        "evaluate": -536,
+        "evaluateWithoutTaper": -536
+      },
+      {
+        "id": "RO-B-h~mirror",
+        "fen": "4k3/4ppp1/8/8/8/8/4PPP1/4K2R b - - 0 1",
+        "evaluate": -536,
+        "evaluateWithoutTaper": -536
+      },
+      {
+        "id": "RS-W-a",
+        "fen": "4k3/pppp4/8/8/8/8/1PPP4/R3K3 w - - 0 1",
+        "evaluate": 436,
+        "evaluateWithoutTaper": 436
+      },
+      {
+        "id": "RS-W-a~mirror",
+        "fen": "r3k3/1ppp4/8/8/8/8/PPPP4/4K3 b - - 0 1",
+        "evaluate": 436,
+        "evaluateWithoutTaper": 436
+      },
+      {
+        "id": "RS-W-h",
+        "fen": "4k3/4pppp/8/8/8/8/4PPP1/4K2R b - - 0 1",
+        "evaluate": -432,
+        "evaluateWithoutTaper": -432
+      },
+      {
+        "id": "RS-W-h~mirror",
+        "fen": "4k2r/4ppp1/8/8/8/8/4PPPP/4K3 w - - 0 1",
+        "evaluate": -432,
+        "evaluateWithoutTaper": -432
+      },
+      {
+        "id": "RS-B-a",
+        "fen": "r3k3/1ppp4/8/8/8/8/PPPP4/4K3 b - - 0 1",
+        "evaluate": 436,
+        "evaluateWithoutTaper": 436
+      },
+      {
+        "id": "RS-B-a~mirror",
+        "fen": "4k3/pppp4/8/8/8/8/1PPP4/R3K3 w - - 0 1",
+        "evaluate": 436,
+        "evaluateWithoutTaper": 436
+      },
+      {
+        "id": "RS-B-h",
+        "fen": "4k2r/4ppp1/8/8/8/8/4PPPP/4K3 w - - 0 1",
+        "evaluate": -432,
+        "evaluateWithoutTaper": -432
+      },
+      {
+        "id": "RS-B-h~mirror",
+        "fen": "4k3/4pppp/8/8/8/8/4PPP1/4K2R b - - 0 1",
+        "evaluate": -432,
+        "evaluateWithoutTaper": -432
+      },
+      {
+        "id": "RF-open-norook",
+        "fen": "4k3/1ppp4/8/8/8/8/1PPP4/Q3K3 w - - 0 1",
+        "evaluate": 935,
+        "evaluateWithoutTaper": 935
+      },
+      {
+        "id": "RF-open-norook~mirror",
+        "fen": "q3k3/1ppp4/8/8/8/8/1PPP4/4K3 b - - 0 1",
+        "evaluate": 935,
+        "evaluateWithoutTaper": 935
+      },
+      {
+        "id": "RF-open-ownpawn",
+        "fen": "4k3/1ppp4/8/8/8/8/PPPP4/R3K3 w - - 0 1",
+        "evaluate": 612,
+        "evaluateWithoutTaper": 612
+      },
+      {
+        "id": "RF-open-ownpawn~mirror",
+        "fen": "r3k3/pppp4/8/8/8/8/1PPP4/4K3 b - - 0 1",
+        "evaluate": 612,
+        "evaluateWithoutTaper": 612
+      },
+      {
+        "id": "RF-semi-norook",
+        "fen": "4k3/pppp4/8/8/8/8/1PPP4/Q3K3 w - - 0 1",
+        "evaluate": 831,
+        "evaluateWithoutTaper": 831
+      },
+      {
+        "id": "RF-semi-norook~mirror",
+        "fen": "q3k3/1ppp4/8/8/8/8/PPPP4/4K3 b - - 0 1",
+        "evaluate": 831,
+        "evaluateWithoutTaper": 831
+      },
+      {
+        "id": "RF-semi-ownpawn",
+        "fen": "4k3/pppp4/8/8/8/8/PPPP4/R3K3 w - - 0 1",
+        "evaluate": 512,
+        "evaluateWithoutTaper": 512
+      },
+      {
+        "id": "RF-semi-ownpawn~mirror",
+        "fen": "r3k3/pppp4/8/8/8/8/PPPP4/4K3 b - - 0 1",
+        "evaluate": 512,
+        "evaluateWithoutTaper": 512
+      },
+      {
+        "id": "RW1-ownbehind",
+        "fen": "6k1/3p1p2/8/4R3/8/8/4P3/4K3 w - - 0 1",
+        "evaluate": 503,
+        "evaluateWithoutTaper": 458
+      },
+      {
+        "id": "RW1-ownbehind~mirror",
+        "fen": "4k3/4p3/8/8/4r3/8/3P1P2/6K1 b - - 0 1",
+        "evaluate": 503,
+        "evaluateWithoutTaper": 458
+      },
+      {
+        "id": "RW2-enemybehind",
+        "fen": "6k1/3p1p2/4R3/8/8/4p3/8/4K3 w - - 0 1",
+        "evaluate": 115,
+        "evaluateWithoutTaper": 133
+      },
+      {
+        "id": "RW2-enemybehind~mirror",
+        "fen": "4k3/8/4P3/8/8/4r3/3P1P2/6K1 b - - 0 1",
+        "evaluate": 115,
+        "evaluateWithoutTaper": 133
+      },
+      {
+        "id": "RD1-doubled-open",
+        "fen": "4k3/1ppp4/8/8/8/8/RPPP4/R3K3 w - - 0 1",
+        "evaluate": 1036,
+        "evaluateWithoutTaper": 1036
+      },
+      {
+        "id": "RD1-doubled-open~mirror",
+        "fen": "r3k3/rppp4/8/8/8/8/1PPP4/4K3 b - - 0 1",
+        "evaluate": 1036,
+        "evaluateWithoutTaper": 1036
+      },
+      {
+        "id": "RD2-doubled-semi",
+        "fen": "4k2r/4ppp1/7r/8/8/8/4PPPP/4K3 w - - 0 1",
+        "evaluate": -960,
+        "evaluateWithoutTaper": -960
+      },
+      {
+        "id": "RD2-doubled-semi~mirror",
+        "fen": "4k3/4pppp/8/8/8/7R/4PPP1/4K2R b - - 0 1",
+        "evaluate": -960,
+        "evaluateWithoutTaper": -960
+      },
+      {
+        "id": "RD3-two-open-files",
+        "fen": "4k3/2pp4/8/8/8/8/2PP4/R3K2R w - - 0 1",
+        "evaluate": 1076,
+        "evaluateWithoutTaper": 1076
+      },
+      {
+        "id": "RD3-two-open-files~mirror",
+        "fen": "r3k2r/2pp4/8/8/8/8/2PP4/4K3 b - - 0 1",
+        "evaluate": 1076,
+        "evaluateWithoutTaper": 1076
+      },
+      {
+        "id": "RD4-open-plus-semi",
+        "fen": "4k3/2ppp2p/8/8/8/8/2PPP3/R3K2R b - - 0 1",
+        "evaluate": -973,
+        "evaluateWithoutTaper": -977
+      },
+      {
+        "id": "RD4-open-plus-semi~mirror",
+        "fen": "r3k2r/2ppp3/8/8/8/8/2PPP2P/4K3 w - - 0 1",
+        "evaluate": -973,
+        "evaluateWithoutTaper": -977
+      },
+      {
+        "id": "R7-W",
+        "fen": "6k1/pp1R1ppp/8/8/8/8/PP3PPP/6K1 w - - 0 1",
+        "evaluate": 564,
+        "evaluateWithoutTaper": 564
+      },
+      {
+        "id": "R7-W~mirror",
+        "fen": "6k1/pp3ppp/8/8/8/8/PP1r1PPP/6K1 b - - 0 1",
+        "evaluate": 564,
+        "evaluateWithoutTaper": 564
+      },
+      {
+        "id": "R7-B",
+        "fen": "6k1/pp3ppp/8/8/8/8/PP1r1PPP/6K1 b - - 0 1",
+        "evaluate": 564,
+        "evaluateWithoutTaper": 564
+      },
+      {
+        "id": "R7-B~mirror",
+        "fen": "6k1/pp1R1ppp/8/8/8/8/PP3PPP/6K1 w - - 0 1",
+        "evaluate": 564,
+        "evaluateWithoutTaper": 564
+      },
+      {
+        "id": "NP1-KR-K",
+        "fen": "4k3/8/8/8/8/8/8/R3K3 w - - 0 1",
+        "evaluate": 540,
+        "evaluateWithoutTaper": 540
+      },
+      {
+        "id": "NP1-KR-K~mirror",
+        "fen": "r3k3/8/8/8/8/8/8/4K3 b - - 0 1",
+        "evaluate": 540,
+        "evaluateWithoutTaper": 540
+      },
+      {
+        "id": "NP2-KRR-KR",
+        "fen": "3rk3/8/8/8/8/8/8/R3K2R b - - 0 1",
+        "evaluate": -540,
+        "evaluateWithoutTaper": -540
+      },
+      {
+        "id": "NP2-KRR-KR~mirror",
+        "fen": "r3k2r/8/8/8/8/8/8/3RK3 w - - 0 1",
+        "evaluate": -540,
+        "evaluateWithoutTaper": -540
+      },
+      {
+        "id": "NP3-KBB-KR",
+        "fen": "4k2r/8/8/8/8/8/8/2B1KB2 w - - 0 1",
+        "evaluate": 146,
+        "evaluateWithoutTaper": 146
+      },
+      {
+        "id": "NP3-KBB-KR~mirror",
+        "fen": "2b1kb2/8/8/8/8/8/8/4K2R b - - 0 1",
+        "evaluate": 146,
+        "evaluateWithoutTaper": 146
+      },
+      {
+        "id": "RX1-one-file-split",
+        "fen": "4r1k1/5ppp/8/8/4P3/8/5PPP/4R1K1 w - - 0 1",
+        "evaluate": 104,
+        "evaluateWithoutTaper": 104
+      },
+      {
+        "id": "RX1-one-file-split~mirror",
+        "fen": "4r1k1/5ppp/8/4p3/8/8/5PPP/4R1K1 b - - 0 1",
+        "evaluate": 104,
+        "evaluateWithoutTaper": 104
+      },
+      {
+        "id": "RX2-one-file-open",
+        "fen": "4r1k1/5ppp/8/8/8/8/5PPP/4R1K1 b - - 0 1",
+        "evaluate": 0,
+        "evaluateWithoutTaper": 0
+      },
+      {
+        "id": "RX2-one-file-open~mirror",
+        "fen": "4r1k1/5ppp/8/8/8/8/5PPP/4R1K1 w - - 0 1",
+        "evaluate": 0,
+        "evaluateWithoutTaper": 0
+      },
+      {
+        "id": "FB1-start",
+        "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+        "evaluate": 0,
+        "evaluateWithoutTaper": 0
+      },
+      {
+        "id": "FB1-start~mirror",
+        "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 0 1",
+        "evaluate": 0,
+        "evaluateWithoutTaper": 0
+      },
+      {
+        "id": "FB2-kiwipete",
+        "fen": "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1",
+        "evaluate": 41,
+        "evaluateWithoutTaper": 41
+      },
+      {
+        "id": "FB2-kiwipete~mirror",
+        "fen": "r3k2r/pppbbppp/2n2q1P/1P2p3/3pn3/BN2PNP1/P1PPQPB1/R3K2R b KQkq - 0 1",
+        "evaluate": 41,
+        "evaluateWithoutTaper": 41
+      },
+      {
+        "id": "FB3-mid",
+        "fen": "3r1rk1/pp2bppp/2n1pn2/q7/3P4/2N1BN2/PP2BPPP/2RQ1RK1 w - - 0 1",
+        "evaluate": 291,
+        "evaluateWithoutTaper": 291
+      },
+      {
+        "id": "FB3-mid~mirror",
+        "fen": "2rq1rk1/pp2bppp/2n1bn2/3p4/Q7/2N1PN2/PP2BPPP/3R1RK1 b - - 0 1",
+        "evaluate": 291,
+        "evaluateWithoutTaper": 291
+      },
+      {
+        "id": "FB4-largest",
+        "fen": "2rr2k1/pb3ppp/1p2pb2/8/8/2N1PN2/PP3PPP/R4RK1 b - - 0 1",
+        "evaluate": -16,
+        "evaluateWithoutTaper": -16
+      },
+      {
+        "id": "FB4-largest~mirror",
+        "fen": "r4rk1/pp3ppp/2n1pn2/8/8/1P2PB2/PB3PPP/2RR2K1 w - - 0 1",
+        "evaluate": -16,
+        "evaluateWithoutTaper": -16
+      },
+      {
+        "id": "K2-A4",
+        "fen": "6kr/3p2pp/8/8/3R4/8/3P2PP/6K1 w - - 0 1",
+        "evaluate": 48,
+        "evaluateWithoutTaper": 48
+      },
+      {
+        "id": "K2-A4~mirror",
+        "fen": "6k1/3p2pp/8/3r4/8/8/3P2PP/6KR b - - 0 1",
+        "evaluate": 48,
+        "evaluateWithoutTaper": 48
+      },
+      {
+        "id": "K2-A4-btm",
+        "fen": "6kr/3p2pp/8/8/3R4/8/3P2PP/6K1 b - - 0 1",
+        "evaluate": -48,
+        "evaluateWithoutTaper": -48
+      },
+      {
+        "id": "K2-A4-btm~mirror",
+        "fen": "6k1/3p2pp/8/3r4/8/8/3P2PP/6KR w - - 0 1",
+        "evaluate": -48,
+        "evaluateWithoutTaper": -48
+      },
+      {
+        "id": "K2-A3b-F5",
+        "fen": "rnbr1qk1/3nbppp/8/5P2/8/8/3NB1PP/RNBR1QK1 w - - 0 1",
+        "evaluate": 13,
+        "evaluateWithoutTaper": 13
+      },
+      {
+        "id": "K2-A3b-F5~mirror",
+        "fen": "rnbr1qk1/3nb1pp/8/8/5p2/8/3NBPPP/RNBR1QK1 b - - 0 1",
+        "evaluate": 13,
+        "evaluateWithoutTaper": 13
+      },
+      {
+        "id": "K2-A3b-E5",
+        "fen": "rnbr1qk1/3nbppp/8/4P3/8/8/3NB1PP/RNBR1QK1 w - - 0 1",
+        "evaluate": 11,
+        "evaluateWithoutTaper": 11
+      },
+      {
+        "id": "K2-A3b-E5~mirror",
+        "fen": "rnbr1qk1/3nb1pp/8/8/4p3/8/3NBPPP/RNBR1QK1 b - - 0 1",
+        "evaluate": 11,
+        "evaluateWithoutTaper": 11
+      }
+    ]
+  }
+}

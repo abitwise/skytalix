@@ -1,0 +1,30 @@
+{
+  "refs": [
+    "qe-ABC-292-freeze",
+    "grugops/qe-ABC-292-freeze",
+    "ABC-292",
+    "EPIC-011",
+    "E5",
+    "ADR-0076",
+    "ADR-0076 d10 step 3",
+    "orch-2026-10-30a/…23d30c72",
+    "orch-2026-10-30a/…89b7220c",
+    "orch-2026-10-30a/…e63ff24f",
+    "K1",
+    "K2",
+    "ABC-083",
+    "0885de71",
+    "bba42fb7",
+    ".grugops/context/qe-ABC-292-freeze/raw/fixtures.json",
+    "sha256:6dc902c6be848e970a0cf66228f82e8f00f6e3d2d070fe954d85a27309ffbfe4",
+    ".grugops/context/qe-ABC-292-freeze/raw/pre-ticket.json",
+    "sha256:ed6a6fdad7c66737e1df4b83478ecb10125c23c6d397ecb4da6a6d6d6146ff36"
+  ],
+  "notes": [
+    {
+      "kind": "decision",
+      "confidence": "high (a freeze: every K1 (c) and K2 piece value worked by hand from ADR-0076 d2/d3 with no patch in the world, then checked by a labeller written from d2's words and by main's FEN / check / phaseOf / evaluate mirror; K2's relations and K1 (b)'s sets read on main at 0885de71; the build's readings are UNKNOWN - verify)",
+      "bodyFile": "note-freeze.md"
+    }
+  ]
+}

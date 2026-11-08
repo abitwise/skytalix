@@ -1,0 +1,6 @@
+K2-A4 on main: legal 19 v 8; evaluateWithoutMobility 0; evaluate 48 / btm -48; hand piece net 0
+K2-A3b on main: E5 - F5 = -2 (term on), 8 (zeroed); piece net per arm 0 / 0 by hand.
+  old pair: main E5 - F5 = -2, piece net F5 0, E5 10 -> on a correct build 8 (red), as K2 says
+  old MOBILE_WHITE: evaluateWithoutMobility on main 0, piece net 20 -> 20 on a correct build (not 0), as K2 says
+K1 (c) 39 rows by group {"pair":10,"open":4,"semi":4,"fail":4,"whole-file":2,"doubled":4,"seventh":2,"no-pawns":3,"shared-file":2,"full":4}; K1 (a) 15; K2 2
+1300 checks, 0 failures
