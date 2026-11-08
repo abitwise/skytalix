@@ -1,3 +1,5 @@
+_Updated: 2026-11-08T22:12:53Z — arch-ABC-298-stop merged: three source rows re-pointed, not F2; se-ABC-298-repoint runs the re-reads and G4._
+_Updated: 2026-11-08T22:04:12Z — se-ABC-298 STOP: values identical, three source-shape rows red; not merged; arch-ABC-298-stop rules._
 _Updated: 2026-11-08T21:30:03Z — qe-ABC-298-freeze merged (673e21bc); step 5 check passed; ABC-298 In Development, se-ABC-298 building._
 _Updated: 2026-11-08T20:28:14Z — count probe GO (558a25e5; s 0.075 / 0.058 / 0.032); qe-ABC-298-freeze running (step 4)._
 _Updated: 2026-11-08T20:19:42Z — bapm-ABC-298-accept merged (DoR 10/10); arch-ABC-298-probe running (count, untimed); stale se-ABC-289 brief withdrawn._

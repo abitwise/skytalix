@@ -10,6 +10,7 @@ id: ADR-0077
 - **His word, verbatim** (`orch-2026-10-30a` `…44810861`): *"accept ADR-0077 ; yes"*. Question 1, accept this ADR: yes. Question 2, a stop or a miss ends V3: yes. Both were the recommendations he was shown (`…b517ced2`).
 - **What it settles:** d1–d12 as written. **No gate, form, value, bar, spread rule, stop rule or order step changes with this acceptance.** The count probe stays written and not run.
 - **Question 2 is his ruling now.** A count-probe STOP (F5), a miss on SG3 (F4) or identity not kept (d12, F2) ends V3. No wider form without a new ADR and his word. See d12's dated line.
+- *Dated 2026-11-08 (`arch-ABC-298-stop`):* d9 step 6's STOP was ruled **not F2**. Three source-shape rows are re-pointed in place by d6's dated line, and V3 continues. The build keeps its exports (d2's line) and its `list.slice(1)` (d1's line). d8's `ABC-299` wording is corrected. No gate, form, value, bar, spread rule, stop rule or order step moved.
 - **d9's order, step 2:** this status, the decision log and the dated lines at d12 and `ADR-0056` D2 (row V3) are the Architect's half. `ABC-298`'s page is BA/PM's half (`bapm-ABC-298-accept`). Step 3, the count probe (`arch-ABC-298-probe`), comes next.
 
 *As proposed:* **PROPOSED 2026-11-08.** Recorded by Architect/Design (task `arch-ABC-298`, records only, on `grugops/arch-ABC-298` from `main` `36baff11`, `src/` tree `bba42fb7`).
@@ -54,6 +55,7 @@ id: ADR-0077
 | 2026-11-08 | Architect/Design | PROPOSED: the form with the depth-1–2 gate, the legality seam, the identity duty, captures-first out, SG0–SG3 with SG3's bar and spread rule, the count probe and its stop rule, no games, the order with the freeze first, `kingExposure` out, `NFR-008` line, the stop. Nothing run | `arch-ABC-298` |
 | 2026-11-08 | Owner | ACCEPTED ("accept ADR-0077 ; yes"), in force only at `ABC-298`'s merge. Question 1 yes; question 2 yes: a count-probe STOP, an SG3 miss or identity not kept ends V3, and no wider form comes without a new ADR and his word | `orch-2026-10-30a` `…44810861` |
 | 2026-11-08 | Architect/Design | Status and this log. Dated lines at d12 (his question 2) and in `ADR-0056` D2, row V3. No gate, form, value, bar, spread rule, stop rule or order step moved. Nothing run | `arch-ABC-298-accept` |
+| 2026-11-08 | Architect/Design | The Engineer's STOP (`se-ABC-298` `…999b2535`) ruled: the three red rows are source-shape rows, not identity rows; each row's property holds on the build, so each is re-pointed in place by d6's dated line, word for word, titles unchanged. Not F2; V3 continues. No new `src/search.ts` export (d2's line). `list.slice(1)` is within d1 and not required to change (d1's line). d8's `ABC-299` wording corrected. No gate, form, value, bar, spread rule, stop rule or order step moved. Nothing run | `arch-ABC-298-stop` |
 
 ## Context
 
@@ -133,6 +135,7 @@ At a node where the hash move exists and does not cut off, V3 pays for the check
         - `searchMove` gives it the node's own window.
      5. **If it cuts off,** make the writes today's cutoff at index 0 makes (d3 item 10), store, and return. Nothing is generated.
      6. **If not,** run `legalMoves` and `orderMoves` as today, with the same hash move and the countermove read in step 2. The list's first entry is the hash move's twin. The loop runs from list position 1, with `index` 1, and carries `best`, `bestMove`, `alpha` and `searchedQuiets` from step 4.
+        *Dated 2026-11-08 (`arch-ABC-298-stop`): the build's `for (const move of hashFirst === null ? list : list.slice(1))` is this step. It starts at list position 1, with `index` 1, while the cutoff's `recordHistoryCutoff(position, list, index - 1, …)` still indexes the full list. So it is within d1–d3. The slice is one transient array per gated node whose hash move does not cut off. That is not a fixed structure, so `NFR-009` gets no line and `G7` stays 0. Such nodes are H − C in the probe (`…d097e25f`): 5.7 %, 4.6 % and 5.8 % of G. Each already allocates the generated list, the filtered list and `orderMoves`' own `moves.slice()`, so the extra copy costs at most about one more `moves.slice()` at those nodes. By arithmetic that is well under S2's resolution, and the reading is `UNKNOWN - verify`. **A non-allocating form is not required, and the build keeps the slice.** An index loop would redden `src/search.futility.test.ts`'s source row, which needs the loop to open `for (const move of ` with the futile skip as its first statement. That row is not re-pointed, and no change to it is ruled here. SG3 grades the build as it stands.*
    - **Nothing else changes:**
      - the order's keys and tiers;
      - the killers, history and countermove tables;
@@ -157,6 +160,7 @@ At a node where the hash move exists and does not cut off, V3 pays for the check
      - It uses no pin scratch, so it cannot disturb a filter's shared scratch, which (1-A)'s last rule guards.
    - **The read of the move bits stays in `src/transposition.ts`,** which owns `packMove`. It is a live read of word 2, as `entryMove` is (`ADR-0025`). It never reads the verified copy (`hitData`).
    - **Names and signatures are the Engineer's,** with no import cycle. `entryMove` stays for the roots and the gated-out nodes.
+     *Dated 2026-11-08 (`arch-ABC-298-stop`): **no new `src/search.ts` or `src/engine.ts` export.** d2 names the new exports, which are one each in `src/moves.ts`, `src/legal.ts` and `src/transposition.ts`. The build has exactly these: `generateMovesFrom`, `legalMoveFrom`, and `entryMoveLegal` with `HASH_FIRST_DEPTH_LIMIT`. d1 names the constant and leaves its home to the Engineer. `src/search.test.ts` A6 pins `src/search.ts`'s export list, and every name it adds is named by an ADR decision. This ADR names none there, and nothing needs one: the engine already imports `recordHistoryCutoff`, and d6's dated line re-points the rows the build reddened. **The build stays as the Engineer left it.***
    - **`ADR-0003` fit.**
      - Make/test/unmake stays the legality test (clause 1, (1-A)).
      - Nothing is cached on `Position` (`ADR-0020`).
@@ -209,6 +213,33 @@ At a node where the hash move exists and does not cut off, V3 pays for the check
    | **SG3** | speed | held host | d7 |
    | gates | as `ABC-254` A5 | — | `npm run lint`, `typecheck`, `test` and `build` green at every commit; `G1` 54 / 58 with rows equal (`PUZZLE_DEEP=1`, a virtual clock, so node-identical means equal); `G4` = SG1; `G6` "≥ base" (d7); `G7` growth 0; `NFR-008` (d11) |
 
+   *Dated 2026-11-08 (`arch-ABC-298-stop`, on the Engineer's STOP `se-ABC-298` `…999b2535`): **SG1 (c) and three source-shape rows. Not F2. V3 continues.***
+   - **The fault is this ADR's, not the build's.** d1 step 5 and d3 item 10 require the build to do two things. The hash move's cutoff makes index 0's history write, which is a second `recordHistoryCutoff(` call in each recursion. It also stores, which puts a `storeEntry(` between the null move and `legalMoves(position);`. Three existing rows read the source text and forbid exactly that. d6 says "each can be met by a correct build", and SG1 (c) says "changes none". As written, no build that keeps d1 can meet SG1 (c). d3 item 14 and d9 step 4 listed the files that mock `./legal.ts` or `./transposition.ts`. They did not list the rows that read the node's source text. That was my miss.
+   - **What identity means here.** It means what the search does: the nodes, their order, the moves, the scores, the clock reads and the door outputs (d3, § The pins this ticket moves, and § The owner's questions 1: "it looks at exactly the same positions as today, in the same order, and plays the same move at the same depth … checked by exact counts"). F2 and d12 guard that, and the owner's question 2 ends V3 on it.
+   - **What the three rows read.** They read where calls sit in the text. d1 moves that text by design. A source row is an identity row only where its property is node identity, and none of these three is.
+   - **Each row's property is a rule from an older ADR, and each still holds on the build** (`grugops/ABC-298` `43fe357e`, read as text only):
+     - **(R1) `src/search.bundle.test.ts`, "ABC-283 (h) … source: each negamax updates once, at its beta cutoff, behind the switch; …".** `ADR-0063` d2: the history table is updated only at a main-tree beta cutoff, behind the switch, at most once per node, and never in quiescence, at the root or on a null-move cutoff. On the build each recursion has two call sites. Each sits inside a beta-cutoff block behind `switches.history` / `budget.history`. The hash move's site returns, and the loop's runs only after it, so a node still updates at most once. Quiescence, the clear and the `HISTORY[…] =` / `HISTORY.fill(0)` counts are unchanged.
+     - **(R2, R3) `src/search.null-move.test.ts`, "both recursions try the null move … and return beta", for `./search.ts` and `./engine.ts`.** `ADR-0050` d7: the null move's cut returns beta, never the null score, and **stores no table entry**. On the build the null-move block is byte-unchanged and holds no `storeEntry(`. The one store between it and `legalMoves(position);` is the hash move's cutoff store that d3 item 10 requires.
+   - **The re-point, in place, word for word.** The Engineer makes it in its own commit, citing this line. No row title changes, so QE's freeze list (`…44a6717d` § 4) still finds each row by title. No other line of either file changes. "Changes none" in SG1 (c) now reads "changes none, except the lines this dated line names". Each re-pointed row proves its old property and pins the new site exactly.
+     - **R1**, in the `it` body, two lines out:
+       - out: `expect(search.match(/recordHistoryCutoff\(/g)).toHaveLength(2); // the declaration and negamax` and `expect(engine.match(/recordHistoryCutoff\(/g)).toHaveLength(1);`;
+       - in, the counts: `expect(search.match(/recordHistoryCutoff\(/g)).toHaveLength(3); // the declaration, the loop's cutoff, the hash move's cutoff (ADR-0077 d3 item 10)` and `expect(engine.match(/recordHistoryCutoff\(/g)).toHaveLength(2); // the loop's cutoff, the hash move's cutoff`;
+       - in, the new site, at a beta cutoff, behind the switch, once, then return: `expect(search).toContain("if (prune && Math.max(alpha, hashScore) >= beta) { if (switches.history) { HASH_CUTTER[0] = hashFirst; recordHistoryCutoff(position, HASH_CUTTER, 0, depth, false, previousCut); } killers.record(ply, hashFirst); storeEntry(key, depth, boundOf(hashScore, alpha, beta), hashScore, ply, hashFirst); return hashScore; }");` and `expect(engine).toContain("if (Math.max(alpha, hashScore) >= beta) { if (budget.history) { HASH_CUTTER[0] = hashFirst; recordHistoryCutoff(position, HASH_CUTTER, 0, remaining, false, previousCut); } budget.killers.record(ply, hashFirst); storeEntry(key, remaining, boundOf(hashScore, alpha, beta), hashScore, ply, hashFirst); return hashScore; }");`;
+       - every other line of the row stays: the two loop literals, the two clear literals, quiescence, and the `HISTORY` write and fill counts.
+     - **R2 and R3**, one `it` body run for both modules, two lines out:
+       - out: the comment `// The cut: beta, never the null score, and no table store between the gate and the moves.` and `expect(block, path).not.toContain("storeEntry(");`;
+       - in: the comment `// The cut: beta, never the null score, and no table store in the null move's block. The one store between it and the moves is the hash move's cutoff (ADR-0077 d1 step 5, d3 item 10).`, then:
+         - `const v3 = block.indexOf("const gated =");`
+         - `expect(block.indexOf("if (nullScore >= beta) return beta;"), path).toBeGreaterThan(-1);`
+         - `expect(v3, path).toBeGreaterThan(block.indexOf("if (nullScore >= beta) return beta;"));`
+         - `expect(block.slice(0, v3), path).not.toContain("storeEntry(");`
+         - `expect(block.match(/storeEntry\(/g) ?? [], path).toHaveLength(1);`
+         - `` expect(block.slice(v3), path).toContain(`storeEntry(key, ${depth}, boundOf(hashScore, alpha, beta), hashScore, ply, hashFirst); return hashScore;`); ``
+       - the `const block = …` line and `expect(block, path).not.toMatch(/return nullScore/);` stay unchanged.
+     - I checked each literal above against the build's text, flattened as each file flattens it (R1 without comments, R2 and R3 with them). Each matches once.
+   - **What this does not do.** It moves no figure, count of nodes, move, score, clock read, door output or deep pin. It loosens no bar, since each row proves at least what it proved. It applies to these three rows only. **Any other row that reddens, a source row included, is a STOP to the Architect again, never the Engineer's re-point.** F2 is unchanged for every value row: SG1 (a), SG1 (b) (`G4`, not yet run), the pins and every door row. A difference there still ends V3 by d12 and the owner's word.
+   - **`ADR-0063` and `ADR-0050` are not amended.** Their rules hold, and only the rows' reading of the text moves.
+
 7. **SG3: the bar and the spread rule, fixed here, before any reading.**
    - **The instrument: S2, by `ADR-0055` D3 as amended by D3-V2** (§ Addendum — 2026-11-01), unchanged. It is the instrument `qe-ABC-254-a4v2` graded with, and that the second addendum's item 2 names for search reads:
      - `chooseMove` at 4 000 ms on the wall clock, one fresh process per run, base and head on the same Node binary;
@@ -247,6 +278,7 @@ At a node where the hash move exists and does not cut off, V3 pays for the check
    - **Games add no safety.** At a fixed depth, the move, the score and every node are `main`'s, and SG1 checks that exactly. The mate floors, zugzwang 7 / 7 and `G1` catch a change in what the search sees. Here there is none to catch. Under a clock, the only difference is the depth reached, and S2 measures the rate behind it directly.
    - **Games could not see the gain.** C2′ resolves about ± 48 Elo at 95 %. The gain here is a few Elo by estimate.
    - **Where it is counted:** the epic's 400-game close read (`ABC-299`, R3) carries every merged change, this one included.
+     *Dated 2026-11-08 (`arch-ABC-298-stop`): **corrected. `ABC-299` is not the close read.** The line now reads: "the epic's 400-game close read, `EPIC-011` § Success measures G7 (`ADR-0056` C3″: 400 games head to head at 100 ms, closing build against starting build, QE alone before the close; no ticket id on record), carries every merged change, this one included." `ABC-299` is R3, G2's milestone reading after Phase 5: 200 games at 100 ms against Stockfish 19 `UCI_LimitStrength` at the band-rule E. If V3 merges before R3 runs, R3's `main` carries V3, but R3 reports a scale point, not a pass on the epic. Nothing in this decision depended on the wrong wording: no games are owed either way.*
 
 9. **The order: the count probe, then QE's freeze, then the build. The dispatch can check it.** This is `ADR-0076` d10's form. No step moves a bar, and each names its proof.
 
@@ -397,6 +429,8 @@ A deep row outside this table that reddens in the build is a STOP to the Archite
 | F6 | d9, the order | a build commit with no freeze commit behind it | SG1 is not met to the letter, and QE says so. No reading makes it met. Whether it may still merge is the owner's |
 | F7 | d11 | `NFR-008` over +0.10 s | UNRESOLVED, not a defect; it does not merge while over. To the Architect |
 | F8 | d10 | V3's head carries any evaluation change | SG3 is not graded. Back to the Engineer |
+
+*Dated 2026-11-08 (`arch-ABC-298-stop`): **F2 did not fire on `se-ABC-298`'s STOP.** Its three red rows read source text, not anything the search does, and each row's property holds on the build. They are re-pointed by d6's dated line, which covers those three rows only. F2 stands as written for every value row, door row and deep pin, and for `G4`, which is not yet read. Any other red row comes back to the Architect.*
 
 ## Consequences
 
