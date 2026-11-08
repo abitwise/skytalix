@@ -1,3 +1,4 @@
+_Updated: 2026-11-08T23:11:29Z — se-ABC-298-repoint done, G4 byte-equal; ABC-298 In Review; qe-ABC-298 stage A running._
 _Updated: 2026-11-08T22:12:53Z — arch-ABC-298-stop merged: three source rows re-pointed, not F2; se-ABC-298-repoint runs the re-reads and G4._
 _Updated: 2026-11-08T22:04:12Z — se-ABC-298 STOP: values identical, three source-shape rows red; not merged; arch-ABC-298-stop rules._
 _Updated: 2026-11-08T21:30:03Z — qe-ABC-298-freeze merged (673e21bc); step 5 check passed; ABC-298 In Development, se-ABC-298 building._
@@ -1442,7 +1443,7 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   one hop at pull, when it checks `Ready for Dev`'s exit at that moment; the row records the pull.
 
   HEADING FORMAT (spec §6.1): each column is an H2 heading carrying its live/limit WIP count,
-  e.g. `## In Development (WIP 1/3)` — the left number is how many tickets are in the column
+  e.g. `## In Development (WIP 0/3)` — the left number is how many tickets are in the column
   now, the right number is the limit from config. Unlimited columns read `(WIP unlimited)`;
   Blocked is visible and time-tracked (no WIP limit) and reads `(visible, time-tracked)`.
   INVARIANT: the column H2 headings and the rows of the `## Columns` table are the same 13 names in the
@@ -1452,7 +1453,7 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   clean append target. Roles append a one-line ticket row under the matching column as work
   moves, e.g. (this is a comment, NOT a live row — the generic `ABC-` prefix shows format only):
 
-    ## In Development (WIP 1/3)
+    ## In Development (WIP 0/3)
 - [ABC-301] E2s second pull, scopes 1–4 (one bounded fit). se-ABC-301-fit running.
 - ~~[ABC-283]~~ → Blocked. The O1h+O3s+S1 bundle (ABC-233 history, ABC-234 SEE ordering, ABC-236 root aspiration) on one branch; one read of 100 games at 100 ms, GAIN ≥ 50.0 (owner's word, …4c4cb03d). se-ABC-283 running; rulings …3851bf43.
     - [ABC-014] Asset allocation chart  (owner: Software Engineer, since: 2026-06-01)
@@ -1603,8 +1604,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 1/3)
-- [ABC-298] V3 hash move first at remaining depth 1–2, node-identical (ADR-0077): se-ABC-298 building on QE's freeze …44a6717d (b9b8eee9, ancestor checked). Then QE; SG3 on a held host; no games.
+## In Development (WIP 0/3)
 
 
 
@@ -1632,7 +1632,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## In Review (WIP 0/3)
+## In Review (WIP 1/3)
+- [ABC-298] V3 (ADR-0077): built b40a2d7e, identity held (G4 byte-equal); qe-ABC-298 stage A (untimed) running; SG3/NFR-008 on a held host after the owner's word.
 
 
 
