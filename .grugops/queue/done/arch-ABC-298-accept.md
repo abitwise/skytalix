@@ -24,3 +24,4 @@ Publish: sealed notes (contextRoot = the worktree's .grugops/context, `at` from 
 3. **`ADR-0056` D2, row V3, one dated line:** V3 is the next search step, by his option 2 (`…4d1e0382`) and `arch-search-rank`'s pick (`…5a155b2c`). The row's +10–30 stays an estimate. Its cells are not rewritten. D6's "V3 after O1-d" is already met (`ABC-254`, done).
 
 - **Next:** BA/PM's half of step 2 (`bapm-ABC-298-accept`), then step 3, `arch-ABC-298-probe`, untimed, under the lock, no held host. QE's freeze only on GO.
+- **Path check:** `node tools/grugops/records-path-check.js --base main` exit 0 at `497d3074`, before this last commit.
