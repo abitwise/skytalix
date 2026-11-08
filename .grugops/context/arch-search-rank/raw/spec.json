@@ -1,0 +1,32 @@
+{
+  "refs": [
+    "arch-search-rank",
+    "ABC-298",
+    "ABC-257",
+    "ABC-285",
+    "ABC-297",
+    "ABC-296",
+    "ABC-287",
+    "ABC-258",
+    "ABC-237",
+    "ABC-284",
+    "ADR-0056",
+    "ADR-0056 D2",
+    "ADR-0056 D6",
+    "ADR-0051",
+    "ADR-0055",
+    "ADR-0050",
+    "ADR-0058",
+    "EPIC-011",
+    "NFR-008",
+    "NFR-005",
+    "e8ea9a46",
+    "bba42fb7",
+    "orch-2026-10-30a/20261108T180856Z-orchestrator-decision-0b4bc6ba",
+    "arch-ABC-292-closed/20261108T093747Z-architect-design-decision-569849c4",
+    "arch-ABC-284/20261108T171046Z-architect-design-decision-9ae6cff1"
+  ],
+  "notes": [
+    { "kind": "decision", "confidence": "high on each record quoted and on the src/ reads; the ranking's odds, every speed figure and every Elo figure are judgement, UNKNOWN - verify; today's share of time in move generation UNKNOWN - verify", "bodyFile": "notes/note-decision.md" }
+  ]
+}
