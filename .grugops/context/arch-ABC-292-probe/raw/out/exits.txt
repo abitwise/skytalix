@@ -19,3 +19,6 @@ C-PR5-mate55 exit 0
 C-PR6-zug exit 0
 C-PR7-g1 exit 0
 C-PR7-row1632 exit 0
+K-callsites exit 0
+K-det exit 0
+K-tree exit 0
