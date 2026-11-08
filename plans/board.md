@@ -1,3 +1,4 @@
+_Updated: 2026-11-08T17:11:50Z — arch-ABC-284 merged (88b1a7ec): ADR-0060 re-open PROPOSED, Architect advises against; P1's try back to the owner._
 _Updated: 2026-11-08T16:57:15Z — owner: option 2 (…4d1e0382), no pause; ABC-284 In Design, arch-ABC-284 writes the re-open, PROPOSED._
 _Updated: 2026-11-08T09:39:19Z — arch-ABC-292-closed merged (fb220699): options read with the owner (Q-3K-12); nothing running._
 _Updated: 2026-11-08T09:37:33Z — bapm-ABC-292-closed merged: ABC-292 Done (NOT MET), ABC-290, 293, 308 held; In Design 0/2; arch-ABC-292-closed (options read) running._
