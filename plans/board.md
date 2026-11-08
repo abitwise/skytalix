@@ -1,3 +1,4 @@
+_Updated: 2026-11-08T09:39:19Z — arch-ABC-292-closed merged (fb220699): options read with the owner (Q-3K-12); nothing running._
 _Updated: 2026-11-08T09:37:33Z — bapm-ABC-292-closed merged: ABC-292 Done (NOT MET), ABC-290, 293, 308 held; In Design 0/2; arch-ABC-292-closed (options read) running._
 _Updated: 2026-11-08T09:30:12Z — **ABC-292 NOT MET at its probe** (PR7, rule 2), not built; owner's stop fires on the hand-valued path; arch- and bapm-ABC-292-closed running; owner told._
 _Updated: 2026-11-08T09:09:24Z — qe-ABC-292-freeze merged (1faefe3f, freeze e88e91f9, d10 step 3 met); arch-ABC-292-probe stage A (untimed rows) running; PR8 timing waits on a held host._
