@@ -6,6 +6,21 @@ id: ADR-0060
 
 ## Status
 
+*2026-11-08, dated line by Architect/Design (task `arch-ABC-284`, records only, on `grugops/arch-ABC-284` from `main`
+`50ff9250`, `src/` tree `bba42fb7`). Nothing was run.* **The owner chose one try at P1 (`orch-2026-10-30a` `…4d1e0382`,
+option 2). The look is written in § The 2026-11-08 look, PROPOSED. The Architect's recommendation is: do not re-open.**
+- **The premise named:** decision 1, unchanged, meets every bar on today's `main`, whose tree is not the one it missed on.
+  E1, Q1, `ABC-283`'s bundle (history with K3, SEE ordering, root aspiration) and bundle 1 (M3, the countermove) have
+  merged since. At depth 8 the door's position-6 tree is 0.13× (`search()`) and 0.24× (`chooseMove`) what it was on
+  `e72487e1`.
+- **Why not:** of the four rows it must pass, two have a reason drawn from a reading on a near tree (`A4` (a), the 27 cp
+  cap). The other two, `zugzwang.004` at d11 and R-283-LMR's same-depth d5 mate floor, have no reason that is not a
+  guess, and every reading on a tree with P3's futility went against them. `main` keeps P3's futility.
+- **If he takes the look anyway,** the form, the door counts, the probe, the order, the NFR lines, the pins and the
+  intent are in that section, and a miss is final for P1 (its question 3).
+- **Unchanged:** decisions 1–11, F1–F8, every bar, and R-283-LMR's line below. "Accept ADR-0060" is put only as a
+  condition on a pass (its question 2). P1 stays parked until he answers.
+
 *2026-11-04, dated line by Architect/Design (task `arch-owner-answers-1104b`, records only at `main` `65e28f95`; owed at
 acceptance by `arch-bundle-1` `…37b7fb23`).* **R-283-LMR gains bundle 1's rows. Nothing in this ADR changes.**
 - **The rows** (`arch-bundle-1` `…ed82b408`, exploratory, six rows, not a node trace): M1, M2 and M4 of P4 lose the KRK row
@@ -313,6 +328,243 @@ repository, under the host lock. The copy is deleted. Nothing was committed to `
   `ADR-0026` decision is cited, not changed. It follows `ADR-0026` decision 10's pattern: a switch, a pair of doors,
   off in every older door, a bounded oracle. **It does not amend `ADR-0059` or `ADR-0050`.**
 
+## The 2026-11-08 look (`arch-ABC-284`): written, PROPOSED, recommended against
+
+*Recorded by Architect/Design, task `arch-ABC-284`, records only, at `main` `50ff9250` (`src/` tree `bba42fb7`).
+Nothing was run: no test, build, engine or probe. Every figure is quoted from a named record or read from `src/` as
+committed. Anything that needs a reading is marked `UNKNOWN - verify`. Inputs: the owner's `…4d1e0382`; `ABC-284`'s
+page; § Status with `…e17a23f4` (`arch-ADR-0060-reopen`), `…1bc554fb` (`arch-post-268`) and the lines of
+`arch-ABC-233`, `arch-next-pull` and `arch-ABC-283-accept`; `ADR-0063` d11; `ADR-0076` d10 to d13; `…569849c4`;
+`ADR-0056` D2 and D6; `arch-bundle-1` `…ed82b408`; `src/search.ts`, `src/search.bundle.test.ts`, `src/engine.test.ts`,
+`src/search.futility.test.ts` and `src/uci-session.test.ts` on `main`.*
+
+**Acceptance is the owner's** (L6). The Orchestrator brings it to him. Nothing here is in force, and P1 stays parked
+until he answers.
+
+### L1. The premise, the form, the door counts, and where it is written
+
+- **The premise, named:** *decision 1, unchanged, meets every bar of L3 on today's `main`.* What changed in the tree
+  since its last two probes, both on `e72487e1`:
+
+  | merge | what it changed |
+  |---|---|
+  | `54dee3f2`, E1 (`ABC-269`) | every evaluation value: the tapered table |
+  | `7b70e268`, Q1 (`ABC-279`) | quiescence skips SEE-losing captures out of check |
+  | `58e90d07`, `ABC-283` | history with K3 (max(0, h)), SEE ordering, root aspiration: which quiet moves stand late |
+  | `434fa171`, bundle 1 (`ABC-303`) | M3 move-count pruning at depth 1–3 (three-piece guard), and the countermove tier |
+  | `a6ae8227`, W1 (`ABC-282`) | time use in the clock modes; a fixed-depth read on a frozen clock does not see it (`ABC-282` A0-1) |
+  | `ABC-274`, `ABC-270`, `ABC-271` | structure only, value- and node-identical |
+
+  - **The size of the change, from records.** The door's depth-8 counts went from 888 786 / 1 262 046 (`search()`)
+    and 1 306 981 / 391 451 (`chooseMove`) to 311 546 / 163 523 and 573 518 / 94 911. Reach at 47 000 nodes on the 190
+    went from 5.837 to about 7.016 (`arch-bundle-1`'s probe of C1 + M3, not re-read on `main`, `UNKNOWN - verify`).
+  - **No P1 reading exists on any tree with E1, K3, SEE ordering, the countermove or M3.** That is the premise: a
+    different tree, never measured. A different tree is not by itself a reason to pass. L2 says, row by row, what
+    reason exists.
+- **The form: one, chosen before any reading, and it is decision 1 exactly.** r = max(0, min(T[d][m] − (pvNode ? 1 :
+  0), 2, d − 2)), with T[d][m] = ⌊1.0 + ln d × ln m / 2.0⌋. The flat rule's eligibility, and the full-depth re-search
+  first, as decisions 1 and 2 write them. m is the 1-based number in today's ordered list, as the flat rule's index is.
+  There is no history term. The reasons:
+  - **It is the only form whose shape was chosen before these rows bit.** It was chosen on `4d1c0616` by its own
+    pre-registered rule. Every other form on record lost at least one of L2's rows: eight in the re-open set, J1–J4,
+    and the variants. Choosing one of them now is choosing with the rows in hand. § Status (`arch-phase2-rebase`)
+    says it: "a rule fitted to its own bar measures nothing".
+  - **The premise is about the tree.** Changing the rule too would leave a reading that cannot say which of the two
+    moved the rows.
+  - **A history term is a second change at once.** J1–J4 each lost `zugzwang.004` and drifted 69 cp. That was over
+    H1, not K3, but picking a J form now is again choosing with the rows in hand. Decision 11 stays later.
+  - **It needs no new text.** The switch, the doors, the rows, the exports, the oracle and the bars are decisions
+    2–10, as written.
+- **The door counts on today's `main`.** The door is `main`'s shipped search, with the flat 1-ply rule. Read from the
+  pinned rows, not re-run:
+  - `search()` at depth 8: kiwipete **311 546**, position-6 **163 523**;
+  - `chooseMove` deepened to 8 on a frozen clock: kiwipete **573 518**, position-6 **94 911**;
+  - source: `src/search.bundle.test.ts`, "`ABC-303` — the bundle's own counts at depth 8". `src/engine.test.ts`
+    `ABC-282` A0-1's all-on column agrees for `chooseMove`. LR1 re-reads all four to the node. Decision 9's earlier
+    counts are stale.
+  - **Exports:** decision 4's, unchanged: `ABC-077` A6 +2, `ABC-078` A4 +1.
+  - **Doors:** `logReductions` is the top rung. Every door on `main` turns it off by decision 5's rule, the newest
+    (`searchWithoutCountermove`, `searchWithoutMoveCountPruning`, `searchWithoutQuietBundle`) among them. No list is
+    needed.
+- **Where: a dated re-open of this ADR, not a new ADR.**
+  - The form, the bars, the switch and the doors are this ADR's, unchanged. A new ADR would restate decisions 1–10
+    and give the bars a second home, where `ABC-284` says they have one.
+  - `ABC-284`'s front matter and § Status (`arch-post-268`) name a dated line here as a re-open's place. The joint
+    probe (`arch-next-pull`) was recorded here the same way.
+  - Acceptance of this ADR is still the owner's. It is asked only as a condition on a pass (L6, question 2).
+
+### L2. The rows it missed before, and whether it should pass them now
+
+Named up front. The last column says what kind of reason exists.
+
+| row | bar | where it missed | reason it should pass now | kind of reason |
+|---|---|---|---|---|
+| `A4` (a), `chooseMove` d8 position-6 | ≤ 0.85 | 0.8699 on pre-P3 `main`; 0.8528 on `e72487e1` | Over history ordering (`arch-ABC-233`'s diagnostic, H1 on `e72487e1`) decision 1 read 0.7749 against H1's door. History orders quiet moves by their cutoffs, so the moves left late fail low more often, and reducing them costs fewer re-searches | **measured on a near tree.** Not today's: K3 differs from H1, and SEE ordering, the countermove and M3 are new |
+| `A3`'s 27 cp cap, `search()` drift at d5 | ≤ 27 cp | 63 cp at position-6/g5h6, on both pre-P3 `main` and `e72487e1` | Over H1, decision 1's largest drift was 25 cp (`search()`) and 11 (`chooseMove`). The 63 cp line came from two-ply reductions at PV nodes in a history-free order | **measured on a near tree, 2 cp inside.** E1 has changed every centipawn value since, so the line's size is unread |
+| zugzwang 7 / 7: `zugzwang.004` at d11 | plays h3h4 | g7f6 on `e72487e1` (h3h4 only from d12); lost over H1 (5 / 7) and in each of J1–J4 | **None that is not a guess.** Decision 1 kept it only on the two trees without P3's futility; on `4d1c0616` the door found h3h4 a ply early, at d10. On `e72487e1` the door found it only from d11, with no ply to spare, and decision 1 lost it; it was lost again over H1 and in each J form. `main` keeps P3's futility. M3 does not act there: each side has two non-pawn pieces. Whether today's door has a ply to spare is unread | **a guess, and the record points against it** |
+| R-283-LMR's same-depth mate floor, d5 → d5 on the 287, both recursions: a bar for this re-open since 2026-11-04 | 0 / 190 (`search()`), 0 / 188 (`chooseMove`) | Not a bar when read. Decision 1 lost 2 / 189 on all three trees it was read on (`4d1c0616`, pre-P3 `main`, `e72487e1`). J1–J4 lost 3 to 7 / 194 over H1 | K3 lets a mating quiet move that cut earlier rise in the order, so it may stand before the reduced moves. That is plausible, and unmeasured for decision 1. The loss itself is the cost decision 8 accepted: a move reduced by two plies can miss a mate the door sees at the same depth (`ADR-0026` d9) | **a guess, and the record points against it** |
+
+**So, plainly: I cannot give a reason that is not a guess for two of the four rows. My recommendation is: do not
+re-open.**
+- **The odds, by judgement and not by reading:** below one in ten that the probe passes every row. A pass would still
+  face C2′, which a change worth nothing passes half the time (`ADR-0076` d12). This corrects `…569849c4`'s "below
+  even" downward, on a closer reading of the same records.
+- **What the options read did not say.** The same-depth floor became this re-open's bar after decision 1 was
+  designed. It was set to guard the floor against order changes (R-283-LMR). Decision 8 had accepted 2 / 189 there
+  as the price of reducing deeper. With that floor as a bar, any LMR that reduces deeper than the door is likely to
+  lose a few of the 287, whatever its table. So keeping the bar, as I recommend, all but closes this family on this
+  engine. Reading it as a report again would loosen a standing line. That is not mine to do, so it is L6's question
+  4, and I recommend against it.
+- **No bar moved here.** Every bar in L3 is decision 8's, decision 9's or R-283-LMR's, as written.
+
+### L3. The probe, if he takes the look: written here, not run
+
+`ADR-0076` d13's form. It runs after L4's step 3, once, under the host lock, alone, on one core. It plays no games.
+- **Sealed form.** A `decision` note under its own task, `arch-ABC-284-probe`, sealed and committed **before any
+  measured run**. It names `main`'s tip and `src/` tree, each script's sha256, QE's freeze note, and the rows, bars,
+  batch order and rule below, word for word. One load-only smoke may run first: the predicate called once. Then one
+  results note and one decision note. Scripts and outputs go to the task's `raw/`, with `<scratch>`, `<home>` and
+  `<repo>` as placeholders. **No bar moves after a reading, and a miss is not re-run.**
+- **The instrument.** Scratch `git archive` copies of `src/` at the sealed tree, outside the repository: `main`,
+  unpatched; and `cand`, with decisions 1–4 patched in (the predicate, the table, `logReductions` in both recursions),
+  giving ON and OFF. The patch is `arch-post-268`'s (`raw/probe/`), re-anchored on today's move loops, after the
+  futility and M3 skips.
+- **The rows:**
+
+  | row | reads | bar | class |
+  |---|---|---|---|
+  | **LR1**, instrument | OFF against unpatched `main`: nodes, score and move, `search()` d8 and `chooseMove` deepened to 8 on a frozen clock, kiwipete and position-6 | exact: L1's four counts, and `main`'s moves and scores | else void: STOP |
+  | **LR0**, counts | ON on LR1's rows | none; a reading, it becomes decision 9's instrument check | reading |
+  | **LR2**, the table | `lateMoveReductionByTable` called directly, against QE's frozen cells and eligibility fixtures | 0 mismatches | exact |
+  | **LR3**, zugzwang | `ADR-0050` d9's seven rows, `chooseMove` ON at the recorded depths, the played move only | 7 / 7 | safe |
+  | **LR4**, mate floors | (a) R-283-LMR's: every mate the door scores at d5, ON scores as a same-sign mate at d5, on the 287, `search()` and `chooseMove`, against OFF and against each all-off door the standing rows use (`…WithoutBundle`, `…WithoutQuietBundle`); (b) decision 8's: OFF at d4 against ON at d5, `search()` | 0 violations on each | safe |
+  | **LR5**, pay (`A4` (a)) | d8 nodes, ON over OFF, on LR1's four rows | each ≤ 0.85 | pay |
+  | **LR6**, reach (`A4` (b)) | `chooseMove` with `maxNodes: 47_000` on a frozen clock, the 190, mean completed depth, ON against OFF | ≥ OFF + 0.25 ply | pay |
+  | **LR7**, drift (`A3`) | depth 5 on the 190, both recursions, ON against OFF | ≥ 95 % of non-mate scores within 25 cp, none beyond 27 cp, 0 mate scores change sign | safe |
+  | **LR8**, `G1` | the 58 at the baseline's budget and step, ON against OFF | ≥ 54 / 58 ON, no NEWLY-MISSED line | safe |
+  | **LR9**, reports | `chooseMove` d6 same-depth floor on the 287 and on QE's fresh KRK / KQK set (R-283-LMR's report); the first depth at which OFF and ON play h3h4 on `zugzwang.004`; deeper and shallower counts for LR6; d8 on position-4, position-5 and the start position; reach at 20 000; firing at d6 on the 190 (share reduced, share by two plies); `ADR-0061`'s cut audit as information | none | decides nothing |
+  | **LR10**, lane report | the default lane with ON hard-wired, against `main`'s copy; then, with `-t`, L5's deep pins on their lanes | none; it lists every re-pin and re-point | decides nothing |
+  | **LR11**, timing, last | ns per node ON against OFF at fixed depth on kiwipete and position-6; one lane read, arms B, B again and ON, production files only, 8 scored rounds | none | decides nothing; the Orchestrator may drop it |
+
+- **Batch order, cheapest stop first:** A (LR1, LR2); B (LR3, then LR4), the two rows the record points against, a few
+  minutes of lock; C (LR5, LR7, LR8); D (LR6, LR9, LR10). **Stage B (LR11) runs last, and only on a later
+  Orchestrator line citing the owner's word that the host is held, with W asked for that read.**
+- **Lane reads** (LR10, LR11) run vitest with one worker: `VITEST_MAX_WORKERS=1 npx vitest run …`, never plain
+  `npm test`. The PREREG prints the worker count, and a run on more than one worker is void.
+- **The rule, fixed now:**
+  1. **LR1 or LR2 misses:** a prototype defect gets one fix under a sealed addendum, and then every row is re-read.
+     If LR2 shows that decision 1's words or QE's frozen cells are wrong, and not the patch: STOP. This ADR is
+     restated and goes back to him. No rule moves.
+  2. **LR3, LR4, LR7 or LR8 misses:** a defect check first, sealed in the PREREG. At the failing row it confirms that
+     the predicate returns decision 1's cells, that every reduced fail-high was searched again at full depth, that
+     the switch reaches both recursions, and that OFF still equals LR1. If the miss is real, the premise is **NOT
+     MET**: `ABC-284` is not built, it goes back to BA/PM, and nothing after the miss runs.
+  3. **LR5 or LR6 misses:** **NOT MET for pay** (F4). The same as rule 2.
+  4. **Every row holds:** the premise is **MET**. LR0's counts and LR10's list join decision 9 and L5 by a dated line,
+     then L4's step 5.
+  - No form is tuned, no second form is read, no row is dropped, and no subset stands in. **If he answers question 3
+    yes, a miss here is final for P1,** and F1's "this ADR is re-opened with a new probe" does not apply after it.
+- **What it can change:** decision 9's counts (LR0), L5's pin list (LR10), and whether `ABC-284` is built. **What it
+  cannot:** decisions 1 and 2, any bar, the intent or the form. It cannot turn a miss into a pass.
+- **Host:** the last P1 probe ran four batches, each under 5 min. This one adds the same-depth floor in both
+  recursions against three doors, and a few deep rows. Under 25 min of lock by estimate, `UNKNOWN - verify`; stage B
+  about 5 min more.
+
+### L4. The order: QE's freeze before the probe and before the build
+
+`ADR-0076` d10's pattern. No step moves a bar. Each names what proves it happened.
+
+| # | step | who | what proves it |
+|---|---|---|---|
+| 1 | he answers L6 | owner | his word, in an Orchestrator note |
+| 2 | this re-open merged; `ABC-284`'s page lines (the premise named, the look's rule, DoR row 10 "probe written") | Architect, BA/PM | merged records |
+| 3 | **the freeze:** `qe-ABC-284-freeze`, from the words of decisions 1, 2 and 7 alone, with no code in hand. (a) The table's cells worked by hand, d 3–16 × m 4–64, non-PV and PV, after the cap and the clamp. (b) One eligibility fixture per clause of decision 2, each where every other clause would reduce. (c) The probe's sets by name, commit and sha256: the 190, the 287, the seven zugzwang rows with their depths and moves, the 58 with its baseline, kiwipete and position-6, and `qe-ABC-283`'s fresh KRK / KQK set. (d) L1's four door counts. No row is written to `src/` | QE | a sealed `decision` note with each fixture file's sha256, merged to `main` |
+| 4 | the probe, under its own task; LR2 reads QE's frozen cells | Architect | its PREREG commit descends from step 3's: `git merge-base --is-ancestor <freeze commit> <PREREG commit>` |
+| 5 | on MET: LR0's counts and LR10's list by dated line; DoR 10 / 10 | Architect, BA/PM | merged records |
+| 6 | **the check:** before any build dispatch, the Orchestrator runs `git merge-base --is-ancestor <freeze commit> main` and confirms that the brief cites the freeze note's id | Orchestrator | a line in the dispatch note. No id, no dispatch |
+| 7 | the build, on `main` after step 6 | Engineer | its first commit descends from the freeze commit |
+| 8 | QE's stage 0 re-reads step 7's ancestry and the sha256s; then `A1`–`A5`; then `G6` and `NFR-008` on a held host; then C2′, 100 games at 100 ms against the merge-base, S′ at the E in force (1 810 today), and the Levels lane. Each stage under its own hold and under 1 h; W asked per read | QE | its PREREG line |
+
+- **Why before the probe, not only before the build.** A freeze made with no patch in the world is blind by date. It
+  also gives LR2 a reader of decision 1 who is not the patch's author.
+- **If the order is missed,** LR2 and `A2` are not met to the letter, and no reading makes them met.
+- **The fault rule.** CF1–CF10 and FL reach C2′ by `ADR-0056` D5's dated blocks. QE copies them unaltered, in
+  `ADR-0076` d11's table form, with this ticket's words: "50.0" (GAIN); "B6" (NOT MET, nothing merges, QE records a
+  `failed-attempt`, the ticket goes back to BA/PM, and question 3's answer applies); "no form … moves" (decisions 1
+  and 2: no cell, cap, clamp, PV term or eligibility clause moves); "S1, S2 and R7" (`A7`'s doors and LR0's counts).
+  It adds no bar.
+
+### L5. `NFR-008`, `G2`, the pins, the intent
+
+- **`NFR-008`: ≤ +0.10 s stays.** No figure above it is proposed. The lane reads 9.085 s on QE's arms
+  (`plans/nfr-catalog.md`). Expected cost, all `UNKNOWN - verify`:
+
+  | part | expected | what the design does |
+  |---|---:|---|
+  | the predicate's cells and eligibility rows | about +0.005 s | units, no search, in `src/search.pvs-lmr.test.ts` |
+  | the two-ply re-search row | +0.005 to +0.02 s | in an existing file that already holds a call-through module mock, never a new default-lane file (`R-N8H-3`) |
+  | the source row | about +0.002 s | reads two files |
+  | larger production files | +0.005 to +0.02 s | about 1 to 2 KiB more in `src/search.ts` and `src/engine.ts` |
+  | shipped-path rows that search at depth ≥ 3 | 0 or below | the shipped tree is smaller; unread |
+  | the unresolved part, as on `ABC-291` | 0 to +0.07 s | nothing can; it may be read noise |
+  | **sum** | **about +0.01 to +0.12 s, midpoint about +0.05 s** | |
+
+  - **If it reads over:** `NFR-008` is UNRESOLVED, not a defect. The owner's "games first" (`…23d30c72`, question 4)
+    was given for the evaluation terms after `ABC-291`. I read it as reaching this search change too; that reading is
+    open to the Orchestrator's overruling. QE's PREREG seals the order before any figure exists.
+- **`G2`: not relevant.** P1 does not touch `evaluate`, so there is no per-call ratio to set and no `G2` row.
+- **`NFR-009`:** decision 2's 4 096-byte constant, built once at load. Nothing grows per search, and no level is near.
+  The PR states the bytes, as decision 2 says.
+- **`NFR-005`:** `A4` (c), `G6` "≥ base", is the build's timing gate, read on a held host at step 8. It is not a
+  probe row.
+- **The deep pins it moves.** `ADR-0071` D8's form. New figures are `UNKNOWN - verify` until LR10, then a dated line
+  here and in `ADR-0071` D8, on that tree, before Ready.
+
+  | rows | lane | where | form | old |
+  |---|---|---|---|---|
+  | `ABC-282` A0-3: `D8`, `D7`, `D6` | `ENGINE_DEEP` | `src/uci-session.test.ts` | **re-pin:** the session has no door, and each line is a tree pin | `info depth 8 score cp 45 nodes 196681 …`, `info depth 7 … nodes 69705 …`, `info depth 6 … nodes 10513 …` |
+  | `ABC-282` A0-1, 6 rows | `ENGINE_DEEP` | `src/engine.test.ts` | **re-point** the all-on column to `chooseMoveWithoutLogReductions`, figures unchanged; the `softMs` absent ≡ 1 relation stays on `chooseMove` | 104 780 … 94 911 |
+  | `ABC-282` A0-2, 4 rows | `ENGINE_DEEP` | same | **re-point,** figures unchanged | `ADR-0071` D8's table |
+  | `ABC-303`, "the bundle's own counts at depth 8", 2 rows | `SEARCH_DEEP` | `src/search.bundle.test.ts` | **re-point** to the new doors, figures unchanged: they are L1's door counts | 311 546 / 573 518 and 163 523 / 94 911 |
+  | `ABC-283` and `ABC-303`, "the same-depth mate floor on the 287", 4 rows | `SEARCH_DEEP` | same | **stay on the shipped path.** They are R-283-LMR's bar, read in the build. Never re-pointed | 0 violations |
+  | zugzwang, the seven rows | their own lanes | `src/search.futility.test.ts`, `src/search.null-move.test.ts` | **stay; no depth is re-pinned** (F3) | recorded depths |
+  | D5, "a kept move is reported…", cp 475, `a1f6` | default | `src/uci-session.test.ts` | **unchanged by construction:** depth 2 reduces nothing (the root and remaining depth below 3 return 0). LR10 confirms | `info depth 2 score cp 475 … pv a1f6` |
+
+  - **The A0-3 margin.** `ADR-0071` D8 says `D8` reads a W1 leak only if the leak's line differs from the head's.
+    LR10 reports this tree's margin in clock reads. If a leak would no longer show, it comes to the Architect before
+    Ready.
+  - **The default lane's re-pins** are unknown until LR10. A smaller shipped tree reaches many rows; `ABC-291`
+    moved 64. A row outside LR10's list that reddens in the build is a STOP to the Architect.
+- **The intent: GAIN, ≥ 50.0 of 100, unchanged** (decision 10; `ABC-284` A6). It is named before any reading and is
+  never re-classed after a score is seen. Why GAIN: on `e72487e1` the rule reduced 15.7 % of non-first moves at depth
+  6, 43.9 % of them by two plies, and reached +0.384 ply at the 100 ms node budget. LR9 reports today's firing; LR6
+  is its bar.
+- **What a pass means:** "not seen worse", not "proven better" (`ADR-0076` d12, by reference). `ADR-0056` D2's
+  +40–100 stays an estimate for the history-adjusted row.
+
+### L6. The owner's questions
+
+1. **Should P1 get its one try?** The engine has changed a lot since P1 failed. Two of the four checks it failed now
+   have a fair reason to pass, measured on a close relative of today's engine: the node saving and the score drift.
+   The other two are a fixed puzzle position it must solve at a set depth, and finding the same mates at the same
+   depth. Those two failed on every version of the engine that has the futility pruning, and today's engine has it.
+   I have no reason they pass now that is more than a hope. My odds for the probe are below one in ten. A yes costs a
+   QE hop to freeze the test positions, then about 25 minutes of the machine alone; the probe can only stop the work.
+   If it passes: a build, a QE hop and 100 games, about 1 to 1¼ h more. **My recommendation: no.** P1 stays parked,
+   and the host time goes to the next step you choose.
+2. **If you say yes and the probe passes every check, do you accept ADR-0060 now, so the build and the 100 games
+   follow without asking you again?** **My recommendation: yes, in that case only.** The table is the one designed
+   in November, unchanged. With no answer, the build waits for you after a pass.
+3. **If it misses, is that the end of P1?** A yes means no second shape of the table is picked after seeing which
+   check failed. A new shape would need its own ADR, a reason not drawn from a failed check, and your yes.
+   **My recommendation: yes.** If you answer question 1 no, P1 stays parked as it is: only a new named premise with
+   its own probe re-opens it.
+4. **One of the checks, the same-depth mates, was added after P1 was designed, to protect the mates from move-order
+   changes.** P1's design had accepted losing 2 of 189 such mates as the price of reducing more. Any stronger late-move
+   reduction is likely to lose a few. Keeping the check means this kind of change is all but closed on this engine.
+   Turning it back into a report would loosen a safety check, not a speed check. **My recommendation: keep it.**
+   Nothing is asked of you unless you want to change it.
+
 ## Context
 
 - **The gap.** Today's LMR is `ABC-121`'s: **one ply, flat**. A quiet move at index ≥ 3, at remaining depth ≥ 3, not
@@ -523,6 +775,10 @@ figures: `.grugops/context/arch-phase2-p1/` observation `…35bd3967` (the probe
        974 021 / 940 419 / 333 830, with reach 5.837 → 6.221. `chooseMove` position-6 is **0.8528, still above
        0.85**. With the 63 cp cap miss and `zugzwang.004`, see § Status. The build does not start, and no head
        counts are pinned.
+     - *Dated 2026-11-08 (`arch-ABC-284`; nothing run).* On `main` `50ff9250` (`src/` `bba42fb7`) the door is the
+       shipped search. Its pinned counts are 311 546 / 163 523 (`search()`) and 573 518 / 94 911 (`chooseMove`),
+       read from `src/search.bundle.test.ts`, not re-run. The 2026-11-08 look's LR1 re-reads them to the node, and
+       its LR0 would give the head's counts. Until then no head counts are pinned. § The 2026-11-08 look, L1.
    - **`G1` (`A5`):** ≥ 54/58 with no NEWLY-MISSED line (measured 54/58).
 10. **The read and the reports (`A6`, `ADR-0056` D5 as folded):** C2′ 100 games at 100 ms against the merge-base, S′
     10 games at 0.5 s against Stockfish 19 at E 1 650, and the Levels deep lane on the candidate head, all by
@@ -581,6 +837,9 @@ figures: `.grugops/context/arch-phase2-p1/` observation `…35bd3967` (the probe
 - **Change the flat predicate in place** (one predicate, no switch). Rejected: it would leave no pre-ticket door, and
   every older door and the `ABC-121` rows would change meaning. `ADR-0026` decision 10's pattern exists to stop
   exactly that.
+- *Dated 2026-11-08 (`arch-ABC-284`):* **any form other than decision 1, for the 2026-11-08 look.** Every other form
+  on record was read on the rows that look must pass, and lost at least one. Choosing one now would be choosing with
+  the rows in hand. § The 2026-11-08 look, L1.
 - **P3, P5 or P6 first.** Rejected in § Why P1 next: each saves less per depth (P3 0.88–0.91×, P5 0.83–0.99×), and
   P5 is depth-gated at 100 ms.
 

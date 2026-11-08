@@ -795,6 +795,8 @@ d11 (d) now applies, to this term only. "It also sets the pattern" stands as a l
 - Row E7 (`ABC-272`, `ABC-294`) is not named in his ruling and was not in the 2026-11-05 list of hand-valued terms. Whether the stop reaches it is his. It is evaluation on values set by hand, so I would ask him before it is built (this task's decision note `…569849c4`).
 - **No bar moves**, and no row retires.
 
+*Dated 2026-11-08 (`arch-ABC-284`, records only at `main` `50ff9250`; nothing run; the owner's `…4d1e0382`, option 2): row P1.* **The one try he chose is written in `ADR-0060` § The 2026-11-08 look, PROPOSED, and the Architect recommends against taking it.** The form is decision 1, unchanged; the premise is today's tree (E1, Q1, `ABC-283`'s bundle, bundle 1), on which no P1 reading exists. Two of the four rows it missed (`A4` (a), the 27 cp cap) have a reason measured on a near tree. Two (`zugzwang.004` at d11, R-283-LMR's same-depth d5 floor) have none that is not a guess, and the record points against both. If he takes it, a miss is final for P1 (his question 3). Row P1's +40–100 stays an estimate, unclaimed. **No bar moves**, and P1 stays parked until he answers.
+
 ### D3. Is 3 000 reachable without a neural network?
 
 - **For a classical engine, yes, in principle.** Stockfish 11, the last hand-crafted Stockfish, reads ≈ 3 430 CCRL
