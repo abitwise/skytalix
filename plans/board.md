@@ -1,3 +1,4 @@
+_Updated: 2026-11-08T18:15:48Z — arch-search-rank merged: V3 picked; ABC-298 In Design, arch-ABC-298 writes the ADR PROPOSED._
 _Updated: 2026-11-08T18:09:15Z — owner skips P1; ABC-284 back to Backlog parked; arch-search-rank ranks the held search tickets (records only)._
 _Updated: 2026-11-08T17:11:50Z — arch-ABC-284 merged (88b1a7ec): ADR-0060 re-open PROPOSED, Architect advises against; P1's try back to the owner._
 _Updated: 2026-11-08T16:57:15Z — owner: option 2 (…4d1e0382), no pause; ABC-284 In Design, arch-ABC-284 writes the re-open, PROPOSED._
@@ -958,7 +959,7 @@ _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-137` 
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-138` → `In Review` (`7e5c9c74`); QE `qe-ABC-138` dispatched._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-010` pulled `Ready for Dev` → `In Development`._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-055` → `Done` (UAT WAIVED; board now renders all 13 columns). FORMAT comment: In UAT added to the skippable columns (waiver path) and the Orchestrator's Ready → Ready for Dev → In Development pass-through at pull stated (QE-055-b/c)._
-_Updated: 2026-10-10 by the Software Engineer (task `wave-2026-09-25`, subtask `ticket-to-pr-ABC-055`) — `ABC-055` built: `## In Analysis (WIP 0/2)` and `## In Design (WIP 0/2)` added between `Ready` and `Ready for Dev` (13 headings = 13 table rows); the FORMAT comment now names the dial `.grugops/factory.config.json`, the four skippable columns and the heading/table invariant. No ticket row moved; `ABC-055` stays in `In Development` (A4), so the `In Review` move is left for the close-out._
+_Updated: 2026-10-10 by the Software Engineer (task `wave-2026-09-25`, subtask `ticket-to-pr-ABC-055`) — `ABC-055` built: `## In Analysis (WIP 0/2)` and `## In Design (WIP 1/2)` added between `Ready` and `Ready for Dev` (13 headings = 13 table rows); the FORMAT comment now names the dial `.grugops/factory.config.json`, the four skippable columns and the heading/table invariant. No ticket row moved; `ABC-055` stays in `In Development` (A4), so the `In Review` move is left for the close-out._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-137` → `In Review` (`455a0846`); QE `qe-ABC-137` dispatched._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — BA/PM `bapm-abc010-qe129a-2026-10-10` merged (`7d62038a`): `ABC-010` Backlog → `Ready for Dev` (10/10); new `ABC-139` → `Ready`; `ABC-137` pulled → `In Development`._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-055` → `In Review` (`86926927`), QE dispatched; board writes resumed. BA/PM `bapm-cuts-r5c-f1331-2026-10-10` merged (`4bc53b0a`): new `ABC-137` → `Ready`; new `ABC-138` → `Ready` → pulled → `In Development`._
@@ -1544,7 +1545,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 - [ABC-295] R2: the second EPIC-011 milestone reading, on main at Phase 4's close: 200 games at 100 ms a move against Stoc (Backlog; cut by bapm-epic011-areas 181da9e3; hold and owed ADR on the page)
 - [ABC-296] X1: a check extension at every depth. A move that gives check is searched one ply deeper wherever it occurs in (Backlog; cut by bapm-epic011-areas 181da9e3; hold and owed ADR on the page)
 - [ABC-297] X2: singular extension and internal iterative reduction (IIR). A hash move that a reduced-depth exclusion sear (Backlog; cut by bapm-epic011-areas 181da9e3; hold and owed ADR on the page)
-- [ABC-298] V3: staged move generation. At a full-width node the hash move is tried before any move is generated, and capt (Backlog; cut by bapm-epic011-areas 181da9e3; hold and owed ADR on the page)
+- ~~[ABC-298]~~ → In Design. V3: staged move generation. At a full-width node the hash move is tried before any move is generated, and capt (Backlog; cut by bapm-epic011-areas 181da9e3; hold and owed ADR on the page)
 - [ABC-299] R3: the third EPIC-011 milestone reading, on main after Phase 5: 200 games at 100 ms a move against Stockfish  (Backlog; cut by bapm-epic011-areas 181da9e3; hold and owed ADR on the page)
 - ~~[ABC-282]~~ → Ready. W1 (was size M, P2, DoR 9/10; ADR owed → arch-ABC-282; builds after ABC-283, both edit the deepening loop; must land before the first 40/15 reading). Cut by bapm-W1-bundle-cut 9be6befd.
 - [ABC-271] **2026-11-04: design done (arch-ABC-271 df6a873f): ADR-0070 PROPOSED. Relation rows NOT MET (square 44/404, KD 312/2 123); Orchestrator ruling …e0ff0aeb: sealed choice rule 4 → structure only at 0 (ADR-0068 form); Architect proposed values route. Owner asked: accept ADR-0070 (structure-only recommended) or override to values.** **2026-11-04: In Design → `arch-ABC-271` (next: its terms are what zugzwang.001 needs before a second pull).** E4a: passed pawns read the kings and the path — king distance, free path, rule of the square (EPIC-011 Phase 4; size: M, priority: P3, DoR 9/10; GAIN unless the ADR names NEUTRAL; waits ABC-269 merged + ADR) **cut 2026-11-03 (bapm-epic011-cut)**
@@ -1589,7 +1590,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## In Analysis (WIP 0/2)
 
 
-## In Design (WIP 0/2)
+## In Design (WIP 1/2)
+- [ABC-298] V3 hash move before generation, node-identical: Architect's pick (…5a155b2c); arch-ABC-298 writes the ADR PROPOSED; owner accepts; QE freeze before build; timing on a held host, no games.
 
 
 ## Ready for Dev (WIP 0/6)
