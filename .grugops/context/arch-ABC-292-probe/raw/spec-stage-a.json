@@ -1,0 +1,11 @@
+{ "refs": ["arch-ABC-292-probe"],
+  "notes": [
+    { "kind": "observation",
+      "confidence": "high on every figure (copied from raw/out; deterministic counts, no timing); PR8-PR11 not read, UNKNOWN - verify",
+      "bodyFile": "notes/note-readings.md",
+      "refs": ["arch-ABC-292-probe", "ABC-292", "ADR-0076", "ADR-0076 d13", "ADR-0076 K3", "G1", "K0", "K1", "3cbf5374", "bba42fb7", "arch-ABC-292-probe/20261108T092441Z-architect-design-decision-e158a4a0", "arch-ABC-292-probe/20261108T092710Z-architect-design-decision-9e29be9d"] },
+    { "kind": "decision",
+      "confidence": "high that the probe ran as sealed and the miss is real by its rule; low on what one puzzle row says about play",
+      "bodyFile": "notes/note-decision.md",
+      "refs": ["arch-ABC-292-probe", "ABC-292", "ADR-0076", "ADR-0076 d13", "ADR-0076 d14 (c)", "ADR-0076 F5", "ADR-0056", "ABC-290", "ABC-293", "ABC-308", "EPIC-011", "E5", "G1", "orch-2026-10-30a/…23d30c72", "orch-2026-10-30a/…e63ff24f", "arch-ABC-292-probe/20261108T092441Z-architect-design-decision-e158a4a0", "arch-ABC-292-probe/20261108T092710Z-architect-design-decision-9e29be9d"] }
+  ] }

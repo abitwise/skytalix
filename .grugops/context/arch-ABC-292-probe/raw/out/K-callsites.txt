@@ -1,0 +1,9 @@
+src/search.ts:697:      ? evaluateAtPhase(position, phase)
+src/search.ts:698:      : evaluateAtPhaseWithoutPieceTerms(position, phase)
+src/search.ts:699:    : evaluateWithoutTaper(position);
+src/search.ts:818:          ? evaluateAtPhase(position, phase)
+src/search.ts:819:          : evaluateAtPhaseWithoutPieceTerms(position, phase)
+src/search.ts:820:        : evaluateWithoutTaper(position);
+src/quiescence.ts:227:          ? evaluateAtPhase(position, phase)
+src/quiescence.ts:228:          : evaluateAtPhaseWithoutPieceTerms(position, phase)
+src/quiescence.ts:229:        : evaluateWithoutTaper(position);
