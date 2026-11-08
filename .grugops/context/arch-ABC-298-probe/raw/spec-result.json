@@ -1,0 +1,8 @@
+{ "refs": ["arch-ABC-298-probe"],
+  "notes": [
+    { "kind": "decision",
+      "confidence": "high on the counts and the identity (exact, one run, checked against main's unpatched copy); the rule is d9's as sealed; d9's 0.6 bound is judgement and enters nothing",
+      "bodyFile": "notes/note-result.md",
+      "refs": ["arch-ABC-298-probe", "ABC-298", "ADR-0077", "ADR-0077 d9 step 3", "arch-ABC-298-probe/20261108T202500Z-architect-design-decision-56ac06ee", "da4f1c53", "090e17d1", "bba42fb7",
+        "sha256:96760ffd8fb7436883c544bc9d9919fccc6aaa16a5d233bf54d23271f917c18c"] }
+  ] }

@@ -1,0 +1,7 @@
+P-main-kiwipete exit 0
+P-count-kiwipete exit 0
+P-main-position-6 exit 0
+P-count-position-6 exit 0
+P-main-start exit 0
+P-count-start exit 0
+analyse exit 0

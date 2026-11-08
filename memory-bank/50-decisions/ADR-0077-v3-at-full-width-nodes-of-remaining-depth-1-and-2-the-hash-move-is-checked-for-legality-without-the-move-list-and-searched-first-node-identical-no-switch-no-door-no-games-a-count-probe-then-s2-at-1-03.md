@@ -275,6 +275,7 @@ At a node where the hash move exists and does not cut off, V3 pays for the check
      - **What GO means:** only "it can pay". It says nothing about the bar, and no figure of it enters SG3.
      - **What it cannot change:** the probe creates no V3 code and reads no SG1 or SG3 figure. The freeze stays blind.
      - **About 5–15 min of lock,** an estimate.
+     - *Dated 2026-11-08 (`arch-ABC-298-probe`; plan `…56ac06ee` sealed at `da4f1c53` before any run; result `…d097e25f`): **GO.** On `main` `090e17d1` (`src/` tree `bba42fb7`), s = C ÷ G is 0.0754 on kiwipete (C 5 606, G 74 356), 0.0579 on position-6 (1 457, 25 180) and 0.0320 on start (462, 14 458): below 0.048 on one board of three. The counted copy was value-identical to `main` on every board (nodes, depth, score, move). One run, no defect, no re-run, no timing. GO means only "it can pay"; no figure enters SG3. Next: step 4, `qe-ABC-298-freeze`. No gate, bar, rule or order step moved.*
    - **If the order is missed** (a build commit with no freeze commit behind it), SG1 is not met to the letter, as `ADR-0076` F7 says of its own order, and QE says so. Whether the ticket may still merge is the owner's call.
 
 10. **d6's `kingExposure` cut: it stays out.** It does not share V3's held window, now or as a separate arm.
