@@ -1,3 +1,4 @@
+_Updated: 2026-11-08T09:37:33Z — bapm-ABC-292-closed merged: ABC-292 Done (NOT MET), ABC-290, 293, 308 held; In Design 0/2; arch-ABC-292-closed (options read) running._
 _Updated: 2026-11-08T09:30:12Z — **ABC-292 NOT MET at its probe** (PR7, rule 2), not built; owner's stop fires on the hand-valued path; arch- and bapm-ABC-292-closed running; owner told._
 _Updated: 2026-11-08T09:09:24Z — qe-ABC-292-freeze merged (1faefe3f, freeze e88e91f9, d10 step 3 met); arch-ABC-292-probe stage A (untimed rows) running; PR8 timing waits on a held host._
 _Updated: 2026-11-08T08:53:42Z — bapm-ABC-292-accept merged (ABC-286, 288, 289 Done; ABC-308 held); d10 step 2 met; qe-ABC-292-freeze running (step 3)._
@@ -1529,10 +1530,10 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 - [ABC-287] P6: razoring. At low remaining depth, a node whose static score is far below alpha is resolved by quiescence i (Backlog; cut by bapm-epic011-areas 181da9e3; hold and owed ADR on the page)
 - ~~[ABC-288]~~ → Done (delivered by ABC-303, bapm-ABC-292-accept). O2c: countermove and continuation history. Quiet moves are also ordered by the move that answered the opponent (Backlog; cut by bapm-epic011-areas 181da9e3; hold and owed ADR on the page) **2026-11-04: unheld for its probe (ABC-283 merged); recommended bundle 1 with its pair (Q-3K-11).**
 - ~~[ABC-289]~~ → Done, closed NOT MET (OQ-0074-2 (a)). Q2: delta pruning in quiescence. Out of check, a capture is skipped when the stand-pat score plus its victim's (Backlog; cut by bapm-epic011-areas 181da9e3; hold and owed ADR on the page)
-- [ABC-290] E3b: king attack. Pieces attacking the enemy king's zone add a weighted, tapered term (a re-try of dropped ABC (Backlog; cut by bapm-epic011-areas 181da9e3; hold and owed ADR on the page)
+- [ABC-290] ⏸ held under the owner's stop (…5bc9e701), no build without his word. E3b: king attack. Pieces attacking the enemy king's zone add a weighted, tapered term (a re-try of dropped ABC (Backlog; cut by bapm-epic011-areas 181da9e3; hold and owed ADR on the page)
 - ~~[ABC-291]~~ → In Design. E4b: pawn structure. Connected and phalanx pawns earn a tapered bonus and backward pawns a tapered penalty; th (Backlog; cut by bapm-epic011-areas 181da9e3; hold and owed ADR on the page)
-- [ABC-292] E5: piece terms. A bishop pair bonus, rooks on open and semi-open files, outposts, and mobility weighted per p (Backlog; cut by bapm-epic011-areas 181da9e3; hold and owed ADR on the page)
-- [ABC-293] E6: threats and tempo. A piece attacked by an enemy pawn and a hanging piece (attacked and not defended) cost  (Backlog; cut by bapm-epic011-areas 181da9e3; hold and owed ADR on the page)
+- ~~[ABC-292]~~ → Done, closed NOT MET. E5: piece terms. A bishop pair bonus, rooks on open and semi-open files, outposts, and mobility weighted per p (Backlog; cut by bapm-epic011-areas 181da9e3; hold and owed ADR on the page)
+- [ABC-293] ⏸ held under the owner's stop (…5bc9e701), no build without his word. E6: threats and tempo. A piece attacked by an enemy pawn and a hanging piece (attacked and not defended) cost  (Backlog; cut by bapm-epic011-areas 181da9e3; hold and owed ADR on the page)
 - [ABC-308] E5c outposts, split from ABC-292 by ADR-0076 d1. Held, no build; reopens on a third pull that names it, or a case of its own (S–M, P3, DoR 9/10; bapm-ABC-292-accept).
 - [ABC-294] E7b: endgame knowledge beyond E7a. Rook-pawn and wrong-coloured-bishop draws and named rook-ending rules scale (Backlog; cut by bapm-epic011-areas 181da9e3; hold and owed ADR on the page)
 - [ABC-295] R2: the second EPIC-011 milestone reading, on main at Phase 4's close: 200 games at 100 ms a move against Stoc (Backlog; cut by bapm-epic011-areas 181da9e3; hold and owed ADR on the page)
@@ -1583,8 +1584,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## In Analysis (WIP 0/2)
 
 
-## In Design (WIP 1/2)
-- [ABC-292] E5 bishop pair and rook files: ADR-0076 ACCEPTED 2026-11-08 (…23d30c72); page narrowed, DoR 9/10. Next d10 step 3, qe-ABC-292-freeze; then the probe (held host). A miss stops the hand-valued path.
+## In Design (WIP 0/2)
 
 
 ## Ready for Dev (WIP 0/6)
@@ -1678,6 +1678,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready to Release (WIP 0/4)
 
 ## Done (WIP unlimited)
+- [ABC-292] E5 bishop pair and rook files: closed NOT MET 2026-11-08 at its probe (ADR-0076 d13 rule 2, PR7 G1 53/58 vs 54/58), not built, not re-played. The owner's stop fired (…5bc9e701).
 - [ABC-289] Q2 delta pruning: closed NOT MET 2026-11-08 on OQ-0074-2 (a) (…23d30c72). Branch grugops/ABC-289 kept, unmerged.
 - [ABC-286] P4 late-move pruning: Done 2026-11-08, delivered by ABC-303 (434fa171).
 - [ABC-288] O2c countermove and continuation history: Done 2026-11-08, delivered by ABC-303 (434fa171).
