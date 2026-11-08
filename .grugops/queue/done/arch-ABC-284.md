@@ -30,3 +30,4 @@ Publish: sealed notes (contextRoot = the worktree's .grugops/context, `at` from 
 - **4 (the order):** `ADR-0076` d10's table. QE's freeze (`qe-ABC-284-freeze`) comes before the probe (`git merge-base --is-ancestor <freeze commit> <PREREG commit>`) and before the build (the Orchestrator's `git merge-base --is-ancestor <freeze commit> main`).
 - **5 (NFRs, pins, intent):** `NFR-008` ≤ +0.10 s stays (expected +0.01 to +0.12 s, `UNKNOWN - verify`). `G2` is not relevant. The deep pins are named. The intent is GAIN ≥ 50.0.
 - **6 (for the owner):** 1 no; 2 yes, on a pass only; 3 yes, a miss is final for P1; 4 keep the same-depth floor (loosening it would move a standing bar, so it is not proposed).
+- **Path check:** `node tools/grugops/records-path-check.js --base main` exit 0 at `e9bf449a`, before this last commit.
