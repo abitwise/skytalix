@@ -1,3 +1,4 @@
+_Updated: 2026-11-08T18:35:13Z — ADR-0077 PROPOSED merged (e2b43ae3): V3 gated to depth 1–2, count probe first; acceptance with the owner._
 _Updated: 2026-11-08T18:15:48Z — arch-search-rank merged: V3 picked; ABC-298 In Design, arch-ABC-298 writes the ADR PROPOSED._
 _Updated: 2026-11-08T18:09:15Z — owner skips P1; ABC-284 back to Backlog parked; arch-search-rank ranks the held search tickets (records only)._
 _Updated: 2026-11-08T17:11:50Z — arch-ABC-284 merged (88b1a7ec): ADR-0060 re-open PROPOSED, Architect advises against; P1's try back to the owner._
