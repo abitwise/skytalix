@@ -1,0 +1,42 @@
+--- <scratch>/<home>/<repo>/abc298-probe/main/src/engine.ts	2026-11-08 20:19:42.000000000 +0000
++++ <scratch>/<home>/<repo>/abc298-probe/count/src/engine.ts	2026-11-08 20:23:35.686955599 +0000
+@@ -557,11 +557,13 @@
+     }
+   }
+ 
++  PROBE_G[remaining > 63 ? 63 : remaining]++; // PROBE
+   const moves = legalMoves(position);
+   if (moves.length === 0) return isInCheck(position) ? 0 - (MATE_SCORE - ply) : 0;
+ 
+   const alphaIn = alpha;
+   const hashMove = slot === -1 ? null : entryMove(slot, moves);
++  if (hashMove !== null) PROBE_H[remaining > 63 ? 63 : remaining]++; // PROBE
+   // Futility (`ABC-268`): once per node, with the entry window; a skipped move still takes its index.
+   const futile =
+     budget.futility && futilityNode(position, remaining, ply, alphaIn, beta, budget.taper, phase);
+@@ -577,6 +579,7 @@
+     budget.history,
+     previousCut === null ? 0 : countermoveAt(previousCut),
+   );
++  if (hashMove !== null && list[0] !== hashMove) PROBE_X[0]++; // PROBE
+   // Move-count pruning (`ABC-303`): the tail is read here, before any recursion reuses the keys.
+   const moveLimit = budget.moveCount ? moveCountNode(position, remaining, ply, alphaIn, beta) : 0;
+   const zeroFrom = moveLimit > 0 ? moveCountFrom(list.length) : 0;
+@@ -625,6 +628,7 @@
+     }
+     if (best > alpha) alpha = best;
+     if (alpha >= beta) {
++      if (hashMove !== null && index === 1) { if (move === hashMove) PROBE_C[remaining > 63 ? 63 : remaining]++; else PROBE_X[1]++; } // PROBE
+       if (budget.history) {
+         recordHistoryCutoff(
+           position,
+@@ -1407,3 +1411,9 @@
+     return choice.move;
+   };
+ }
++
++// PROBE (arch-ABC-298-probe): counters by remaining depth (index 63 holds 63 and above). Read by probe.ts.
++export const PROBE_G = new Float64Array(64);
++export const PROBE_H = new Float64Array(64);
++export const PROBE_C = new Float64Array(64);
++export const PROBE_X = new Float64Array(2);

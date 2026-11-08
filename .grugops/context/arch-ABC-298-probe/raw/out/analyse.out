@@ -1,0 +1,43 @@
+IDENTITY (count copy against main's unpatched copy):
+  kiwipete: depth 9, nodes 1320857, score -128, move e2a6:0; count copy EQUAL; pure true/true
+  position-6: depth 9, nodes 234984, score 34, move c3d5:0; count copy EQUAL; pure true/true
+  start: depth 9, nodes 64849, score 17, move b1c3:0; count copy EQUAL; pure true/true
+  identity holds on every board; X = 0,0 on every board
+COUNTS (gate: remaining 1 or 2):
+  kiwipete: G 74356, H 9831, C 5606, s = C/G = 0.075394 (at or above 0.048); nodes 1320857
+    INFO by remaining r = 1..9 (G_r / H_r / C_r):
+      r=1: 50094 / 999 / 471
+      r=2: 13175 / 8832 / 5135
+      r=3: 6354 / 5409 / 3691
+      r=4: 2872 / 2498 / 1657
+      r=5: 1337 / 1189 / 861
+      r=6: 393 / 356 / 300
+      r=7: 89 / 83 / 40
+      r=8: 42 / 37 / 36
+      r=9: 0 / 0 / 0
+    INFO above r=9: 0; H all depths 19403, C all depths 12191
+  position-6: G 25180, H 2619, C 1457, s = C/G = 0.057863 (at or above 0.048); nodes 234984
+    INFO by remaining r = 1..9 (G_r / H_r / C_r):
+      r=1: 17119 / 204 / 88
+      r=2: 4318 / 2415 / 1369
+      r=3: 2008 / 1380 / 902
+      r=4: 979 / 678 / 441
+      r=5: 427 / 344 / 204
+      r=6: 217 / 179 / 138
+      r=7: 77 / 75 / 39
+      r=8: 35 / 33 / 31
+      r=9: 0 / 0 / 0
+    INFO above r=9: 0; H all depths 5308, C all depths 3212
+  start: G 14458, H 1306, C 462, s = C/G = 0.031955 (below 0.048); nodes 64849
+    INFO by remaining r = 1..9 (G_r / H_r / C_r):
+      r=1: 10444 / 234 / 111
+      r=2: 2075 / 1072 / 351
+      r=3: 975 / 756 / 560
+      r=4: 496 / 325 / 98
+      r=5: 365 / 238 / 175
+      r=6: 59 / 55 / 22
+      r=7: 34 / 33 / 20
+      r=8: 10 / 9 / 7
+      r=9: 0 / 0 / 0
+    INFO above r=9: 0; H all depths 2722, C all depths 1344
+RULE: s < 0.048 on 1 of 3 boards -> GO
