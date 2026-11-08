@@ -29,3 +29,4 @@ Publish: sealed notes (contextRoot = the worktree's .grugops/context, `at` from 
 - **5 (`ABC-286`, `ABC-288`):** Done, "delivered by `ABC-303`" (merged `434fa171`), each by a dated banner, `adr:` clause and DoR close, in `ABC-233`'s form.
 - **Open, not ruled (`…98877379`):** whether the stop ruling reaches an outposts re-open on hand values; `ADR-0076` d7 cites question 3 where games-first is question 4 (the Architect's); `ABC-289`'s "Re-open" line left standing; board cards for `ABC-286`, `ABC-288`, `ABC-289` and a new `ABC-308` card are the Orchestrator's.
 - **Notes:** `…d65215d0`, `…98877379`.
+- **Path check:** `node tools/grugops/records-path-check.js --base main` exit 0 at `96d5435f`, before this last commit.
