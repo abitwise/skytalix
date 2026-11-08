@@ -272,6 +272,7 @@ run): after `ABC-303`'s merge `434fa171` (QE MET, PASS_WITH_GAPS `…ebefbfa2`; 
 - **`ADR-0074` stays ACCEPTED, not in force.** `ABC-289` is recorded NOT MET on an exact build. D2's dated line of this task gives
   the rows.
 - **New, open (his):** OQ-0074-2, which blocks nothing.
+  *Dated 2026-11-08 (`arch-ABC-292-accept`; his word `…23d30c72`): answered (a). `ABC-289` closes NOT MET. See D2's dated line of this task at row Q2.*
 
 *2026-11-05, dated line by Architect/Design (task `arch-owner-answers-1105b`, records only at `main` `6ff2554e`; his word `…0f1ab02e`, verbatim "1. yes;
 2. yes; 3. yes").* **CF1–CF10 reach every later C2′ read, of one change or of a bundle. A term merged inside a bundle meets `ADR-0067`'s
@@ -759,6 +760,12 @@ Orchestrator's `…5ec6c124` 5 and `…0edae6fd` 1; `arch-bundle-1` released the
   - **Not closed.** OQ-0074-2 is with the owner and blocks nothing. The ticket closes on (a) or on no answer. Only he can open (b)
     to (d). No bar moved, nothing was re-pinned, and no row retired.
 
+*Dated 2026-11-08 (`arch-ABC-292-accept`, records only at `main` `6eaeee01`; his word `…23d30c72`, "agree"; nothing run): row Q2.*
+**OQ-0074-2 is answered (a): `ABC-289` closes NOT MET.** "Not closed" above is answered. Routes (b) to (d) were not opened.
+`ADR-0074` stays ACCEPTED, not in force, with no merge left to wait for, so `ADR-0024` d4 stands as written on `main`. Branch
+`grugops/ABC-289` at `b42706b3` is kept, unmerged, and nothing of it reached `main`. The row's +5–20 stays an estimate, unmeasured.
+No bar moved, nothing was re-pinned, and no row retired.
+
 *Dated 2026-11-05 (`arch-owner-answers-1105`, records only at `main` `a44aa057`; his word `…b836b85c`, verbatim "1. yes; 2. yes;
 3. wait"): rows E2, E3, E4, E5 and E6.*
 - **Row E2, status: waiting, not closed.** Both pulls closed NOT MET on `zugzwang.001` (`ABC-239`, `ABC-301`). `main` keeps E1's
@@ -780,7 +787,7 @@ only, and only on his acceptance. It also sets the pattern `ABC-292`, `ABC-290` 
 *Dated 2026-11-07 (`arch-ABC-291-closed`, records only at `main` `78f13b30`; nothing run): row E4 (E4b).* **`ABC-291` is NOT MET: C2′ 46.0 of 100 against 50.0, clean, `ADR-0075` F4 by CF5** (`…211fb87a`). Nothing merged, and the branch is kept. "`ADR-0075` is ACCEPTED" reads accepted, not in force. Row E4's +20–60 stays an estimate and stays unclaimed, and this read cannot size it: −27.9 ± 61.6 spans 0. E4a stands at 0, so row E4 adds nothing to `main`'s score today.
 d11 (d) now applies, to this term only. "It also sets the pattern" stands as a list for the next ADRs: each states its own lines and he accepts them there, so the list does not wait on `ADR-0075` being in force (its dated block of this task). **No bar moves.**
 
-*Dated 2026-11-07 (`arch-ABC-292`, records only at `main` `b1227f2b`; nothing run): row E5.* **`ADR-0076` is PROPOSED, form (b), and acceptance is the owner's.** The bishop pair and the rook file terms go on one read, on hand values fixed by one rule before any row is read. Outposts split off and wait, by the page's split rule, and per-piece mobility stays `ABC-306`. Row E5's +30–80 stays an estimate for the whole row, and these two terms' share is `UNKNOWN - verify`. Nothing here is in force until his answer and `ABC-292`'s merge. **No bar moves.**
+*Dated 2026-11-07 (`arch-ABC-292`, records only at `main` `b1227f2b`; nothing run): row E5.* **`ADR-0076` is ACCEPTED, form (b), and acceptance is the owner's.** The bishop pair and the rook file terms go on one read, on hand values fixed by one rule before any row is read. Outposts split off and wait, by the page's split rule, and per-piece mobility stays `ABC-306`. Row E5's +30–80 stays an estimate for the whole row, and these two terms' share is `UNKNOWN - verify`. Nothing here is in force until his answer and `ABC-292`'s merge. **No bar moves.**
 
 ### D3. Is 3 000 reachable without a neural network?
 
@@ -1695,6 +1702,7 @@ of 10; below that, 10 more games and ≥ 7.0 of 20). Then **the Levels deep lane
   wait on it (`ADR-0075`'s Order line). If the owner opens a route on OQ-0074-2, it is ordered against `ABC-291`'s read then. This
   block's reasons stand as written.
   *Dated 2026-11-07 (`arch-ABC-291-closed`):* `ABC-291`'s read is played and closed, NOT MET, so it went first. A route on OQ-0074-2, if he opens one, is ordered against the next read then.
+  *Dated 2026-11-08 (`arch-ABC-292-accept`; his word `…23d30c72`):* OQ-0074-2 is answered (a). `ABC-289` closes NOT MET, so no route opens, and the clauses above that would order one lapse.
 
 #### Dated 2026-11-04 (`arch-ABC-303-open`, records only at `main` `c118a5cf`): `ABC-303` § Open 1 and 2, and the moved base. No bar moves
 
@@ -2235,6 +2243,11 @@ changes form, not place.***
   - **Item 4:** E4b can no longer open the door. It rests on E5, E3b and E6. This is no miss on row E2, and tuning waits as it did (`ADR-0067`'s dated line of this task).
   - **The queue:** no read waits. `main`'s `src` and `tools` read as `780d9021`, so the next term's base is `main` as it stands.
   - **`ABC-289`'s NOT MET is row Q2's.** It counts neither for nor against a term here. OQ-0074-2 stands as `…40ef8351` left it.
+  *Dated 2026-11-08 (`arch-ABC-292-accept`, records only at `main` `6eaeee01`; his word `…23d30c72`, "agree"; nothing run): **`ADR-0076` is ACCEPTED, and a miss on `ABC-292` is the stop for the hand-valued path. This is his ruling, not only the Architect's recommendation.***
+  - **The stop.** Any miss on `ABC-292`, as `ADR-0076` d14 (c) lists a miss, stops the path: E3b (`ABC-290`) and E6 (`ABC-293`) are not built after it without a new word from him. A defect fix that restores `ADR-0076` d2 or d3 is not a miss. It replaces `ADR-0076` d14 (c)'s "It does not hold the next term". The line above on `ADR-0075` d11 (d) is about `ABC-291`'s miss, and it stands.
+  - **Before the read, and on a pass,** E5, then E3b, then E6 stands, the Orchestrator's by this section's reorder rule, with the owner told. Each later ADR is still owed and is still his to accept.
+  - **`ABC-289` closes NOT MET (OQ-0074-2 (a)).** "`ABC-289` is not closed" and "OQ-0074-2 stands as `…40ef8351` left it", above, are answered. The clauses that waited on a route for it lapse, and no read is ordered against it. Its NOT MET stays row Q2's, and counts neither for nor against a term.
+  - No value, rule, bar, definition or ratio moved.
 - **What a hand value must show:** the term's page, form (b). Values fixed by a stated rule in its ADR before any row is read,
   which the owner accepts; `ADR-0064` d7's safety rows, `zugzwang.001` among them; `G2` at the ADR's ratio; `G6` under `Q-3K-4` (b);
   C2′ GAIN ≥ 50.0 of 100, since evaluation rows fire at 100 ms; S′; the Levels lane. A miss is not merged and not re-played.
