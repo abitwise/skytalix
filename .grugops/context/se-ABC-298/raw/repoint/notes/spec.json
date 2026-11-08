@@ -1,0 +1,7 @@
+{
+  "refs": ["se-ABC-298-repoint", "se-ABC-298", "ABC-298", "ADR-0077", "arch-ABC-298-stop/20261108T221135Z-architect-design-decision-251b60bb", "qe-ABC-298-freeze/20261108T212842Z-qe-e2e-decision-44a6717d", "b9b8eee9", "400c1b9e"],
+  "notes": [
+    { "kind": "observation", "confidence": "high on every reading stated (deterministic, under the host lock, one core, one worker); G4 cmp- and sha256-equal to the frozen digest; the weakened-lane red read equal on main", "bodyFile": "obs-reread.md" },
+    { "kind": "observation", "confidence": "high: commits and files as listed (an observation: an artifact-ref needs a §14-gate run, and none exists)", "bodyFile": "art.md" }
+  ]
+}
