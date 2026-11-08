@@ -123,6 +123,7 @@ The ADR fixes exact counts before Ready. None is loosened after Ready. Form (b) 
   only for the host (`ADR-0056` D6's dated line).
 - **Last of the four, after `ABC-290`'s read.**
   *2026-11-07 (`bapm-terms-after-291`; `…8cc32a89` § 2, `…aab9afd1`): `ABC-291`'s read is played, NOT MET, so this page is **last of the three left, still after `ABC-290`'s read.** QE's freeze goes before its build (test note 1).*
+  *2026-11-08 (`bapm-ABC-292-accept`; the owner's ruling, `orch-2026-10-30a` `…23d30c72`): **a miss on `ABC-292`, any `ADR-0076` d14 (c) miss, is the stop for the hand-valued path:** E3b (`ABC-290`) and E6 (`ABC-293`) are not built after it without his new word. This page stands, and nothing on it moves. Without a miss there, the order above holds.*
 - **The read queues.** A value-changing merge stales the read after it, so this term's C2′ follows `ABC-303` and `ABC-289`.
   *2026-11-06 (`bapm-lines-1106b`; `…7c297147` § 4 item 2, `…40ef8351`): **met.** `ABC-303` merged at `434fa171`, and `ABC-289`'s recorded outcome, NOT MET on an exact build with nothing merged, meets it. This term's place in the order does not change.*
 - **A bundle with `ABC-290`** (`…a5d74f70`) stays lawful under B1. A term merged inside it can open `ADR-0067`'s third-pull door, and CF1–CF10 reach
