@@ -1,0 +1,19 @@
+{
+  "refs": [
+    "arch-ABC-298",
+    "ABC-298",
+    "ADR-0077",
+    "ADR-0063",
+    "ADR-0073",
+    "36baff11",
+    "bba42fb7",
+    "arch-search-rank/20261108T181423Z-architect-design-decision-5a155b2c"
+  ],
+  "notes": [
+    {
+      "kind": "observation",
+      "confidence": "high on the src/ reading (table keys, writers, sort before loop, both recursions); the depth bound is arithmetic on it; how many nodes the gate keeps is UNKNOWN - verify",
+      "bodyFile": "notes/note-observation.md"
+    }
+  ]
+}
