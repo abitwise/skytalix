@@ -39,6 +39,16 @@ adr: "ADR-0060 (PROPOSED; parked, premise not met on main, arch-ADR-0060-reopen 
 >     mate with LMR off (exploratory, six rows, not a node trace). The forms built, `C1+M3`, `M3` and `C1`, read 0 on every d5
 >     row; on P4 that rests on the three-piece clause, not on construction. If bundle 1 (`ABC-303`) turns the d5 floor red, the
 >     lever is LMR. No bar, size or priority moves here. **Still parked; DoR 9/10, Backlog.**
+>   - *2026-11-08 (`bapm-ABC-298-accept`; `orch-2026-10-30a` `…4d1e0382`, `…00cde110`, `…0b4bc6ba`; `arch-ABC-284`
+>     `…9ae6cff1`):* **the owner skipped the re-open try.** On `Q-3K-12` he chose option 2, one try at P1 (`…4d1e0382`).
+>     The Architect wrote it as a dated re-open of `ADR-0060`, § The 2026-11-08 look (L1–L6), PROPOSED (premise: today's
+>     `main`, a different tree from the one it missed on; decision 1 unchanged), and recommended against it: `zugzwang.004` at d11 and R-283-LMR's
+>     same-depth d5 mate floor have no reason to pass that is not a guess, and the probe's odds are below one in ten
+>     (`…9ae6cff1`). He agreed with the Architect (`…0b4bc6ba`): **no freeze, no probe, no host time.** `ADR-0060`'s
+>     2026-11-08 look **stays PROPOSED, not accepted,** parked as before. **The same-depth mate floor bar stands** (his
+>     agreement with L6 question 4). The card went to In Design for the look and is back in Backlog (`…0b4bc6ba`); this
+>     page read Backlog throughout. The re-open trigger is unchanged: a new named premise with its own pre-registered
+>     probe. No bar, size or priority moves. **Still parked; DoR 9/10, Backlog.**
 > - **The board move is the Orchestrator's.**
 
 ## Problem
@@ -136,6 +146,6 @@ lists them so this page is checkable). None is loosened after Ready.
 | 7 | test notes | ✅ 1–4 |
 | 8 | size | ✅ S–M |
 | 9 | priority | ✅ P2 |
-| 10 | no major unresolved blocker | ❌ **parked:** no form meets every bar on `main`. Re-opens on a named premise with a pre-registered probe (the Architect's) |
+| 10 | no major unresolved blocker | ❌ **parked:** no form meets every bar on `main`. Re-opens on a named premise with a pre-registered probe (the Architect's) *2026-11-08 (`bapm-ABC-298-accept`; `…0b4bc6ba`): the owner skipped the 2026-11-08 try; `ADR-0060`'s look stays PROPOSED; still parked* |
 
 **DoR 9/10. Backlog, parked.**
