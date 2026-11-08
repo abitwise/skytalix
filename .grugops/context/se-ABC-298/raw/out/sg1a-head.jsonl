@@ -1,0 +1,7 @@
+{"row":"search","board":"kiwipete","depth":8,"nodes":311546,"move":"20-80-0-0","uci":"e2a6","score":-81,"pure":true}
+{"row":"search","board":"position-6","depth":8,"nodes":163523,"move":"34-67-0-0","uci":"c3d5","score":71,"pure":true}
+{"row":"chooseMove","board":"kiwipete","maxDepth":8,"depth":8,"nodes":573518,"move":"20-80-0-0","uci":"e2a6","score":-114,"reads":568,"pure":true}
+{"row":"chooseMove","board":"kiwipete","maxDepth":9,"depth":9,"nodes":1320857,"move":"20-80-0-0","uci":"e2a6","score":-128,"reads":1299,"pure":true}
+{"row":"chooseMove","board":"position-6","maxDepth":8,"depth":8,"nodes":94911,"move":"34-67-0-0","uci":"c3d5","score":45,"reads":102,"pure":true}
+{"row":"chooseMove","board":"position-6","maxDepth":9,"depth":9,"nodes":234984,"move":"34-67-0-0","uci":"c3d5","score":34,"reads":240,"pure":true}
+{"row":"chooseMove","board":"position-6","maxDepth":10,"depth":10,"nodes":523610,"move":"34-67-0-0","uci":"c3d5","score":64,"reads":523,"pure":true}

@@ -1,0 +1,37 @@
+== default
+ FAIL  src/search.bundle.test.ts > ABC-283 (h) — the history table (ADR-0063 decisions 1-5) > source: each negamax updates once, at its beta cutoff, behind the switch; the clear sits beside clearTable; quiescence never touches it
+ FAIL  src/search.null-move.test.ts > both recursions try the null move through the predicate, at null-window nodes, and return beta > ./search.ts: calls nullMoveReduction once, gates on alpha + 1 === beta, subtracts its value and returns beta
+ FAIL  src/search.null-move.test.ts > both recursions try the null move through the predicate, at null-window nodes, and return beta > ./engine.ts: calls nullMoveReduction once, gates on alpha + 1 === beta, subtracts its value and returns beta
+ Test Files  2 failed | 69 passed (71)
+      Tests  3 failed | 2779 passed (2782)
+== PERFT_DEEP-perft
+ Test Files  1 passed (1)
+      Tests  32 passed (32)
+== PUZZLE_DEEP-puzzle-suite
+PUZZLES shipped: solved 54/58, baseline 54/58, budget 25 step 1, wall 2.37 s
+ Test Files  1 passed (1)
+      Tests  18 passed (18)
+== SEARCH_DEEP-search.bundle
+ABC-283 mate floor search() d5: 0 of 190 violated
+ABC-283 mate floor chooseMove d5: 0 of 188 violated
+ABC-303 mate floor search() d5: 0 of 191 violated
+ABC-303 mate floor chooseMove d5: 0 of 189 violated
+ FAIL  src/search.bundle.test.ts > ABC-283 (h) — the history table (ADR-0063 decisions 1-5) > source: each negamax updates once, at its beta cutoff, behind the switch; the clear sits beside clearTable; quiescence never touches it
+ Test Files  1 failed (1)
+      Tests  1 failed | 55 passed (56)
+== ENGINE_DEEP-engine
+ Test Files  1 passed (1)
+      Tests  105 passed (105)
+== ENGINE_DEEP-uci-session
+ Test Files  1 passed (1)
+      Tests  270 passed (270)
+== ENGINE_DEEP-legal
+stdout | src/legal.test.ts > ABC-298 SG2 (b) — the check without the list, by walk (ADR-0077 d6) [deep, ENGINE_DEEP=1] > on ABC-206's 285 074-position walk to depth 3, 0 mismatches, 0 mutations [deep, ENGINE_DEEP=1]
+ABC-298 SG2 (b) ABC-206 walk: {"nodes":285074,"twins":11137359,"stale":12500288,"staleLegal":0,"mismatches":0,"mutations":0}
+stdout | src/legal.test.ts > ABC-298 SG2 (b) — the check without the list, by walk (ADR-0077 d6) [deep, ENGINE_DEEP=1] > on the six perft roots, ADR-0003's 518 474-node walk, 0 mismatches, 0 mutations [deep, ENGINE_DEEP=1]
+ABC-298 SG2 (b) ADR-0003 walk: {"nodes":518474,"twins":16564718,"stale":17581408,"staleLegal":0,"mismatches":0,"mutations":0}
+ Test Files  1 passed (1)
+      Tests  91 passed (91)
+== ENGINE_DEEP-moves
+ Test Files  1 passed (1)
+      Tests  40 passed (40)

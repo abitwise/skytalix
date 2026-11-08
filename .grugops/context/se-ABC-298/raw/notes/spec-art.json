@@ -1,0 +1,18 @@
+{
+  "refs": [
+    "se-ABC-298",
+    "ABC-298",
+    "ADR-0077",
+    "qe-ABC-298-freeze/20261108T212842Z-qe-e2e-decision-44a6717d",
+    "b9b8eee9",
+    "43fe357e",
+    "05b2ea2f"
+  ],
+  "notes": [
+    {
+      "kind": "observation",
+      "confidence": "high: commits and files as listed (recorded as an observation: an artifact-ref needs a \u00a714-gate run, and none exists)",
+      "bodyFile": "art.md"
+    }
+  ]
+}
