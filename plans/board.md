@@ -1,3 +1,4 @@
+_Updated: 2026-11-08T08:46:23Z — arch-ABC-292-accept merged: ADR-0076 ACCEPTED, stop ruling and ABC-289 close in the ADRs; bapm-ABC-292-accept running._
 _Updated: 2026-11-08T08:39:00Z — owner "agree": ADR-0076 accepted, miss on ABC-292 stops the hand-valued path, OQ-0074-2 (a) closes ABC-289; arch- and bapm-ABC-292-accept running (d10 step 2)._
 _Updated: 2026-11-07T20:37:55Z — ADR-0076 PROPOSED merged; acceptance and four questions with the owner; ABC-292 stays In Design._
 _Updated: 2026-11-07T20:18:15Z — bapm-terms-after-291 merged; ABC-291 closed to Done; ABC-292 In Design, arch-ABC-292 running._
