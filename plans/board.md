@@ -1,3 +1,4 @@
+_Updated: 2026-11-08T08:53:42Z — bapm-ABC-292-accept merged (ABC-286, 288, 289 Done; ABC-308 held); d10 step 2 met; qe-ABC-292-freeze running (step 3)._
 _Updated: 2026-11-08T08:46:23Z — arch-ABC-292-accept merged: ADR-0076 ACCEPTED, stop ruling and ABC-289 close in the ADRs; bapm-ABC-292-accept running._
 _Updated: 2026-11-08T08:39:00Z — owner "agree": ADR-0076 accepted, miss on ABC-292 stops the hand-valued path, OQ-0074-2 (a) closes ABC-289; arch- and bapm-ABC-292-accept running (d10 step 2)._
 _Updated: 2026-11-07T20:37:55Z — ADR-0076 PROPOSED merged; acceptance and four questions with the owner; ABC-292 stays In Design._
@@ -1522,14 +1523,15 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 - ~~[ABC-302]~~ → In Development. NFR-008 headroom: nine named rows to existing deep lanes, each with a remnant (form S), ~−0.55 s, re-graded with a twin (S, P1, DoR 9/10; arch-ABC-302 running). Critical path before ABC-282 and ABC-301.
 - [ABC-284] P1: late-move reductions from a log table of remaining depth × move index, replacing ABC-121's flat 1-ply LMR  (Backlog; cut by bapm-epic011-areas 181da9e3; hold and owed ADR on the page)
 - [ABC-285] P5: the null-move reduction R grows with remaining depth and the static eval margin, amending ADR-0050's fixed (Backlog; cut by bapm-epic011-areas 181da9e3; hold and owed ADR on the page)
-- [ABC-286] P4: late-move (move-count) pruning skips the late quiet moves at low remaining depth, by a move-count table, b (Backlog; cut by bapm-epic011-areas 181da9e3; hold and owed ADR on the page) **2026-11-04: unheld for its probe (ABC-283 merged); recommended bundle 1 with its pair (Q-3K-11).**
+- ~~[ABC-286]~~ → Done (delivered by ABC-303, bapm-ABC-292-accept). P4: late-move (move-count) pruning skips the late quiet moves at low remaining depth, by a move-count table, b (Backlog; cut by bapm-epic011-areas 181da9e3; hold and owed ADR on the page) **2026-11-04: unheld for its probe (ABC-283 merged); recommended bundle 1 with its pair (Q-3K-11).**
 - [ABC-287] P6: razoring. At low remaining depth, a node whose static score is far below alpha is resolved by quiescence i (Backlog; cut by bapm-epic011-areas 181da9e3; hold and owed ADR on the page)
-- [ABC-288] O2c: countermove and continuation history. Quiet moves are also ordered by the move that answered the opponent (Backlog; cut by bapm-epic011-areas 181da9e3; hold and owed ADR on the page) **2026-11-04: unheld for its probe (ABC-283 merged); recommended bundle 1 with its pair (Q-3K-11).**
-- [ABC-289] Q2: delta pruning in quiescence. Out of check, a capture is skipped when the stand-pat score plus its victim's (Backlog; cut by bapm-epic011-areas 181da9e3; hold and owed ADR on the page)
+- ~~[ABC-288]~~ → Done (delivered by ABC-303, bapm-ABC-292-accept). O2c: countermove and continuation history. Quiet moves are also ordered by the move that answered the opponent (Backlog; cut by bapm-epic011-areas 181da9e3; hold and owed ADR on the page) **2026-11-04: unheld for its probe (ABC-283 merged); recommended bundle 1 with its pair (Q-3K-11).**
+- ~~[ABC-289]~~ → Done, closed NOT MET (OQ-0074-2 (a)). Q2: delta pruning in quiescence. Out of check, a capture is skipped when the stand-pat score plus its victim's (Backlog; cut by bapm-epic011-areas 181da9e3; hold and owed ADR on the page)
 - [ABC-290] E3b: king attack. Pieces attacking the enemy king's zone add a weighted, tapered term (a re-try of dropped ABC (Backlog; cut by bapm-epic011-areas 181da9e3; hold and owed ADR on the page)
 - ~~[ABC-291]~~ → In Design. E4b: pawn structure. Connected and phalanx pawns earn a tapered bonus and backward pawns a tapered penalty; th (Backlog; cut by bapm-epic011-areas 181da9e3; hold and owed ADR on the page)
 - [ABC-292] E5: piece terms. A bishop pair bonus, rooks on open and semi-open files, outposts, and mobility weighted per p (Backlog; cut by bapm-epic011-areas 181da9e3; hold and owed ADR on the page)
 - [ABC-293] E6: threats and tempo. A piece attacked by an enemy pawn and a hanging piece (attacked and not defended) cost  (Backlog; cut by bapm-epic011-areas 181da9e3; hold and owed ADR on the page)
+- [ABC-308] E5c outposts, split from ABC-292 by ADR-0076 d1. Held, no build; reopens on a third pull that names it, or a case of its own (S–M, P3, DoR 9/10; bapm-ABC-292-accept).
 - [ABC-294] E7b: endgame knowledge beyond E7a. Rook-pawn and wrong-coloured-bishop draws and named rook-ending rules scale (Backlog; cut by bapm-epic011-areas 181da9e3; hold and owed ADR on the page)
 - [ABC-295] R2: the second EPIC-011 milestone reading, on main at Phase 4's close: 200 games at 100 ms a move against Stoc (Backlog; cut by bapm-epic011-areas 181da9e3; hold and owed ADR on the page)
 - [ABC-296] X1: a check extension at every depth. A move that gives check is searched one ply deeper wherever it occurs in (Backlog; cut by bapm-epic011-areas 181da9e3; hold and owed ADR on the page)
@@ -1580,7 +1582,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 ## In Design (WIP 1/2)
-- [ABC-292] E5 piece terms: arch-ABC-292 writes the owed ADR, PROPOSED; no build before his acceptance and QE's freeze.
+- [ABC-292] E5 bishop pair and rook files: ADR-0076 ACCEPTED 2026-11-08 (…23d30c72); page narrowed, DoR 9/10. Next d10 step 3, qe-ABC-292-freeze; then the probe (held host). A miss stops the hand-valued path.
 
 
 ## Ready for Dev (WIP 0/6)
@@ -1674,6 +1676,9 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready to Release (WIP 0/4)
 
 ## Done (WIP unlimited)
+- [ABC-289] Q2 delta pruning: closed NOT MET 2026-11-08 on OQ-0074-2 (a) (…23d30c72). Branch grugops/ABC-289 kept, unmerged.
+- [ABC-286] P4 late-move pruning: Done 2026-11-08, delivered by ABC-303 (434fa171).
+- [ABC-288] O2c countermove and continuation history: Done 2026-11-08, delivered by ABC-303 (434fa171).
 - [ABC-291] E4b pawn structure: closed NOT MET, C2′ 46.0 of 100 (…211fb87a), F4; not merged, d11 (d) applies. Branches grugops/ABC-291, grugops/qe-ABC-291 kept.
 - [ABC-303] Bundle 1, ABC-286 + ABC-288: merged 434fa171. C2′ 55.5, S′ 9.0, Levels 58/58, P6, P7 met; QE MET …ebefbfa2, B4 …9e2facfa, UAT signed. Gates 2 734 and bundle, Levels, engine, uci deep lanes green.
 - [ABC-305] Tools-only landing from b297ab89: merged d00164ce. A5 MET, QE PASS …482f3e67, UAT waived by A3. Gates 2 710, tune 25, passer 29 green; dd88560f out of main.
@@ -1993,7 +1998,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 - [ABC-142] `npm test` keeps the failing test's name on disk when the console is truncated  (BA/PM, XS, P2, since: 2026-10-10, DoR 10/10; cut from QE-141-a + QE-093-e, two unnamed one-test flakes) **2026-10-10: cut → Ready → Ready for Dev → pulled → In Development (pass-through); build `ticket-to-pr-ABC-142`; zero `src/` expected.** **2026-10-10: engineer STOPPED pre-code — premise stale: `src/cli.test.ts:1665–1686` (ABC-042 A10) pins `scripts.test`; A5 forbade the one test line. Orchestrator routes option 1 (update the pin, zero production lines) → BA/PM amend `bapm-amend-abc142-2026-10-10`, then the build resumes.** **2026-10-10: A5 amended (merged `a559ca34`, DoR 10/10; new A6 keeps the pin exact) → build resumed.** **2026-10-10: BUILT `41abc389`/`ab8d0088`: A1–A6 met; 53/1680; `.test-results/last-run.json` names the failing test even through `| tail -3`. One deviation: vitest adds one console line (`JSON report written to …`) — Orchestrator reads it as acceptable IF no console consumer breaks (QE to verify) → In Review, QE `qe-ABC-142`.** **2026-10-10: QE PASS_WITH_GAPS (`8b0685de`; no console consumer breaks — the extra `JSON report written to …` line is ACCEPTED by the Orchestrator) → merged `addbc328` → Done (UAT WAIVED: test-only `src/`). Follow-ups next session (BA/PM): QE-142-a MEDIUM (unhandled error → exit 1 but file says success), QE-142-b/c LOW.**
 
 ## Blocked (visible, time-tracked)
-- [ABC-289] Q2 delta pruning: NOT MET on an exact build …7c297147, DP2 red with P4 in. Branch b42706b3 kept, unmerged. OQ-0074-2 with the owner; blocks nothing.
+- ~~[ABC-289]~~ → Done 2026-11-08 (OQ-0074-2 (a)). Q2 delta pruning: NOT MET on an exact build …7c297147, DP2 red with P4 in. Branch b42706b3 kept, unmerged. OQ-0074-2 with the owner; blocks nothing.
 - ~~[ABC-283]~~ unblocked 2026-11-04T14:25Z (K3). Was: mate floor (ADR-0064 d7) lost on KRK by the history part (se-ABC-283 …0b0b135f); SEE ordering and aspiration clean. → arch-ABC-283-mate (…19583086).
 - [ABC-266] TH-2: Lazy SMP worker pool behind UCI Threads (default 1); read Threads N vs Threads 1 as a hardware gain (EPIC-011 threads; size: L; P2; DoR 9/10 — ADR amending ADR-0044 D3/D5 owed; after ABC-265) **2026-11-02 PARKED (Orchestrator, on evidence): D12 MISS and re-proposal NO WIN (…b6305641) — plain pools run in lockstep (depth 7 = 7); only skip+deeper+perturbation adds a ply and it costs move quality. Threads stay 1. Re-open: owner-funded ~30 min probe (≥ 60 positions, ≥ 1 s load windows) or a new premise.**
 
