@@ -128,6 +128,7 @@ Architect/Design (task `arch-owner-answers-1103`, records only, on `grugops/arch
 | 2026-11-05 | Architect/Design | The four tests read for a bundle term. No bar moved | `arch-owner-answers-1105b` |
 | 2026-11-05 | Architect/Design | Three lines on the wait, as accepted with `ADR-0075`: the tool line at a term's merge, `ABC-306`'s route, "E5" at the door. No bar moved | `arch-ABC-291` |
 | 2026-11-07 | Architect/Design | `ABC-291` NOT MET: the three lines stand, the trigger did not fire, E4b leaves the door, and this is no miss on row E2. No bar moved. Nothing run | `arch-ABC-291-closed` |
+| 2026-11-08 | Architect/Design | "E5" at the door reads accepted with `ADR-0076`. His reading of a lone pass, and his stop ruling's reach to the door. No bar or door test moved. Nothing run | `arch-ABC-292-accept` |
 
 ## Context
 
@@ -963,7 +964,11 @@ bundle meets the trigger. No bar moves, and nothing is fitted.***
 - **The trigger did not fire.** E4b has not merged and cannot. `…e5a5ac0c`'s one clean form now reads E3b, E5 or E6, on its own read or in a bundle.
 - **This is not a miss on row E2.** The cap counts pulls: two are spent, and "a third miss on this row" means a third pull. A term's miss neither spends it nor closes tuning.
 
-*Dated 2026-11-07 (`arch-ABC-292`, records only at `main` `b1227f2b`; nothing run; `ADR-0076` PROPOSED): **"E5" at the door, if he accepts the split. No bar moves, and nothing is fitted.** `ADR-0076` d1 takes outposts off `ABC-292`, so `ADR-0075` d11 (c)'s "each merged part counts" applies. The bishop pair and rook file terms count if they merge, and outposts count only if they merge one day on their own read. Test 4 is unchanged: one door, one fit. Each read is one more draw at the door, by `…8cc32a89` § 2's arithmetic. The reading stays open to overruling at any third-pull call.
+*Dated 2026-11-07 (`arch-ABC-292`, records only at `main` `b1227f2b`; nothing run; `ADR-0076` ACCEPTED, so this line reads as accepted from his answer): **"E5" at the door, with the split he accepted. No bar moves, and nothing is fitted.** `ADR-0076` d1 takes outposts off `ABC-292`, so `ADR-0075` d11 (c)'s "each merged part counts" applies. The bishop pair and rook file terms count if they merge, and outposts count only if they merge one day on their own read. Test 4 is unchanged: one door, one fit. Each read is one more draw at the door, by `…8cc32a89` § 2's arithmetic. The reading stays open to overruling at any third-pull call.
+
+*Dated 2026-11-08 (`arch-ABC-292-accept`, records only at `main` `6eaeee01`; his word `…23d30c72`, "agree"; nothing run): **a lone pass at the door. No bar moves, no door test moves, and nothing is fitted.**
+- **His reading of a lone pass** (`ADR-0076` § The owner's questions 5): one pass of E5, E3b and E6 reads "keep this term, it was not seen worse", and nothing more. It lets a third pull be asked for, and it is no reason to say yes. The ask carries the odds `ADR-0076` question 5 gives.
+- **His stop ruling reaches the door.** After a miss on `ABC-292`, E3b and E6 are not built without a new word from him (`ADR-0056` D6's dated line of this task). So after such a miss no term comes to the door by the hand-valued path without that word. This is no miss on row E2.
 
 ## What would falsify this
 

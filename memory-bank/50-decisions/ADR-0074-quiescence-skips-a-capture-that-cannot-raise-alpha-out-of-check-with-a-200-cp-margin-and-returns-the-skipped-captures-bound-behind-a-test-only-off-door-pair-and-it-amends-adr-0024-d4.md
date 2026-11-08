@@ -6,6 +6,15 @@ id: ADR-0074
 
 ## Status
 
+***Dated 2026-11-08 (`arch-ABC-292-accept`, records only at `main` `6eaeee01`; nothing run): OQ-0074-2 IS ANSWERED (a).
+`ABC-289` CLOSES NOT MET. THIS ADR STAYS ACCEPTED, NOT IN FORCE.***
+- **His word** (`orch-2026-10-30a` `…23d30c72`): *"agree"*, to the Orchestrator's recommendation (a), close. Routes (b) to (d)
+  were not opened.
+- **What follows.** "Not in force until `ABC-289` merges" has no merge left to wait for. Branch `grugops/ABC-289` at `b42706b3`
+  is kept, unmerged, and nothing of it reached `main`. `ADR-0024` d4's amendment is not in force, so d4 stands as written.
+  A re-read of D200b unchanged is not a route (§ What would falsify this).
+- **No bar, margin, form or pin moved.** The block below stands as written.
+
 ***Dated 2026-11-06 (`arch-ABC-289-joint`, at `main` `3ff03a9d`; scratch reads on copies, no game): F1 AND F7 FIRED ON AN EXACT
 BUILD, ON THE JOINT TREE. BY THE LETTER, NOT MET. THIS ADR STAYS ACCEPTED, NOT IN FORCE.***
 - **The build:** `grugops/ABC-289` `b42706b3`, on `main` `063ca870`, which holds bundle 1 (`se-ABC-289` `…0e380b06`). Drift reads
@@ -66,6 +75,8 @@ a scratch copy of `main`'s `src/`, outside the repository, under the host lock, 
 | 2026-11-04 | Owner | OQ-0074-1: yes, accept | `orch-2026-10-30a` `…3e73f9f9` |
 | 2026-11-04 | Architect/Design | **ACCEPTED, not in force.** `ADR-0024` d4 amended by pointer; order after bundle 1 | `arch-owner-answers-1104b` |
 | 2026-11-06 | Architect/Design | F1 and F7 read on the joint tree: fired, exact build, NOT MET by the letter; no bar moved | `arch-ABC-289-joint` `…7c297147` (decision), `…d61479af` (readings) |
+| 2026-11-08 | Owner | OQ-0074-2: (a), close ("agree") | `orch-2026-10-30a` `…23d30c72` |
+| 2026-11-08 | Architect/Design | OQ-0074-2 (a) recorded: `ABC-289` closes NOT MET; accepted, not in force; no bar moved. Nothing run | `arch-ABC-292-accept` |
 
 ### The nine items `ADR-0024` § Status, the fourth block, asks for
 
@@ -313,6 +324,7 @@ verdict does not change.
 - **A re-read of D200b, unchanged, on a later tree is not a route.** That is a miss re-played. A new read needs a new form or the
   owner's word.
 - **Routes, and whose each is:** `arch-ABC-289-joint` `…7c297147` § 2.
+  *Dated 2026-11-08 (`arch-ABC-292-accept`): he chose (a), close (`…23d30c72`). See § Status.*
 
 ## Alternatives
 

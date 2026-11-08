@@ -6,7 +6,21 @@ id: ADR-0076
 
 ## Status
 
-**PROPOSED 2026-11-07.** Recorded by Architect/Design (task `arch-ABC-292`, records only, on `grugops/arch-ABC-292` from `main` `b1227f2b`, `src/` tree `bba42fb7`).
+**ACCEPTED 2026-11-08 by the owner. In force only at `ABC-292`'s merge.** Recorded by Architect/Design (task `arch-ABC-292-accept`, records only, on `grugops/arch-ABC-292-accept` from `main` `6eaeee01`). Nothing was run.
+- **His word, verbatim** (`orch-2026-10-30a` `…23d30c72`): *"agree"*, to every recommendation the Orchestrator put to him. In the Orchestrator's numbering: 1 accept this ADR, with `G2` ≤ 1.05 × named as looser than `ADR-0075`'s 1.03, and K2's two rows named as lost fixture properties re-found in QE's freeze; 2 a miss here is the stop for the hand-valued path; 3 d14 (c), yes; 4 the pawn terms in a bundle, no; 5 games first over budget, yes; and question 5's reading of a lone pass.
+- **What it settles:** d1–d14 as written. **No definition, rule, value, ratio, bar or probe row changes with this acceptance.** The probe stays written and not run. F5's "accepted, not in force" now applies to a miss.
+- **Question 1, with the two lines he was shown:**
+  - `G2` ≤ 1.05 × stands as d6 writes it, with the 1.03 tripwire and the named cut. He saw it named as looser than `ADR-0075`'s 1.03. The ratio is this ADR's, as the ticket says, so no bar moved. See d6's dated line.
+  - K2's two `ABC-083` rows are lost fixture properties, not re-pins and not a bar loosened. Their re-found fixtures are QE's, in the freeze (d10 step 3). Their words and relation stand. See K2's dated line.
+- **d14 (c), no second set of values after a miss:** accepted, for this term. "If accepted" and "if he accepts it" in d11's table, F4 and F5 now read accepted. It binds no later term; each asks him in its own ADR.
+- **His ruling: a miss on `ABC-292` is the stop for the hand-valued path.** A miss is any in d14 (c)'s list. After one, E3b (`ABC-290`) and E6 (`ABC-293`) are not built without a new word from him. It was § The plain case's recommendation; it is now his ruling. It replaces d14 (c)'s "It does not hold the next term". `ADR-0056` D6's dated line of this task holds it with the term order.
+- **Question 3, the pawn terms back in a bundle at the same numbers: no.** `ADR-0075` d11 (d)'s dated line of this task.
+- **Question 4, games first over budget: yes.** See d7's dated line. The figure stays ≤ +0.10 s.
+- **Question 5:** a lone pass reads "keep this term, it was not seen worse", and nothing more. A third-pull ask carries the odds. No bar or door test moves. See d14 (b)'s dated line and `ADR-0067`'s.
+- **OQ-0074-2 (a):** `ABC-289` closes NOT MET. § Consequences' clause that waited on it lapses.
+- **Still owed, unchanged:** § Consequences' lines. d10 step 3, QE's freeze, comes next, and no probe or build comes before it.
+
+*Before acceptance:* **PROPOSED 2026-11-07.** Recorded by Architect/Design (task `arch-ABC-292`, records only, on `grugops/arch-ABC-292` from `main` `b1227f2b`, `src/` tree `bba42fb7`).
 **Nothing was run:** no test, build, engine, probe or game. Every figure below is arithmetic on `src/` at that commit, or is quoted from a named record. Anything that needs a reading is marked `UNKNOWN - verify`.
 
 **Acceptance is the owner's:** this is a new ADR (`ABC-292`'s front matter, reading (b)). His questions are § The owner's questions. Not in force until `ABC-292` merges.
@@ -20,6 +34,8 @@ id: ADR-0076
 | date (UTC) | by | what | record |
 |---|---|---|---|
 | 2026-11-07 | Architect/Design | PROPOSED: two terms, outposts split, rule and values, seam, `G2` ratio, order before the build, probe written and not run. Nothing run | `arch-ABC-292` |
+| 2026-11-08 | Owner | ACCEPTED ("agree", to every recommendation), in force only at `ABC-292`'s merge. `G2` ≤ 1.05 × and K2's two rows as named; d14 (c) for this term; a miss here stops the hand-valued path; question 3 no; question 4 yes; question 5's reading. OQ-0074-2 (a) | `orch-2026-10-30a` `…23d30c72` |
+| 2026-11-08 | Architect/Design | Status and this log. Dated lines at d6, d7, K2, d14 (b), d14 (c), § The plain case, § The owner's questions and § Consequences. The dated lines of `arch-ABC-292` in `ADR-0056` and `ADR-0067` read accepted; his stop ruling in `ADR-0056` D6. No value, rule, definition, ratio or bar moved. Nothing run | `arch-ABC-292-accept` |
 
 ## Context
 
@@ -107,6 +123,7 @@ Notation: a half h is mg or eg. A file is a to h. "Own" and "enemy" are from the
      - This term does more than one memo read: it works in the walk. 1.03 fitted "one read, one add, one branch", and even that took a spent cut and a 0.0033 margin.
      - One session's level moves R by about ± 0.018. A correct build with a true R of 1.03 would miss a 1.03 bar about half the time. No bar should be a coin flip for a correct build.
      - 1.05 is `ADR-0064` B6's ratio for a change to the whole evaluation. E1 read 1.0373 under it. The page calls 1.05 form (a)'s precedent and no bar here, so it binds nothing: I take it for these reasons, and not because it is old.
+     - *Dated 2026-11-08 (`arch-ABC-292-accept`; his word `…23d30c72`): accepted as written. He was shown 1.05 named as looser than `ADR-0075`'s 1.03, and written after K4 read 1.0267. The tripwire at 1.03 and the named cut stand. No bar moved.*
    - **What 1.05 costs in play, by arithmetic.** `evaluate` is about 315 ns, run about 0.9 times a node (`ADR-0031`), and a node is about 1 476 to 1 626 ns (`…024bbd63` K5). So the call is 17 to 19 % of a node, and +5 % a call is about +1 % a node. At `ADR-0055`'s 50–100 Elo a doubling that is about 0.7 to 1.4 Elo. `ABC-291` agrees in size: `nsnode` read 1.0021 and 1.0089 on a per-call 1.0267. **Per-call `G2` guards little Elo at this size.** It is a cost bar, and it stays one.
    - **The instrument:** `ADR-0067` d8's A5 shape under a PREREG sealed before timing, as `ADR-0075` d5 has it: R = (r₁ + r₂) / 2 on the unrounded value, two sessions in reverse order, a `main`-copy control, rounds 2, 4 and 6 reversing the list, round 1 dropped, void window [0.970, 1.030].
    - **What it cannot read, stated now.** `G2` repeats six roots, so it reads the hit path. In this design the miss path adds nothing by reading, but that is not read. A per-call ratio says little about a node. The two levels' cause is unread. PR10 reports all three.
@@ -129,6 +146,7 @@ Notation: a half h is mg or eg. A file is a to h. "Own" and "enemy" are from the
 
    - **So a correct build may well read over.** With QE's read sigma of 0.082 s, a true +0.04 s reads over the bar about 23 % of the time, +0.085 s about 43 %, and +0.12 s about 60 %. That is arithmetic on an estimate.
    - **If it reads over:** `NFR-008` is UNRESOLVED by `…a49d69d7` § 5's form, not a defect. The route is the owner's: § The owner's questions, 3. With no answer, H3's stricter order stands, and no game starts until `NFR-008` is read and not over.
+     *Dated 2026-11-08 (`arch-ABC-292-accept`; his word `…23d30c72`): answered. "§ The owner's questions, 3" in the line above means question 4, games first, by its words. He said yes, for the terms after `ABC-291`. I read that as including this one: this line sends this term's over-read to that question, and the question gives this term's odds. That is a reading, open to the Orchestrator's overruling. So if `NFR-008` reads over on this term, its games may go first, and the budget is decided only if it passes. Each read seals that order in its PREREG before any figure exists. H3's stricter order no longer stands for these reads. The figure stays ≤ +0.10 s, and "UNRESOLVED, not a defect" stands.*
    - **The supply stays in reserve.** N1 to N9 are unspent, and rows reach the bar only by riding on the branch (`…61a939d3`). Merged first, they sit in both arms and buy nothing. They are not planned here.
    - **`NFR-009`: +0 bytes.** `src/evaluate.pawns.test.ts`'s and `src/transposition.test.ts`'s byte rows do not move. One small count table, if the build uses one, is 256 bytes at load.
    - **`NFR-001`/`G2`:** d6. **`NFR-005`:** K5. No new NFR file. `plans/nfr-catalog.md` is untouched.
@@ -161,6 +179,7 @@ Notation: a half h is mg or eg. A file is a to h. "Own" and "enemy" are from the
        - `src/evaluate.king-mobility.test.ts` `ABC-083` A4, "white, with substantially more moves at equal material…". `MOBILE_WHITE` puts white's rook on the open d-file and black's behind its own h7, and the row asserts `evaluateWithoutMobility` is 0. With d5's line that reads 20. The relation and the ± 100 bound row do not change. Only the premise "every term but mobility cancels" is lost.
        - The same file's `ABC-083` A3 (b), "at EQUAL material, shelter equal, at phase 24". `F_HALF_OPEN_E5_24` has white's rook on f1, so the arm that opens the f-file also earns the semi-open term. On `main` the margin is about −2 by my arithmetic: +6 table, −10 isolated, −10 half-open, +12 mobility. **Any semi-open value of 2 or more turns it red, so this is no fault of d3's rule.** The re-found fixture must keep "red with the term zeroed". The twin row stays green.
        - **Reading:** `ABC-292` says "`G3`'s relation rows stay green, `ABC-083` A4 (mobility within ± 100 cp) included". The bound row is what that names, and it stands. These two keep their words and their relation, on a re-found fixture, under `ADR-0064` d7's own clause. **If the Orchestrator or the owner reads this as a bar loosened after Ready, it comes back here before the seal.**
+         *Dated 2026-11-08 (`arch-ABC-292-accept`; his word `…23d30c72`): neither did. The Orchestrator put both rows to him with question 1, as lost fixture properties re-found in QE's freeze, and he accepted. Their re-found fixtures are QE's, made at d10 step 3, before the probe. "Red with the term zeroed" stays the A3 (b) fixture's test. No bar moved.*
      - **The deep pins:** § The pins this term moves.
      - **The classes `ABC-291` showed** (`…cb124720`, 64 rows): door lists, the switch's call sites, `futilityNode`'s arity 7 → 8, older-door re-points, value rows, a lost `ABC-282` A2 fixture. The rows will differ, because a piece term reaches rows a pawn term did not. No count carries from that tree (`ADR-0075`'s dated block of `arch-ABC-291-closed`).
    - **K3, safety (`ADR-0064` d7's rows):** mate floor 0 violations, door depth 4 → head depth 5 and depth 5 → depth 5 on the 287; zugzwang **7 / 7** at recorded depths with `zugzwang.001` among them; `G1` no NEWLY-MISSED line. All read all-on. No depth moves, and no expected result is rewritten.
@@ -246,12 +265,14 @@ Notation: a half h is mg or eg. A file is a to h. "Own" and "enemy" are from the
 14. **The carried items.**
     - **(a) The tool line lands with the term, at its merge,** by `ADR-0075` d11 (a), which stands, and which each term's ADR states for itself. `tools/tune` gains the three terms' counts in the tracer and the three exports in the emitter, **traced and held, not free**. 17 → 20 exports. No fit, no emission to `src/`, and `src/` gains no tracing code. `QUIET_RULES`: d5. K7 reads it. It holds no production line, so it stales no read, and test-only commits may follow it. If E2 closes for good, no tool line is owed.
     - **(b) The third-pull door.** `ADR-0075` d11 (c) stands: these parts count, each merged part on its own. Test 4 is unchanged: one door, one fit. Outposts count only if they merge one day. That reading stays open to overruling at any third-pull call. Asking is not a yes.
+      *Dated 2026-11-08 (`arch-ABC-292-accept`; his word `…23d30c72`): question 5's reading is his. A lone pass reads "keep this term, it was not seen worse", and nothing more. It lets a third pull be asked for and is no reason to say yes. The ask carries the odds of question 5. No bar and no door test moves.*
     - **(c) No second set of values after a miss. This is his to accept here, for this term** (`…c1623ae7`: each later term's ADR asks him).
       - **The line.** After a miss, `BISHOP_PAIR`, `ROOK_OPEN_FILE` and `ROOK_SEMI_OPEN_FILE` do not get new numbers by hand. New numbers chosen after a loss are tuning on play by hand.
       - **A miss is:** a real safety red (F3), C2′ below the bar on a clean read, a CF2 or CF8 NOT MET, a second miss on F2's K4 or K5 half, or the probe's rule 2, rule 3's cost stop, or rule 4.
       - **Not a miss:** a defect fix that restores d2 or d3.
       - **How it sits with C2′'s line** "a changed form may come back as a new attempt". It narrows that line for this term. A change of values alone is not a changed form. A new form needs a new definition, a reason drawn from no missed read, its own ADR and his acceptance.
       - **What it does not do.** It does not hold the next term: a miss here leaves `ABC-290` where it stands. It does not bar outposts, which have not been read.
+      - *Dated 2026-11-08 (`arch-ABC-292-accept`; his word `…23d30c72`): **accepted, for this term.** The list above is what a miss is. **His ruling replaces "It does not hold the next term":** any miss in that list is the stop for the hand-valued path, and E3b (`ABC-290`) and E6 (`ABC-293`) are not built after it without a new word from him (`ADR-0056` D6's dated line of this task). "It does not bar outposts" stands: their page is held, and nothing here reads them. A defect fix that restores d2 or d3 is still not a miss. No value, rule or bar moved.*
 
 ## The pins this term moves
 
@@ -274,6 +295,8 @@ Notation: a half h is mg or eg. A file is a to h. "Own" and "enemy" are from the
 
 **My recommendation: build it, once, narrowed to these two terms. If it misses, I would then put stop to him as my own recommendation for the hand-valued path, not E3b next.** This is judgment, not a reading.
 
+*Dated 2026-11-08 (`arch-ABC-292-accept`; his word `…23d30c72`, "agree"): **the stop is now his ruling, not only my recommendation.** A miss on `ABC-292`, any miss in d14 (c)'s list, is the stop for the hand-valued path. E3b (`ABC-290`) and E6 (`ABC-293`) are not built after it without a new word from him. So after a miss there is nothing left to recommend; the next step is his. On a pass, the order E5, E3b, E6 stands as `ADR-0056` D6 has it. The case below stands as written.*
+
 **For:**
 - **It is a different kind of gap from E4b.** Today the engine cannot tell a bishop pair from a bishop and knight, so it trades one for the other at par. It sees a rook's open file only as a few squares of reach. These are decisions it has no information for. Pawn shape was partly seen already by the square tables and the two pawn terms. That is reasoned, not read.
 - **It is the cheapest term left.** No new memo bytes, no new loop, and the same reads on a hit. E3b and E6 need attack maps, and `ABC-205` died on that cost.
@@ -292,6 +315,8 @@ Notation: a half h is mg or eg. A file is a to h. "Own" and "enemy" are from the
 **When not to build.** If he does not mean to fund a third pull even after a term lands, and is not after the small direct gain, then this ADR buys little, and he should say **stop** now. Saying it costs nothing here. d6's cut stays worth doing either way.
 
 ## The owner's questions
+
+*Answered 2026-11-08 (`…23d30c72`): "agree", to each recommendation: 1 yes, 2 yes, 3 no, 4 yes, and 5's reading. He also ruled that a miss here is the stop for the hand-valued path (§ The plain case's dated line). The questions stand below as they were asked.*
 
 **1. Do you accept ADR-0076?** The engine would learn two ideas. A side with two bishops earns 50 centipawns. A rook earns 20 on a file with no pawns, and 10 on a file with no pawn of its own. The numbers come from numbers the engine already has, and nothing has been tested. Outposts leave this ticket and wait, because they cost the most and have the weakest case. A yes locks the numbers before any test sees them. After that, QE fixes its test positions, a short host check runs that can only stop the work, the term is built, and it is read in 100 games at 100 ms. **My recommendation: yes.**
 
@@ -348,6 +373,7 @@ Notation: a half h is mg or eg. A file is a to h. "Own" and "enemy" are from the
 - **Owed by the Orchestrator:** d10's check, before any build dispatch. The held windows.
 - **Host.** Probe under 30 min by estimate, a build, timing 14 to 27 min, games 41 to 48 min, by `ABC-291`'s PREREG. Each stage is under 1 h.
 - **Order.** E5, then E3b, then E6 stands, the Orchestrator's by D6's rule, with the owner told. No read waits. `main` is the read's base. If OQ-0074-2 opens a route for `ABC-289`, that read and this one order as `…40ef8351` says.
+  *Dated 2026-11-08 (`arch-ABC-292-accept`; his word `…23d30c72`): OQ-0074-2 is answered (a). `ABC-289` closes NOT MET, so no route opens, and the clause above on it lapses. His stop ruling joins this order: after a miss here, E3b and E6 are not built without a new word from him (`ADR-0056` D6's dated line of this task). No read waits.*
 - **Third pull.** A merge on its own read meets `ADR-0067`'s trigger, and asking stays a new call for him. A miss here is no miss on row E2.
 - **Determinism (`ADR-0027`) and licence (`ADR-0048`):** integer terms, mirror-exact by construction. The rule is this project's own. Security: none.
 - **File collisions:** `src/evaluate.ts` and `src/evaluate-params.ts`, one at a time with `ABC-272`, `ABC-290`, `ABC-293` and `ABC-294`. `src/search.ts`, `src/engine.ts` and `src/quiescence.ts` take the switch, so the door list is read on the build's base.

@@ -1,0 +1,7 @@
+{ "refs": ["arch-ABC-292-accept"],
+  "notes": [
+    { "kind": "decision",
+      "confidence": "high that the records now say what the owner's word and the Orchestrator's note say; nothing run",
+      "bodyFile": "notes/note-accept.md",
+      "refs": ["arch-ABC-292-accept", "ABC-292", "ADR-0076", "ADR-0056", "ADR-0067", "ADR-0074", "ADR-0075", "ABC-289", "OQ-0074-2", "ABC-290", "ABC-293"] }
+  ] }
