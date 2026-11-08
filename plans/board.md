@@ -1,3 +1,4 @@
+_Updated: 2026-11-08T20:19:42Z — bapm-ABC-298-accept merged (DoR 10/10); arch-ABC-298-probe running (count, untimed); stale se-ABC-289 brief withdrawn._
 _Updated: 2026-11-08T20:12:52Z — owner accepts ADR-0077 (…20:12:34Z note); arch- and bapm-ABC-298-accept running; count probe next._
 _Updated: 2026-11-08T18:35:13Z — ADR-0077 PROPOSED merged (e2b43ae3): V3 gated to depth 1–2, count probe first; acceptance with the owner._
 _Updated: 2026-11-08T18:15:48Z — arch-search-rank merged: V3 picked; ABC-298 In Design, arch-ABC-298 writes the ADR PROPOSED._
@@ -1593,7 +1594,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 ## In Design (WIP 1/2)
-- [ABC-298] V3 hash move before generation, node-identical: Architect's pick (…5a155b2c); arch-ABC-298 writes the ADR PROPOSED; owner accepts; QE freeze before build; timing on a held host, no games.
+- [ABC-298] V3 hash move before generation at remaining depth 1–2, node-identical: ADR-0077 ACCEPTED (…44810861); DoR 10/10. arch-ABC-298-probe (untimed count, no held host) running; QE freeze only on GO; S2 on a held host; no games.
 
 
 ## Ready for Dev (WIP 0/6)
