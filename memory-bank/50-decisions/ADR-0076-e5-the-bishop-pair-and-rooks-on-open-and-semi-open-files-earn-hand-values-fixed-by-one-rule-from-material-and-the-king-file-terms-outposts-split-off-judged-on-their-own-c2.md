@@ -19,6 +19,7 @@ id: ADR-0076
 - **Question 5:** a lone pass reads "keep this term, it was not seen worse", and nothing more. A third-pull ask carries the odds. No bar or door test moves. See d14 (b)'s dated line and `ADR-0067`'s.
 - **OQ-0074-2 (a):** `ABC-289` closes NOT MET. § Consequences' clause that waited on it lapses.
 - **Still owed, unchanged:** § Consequences' lines. d10 step 3, QE's freeze, comes next, and no probe or build comes before it.
+- ***Dated 2026-11-08 (`arch-ABC-292-closed`, records only at `main` `6b8dd230`, `src/` tree `bba42fb7`; nothing run): F5 fired. `ABC-292` is not built. This ADR stays accepted and is not in force, and d14 (c) applies: no second set of values.*** The probe's rule 2 fired on PR7: one NEWLY-MISSED line, "win material, seed 1700", real after its sealed defect check (`arch-ABC-292-probe` `…22e36b63`, `…d277788e`; the Orchestrator's `…5bc9e701`). It is a miss in d14 (c)'s list, so his stop for the hand-valued path has fired. Nothing of this term reached `main`. No value, rule, definition, ratio, intent, bar or level moved. See d6, d14 (c), § The plain case, § What would falsify this, § Consequences and § Rollback, the dated lines of this task.
 
 *Before acceptance:* **PROPOSED 2026-11-07.** Recorded by Architect/Design (task `arch-ABC-292`, records only, on `grugops/arch-ABC-292` from `main` `b1227f2b`, `src/` tree `bba42fb7`).
 **Nothing was run:** no test, build, engine, probe or game. Every figure below is arithmetic on `src/` at that commit, or is quoted from a named record. Anything that needs a reading is marked `UNKNOWN - verify`.
@@ -36,6 +37,7 @@ id: ADR-0076
 | 2026-11-07 | Architect/Design | PROPOSED: two terms, outposts split, rule and values, seam, `G2` ratio, order before the build, probe written and not run. Nothing run | `arch-ABC-292` |
 | 2026-11-08 | Owner | ACCEPTED ("agree", to every recommendation), in force only at `ABC-292`'s merge. `G2` ≤ 1.05 × and K2's two rows as named; d14 (c) for this term; a miss here stops the hand-valued path; question 3 no; question 4 yes; question 5's reading. OQ-0074-2 (a) | `orch-2026-10-30a` `…23d30c72` |
 | 2026-11-08 | Architect/Design | Status and this log. Dated lines at d6, d7, K2, d14 (b), d14 (c), § The plain case, § The owner's questions and § Consequences. The dated lines of `arch-ABC-292` in `ADR-0056` and `ADR-0067` read accepted; his stop ruling in `ADR-0056` D6. No value, rule, definition, ratio or bar moved. Nothing run | `arch-ABC-292-accept` |
+| 2026-11-08 | Architect/Design | F5 fired on the probe's rule 2 (PR7, seed 1700). Accepted, not in force; d14 (c) applies; his stop fired. Dated lines at d6, d14 (c), § The plain case, § What would falsify this, § Consequences and § Rollback. § Rollback's strike not taken. No value, rule, definition, ratio, intent, bar or level moved. Nothing run | `arch-ABC-292-closed` |
 
 ## Context
 
@@ -130,6 +132,7 @@ Notation: a half h is mg or eg. A file is a to h. "Own" and "enemy" are from the
    - **The named cut, F2's one, value-identical:** `kingExposure` reads own and enemy from the memo's file word, and the 6-rank scan goes. That is up to 36 board reads less per call, and it needs `kingSafety` computed after `pawnStructureCached`. The packed sum is commutative, so the value is the same. My estimate is −5 to −10 % a call, `UNKNOWN - verify`, and PR8 reads it.
      - **It is held, not spent, on purpose.** Taken from the start it would put a speed gain inside the term's own C2′. The gain is small: about −1 to −2 % a node, 1 to 3 Elo. Spent, the PREREG discloses it.
      - **For the Orchestrator, no bar and no dependency:** once file sets are on `main`, or on their own, this cut is worth having whatever happens to the term. If it stays unspent, it can be its own value-identical ticket. If the term is refused or misses, it needs only d4's file word. Its order is yours.
+       *Dated 2026-11-08 (`arch-ABC-292-closed`; nothing run): **the term missed, so the "needs only d4's file word" branch is the one left. The cut stands on `main` without the term, and it is small.** Its value identity is read, not only reasoned: on the probe's tree the cut's off evaluation equals `cand`'s (PR4 (d)), which equals `main`'s `evaluate` (PR4 (c)), 0 bad on 28 400 positions. A patch made on `main` alone is not read. Its cost is not read either: PR8 did not run, so −5 to −10 % a call and 1 to 3 Elo stay estimates, `UNKNOWN - verify`, made by the method that was low by four on `ABC-291`. Alone it carries d4's file word and, to keep 36 bytes a slot, the `doubled` and `isolated` fold, or +4 bytes a slot as an `NFR-009` line. It reads by node identity and one held `G2` session, with no games. The Architect's answer, in this task's decision note `…569849c4`: real, not worth a held window on its own; it rides in a speed ticket if one is chosen. No ticket is cut here, and its order stays yours.*
 
 7. **`NFR-008` and `NFR-009`.**
    - **`NFR-008`: ≤ +0.10 s stays** (`…aab9afd1`). No figure above it is proposed: that moves a bar. BA/PM writes the line on this page, as `…8cc32a89` § 4 says.
@@ -273,6 +276,7 @@ Notation: a half h is mg or eg. A file is a to h. "Own" and "enemy" are from the
       - **How it sits with C2′'s line** "a changed form may come back as a new attempt". It narrows that line for this term. A change of values alone is not a changed form. A new form needs a new definition, a reason drawn from no missed read, its own ADR and his acceptance.
       - **What it does not do.** It does not hold the next term: a miss here leaves `ABC-290` where it stands. It does not bar outposts, which have not been read.
       - *Dated 2026-11-08 (`arch-ABC-292-accept`; his word `…23d30c72`): **accepted, for this term.** The list above is what a miss is. **His ruling replaces "It does not hold the next term":** any miss in that list is the stop for the hand-valued path, and E3b (`ABC-290`) and E6 (`ABC-293`) are not built after it without a new word from him (`ADR-0056` D6's dated line of this task). "It does not bar outposts" stands: their page is held, and nothing here reads them. A defect fix that restores d2 or d3 is still not a miss. No value, rule or bar moved.*
+      - *Dated 2026-11-08 (`arch-ABC-292-closed`; `…22e36b63`, `…5bc9e701`): **it applies.** The miss is the probe's rule 2, in the list above, and the defect check found no defect, so it is not the "not a miss" line. `BISHOP_PAIR`, `ROOK_OPEN_FILE` and `ROOK_SEMI_OPEN_FILE` get no new numbers, and no definition, seam, switch or subset moves to rescue them. Not being in force does not loosen it: it was settled on his acceptance. **His stop has fired:** E3b (`ABC-290`) and E6 (`ABC-293`) are not built without a new word from him, nor outposts (`ABC-308`) on hand values (`…e63ff24f`). "It does not bar outposts" now reads: their page stays held, and on hand values the stop holds them. No value, rule or bar moved.*
 
 ## The pins this term moves
 
@@ -296,6 +300,8 @@ Notation: a half h is mg or eg. A file is a to h. "Own" and "enemy" are from the
 **My recommendation: build it, once, narrowed to these two terms. If it misses, I would then put stop to him as my own recommendation for the hand-valued path, not E3b next.** This is judgment, not a reading.
 
 *Dated 2026-11-08 (`arch-ABC-292-accept`; his word `…23d30c72`, "agree"): **the stop is now his ruling, not only my recommendation.** A miss on `ABC-292`, any miss in d14 (c)'s list, is the stop for the hand-valued path. E3b (`ABC-290`) and E6 (`ABC-293`) are not built after it without a new word from him. So after a miss there is nothing left to recommend; the next step is his. On a pass, the order E5, E3b, E6 stands as `ADR-0056` D6 has it. The case below stands as written.*
+
+*Dated 2026-11-08 (`arch-ABC-292-closed`; `…22e36b63`): **it missed, at the probe, before any build or game.** "The probe can stop it before the build" is what happened, so the waste stayed small: under 1 min of lock. The miss is one puzzle row of 58, which says little about play, and it was the bar he accepted. It is not a second miss on score, so "by weight of cost if not by proof" is not what decided it; his ruling did. The next step is his. The options read for him is in this task's decision note `…569849c4`. The case above stands as written, as reasoning at its date.*
 
 **For:**
 - **It is a different kind of gap from E4b.** Today the engine cannot tell a bishop pair from a bishop and knight, so it trades one for the other at par. It sees a rook's open file only as a few squares of reach. These are decisions it has no information for. Pawn shape was partly seen already by the square tables and the two pawn terms. That is reasoned, not read.
@@ -365,6 +371,28 @@ Notation: a half h is mg or eg. A file is a to h. "Own" and "enemy" are from the
 | F6 | d14 (a): the tool line | an identity-gate miss at the tip | read against d2's words. `evaluate` wrong is F1. The tracer wrong is a tool defect. No production line changes to fit the tool |
 | F7 | d10: the order | a build commit with no freeze commit behind it | K1 (c) is not met to the letter, and QE says so. No reading makes it met. Whether the term may still merge is his |
 
+*Dated 2026-11-08 (`arch-ABC-292-closed`, records only at `main` `6b8dd230`, `src/` tree `bba42fb7`; nothing run; `arch-ABC-292-probe` `…22e36b63`, `…d277788e`, PREREG `…e158a4a0`, addendum `…9e29be9d`; the Orchestrator's `…5bc9e701`): **F5 fired. The read, the state, and what each line now reads.***
+
+- **The read.** PR7: ON 53 / 58 against OFF 54 / 58, one NEWLY-MISSED line, "win material, seed 1700". ON plays g6d6 at depth 6 where OFF plays g6g7. The defect check, its form sealed first, found the runner, the source and the seam as d2 to d5 write them, and the miss reproduced in a fresh process. Rule 2: NOT MET. PR1 to PR6 held. PR8 to PR11 did not run, by the PREREG.
+- **What it is not.** It is no defect, and no reading of cost, firing or play. It does not show the terms worse in games, and it does not say which term moved the move: per-term reads of a safety row are fenced (d13).
+- **The state: accepted, not in force.** Not withdrawn: he accepted it, and F5 names this state for a miss once accepted. "In force only at `ABC-292`'s merge" has no merge left to wait for. A way back is a new form under d14 (c), with its own ADR and his acceptance, so this ADR does not come into force by that road either.
+- **What reached `main`: none of it.** `src/` and `tools/` hold no `pieceTerms` and no `BISHOP_PAIR`, and the `src/` tree is `bba42fb7`, the probe's own. No build branch exists. QE's freeze (`e88e91f9`) is records only, under its task's `raw/`, and stays there.
+
+| line | what it reads now |
+|---|---|
+| d2–d5 | the design as written. PR1–PR4 read the prototype exact to it. They bind nothing on `main` |
+| d6 | not read. Its forecast stays `UNKNOWN - verify`. The cut: its dated line of this task |
+| d7, `NFR-008`, `NFR-009` | not read and not reached. The budget stays ≤ +0.10 s. His question 4 answer stands for later terms, if any are built |
+| d8, d11, d12 | not reached. No game was played |
+| d9: K0 (c), K2, the deep pins | never read: P0 is the probe's reading at `3cbf5374`, and PR11 did not run. `ADR-0071` D8 gained no line for this term, so there is nothing to lapse there |
+| d10 | steps 1 to 4 met; steps 5 to 8 not reached. Its order, freeze first, stays a form a later ADR may name. It binds nothing from here |
+| d14 (a), the tool line | not owed: `main` has no term to trace |
+| d14 (b), the door | no term merged, so no door opens. `ADR-0067`'s dated line of this task |
+| d14 (c) | applies: its dated line of this task |
+| The two `ABC-083` re-found fixtures (K2) | QE's, in the freeze. No row on `main` moved |
+
+- **What does not move.** Every value, rule and definition here, F1 to F7, CF1–CF10, FL, `G1`, `G2` and every `NFR` level. No value, rule, definition, ratio, intent, bar or level moved.
+
 ## Consequences
 
 - **Play:** trades of bishop for knight and rook placement can move. The start position stays 0 by symmetry. No read exists. The bars above are the first.
@@ -374,7 +402,9 @@ Notation: a half h is mg or eg. A file is a to h. "Own" and "enemy" are from the
 - **Host.** Probe under 30 min by estimate, a build, timing 14 to 27 min, games 41 to 48 min, by `ABC-291`'s PREREG. Each stage is under 1 h.
 - **Order.** E5, then E3b, then E6 stands, the Orchestrator's by D6's rule, with the owner told. No read waits. `main` is the read's base. If OQ-0074-2 opens a route for `ABC-289`, that read and this one order as `…40ef8351` says.
   *Dated 2026-11-08 (`arch-ABC-292-accept`; his word `…23d30c72`): OQ-0074-2 is answered (a). `ABC-289` closes NOT MET, so no route opens, and the clause above on it lapses. His stop ruling joins this order: after a miss here, E3b and E6 are not built without a new word from him (`ADR-0056` D6's dated line of this task). No read waits.*
+  *Dated 2026-11-08 (`arch-ABC-292-closed`): **closed. The miss came, and his stop fired.** E3b and E6 wait on his new word, and outposts on hand values with them. No read waits on this ticket.*
 - **Third pull.** A merge on its own read meets `ADR-0067`'s trigger, and asking stays a new call for him. A miss here is no miss on row E2.
+  *Dated 2026-11-08 (`arch-ABC-292-closed`): it did not fire and cannot. Nothing merged. This miss is on row E5, not row E2, so it is no third miss there, and tuning waits as his word left it.*
 - **Determinism (`ADR-0027`) and licence (`ADR-0048`):** integer terms, mirror-exact by construction. The rule is this project's own. Security: none.
 - **File collisions:** `src/evaluate.ts` and `src/evaluate-params.ts`, one at a time with `ABC-272`, `ABC-290`, `ABC-293` and `ABC-294`. `src/search.ts`, `src/engine.ts` and `src/quiescence.ts` take the switch, so the door list is read on the build's base.
 - **`ABC-291`'s kept branch** is unmerged, and nothing here depends on it. `pawnCacheDoubledIsolated`'s form is reused as a form, not as a merge.
@@ -391,4 +421,5 @@ Notation: a half h is mg or eg. A file is a to h. "Own" and "enemy" are from the
 ## Rollback
 
 - **Before the merge:** this ADR reads "accepted, not in force", or is withdrawn if not yet accepted. The dated lines of `arch-ABC-292` in `ADR-0056` and `ADR-0067` are read through it. No strike.
+  *Dated 2026-11-08 (`arch-ABC-292-closed`): this is the branch that applies. It reads "accepted, not in force", and nothing is struck. The lines of `arch-ABC-292` and `arch-ABC-292-accept` in `ADR-0056` and `ADR-0067` stay in place, read through this task's dated lines there.*
 - **After the merge:** revert the one merge. The memo keeps its size. The doors and the tool line go with it, and every read after it is stale by C2′'s rule. If a fit has merged on top, revert that first (`ADR-0067` § Rollback).

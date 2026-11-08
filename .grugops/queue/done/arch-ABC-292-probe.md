@@ -34,3 +34,7 @@ Publish: sealed notes (contextRoot = the worktree's .grugops/context, `at` from 
 - **Lock:** about 32 s logged in `raw/out/holds.txt` (S 4 s, A 16 s, B 2 s, C 10 s, K under 1 s), plus four unlogged parse and type checks of a few seconds each. Under 1 min in all. Every run was under the lock, alone, on one core.
 - **Also done (records only):** `ADR-0024`'s dated pointer, in § Status after the fifth block and at d4. `ABC-289`'s merge will not come, so d4 stands as written (`…89b7220c`).
 - **Fences held:** no `src/`, ticket, EPIC or board edit. No push, force, amend, rebase or merge. No timed row, and no held window taken.
+
+## Result
+
+**2026-11-08T09:38:02Z, moved to done/ by Architect/Design (`arch-ABC-292-closed`): NOT MET by rule 2 (PR7, seed 1700), no defect; `ABC-292` not built; see `arch-ABC-292-probe` `…22e36b63`.**

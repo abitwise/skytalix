@@ -129,6 +129,7 @@ Architect/Design (task `arch-owner-answers-1103`, records only, on `grugops/arch
 | 2026-11-05 | Architect/Design | Three lines on the wait, as accepted with `ADR-0075`: the tool line at a term's merge, `ABC-306`'s route, "E5" at the door. No bar moved | `arch-ABC-291` |
 | 2026-11-07 | Architect/Design | `ABC-291` NOT MET: the three lines stand, the trigger did not fire, E4b leaves the door, and this is no miss on row E2. No bar moved. Nothing run | `arch-ABC-291-closed` |
 | 2026-11-08 | Architect/Design | "E5" at the door reads accepted with `ADR-0076`. His reading of a lone pass, and his stop ruling's reach to the door. No bar or door test moved. Nothing run | `arch-ABC-292-accept` |
+| 2026-11-08 | Architect/Design | `ABC-292` NOT MET at its probe; his stop fired. No term merged, so the door stays shut; the wait's lines stand; no miss on row E2. No bar or door test moved. Nothing run | `arch-ABC-292-closed` |
 
 ## Context
 
@@ -969,6 +970,12 @@ bundle meets the trigger. No bar moves, and nothing is fitted.***
 *Dated 2026-11-08 (`arch-ABC-292-accept`, records only at `main` `6eaeee01`; his word `…23d30c72`, "agree"; nothing run): **a lone pass at the door. No bar moves, no door test moves, and nothing is fitted.**
 - **His reading of a lone pass** (`ADR-0076` § The owner's questions 5): one pass of E5, E3b and E6 reads "keep this term, it was not seen worse", and nothing more. It lets a third pull be asked for, and it is no reason to say yes. The ask carries the odds `ADR-0076` question 5 gives.
 - **His stop ruling reaches the door.** After a miss on `ABC-292`, E3b and E6 are not built without a new word from him (`ADR-0056` D6's dated line of this task). So after such a miss no term comes to the door by the hand-valued path without that word. This is no miss on row E2.
+
+*Dated 2026-11-08 (`arch-ABC-292-closed`, records only at `main` `6b8dd230`; nothing run; `…22e36b63`, the Orchestrator's `…5bc9e701`): **`ABC-292` missed at its probe, and his stop has fired. No term has merged, so the third-pull door stays shut. No bar moves, no door test moves, and nothing is fitted.***
+- **The trigger did not fire.** E4b and E5's two terms missed and cannot merge (`ADR-0075` d11 (d), `ADR-0076` d14 (c)). E3b and E6 are not built without his new word, and outposts not on hand values. So no term named before the miss is on its way to `main`, by its own read or in a bundle.
+- **These lines stand.** The wait, the cap, the four tests, the bundle reading and the three lines of `arch-ABC-291` do not rest on any term merging. `ADR-0076` § Rollback's strike is not taken (its dated line of this task). `tools/tune` gained nothing, because `main` gained no term.
+- **This is not a miss on row E2.** Two pulls are spent. A term's miss neither spends the third nor closes tuning.
+- **What would open a pull now** is a new word from him, on one of two roads: a term built after his new word that merges, then the door as written; or a pull without the door, which these lines do not allow and which only he can rule. The options read in this task's decision note `…569849c4` gives the odds of the second as the records allow.
 
 ## What would falsify this
 
