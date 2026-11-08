@@ -43,4 +43,4 @@ Publish: sealed notes (contextRoot = the worktree's .grugops/context, `at` from 
   - runs `G4` against the frozen digest (about 36 min of lock), where a difference is F2;
   - runs the rest of the owed deep lanes.
   - Then QE's hop, which admits exactly those four removed lines at SG1 (c).
-- **Path check:** `node tools/grugops/records-path-check.js --base main`, recorded below.
+- **Path check:** `node tools/grugops/records-path-check.js --base main` exit 0 (clean) at `ba422ad3`, before this last commit.
