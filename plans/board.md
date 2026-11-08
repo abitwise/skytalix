@@ -1,3 +1,4 @@
+_Updated: 2026-11-08T16:57:15Z — owner: option 2 (…4d1e0382), no pause; ABC-284 In Design, arch-ABC-284 writes the re-open, PROPOSED._
 _Updated: 2026-11-08T09:39:19Z — arch-ABC-292-closed merged (fb220699): options read with the owner (Q-3K-12); nothing running._
 _Updated: 2026-11-08T09:37:33Z — bapm-ABC-292-closed merged: ABC-292 Done (NOT MET), ABC-290, 293, 308 held; In Design 0/2; arch-ABC-292-closed (options read) running._
 _Updated: 2026-11-08T09:30:12Z — **ABC-292 NOT MET at its probe** (PR7, rule 2), not built; owner's stop fires on the hand-valued path; arch- and bapm-ABC-292-closed running; owner told._
@@ -955,7 +956,7 @@ _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-137` 
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-138` → `In Review` (`7e5c9c74`); QE `qe-ABC-138` dispatched._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-010` pulled `Ready for Dev` → `In Development`._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-055` → `Done` (UAT WAIVED; board now renders all 13 columns). FORMAT comment: In UAT added to the skippable columns (waiver path) and the Orchestrator's Ready → Ready for Dev → In Development pass-through at pull stated (QE-055-b/c)._
-_Updated: 2026-10-10 by the Software Engineer (task `wave-2026-09-25`, subtask `ticket-to-pr-ABC-055`) — `ABC-055` built: `## In Analysis (WIP 0/2)` and `## In Design (WIP 0/2)` added between `Ready` and `Ready for Dev` (13 headings = 13 table rows); the FORMAT comment now names the dial `.grugops/factory.config.json`, the four skippable columns and the heading/table invariant. No ticket row moved; `ABC-055` stays in `In Development` (A4), so the `In Review` move is left for the close-out._
+_Updated: 2026-10-10 by the Software Engineer (task `wave-2026-09-25`, subtask `ticket-to-pr-ABC-055`) — `ABC-055` built: `## In Analysis (WIP 0/2)` and `## In Design (WIP 1/2)` added between `Ready` and `Ready for Dev` (13 headings = 13 table rows); the FORMAT comment now names the dial `.grugops/factory.config.json`, the four skippable columns and the heading/table invariant. No ticket row moved; `ABC-055` stays in `In Development` (A4), so the `In Review` move is left for the close-out._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-137` → `In Review` (`455a0846`); QE `qe-ABC-137` dispatched._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — BA/PM `bapm-abc010-qe129a-2026-10-10` merged (`7d62038a`): `ABC-010` Backlog → `Ready for Dev` (10/10); new `ABC-139` → `Ready`; `ABC-137` pulled → `In Development`._
 _Updated: 2026-10-10 by the Orchestrator (task `wave-2026-09-25`) — `ABC-055` → `In Review` (`86926927`), QE dispatched; board writes resumed. BA/PM `bapm-cuts-r5c-f1331-2026-10-10` merged (`4bc53b0a`): new `ABC-137` → `Ready`; new `ABC-138` → `Ready` → pulled → `In Development`._
@@ -1525,7 +1526,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 ## Backlog (WIP unlimited)
 - ~~[ABC-302]~~ → In Development. NFR-008 headroom: nine named rows to existing deep lanes, each with a remnant (form S), ~−0.55 s, re-graded with a twin (S, P1, DoR 9/10; arch-ABC-302 running). Critical path before ABC-282 and ABC-301.
-- [ABC-284] P1: late-move reductions from a log table of remaining depth × move index, replacing ABC-121's flat 1-ply LMR  (Backlog; cut by bapm-epic011-areas 181da9e3; hold and owed ADR on the page)
+- ~~[ABC-284]~~ → In Design. P1: late-move reductions from a log table of remaining depth × move index, replacing ABC-121's flat 1-ply LMR  (Backlog; cut by bapm-epic011-areas 181da9e3; hold and owed ADR on the page)
 - [ABC-285] P5: the null-move reduction R grows with remaining depth and the static eval margin, amending ADR-0050's fixed (Backlog; cut by bapm-epic011-areas 181da9e3; hold and owed ADR on the page)
 - ~~[ABC-286]~~ → Done (delivered by ABC-303, bapm-ABC-292-accept). P4: late-move (move-count) pruning skips the late quiet moves at low remaining depth, by a move-count table, b (Backlog; cut by bapm-epic011-areas 181da9e3; hold and owed ADR on the page) **2026-11-04: unheld for its probe (ABC-283 merged); recommended bundle 1 with its pair (Q-3K-11).**
 - [ABC-287] P6: razoring. At low remaining depth, a node whose static score is far below alpha is resolved by quiescence i (Backlog; cut by bapm-epic011-areas 181da9e3; hold and owed ADR on the page)
@@ -1585,7 +1586,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## In Analysis (WIP 0/2)
 
 
-## In Design (WIP 0/2)
+## In Design (WIP 1/2)
+- [ABC-284] P1 late-move reductions: re-open once on the owner's option 2 (…4d1e0382); arch-ABC-284 writes it PROPOSED; then his acceptance, QE's freeze, the probe, and a build only if it passes.
 
 
 ## Ready for Dev (WIP 0/6)
