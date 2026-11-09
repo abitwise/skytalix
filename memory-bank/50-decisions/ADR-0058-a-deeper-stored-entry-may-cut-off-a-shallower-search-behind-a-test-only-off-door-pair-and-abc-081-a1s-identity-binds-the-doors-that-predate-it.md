@@ -6,6 +6,12 @@ id: ADR-0058
 
 ## Status
 
+*2026-11-09, dated line by Architect/Design (task `arch-close-1109`, records only, on `grugops/arch-close-1109` from `main`
+`e069b49a`). Nothing was run.* **ACCEPTED, NOT IN FORCE ON `main`; not delivered, project closed.** `ABC-257` (T1 + T3),
+this ADR's one switch-on path, closed won't-do with the project, unread (`orch-2026-10-30a` `…a9c03e07`). So this ADR
+never comes into force, and `tableCutoff` stays exact-depth on `main`. A close is not a miss on A8′, which is why this
+line is written despite "no further line owed" below.
+
 **ACCEPTED, NOT IN FORCE on `main`** 2026-11-02 by the owner. Recorded by Architect/Design (task
 `arch-owner-answers-1102`, records only, on `grugops/arch-owner-answers-1102` from `main` `7daf8086`). Nothing was
 run.

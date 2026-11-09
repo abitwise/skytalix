@@ -278,6 +278,12 @@ run): after `ABC-303`'s merge `434fa171` (QE MET, PASS_WITH_GAPS `…ebefbfa2`; 
 2. yes; 3. yes").* **CF1–CF10 reach every later C2′ read, of one change or of a bundle. A term merged inside a bundle meets `ADR-0067`'s
 third-pull trigger. CF7 is owner-accepted.** D5's dated block of this task holds the reach. No bar moves.
 
+*2026-11-09, dated line by Architect/Design (task `arch-close-1109`, records only, on `grugops/arch-close-1109` from `main` `e069b49a`;
+the owner's close, `orch-2026-10-30a` `…a9c03e07`; nothing run).* **Phase 4 is closed by the owner's project close. R2 (`ABC-295`)
+is the last reading. R3 (`ABC-299`) is won't-do. `EPIC-011` closes after R2.** This answers D6 item 5's "What Phase 4 does next is his",
+and D6 item 7's timing now reads R1 after E1, R2 at Phase 4's close, and no R3. R2 runs as its page stands. No bar, scale, rule or
+reading shape moves.
+
 *Original status, kept:* **PROPOSED** 2026-11-01 by Architect/Design (task `arch-algo-analysis`, records and reading only, at `main` `bae25131`).
 **Nothing is decided here.** Nothing was run, built, benchmarked or played: `qe-ABC-223` holds the host STRICTLY ALONE.
 Every Elo figure below is either quoted from a sealed reading (named) or is an **estimate** with its basis. An

@@ -6,6 +6,12 @@ id: ADR-0060
 
 ## Status
 
+*2026-11-09, dated line by Architect/Design (task `arch-close-1109`, records only, on `grugops/arch-close-1109` from `main`
+`e069b49a`). Nothing was run.* **WITHDRAWN, project closed. Never accepted, never in force.** The owner did not take the
+2026-11-08 look (`orch-2026-10-30a` `…0b4bc6ba`), and on 2026-11-09 he closed the project with `ABC-284` won't-do
+(`…a9c03e07`). `ADR-0026`'s flat 1-ply LMR stands on `main` as written. The text below is kept as the record of what was
+proposed; nothing in it is rewritten.
+
 *2026-11-08, dated line by Architect/Design (task `arch-ABC-284`, records only, on `grugops/arch-ABC-284` from `main`
 `50ff9250`, `src/` tree `bba42fb7`). Nothing was run.* **The owner chose one try at P1 (`orch-2026-10-30a` `…4d1e0382`,
 option 2). The look is written in § The 2026-11-08 look, PROPOSED. The Architect's recommendation is: do not re-open.**
