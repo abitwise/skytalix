@@ -57,7 +57,9 @@ One measured figure, on one scale: X = 1902.5 ± 49.1. skytalix at level 5 playe
 one at a time, from 100 openings with both colours, against Stockfish 19 with
 `UCI_LimitStrength` on and `UCI_Elo` 1810. Each side had 100 ms a move. skytalix scored
 63.0 %, which is +92.5 ± 49.1 Elo against 1810, so X = 1810 + 92.5. The figure holds on that
-scale only. It is not a 40/15 rating and not a rating-list figure.
+scale only. It is not a 40/15 rating and not a rating-list figure. That 100 ms a move is
+much shorter than level 5's normal 4 s, so in normal play the default level should be at least
+that strong, but that was not measured.
 
 ## Saved games
 
@@ -66,9 +68,10 @@ the clone. Nothing is saved when you `quit` or when input ends.
 
 ## Use with a chess GUI
 
-skytalix speaks UCI. The engine is `dist/uci.js`, a script that `node` runs, so a GUI runs
-the command `node` with the full path to `dist/uci.js` as its argument. Below, `<clone>`
-stands for the full path of your clone.
+skytalix speaks UCI. The engine is `dist/uci.js`, a script that `node` runs. Arena and
+BanksiaGUI are set to run `node` with the full path to `dist/uci.js` as its argument. Cute Chess
+takes no argument, so it is set to run the script itself. Below, `<clone>` stands for the full
+path of your clone.
 
 The engine has three UCI options:
 
@@ -78,23 +81,25 @@ The engine has three UCI options:
 | `OwnBook` | check | `true` or `false`: use the built-in opening book | `true` |
 | `TimeMode` | combo | `level`, `simple-tournament` or `uci-clock-mode` | `level` |
 
-- `level` plays at the `Skill Level`'s time per move.
-- `simple-tournament` searches a fixed 22 s a move, never past the clock it is given.
+- `level` plays at most the `Skill Level`'s time per move.
+- `simple-tournament` searches a fixed 22 s a move and aims to stay within the clock it is
+  given. It can run over by a few milliseconds, so give it a small time margin in the GUI.
 - `uci-clock-mode` spends the clock the GUI gives it, at most 59.5 s a move.
 
 `Skill Level` is read only while `TimeMode` is `level`.
 
 ### Arena
 
-These steps are written for Arena 3.5.1 on Windows. Arena's menu names are not given here,
-because they have not been checked against Arena itself.
+These steps are written for Arena 3.5.1 on Windows. **They have not been tried in Arena.**
+Arena's menu names are not given here, because they have not been checked against Arena itself.
 
 1. In a terminal, in the clone, run `npm install` and then `npm run build`. This writes
    `dist\uci.js`.
-2. Open Arena's engine manager and add a new UCI engine. Set its program to `node.exe` from
-   your Node.js folder and its command-line parameter to `<clone>\dist\uci.js`. Name the
-   engine `skytalix`. If there is no field for a parameter, set the program to the
-   `skytalix.cmd` file of Cute Chess's Windows route instead (untested).
+2. Open Arena's engine manager and add a new UCI engine. Set its program to the full path of
+   `node.exe`, which `where node` prints in a Command Prompt, and its command-line parameter
+   to `<clone>\dist\uci.js`. Name the engine `skytalix`. If there is no field for a
+   parameter, save a file named `skytalix.cmd` in the clone with the one line
+   `@node "%~dp0dist\uci.js"`, and set the program to `<clone>\skytalix.cmd` instead.
 3. Make skytalix the active engine and open its UCI options to set `Skill Level`, `OwnBook`
    and `TimeMode`. The table above lists their values.
 4. Start a new game with skytalix as the opponent, and make your move.
@@ -106,12 +111,12 @@ line, is for Linux and macOS; it was tested on Linux. Step 2 ends with a route f
 
 1. In the clone, run `npm install`, `npm run build` and then `chmod +x dist/uci.js`. The
    build writes `dist/uci.js`. On Windows, skip `chmod`.
-2. Choose **Tools > Settings**, open the **Engines** tab and click **Add**. Cute Chess's
-   **Command** field takes a program and no separate argument, so `node <clone>/dist/uci.js`
-   there does not start. Set **Command** to `<clone>/dist/uci.js` instead: its first line,
-   `#!/usr/bin/env node`, runs it with `node`. This needs `node` on the `PATH` Cute Chess
-   sees, so start Cute Chess from a shell where `node --version` works. Set **Name** to
-   `skytalix` and **Protocol** to `uci`.
+2. Choose **Tools > Settings** (on macOS, **Settings** is in the application menu instead),
+   open the **Engines** tab and click **Add**. Cute Chess's **Command** field takes a program
+   and no separate argument, so `node <clone>/dist/uci.js` there does not start. Set
+   **Command** to `<clone>/dist/uci.js` instead: its first line, `#!/usr/bin/env node`, runs it
+   with `node`. This needs `node` on the `PATH` Cute Chess sees, so start Cute Chess from a
+   shell where `node --version` works. Set **Name** to `skytalix` and **Protocol** to `uci`.
 
    **On Windows** that first line does not run the script. Instead, save a file named
    `skytalix.cmd` in the clone with this one line, and set **Command** to
@@ -130,15 +135,17 @@ line, is for Linux and macOS; it was tested on Linux. Step 2 ends with a route f
 
 ### BanksiaGUI
 
-These steps are written for BanksiaGUI 0.58 on Windows. BanksiaGUI's menu names are not given
-here, because they have not been checked against BanksiaGUI itself.
+These steps are written for BanksiaGUI 0.58 on Windows. **They have not been tried in
+BanksiaGUI.** BanksiaGUI's menu names are not given here, because they have not been checked
+against BanksiaGUI itself.
 
 1. In a terminal, in the clone, run `npm install` and then `npm run build`. This writes
    `dist\uci.js`.
-2. Open BanksiaGUI's engine manager and add a new engine. Set its program to `node.exe` from
-   your Node.js folder and its argument to `<clone>\dist\uci.js`. Set the protocol to UCI and
-   name the engine `skytalix`. If there is no field for an argument, set the program to the
-   `skytalix.cmd` file of Cute Chess's Windows route instead (untested).
+2. Open BanksiaGUI's engine manager and add a new engine. Set its program to the full path of
+   `node.exe`, which `where node` prints in a Command Prompt, and its argument to
+   `<clone>\dist\uci.js`. Set the protocol to UCI and name the engine `skytalix`. If there is
+   no field for an argument, save a file named `skytalix.cmd` in the clone with the one line
+   `@node "%~dp0dist\uci.js"`, and set the program to `<clone>\skytalix.cmd` instead.
 3. Open skytalix's engine options to set `Skill Level`, `OwnBook` and `TimeMode`. The table
    above lists their values.
 4. Start a new game with skytalix as the opponent, and make your move.
