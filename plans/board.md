@@ -1,3 +1,4 @@
+_Updated: 2026-11-09T22:41:19Z — owner: projected level ratings into the README; ABC-311 cut by note …03f8f6f9 (docs only); se-ABC-311 building, QE checks after._
 _Updated: 2026-11-09T22:39:26Z — ABC-310 dropped by the owner (too much work for the likely gain); no open tickets._
 _Updated: 2026-11-09T21:57:27Z — ABC-310 cut (group re-test, held, DoR 8/10; strategy …720e934d); owner Q1–Q5 open; nothing running._
 _Updated: 2026-11-09T21:38:06Z — owner asks for one ticket to re-test the dropped work in groups (…21:37:44Z); qe-group-strategy writes the test strategy (records only, nothing run); BA/PM cuts the ticket after._
