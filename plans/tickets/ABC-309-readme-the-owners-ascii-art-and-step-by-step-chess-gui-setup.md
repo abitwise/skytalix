@@ -194,3 +194,28 @@ left, down from two.
 
 **DoR 9/10. Left in Backlog until `assets/readme-art.txt` is non-empty and reachable from the build branch; then row 10 holds and the ticket
 can go to Ready with no other change to this page.**
+
+## Result
+
+*2026-11-09, by the Software Engineer (task `se-ABC-309`, branch `grugops/ABC-309` from `main` `efd2230b`). Docs only: `README.md`,
+this block and the task's notes. Nothing under `src/`; `assets/readme-art.txt` untouched.*
+
+| row | evidence at the tip | state |
+|---|---|---|
+| A1 | `git diff --name-only efd2230b` lists `README.md`, this page and `.grugops/context/se-ABC-309/` only | met |
+| A2 | `test -s assets/readme-art.txt` (404 bytes, final newline, no line that is exactly ` ``` `); `sed -n '2,/^```$/p' README.md \| sed '$d' \| cmp - assets/readme-art.txt` exits 0. The tagline line stays | met |
+| A3 | § Use with a chess GUI has three `###` subsections, Arena, Cute Chess, BanksiaGUI; 4 numbered steps each (12 of 12); each names a version and an OS; step 3 names all three options and points at the one table. **One deviation, Cute Chess step 2:** see below. The menu labels are verified for Cute Chess only (from its 1.5.1 source); Arena's and BanksiaGUI's are `UNKNOWN - verify`, listed in the task's observation note | met in shape; labels owed to QE |
+| A4 | § Strength: X = 1902.5 ± 49.1; Stockfish 19, `UCI_LimitStrength` on, `UCI_Elo` 1810; level 5; 100 ms a move each side; 200 games from 100 openings with both colours, one at a time; 63.0 %, +92.5 ± 49.1 against 1810; X = 1810 + 92.5; "not a 40/15 rating and not a rating-list figure". Each number is in `qe-ABC-295` `…e11c410e`. No 1806.5, no 2074, no other Elo figure | met |
+| A5 | the table equals the live `uci` reply of the built `dist/uci.js` (3 of 3 `option name` lines); 22 s and 59.5 s equal `SIMPLE_TOURNAMENT_BUDGET_MS` (22 000) and `CLOCK_MODE_MAX_BUDGET_MS` (60 000 − 500); `grep -c 'two options' README.md` prints 0. Commands added: `npm install`, `npm run build`, `chmod +x dist/uci.js`, `node --version`; each ran and exited 0 in this worktree, not on a fresh clone | met |
+| A6 | the four `ABC-216` A8 scans count 0; the one absolute URL is the repository's clone URL, unchanged | met |
+| A7 | relative links `AGENTS.md`, `LICENSE`, `NOTICE` are each listed by `git ls-files`; `npm run lint` and `npm run build` exit 0 | met |
+| A8 | `grep -c 'FIGlet' README.md` prints 0; the diff of § Licence removes only the credit line and the blank line before it | met |
+
+**Deviation, Cute Chess step 2 (A3, "command `node` and the argument").** Cute Chess's Add Engine dialog has a **Command** field and no
+argument field, and its saved engine entry has no arguments key. It starts the whole field as one program, so `node <path>` there does not
+start: run on this host through the same library, `cutechess-cli` 1.5.1 with `cmd=node <full path>/dist/uci.js` prints "Cannot execute
+command". The README's step 2 says so and sets **Command** to the script itself after `chmod +x dist/uci.js`: its first line,
+`#!/usr/bin/env node`, runs it with `node`. That route started and played under `cutechess-cli` with three options set. The step still names
+`node` and the full path to `dist/uci.js`, but not as a separate argument. It is the Orchestrator's to rule whether A3 reads as met.
+
+UAT waived by measurement: `git diff --name-only efd2230b | grep '^src/'` prints nothing. The QE verdict is owed.
