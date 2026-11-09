@@ -1,8 +1,8 @@
 ---
 id: ABC-284
 title: "P1: late-move reductions from a log table of remaining depth × move index, replacing ABC-121's flat 1-ply LMR (ADR-0026), behind a test-only off-door pair. Parked: no form in ADR-0060's set meets every bar on main; re-opened only by a new named premise with its own pre-registered probe"
-status: backlog
-column: Backlog
+status: dropped
+column: Done
 size: S–M
 priority: P2
 epic: EPIC-011
@@ -11,6 +11,8 @@ adr: "ADR-0060 (PROPOSED; parked, premise not met on main, arch-ADR-0060-reopen 
 ---
 
 # ABC-284: late-move reductions from a log table (P1)
+
+> **CLOSED WON'T-DO, 2026-11-09, by BA/PM** (task `bapm-close-1109`, records only, at `main` `e069b49a`; nothing run): project closed by the owner 2026-11-09 (`orch-2026-10-30a` `…a9c03e07`). Status `dropped`, column Done: closed, not delivered. The page below stands as the record; the board move is the Orchestrator's.
 
 > **Cut 2026-11-04 by BA/PM: DoR 9/10, Backlog, PARKED** (task `bapm-epic011-areas`, records only, at `main`
 > `b274711c`; nothing run, built or timed). Source: the owner's ruling 3 (`orch-2026-10-30a` `…4c4cb03d`: "after

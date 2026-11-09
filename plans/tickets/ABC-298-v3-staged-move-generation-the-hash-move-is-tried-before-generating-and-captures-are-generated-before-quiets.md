@@ -1,8 +1,9 @@
 ---
 id: ABC-298
 title: "V3, narrowed by ADR-0077: at full-width nodes below the root of remaining depth 1 and 2, the hash move is checked for legality without the move list and searched first; if it does not cut off, the list is built and ordered exactly as today and the hash move is skipped. Node-identical, value-identical, intent SPEED: no switch, no door, no games. A count probe can stop it before the build; then S2 at ≥ 1.03× on two of three boards and ≥ 1.00× on the third. Captures before quiets (stages 2 and 3) are out"
-status: in-design
-column: In Design
+status: dropped
+column: Done
+closed: "2026-11-09, CLOSED NOT MET, not merged, not shipped: SG3 read H ÷ B 0.962736 kiwipete, 0.973838 position-6, 0.959488 start against ≥ 1.03 on two boards and ≥ 1.00 on the third; every board valid, identity held, no STOP. ADR-0077 F4: NOT MET with SG0–SG2 green; V3 ends, no wider form and no re-play (qe-ABC-298 FAIL …77b0a7e8; orch-2026-10-30a …035a25ff). G6 and NFR-008 UNRESOLVED, not read, by PREREG …c981798f § 5; UAT not signed. main keeps none of it; the code stays on grugops/ABC-298, kept, unmerged. Front matter and dated line by bapm-close-1109"
 size: M
 priority: P3
 epic: EPIC-011
@@ -11,6 +12,16 @@ adr: "ADR-0077, accepted by the owner 2026-11-08 (orch-2026-10-30a …44810861, 
 ---
 
 # ABC-298: the hash move before the list, at remaining depth 1 and 2 (V3, narrowed)
+
+> **CLOSED NOT MET, 2026-11-09, by BA/PM** (task `bapm-close-1109`, records only, at `main` `e069b49a`; nothing run). Sources: QE's verdict `qe-ABC-298`
+> `…77b0a7e8` (FAIL) and the Orchestrator's `orch-2026-10-30a` `…035a25ff`; the project's close, `…a9c03e07` item 1.
+> - **SG3 NOT MET (F4):** H ÷ B **0.962736** kiwipete, **0.973838** position-6 (one re-run, owed by spread), **0.959488** start, against ≥ 1.03 on two
+>   boards and ≥ 1.00 on the third. Every board valid, identity held, no STOP. SG0–SG2 MET at stage A.
+> - **F4 line:** NOT MET with SG0–SG2 green; not merged; V3 ends by the owner's question-2 yes. **No wider form and no re-play.** A re-open needs a
+>   new ADR and his word.
+> - `G6` and `NFR-008`: UNRESOLVED, not read, by PREREG `…c981798f` § 5. Not a miss and not a pass. UAT: nothing to sign.
+> - **The code stays on `grugops/ABC-298`, kept and unmerged.** `main` keeps none of it; only the records reached `main` (`29e716fe`).
+> - Status `dropped`, column Done: closed, not shipped. The sections below stand as the record. The board move is the Orchestrator's.
 
 > **`ADR-0077` ACCEPTED, IN FORCE ONLY AT THIS TICKET'S MERGE; NARROWED TO THE DEPTH-1–2 GATE; STAGES 2 AND 3 OUT;
 > NODE-IDENTICAL, NO GAMES; A STOP OR A MISS ENDS V3; DoR 10/10, 2026-11-08, by BA/PM** (task `bapm-ABC-298-accept`,

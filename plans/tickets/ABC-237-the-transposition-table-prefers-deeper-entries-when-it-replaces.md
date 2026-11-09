@@ -1,14 +1,16 @@
 ---
 id: ABC-237
 title: "The transposition table prefers deeper entries when it replaces, still cleared per search and still 4 MiB"
-status: backlog
-column: Backlog
+status: dropped
+column: Done
 size: S
 priority: P3
 epic: EPIC-011
 ---
 
 # ABC-237: depth-preferred TT replacement
+
+> **CLOSED WON'T-DO, 2026-11-09, by BA/PM** (task `bapm-close-1109`, records only, at `main` `e069b49a`; nothing run): project closed by the owner 2026-11-09 (`orch-2026-10-30a` `…a9c03e07`). Status `dropped`, column Done: closed, not delivered. The page below stands as the record; the board move is the Orchestrator's.
 
 > **STATUS 2026-11-02, by BA/PM: PARKED BY THE OWNER (B), WITH `ABC-258`; PHASE 1 PAUSED BY HIS ORDER (P)** (task
 > `bapm-threads-cut`, records only, at `main` `48f3fc01`; nothing run). His words (`orch-2026-10-30a` `…81ae2db4`,

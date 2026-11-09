@@ -1,8 +1,8 @@
 ---
 id: ABC-296
 title: "X1: a check extension at every depth. A move that gives check is searched one ply deeper wherever it occurs in the full-width search, under a stated bound on growth, behind a test-only off-door pair (not ABC-210's horizon form, which stays closed)"
-status: backlog
-column: Backlog
+status: dropped
+column: Done
 size: S
 priority: P3
 epic: EPIC-011
@@ -11,6 +11,8 @@ adr: "owed (the Architect's): a new ADR (ADR-0026 d10), or a revival of part of 
 ---
 
 # ABC-296: check extension at every depth (X1)
+
+> **CLOSED WON'T-DO, 2026-11-09, by BA/PM** (task `bapm-close-1109`, records only, at `main` `e069b49a`; nothing run): project closed by the owner 2026-11-09 (`orch-2026-10-30a` `…a9c03e07`). Status `dropped`, column Done: closed, not delivered. The page below stands as the record; the board move is the Orchestrator's.
 
 > **Cut 2026-11-04 by BA/PM: DoR 9/10, Backlog** (task `bapm-epic011-areas`, records only, at `main` `b274711c`;
 > nothing run, built or timed). Source: the owner's ruling 3 (`orch-2026-10-30a` `…4c4cb03d`). `EPIC-011` Phase 5,

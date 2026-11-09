@@ -1,8 +1,8 @@
 ---
 id: ABC-297
 title: "X2: singular extension and internal iterative reduction (IIR). A hash move that a reduced-depth exclusion search shows is the only good move is searched one ply deeper; a node with no hash move at sufficient depth is searched one ply shallower; behind a test-only off-door pair, after a premise probe on the stored entries"
-status: backlog
-column: Backlog
+status: dropped
+column: Done
 size: M
 priority: P3
 epic: EPIC-011
@@ -11,6 +11,8 @@ adr: "owed (the Architect's): a premise probe first (how often main's per-move t
 ---
 
 # ABC-297: singular extension and IIR (X2)
+
+> **CLOSED WON'T-DO, 2026-11-09, by BA/PM** (task `bapm-close-1109`, records only, at `main` `e069b49a`; nothing run): project closed by the owner 2026-11-09 (`orch-2026-10-30a` `…a9c03e07`). Status `dropped`, column Done: closed, not delivered. The page below stands as the record; the board move is the Orchestrator's.
 
 > **Cut 2026-11-04 by BA/PM: DoR 9/10, Backlog** (task `bapm-epic011-areas`, records only, at `main` `b274711c`;
 > nothing run, built or timed). Source: the owner's ruling 3 (`orch-2026-10-30a` `…4c4cb03d`). `EPIC-011` Phase 5,

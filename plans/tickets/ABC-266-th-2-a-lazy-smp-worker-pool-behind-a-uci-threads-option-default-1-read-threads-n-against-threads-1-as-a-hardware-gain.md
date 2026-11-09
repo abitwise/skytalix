@@ -1,8 +1,8 @@
 ---
 id: ABC-266
 title: "TH-2: a Lazy SMP worker pool over the shared table behind a UCI Threads spin option, default 1; Threads 1 unchanged node for node; read once, Threads N against Threads 1 at 100 ms, labelled a hardware gain"
-status: backlog
-column: Backlog
+status: dropped
+column: Done
 size: L
 priority: P2
 epic: EPIC-011
@@ -11,6 +11,8 @@ adr: "ADR-0062 (PROPOSED 2026-11-02, arch-ABC-266 …4f828986): Threads 1-12, de
 ---
 
 # ABC-266: the worker pool and `Threads` (TH-2), with `ABC-267`'s rows folded in
+
+> **CLOSED WON'T-DO, 2026-11-09, by BA/PM** (task `bapm-close-1109`, records only, at `main` `e069b49a`; nothing run): project closed by the owner 2026-11-09 (`orch-2026-10-30a` `…a9c03e07`). Status `dropped`, column Done: closed, not delivered. The page below stands as the record; the board move is the Orchestrator's.
 
 > **PARKED 2026-11-02 BY THE OWNER ("park threads"); `ADR-0062` STAYS PROPOSED, NOT IN FORCE; `Threads` STAYS 1, by
 > BA/PM** (task `bapm-records-1102c`, records only, at `main` `a6039c5b`; nothing run). Sources: the Architect's
