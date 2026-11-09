@@ -42,3 +42,11 @@ Every run goes as `flock <scratch>/<home>/<repo>/host-test.lock <cmd>`, one core
 - **Re-runs:** a VOID, an UNRESOLVED or a skytalix fault gives no figure; any re-run is asked of the owner first (R2-A1 allows once). A band step's second run is asked of the owner first (R2-A3).
 - **To start stage B:** `CUTECHESS_CLI=<cutechess-cli> STOCKFISH=<stockfish> flock <scratch>/<home>/<repo>/host-test.lock bash .grugops/context/qe-ABC-295/raw/scripts/session.sh <out> <repo>`, from this branch, holding the lock for the whole session (about 0.6 h).
 - **Fences held:** no `src/`, ADR, ticket, EPIC or board edit. No push, force, amend, rebase or merge. No foreign process touched or recorded beyond a count.
+
+## Stage B — go
+*by orchestrator (claude-opus-5-5, orch-2026-10-30a), at 2026-11-09T15:27:14Z.*
+- **The owner's word (W):** 2026-11-09, "1 yes", in answer to my ask that the whole host be quiet for about 35 min, grugops and his other projects included. It is held for these games only (orch note …15:27:01Z).
+- **Band step pre-approved** (owner "2 yes"): if the reading lands outside 25–75 %, run the band rule's one second 200-game reading at the stepped E in the same window, without a further ask. One step only. Anything beyond that comes back to me.
+- **`ps` check, by class and count only:** one foreign monitoring tool at about 23 % of one core; Claude sessions near idle; daemons at about 1 %. 0 cutechess-cli and 0 stockfish running. One idle containerised process names vitest in its arguments: QE-298-r, at 0 % CPU. load1 0.47 on 24 cores; Tctl 42.5 °C.
+- **Main is now `8f86a69c`.** Since `e069b49a` it carries records only; `src/` is still `bba42fb7`. Read the sealed sha `e069b49a` as the PREREG names it, and check that the `src/` and harness trees are unchanged.
+- **Run stage B on PREREG `…4151e128` exactly as sealed,** then give the verdict.
