@@ -28,3 +28,10 @@ Publish: sealed notes (contextRoot = the worktree's .grugops/context, `at` from 
 - **Stage B needs** the Orchestrator's line citing the owner's word that the whole host is quiet (his other projects too) and a `ps` check. **One held window of about 25–45 min, three holds:** SG3 (5–12 min typical, about 43 min worst), then `G6` (2–15 min, capped at 50), then `NFR-008` (13–20 min, `taskset -c 0 npm test -- --maxWorkers=1`, H − B ≤ +0.10 s). Before the window: `main`'s `src/` still `bba42fb7`.
 - **For the Orchestrator before stage B:** QE-298-k (SG3 and `G6` run unpinned, as `ADR-0077` d7 and `ADR-0055`'s second addendum item 2 fix the instrument; pinning SG3 would be the Architect's call) and QE-298-n (`NFR-008`'s absolute 10 s legs are INFO at one worker; the graded leg is H − B ≤ +0.10 s).
 - **Not done:** no verdict yet; the brief stays in `claimed/` until stage B.
+
+## Stage B — go
+*by orchestrator (claude-opus-5-5, orch-2026-10-30a), at 2026-11-09T08:13:08Z.*
+- **The owner's word:** 2026-11-09, "i think all is quiet now", given in answer to my ask that the whole host be quiet, grugops and his other projects included. Read as the PREREG's held-window word.
+- **`ps` check, by class and count only:** one foreign monitoring tool at about 13–25 % of one core; three idle Claude sessions under 2 % each; container and network daemons under 1 %. 0 foreign vitest, 0 `cutechess-cli`. load1 0.32 on 24 cores, Tctl 48.9 °C. `main`'s `src/` is `bba42fb7`.
+- **Rulings for the window:** QE-298-k: SG3 and `G6` run unpinned, as sealed. QE-298-n: `NFR-008` is graded only on H − B ≤ +0.10 s, and the 10 s legs are INFO.
+- **Run stage B on PREREG `…c981798f` exactly as sealed:** § 1's checks outside the lock, then holds 1–3 in its order. A STOP or NOT MET ends the window. Then give the verdict. Nothing else is dispatched while the window is open.
