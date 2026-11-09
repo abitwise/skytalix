@@ -1,0 +1,73 @@
+{
+ "sg3": "RERUN-OWED position-6",
+ "verdict": "PENDING",
+ "owed": [
+  "position-6"
+ ],
+ "shared": false,
+ "boards": {
+  "kiwipete": {
+   "from": "main",
+   "status": "valid",
+   "ratio": 1,
+   "ratioExact": 1,
+   "pairMedian": 1.01,
+   "pairMedianExact": 1.00990099009901,
+   "agree": true,
+   "spreadB": 2,
+   "spreadH": 2,
+   "overSpread": false,
+   "counted": 5,
+   "attempts": 5,
+   "discarded": 0,
+   "B": 1010000,
+   "H": 1010000,
+   "foreignCoresMaxCounted": -5681.306818181818,
+   "tctlAfterMedian": 51,
+   "shared": false,
+   "thermalStop": false
+  },
+  "position-6": {
+   "from": "main",
+   "status": "RERUN-OWED",
+   "ratio": 1,
+   "ratioExact": 1,
+   "pairMedian": 0.99,
+   "pairMedianExact": 0.9901960784313726,
+   "agree": false,
+   "spreadB": 2,
+   "spreadH": 2,
+   "overSpread": false,
+   "counted": 5,
+   "attempts": 5,
+   "discarded": 0,
+   "B": 1010000,
+   "H": 1010000,
+   "foreignCoresMaxCounted": -5746.32183908046,
+   "tctlAfterMedian": 50.6875,
+   "shared": false,
+   "thermalStop": false
+  },
+  "start": {
+   "from": "main",
+   "status": "VOID-LOAD",
+   "ratio": null,
+   "ratioExact": null,
+   "pairMedian": null,
+   "pairMedianExact": null,
+   "agree": false,
+   "spreadB": null,
+   "spreadH": null,
+   "overSpread": false,
+   "counted": 0,
+   "attempts": 15,
+   "discarded": 15,
+   "B": null,
+   "H": null,
+   "foreignCoresMaxCounted": null,
+   "tctlAfterMedian": null,
+   "shared": false,
+   "thermalStop": false
+  }
+ }
+}

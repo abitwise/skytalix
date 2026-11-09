@@ -1,0 +1,8 @@
+{
+  "refs": ["qe-ABC-298", "ABC-298", "ADR-0077", "ADR-0077 d9 step 7", "qe-ABC-298-freeze/20261108T212842Z-qe-e2e-decision-44a6717d", "arch-ABC-298-stop/20261108T221135Z-architect-design-decision-251b60bb", "se-ABC-298/20261108T231008Z-software-engineer-observation-e57979e2", "b9b8eee9", "400c1b9e", "b40a2d7e", "bba42fb7", "b8d055c9"],
+  "notes": [
+    { "kind": "observation", "confidence": "high on every reading stated: deterministic, under the host lock, one core, one worker; G4 re-run by QE and byte-equal; other deep lanes read from the Engineer's e57979e2, not re-run", "bodyFile": "stage-a.md" },
+    { "kind": "observation", "confidence": "high on the text read line by line; identity of the sort keys rests on ADR-0077 § Context and on the SG1 runs, not on reading alone", "bodyFile": "code-read.md" },
+    { "kind": "decision", "confidence": "high: sealed and committed before any SG3, G6 or paired NFR-008 figure exists; scripts hashed; two readings (QE-298-k no pinning, QE-298-n 10 s legs INFO) held for the Orchestrator's stage-B line; durations UNKNOWN - verify", "bodyFile": "prereg.md", "refs": ["qe-ABC-298", "ABC-298", "ADR-0077", "ADR-0077 d7", "ADR-0077 d9 step 7", "ADR-0077 d11", "ADR-0055 D3-V2", "NFR-005", "NFR-008", "PREREG", "SG3", "G6", "qe-ABC-254-a4v2/20261101T185729Z-qe-e2e-decision-a1136cf6", "qe-ABC-303/20261106T165315Z-qe-e2e-decision-79bd6622", "orch-2026-10-30a/20261108T231108Z-orchestrator-decision-7b267675", "b40a2d7e", "bba42fb7", "b8d055c9"] }
+  ]
+}
