@@ -6,6 +6,12 @@ id: ADR-0062
 
 ## Status
 
+*2026-11-09, dated line by Architect/Design (task `arch-close-1109`, records only, on `grugops/arch-close-1109` from `main`
+`e069b49a`). Nothing was run.* **WITHDRAWN, project closed. Never accepted, never in force.** `ABC-266` (TH-2) closed
+won't-do with the project (`orch-2026-10-30a` `…a9c03e07`), so the threads strand does not re-open. `Threads` stays at 1,
+and `ADR-0044` D3, D5 and D6's `Threads` row stand as written. The `ADR-0025` shared-table amendment (in force, `ABC-265`)
+is not touched.
+
 **PROPOSED, PARKED; NOT IN FORCE** (2026-11-02, the owner's answer). His words, verbatim (`orch-2026-10-30a`
 `…773be7de`): *"park threads"*. Recorded by Architect/Design (task `arch-owner-answers-1102b`, records only, on
 `grugops/arch-owner-answers-1102b` from `main` `b47adfbb`). Nothing was run.

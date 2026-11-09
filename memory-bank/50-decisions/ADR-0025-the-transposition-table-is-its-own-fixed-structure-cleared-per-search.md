@@ -6,6 +6,13 @@ id: ADR-0025
 
 ## Status
 
+*2026-11-09, dated line by Architect/Design (task `arch-close-1109`, records only, on `grugops/arch-close-1109` from `main`
+`e069b49a`). Nothing was run.* **Two amendments at the end of this file are not delivered, project closed** (the owner's
+close, `orch-2026-10-30a` `…a9c03e07`). The 2026-10-26 decision 4 amendment (the game token) stays **ACCEPTED, NOT IN
+FORCE ON `main`, not delivered**: its re-read rode `ABC-257`, closed won't-do. The 2026-11-01 T2 amendment (depth-preferred
+replacement, `ABC-237`, parked with `ABC-258`) is **WITHDRAWN**: both tickets closed won't-do. Decisions 1–7, with the
+TH-1 amendment in force (`ABC-265`), stand on `main` as written, always-replace and clear-per-search included.
+
 *2026-11-02, the owner's answer:* the TH-1 shared-table amendment at the end of this file is **ACCEPTED, and IN FORCE
 on `main`**. His words, verbatim (`orch-2026-10-30a` `…773be7de`): *"25 yes"*. `ABC-265` merged to local `main` at
 `605874b8` (QE PASS_WITH_GAPS, no blocking gap; `G6` head equal to base, so D2.3's fallback did not fire).
