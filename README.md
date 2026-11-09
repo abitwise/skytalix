@@ -50,6 +50,13 @@ Level 1 is the weakest, 7 the strongest, and 5 is the default. The times are app
 | Level | 1 | 2 | 3 | 4 | 5 | 6 | 7 |
 |---|---|---|---|---|---|---|---|
 | Time per move | 0.1 s | 0.2 s | 0.3 s | 1 s | 4 s | 5 s | 30 s |
+| Projected strength | ~1 000–1 300 | ~1 300–1 550 | ~1 550–1 750 | ~1 800–1 950 | ~2 150–2 250 | ~2 170–2 270 | ~2 300–2 450 |
+
+The strength figures are projections, not measurements. They are drawn from the one
+measured figure in § Strength (1902.5 ± 49.1 at 100 ms a move, with no blunders) and two
+assumptions: about +50 to +60 for each doubling of time, less at longer times, and a penalty
+for the levels that blunder, which was not measured. They are on the § Strength scale only,
+and are not FIDE or online ratings.
 
 ## Strength
 
@@ -58,7 +65,7 @@ one at a time, from 100 openings with both colours, against Stockfish 19 with
 `UCI_LimitStrength` on and `UCI_Elo` 1810. Each side had 100 ms a move. skytalix scored
 63.0 %, which is +92.5 ± 49.1 Elo against 1810, so X = 1810 + 92.5. The figure holds on that
 scale only. It is not a 40/15 rating and not a rating-list figure. Level 5 normally has 4 s
-a move, not 100 ms. Its strength at 4 s was not measured.
+a move, not 100 ms. Its strength at 4 s was not measured; § Levels gives a projection only.
 
 ## Saved games
 
