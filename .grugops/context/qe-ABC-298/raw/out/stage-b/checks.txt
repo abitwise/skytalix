@@ -1,0 +1,23 @@
+# qe-ABC-298 stage B: PREREG c981798f § 1 checks, outside the lock, read 2026-11-09 08:14-08:15Z. Paths as <scratch>/<home>/<repo>.
+scripts: 22/22 sha256 equal to the PREREG § 8 table; no change to raw/scripts since 19d0ba57
+main bfdff004 src bba42fb7   (origin/main 71b2beb4 is a stale push of 2026-11-05, an ancestor of main, 352 commits behind; INFO)
+merge-base (B) 2893bdde src bba42fb7
+head (H) dd8e2404 src b8d055c9 (= 400c1b9e's src b8d055c9)
+B..H outside src/:  86 .grugops  (records only)
+F8: git diff bba42fb7 b8d055c9 -- evaluate*.ts quiescence.ts see.ts: 0 files
+node v26.12.1, one binary for every process
+trees: <scratch>/<home>/<repo>/qe-abc298b/trees/B = git archive 2893bdde src package.json tsconfig.json; trees/H = git archive dd8e2404 (same paths); diff -r trees/H/src <worktree>/src empty
+g6/base -> trees/B, g6/head -> trees/H, g6/scripts/timed.mjs cmp-equal to raw/scripts/g6/timed.mjs (built; G6 not run)
+arms/B = git archive 2893bdde, arms/H = git archive dd8e2404, node_modules by symlink; arms/H2 = cp -a arms/H; diff -r --no-dereference H H2 empty (built; NFR-008 not run)
+pre-hold host 08:15:03Z: load1 0.41, Tctl 44 C, 24 cores, lock free, 0 flock; above 5 % lifetime CPU: one monitoring tool; 0 cutechess-cli; one idle containerised node process (age ~34 h, 0 ticks over 3 s) whose arguments name vitest but not as a /vitest path: no sealed detector counts it (pgrep -f [/]vitest matches nothing); INFO, class and count only
+unsanitised originals, sha256 (scratch):
+06ed47f8e22606d754146401e4a3f0e284222f592a29d6020f7049c5fe06a785  sg3/analysis-main.jsonl
+4cdde78aab6e1c9806f1993c481e69e420ea0a07de336edd31f655990e93e854  sg3/analysis-rerun.jsonl
+60c0f2a301041df7b9e15934bb34d1e073fb5cc7a7acf0b795dee088da29fac8  sg3/grade.json
+a967fe4a902c99f00669b87c504d236ec6242b7e9b5f72554e37b18ba05ff257  sg3/s2.jsonl
+4d90502b4a147fee654be96841d96bcbffdef2104e3cdb01b2144b1becf1b335  sg3/s2-rerun.jsonl
+0f09f80ba0cadad105aeec545df5816cd04ed994057e5d1b1afe04b7abc57796  sg3/times.txt
+cb0d0edd4b3e7dd1e4eb89b940ca6d5d72ea11cbcd6e1d9ebf9f1b47bb638b71  session.txt
+7722bfee8eac16bcba7f747f67f4bcfd93169d9397c4ec3c739324de1eb10c27  ps.txt
+6e392e5bb93ec23ee2c01b45e5eb619f280f6f1c43319af34711fb98e06e52f3  holds-outer.txt
+committed copies: host paths replaced by <worktree> / <scratch>/<home>/<repo>; foreign PIDs in busy lists masked as <pid>; nothing else changed

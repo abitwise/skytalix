@@ -1,0 +1,14 @@
+== default
+ Test Files  71 passed (71)
+      Tests  2782 passed (2782)
+== SEARCH_DEEP-search.bundle
+ABC-283 mate floor search() d5: 0 of 190 violated
+ABC-283 mate floor chooseMove d5: 0 of 188 violated
+ABC-303 mate floor search() d5: 0 of 191 violated
+ABC-303 mate floor chooseMove d5: 0 of 189 violated
+ Test Files  1 passed (1)
+      Tests  56 passed (56)
+== SEARCH_DEEP-search.null-move
+ABC-208 A3 mate floor d5 -> d5: 0 of 189 violated
+ Test Files  1 passed (1)
+      Tests  46 passed (46)

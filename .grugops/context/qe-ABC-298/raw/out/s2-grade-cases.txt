@@ -1,0 +1,18 @@
+ok   met → MET | MET
+ok   met-edge → MET | MET
+ok   met-third-high → MET | MET
+ok   bar-miss-one-above → NOT-MET (bar) | NOT-MET (F4)
+ok   third-below-1 → NOT-MET (bar) | NOT-MET (F4)
+ok   spread-owed → RERUN-OWED kiwipete | PENDING
+ok   spread-5.0-ok → MET | MET
+ok   disagree-1.03-owed → RERUN-OWED kiwipete | PENDING
+ok   disagree-1.00-owed → RERUN-OWED start | PENDING
+ok   rerun-fixes → MET | MET
+ok   rerun-void → UNRESOLVED (kiwipete VOID) | UNRESOLVED (not a miss)
+ok   rerun-disagree-void → UNRESOLVED (kiwipete VOID) | UNRESOLVED (not a miss)
+ok   voidload-main → UNRESOLVED (kiwipete VOID-LOAD) | UNRESOLVED (not a miss)
+ok   voidload-rerun → UNRESOLVED (kiwipete VOID-LOAD) | UNRESOLVED (not a miss)
+ok   voidload-not-a-miss → UNRESOLVED (kiwipete VOID-LOAD) | UNRESOLVED (not a miss)
+ok   shared → UNRESOLVED (SHARED) | UNRESOLVED (not a miss)
+ok   thermal → UNRESOLVED (thermal STOP) | UNRESOLVED (not a miss)
+all cases ok

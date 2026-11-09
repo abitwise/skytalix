@@ -1,0 +1,24 @@
+CLI_DEEP-cli.real-engine: Tests  11 passed (11) | FAIL rows 0
+ENGINE_DEEP-book: Tests  36 passed (36) | FAIL rows 0
+ENGINE_DEEP-engine.capacity: Tests  2 passed (2) | FAIL rows 0
+ENGINE_DEEP-evaluate.pawns: Tests  44 passed (44) | FAIL rows 0
+ENGINE_DEEP-gameend: Tests  58 passed (58) | FAIL rows 0
+ENGINE_DEEP-levels: Tests  58 passed (58) | FAIL rows 0
+ENGINE_DEEP-quiescence: Tests  99 passed (99) | FAIL rows 0
+ENGINE_DEEP-search.ordering: Tests  30 passed (30) | FAIL rows 0
+ENGINE_DEEP-search.pvs-lmr: Tests  21 passed (21) | FAIL rows 0
+ENGINE_DEEP-transposition: Tests  26 passed (26) | FAIL rows 0
+INPUT_DEEP-line-input: Tests  34 passed (34) | FAIL rows 0
+PUZZLE_DEEP-weakened-puzzle-suite: Tests  1 failed | 13 passed (14) | FAIL rows 1
+PUZZLES weakened (evaluate = 0): solved 16/58, baseline 54/58, budget 25 step 1, wall 1.86 s
+SEARCH_DEEP-evaluate.passer: Tests  29 passed (29) | FAIL rows 0
+SEARCH_DEEP-evaluate.taper: Tests  170 passed (170) | FAIL rows 0
+SEARCH_DEEP-quiescence: Tests  116 passed (116) | FAIL rows 0
+SEARCH_DEEP-search.futility: Tests  61 passed (61) | FAIL rows 0
+SEARCH_DEEP-search.ordering: Tests  43 passed (43) | FAIL rows 0
+SEARCH_DEEP-search.pvs-lmr: Tests  29 passed (29) | FAIL rows 0
+SEARCH_DEEP-search: Tests  57 passed (57) | FAIL rows 0
+SEARCH_DEEP-see: Tests  52 passed (52) | FAIL rows 0
+SEARCH_DEEP-transposition: Tests  40 passed (40) | FAIL rows 0
+UCI_DEEP-uci.real-engine: Tests  13 passed (13) | FAIL rows 0
+ZOBRIST_DEEP-zobrist: Tests  34 passed (34) | FAIL rows 0

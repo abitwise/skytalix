@@ -1,3 +1,4 @@
+_Updated: 2026-11-09T08:23:08Z — **ABC-298 NOT MET** (SG3 0.963 / 0.974 / 0.959, all valid; QE …77b0a7e8); V3 ends; records only to main; host released._
 _Updated: 2026-11-09T00:14:55Z — qe-ABC-298 stage A done, all rows met, timing PREREG sealed; stage B waits on the owner's held host._
 _Updated: 2026-11-08T23:11:29Z — se-ABC-298-repoint done, G4 byte-equal; ABC-298 In Review; qe-ABC-298 stage A running._
 _Updated: 2026-11-08T22:12:53Z — arch-ABC-298-stop merged: three source rows re-pointed, not F2; se-ABC-298-repoint runs the re-reads and G4._
@@ -1459,7 +1460,7 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
 - ~~[ABC-283]~~ → Blocked. The O1h+O3s+S1 bundle (ABC-233 history, ABC-234 SEE ordering, ABC-236 root aspiration) on one branch; one read of 100 games at 100 ms, GAIN ≥ 50.0 (owner's word, …4c4cb03d). se-ABC-283 running; rulings …3851bf43.
     - [ABC-014] Asset allocation chart  (owner: Software Engineer, since: 2026-06-01)
 
-    ## In Review (WIP 1/3)
+    ## In Review (WIP 0/3)
 - [ABC-282] W1. Built 7e4b1006 → qe-ABC-282 (A6 100 games at tc=40/8, GAIN ≥ 50.0; verdict signs UAT).
     - [ABC-012] Portfolio FX conversion  (PR: #41, QE: running)
 
@@ -1634,7 +1635,6 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 ## In Review (WIP 1/3)
-- [ABC-298] V3 (ADR-0077): built b40a2d7e, identity held (G4 byte-equal); qe-ABC-298 stage A (untimed) running; SG3/NFR-008 on a held host after the owner's word.
 
 
 
@@ -1694,6 +1694,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready to Release (WIP 0/4)
 
 ## Done (WIP unlimited)
+- [ABC-298] V3 hash-first (ADR-0077): closed NOT MET 2026-11-09. Identity held; SG3 0.963 / 0.974 / 0.959 vs ≥ 1.03 (qe-ABC-298 …77b0a7e8); F4 ends V3, no wider form. Code stays on grugops/ABC-298, unmerged.
 - [ABC-292] E5 bishop pair and rook files: closed NOT MET 2026-11-08 at its probe (ADR-0076 d13 rule 2, PR7 G1 53/58 vs 54/58), not built, not re-played. The owner's stop fired (…5bc9e701).
 - [ABC-289] Q2 delta pruning: closed NOT MET 2026-11-08 on OQ-0074-2 (a) (…23d30c72). Branch grugops/ABC-289 kept, unmerged.
 - [ABC-286] P4 late-move pruning: Done 2026-11-08, delivered by ABC-303 (434fa171).

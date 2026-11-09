@@ -1,0 +1,15 @@
+# qe-ABC-298 stage A: each hold of the host lock (flock), start and end UTC, for lock use only. One core (taskset -c 0), one process at a time, vitest with one worker. No timing figure taken.
+a start 2026-11-08T23:18:22Z
+a end 2026-11-08T23:18:30Z
+g4a start 2026-11-08T23:18:41Z
+g4a end 2026-11-08T23:29:45Z
+gates start 2026-11-08T23:29:45Z
+gates end 2026-11-08T23:30:18Z
+g4b start 2026-11-08T23:30:18Z
+g4b end 2026-11-08T23:55:01Z
+pins start 2026-11-08T23:55:01Z
+pins end 2026-11-09T00:10:50Z
+tests start 2026-11-09T00:10:50Z
+tests end 2026-11-09T00:11:30Z
+rows-compare start 2026-11-09T00:11:50Z
+rows-compare end 2026-11-09T00:11:50Z

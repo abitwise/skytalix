@@ -1,0 +1,8 @@
+sg3-start 2026-11-09T08:15:35Z
+clear-deadline 2026-11-09T08:30:35Z
+main-start 2026-11-09T08:15:35Z
+main-end rc=0 2026-11-09T08:17:41Z
+rerun-owed [position-6]
+rerun-start 2026-11-09T08:17:41Z
+rerun-end rc=0 2026-11-09T08:18:43Z
+sg3-done 2026-11-09T08:18:43Z

@@ -1,0 +1,6 @@
+{
+  "refs": ["qe-ABC-298", "ABC-298", "ADR-0077", "ADR-0077 d7", "ADR-0077 d9 step 7", "ADR-0077 d9 step 8", "ADR-0077 d11", "ADR-0077 F4", "SG3", "G6", "NFR-005", "NFR-008", "QE-298-m", "QE-298-q", "QE-298-r", "QE-298-s", "qe-ABC-298/20261109T082142Z-qe-e2e-observation-125e3e29", "qe-ABC-298/20261109T082148Z-qe-e2e-failed-attempt-77448919", "qe-ABC-298/20261109T001340Z-qe-e2e-decision-c981798f", "qe-ABC-298/20261109T001340Z-qe-e2e-observation-c0727df9", "dd8e2404"],
+  "notes": [
+    { "kind": "decision", "confidence": "high: SG3 graded mechanically on a valid read under the sealed PREREG; G6 and NFR-008 not read by the sealed window rule, so UNRESOLVED and graded nothing", "bodyFile": "stage-b-verdict.md" }
+  ]
+}

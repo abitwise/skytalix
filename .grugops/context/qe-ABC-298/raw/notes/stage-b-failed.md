@@ -1,0 +1,32 @@
+# qe-ABC-298: V3 (`ABC-298`, `ADR-0077`) missed SG3. Head ÷ base nodes per second is 0.963, 0.974 and 0.959 on kiwipete, position-6 and start, against ≥ 1.03 on two boards and ≥ 1.00 on the third. F4: not merged. With the owner's question-2 yes, V3 closes
+
+**What was tried:** `ADR-0077` d1–d3, in `grugops/ABC-298` (code `400c1b9e`, `src/` `b8d055c9`). At full-width nodes of remaining depth 1 and 2, it checks the hash move for legality without the move list and searches it first.
+- It is node-identical to `main` (`src/` `bba42fb7`): SG0, SG1 (a)–(c), SG2 (a)–(c) and the gates were all green in stage A (`…c0727df9`).
+- In stage B, (v1) held: the same move and score at equal depth.
+
+**What it read:** S2 under D3-V2, unchanged and unpinned, in one held window on 2026-11-09, 08:15:35Z–08:18:43Z (`…c981798f` § 2; readings in `…125e3e29`).
+- All three boards are valid.
+- The head is **slower** on every board:
+  - kiwipete 0.962736;
+  - position-6 0.973838, on its one re-run (the main reading was 0.951913, re-run for H's 5.51 % spread);
+  - start 0.959488.
+- None of the 15 graded pairs reaches 1.00.
+- On kiwipete the lower rate also costs depth: base reached 10 in 4 of 5 runs, the head 9 in all 5.
+
+**Why, as far as QE can say (judgement, `UNKNOWN - verify`):** `ADR-0077` § Where it costs named this case. At a gated node whose hash move does not cut off, V3 pays for the check (`generateMovesFrom`, `legalMoveFrom`), then for the full list anyway, plus `list.slice(1)`.
+- The probe's counts put cutoffs saved at 7.5 / 5.8 / 3.2 % of G (`…d097e25f`), and non-cutting gated nodes at 5.7 / 4.6 / 5.8 % of G.
+- The reading says the saving at the first did not cover the cost at the second plus the per-node gate overhead. Which term dominates is not measured here.
+- No profile was taken. None is owed by this read.
+
+**What it means (d7, F4, d12):**
+- NOT MET with SG0–SG2 green. **Not merged.** `main` is unchanged.
+- BA/PM closes `ABC-298` as dropped. With the owner's yes to question 2 (`…44810861`), **V3 closes**.
+- No wider form without a new ADR and his word: not captures first, not the hash move first at remaining depth ≥ 3, and not the staged generator.
+- A re-read is not owed. The read is valid, and a bar miss is not a void.
+
+**Do not retry as:**
+- the same build re-timed, which would be shopping for a figure;
+- a looser bar or spread;
+- a pinned instrument, which would change what d7 fixes.
+
+Any new speed idea in this area starts from a fresh profile under its own ADR.

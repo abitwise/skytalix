@@ -1,0 +1,9 @@
+{
+  "refs": ["se-ABC-298", "ABC-298", "ADR-0077", "qe-ABC-298-freeze/20261108T212842Z-qe-e2e-decision-44a6717d", "b9b8eee9", "43fe357e", "05b2ea2f"],
+  "notes": [
+    { "kind": "decision", "confidence": "high: built to ADR-0077 d1-d3 as written; each choice is named with its reason; identity read in obs (every value row equal)", "bodyFile": "dec.md" },
+    { "kind": "observation", "confidence": "high on every reading stated (deterministic, under the host lock, one core); G4 (SG1 (b)) not run, UNKNOWN - verify", "bodyFile": "obs-read.md" },
+    { "kind": "failed-attempt", "confidence": "high that the three rows are red and that no fix inside d1-d3 turns them green without code shaped to hide text from them; whether they are identity rows under F2 / d12 is the Architect's", "bodyFile": "stop.md" },
+    { "kind": "artifact-ref", "confidence": "high: commits and files as listed", "bodyFile": "art.md" }
+  ]
+}

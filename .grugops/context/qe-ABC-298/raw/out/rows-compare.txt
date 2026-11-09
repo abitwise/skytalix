@@ -1,0 +1,12 @@
+ENGINE_DEEP-engine: run 105 rows (105 passed); frozen deep rows 26, missing 0, not passed 0; added deep rows 0 {}
+ENGINE_DEEP-legal: run 91 rows (91 passed); frozen deep rows 6, missing 0, not passed 0; added deep rows 2 {"src/legal.test.ts":{"passed":2,"other":0}}
+ENGINE_DEEP-moves: run 40 rows (40 passed); frozen deep rows 1, missing 0, not passed 0; added deep rows 1 {"src/moves.test.ts":{"passed":1,"other":0}}
+ENGINE_DEEP-uci-session: run 270 rows (270 passed); frozen deep rows 25, missing 0, not passed 0; added deep rows 0 {}
+PUZZLE_DEEP-puzzle-suite: run 18 rows (18 passed); frozen deep rows 6, missing 0, not passed 0; added deep rows 0 {}
+SEARCH_DEEP-search.bundle: run 56 rows (56 passed); frozen deep rows 10, missing 0, not passed 0; added deep rows 7 {"src/search.bundle.test.ts":{"passed":7,"other":0}}
+SEARCH_DEEP-search.futility: run 61 rows (61 passed); frozen deep rows 17, missing 0, not passed 0; added deep rows 0 {}
+SEARCH_DEEP-search.null-move: run 46 rows (46 passed); frozen deep rows 8, missing 0, not passed 0; added deep rows 0 {}
+default: run 2782 rows (2782 passed); frozen rows 2734, missing 0, not passed 0; added rows 48 {"src/legal.test.ts":{"passed":39,"other":0},"src/moves.test.ts":{"passed":1,"other":0},"src/search.futility.test.ts":{"passed":8,"other":0}}
+PERFT_DEEP-perft: run 32 rows (32 passed); frozen deep rows 8, missing 0, not passed 0; added deep rows 0 {}
+default-perft: run 24 rows (24 passed); frozen rows 24, missing 0, not passed 0; added rows 0 {}
+SG1 (c) rows: every frozen row in these lanes collected and passed; every row run passed

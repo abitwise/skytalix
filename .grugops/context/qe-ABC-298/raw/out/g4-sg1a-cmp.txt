@@ -1,0 +1,7 @@
+# G4 (SG1 (b)) at the head b40a2d7e (src b8d055c9), run by QE with the freeze's frozen scripts, vs qe-ABC-298-freeze …44a6717d
+diff g4-digest (head vs frozen): equal
+cmp g4.jsonl vs frozen content: equal
+cmp g4-sample.jsonl vs frozen content: equal
+b65f747aa16b40d9f71c343520026796b2c64260e06af10fadb6269a2131af34  g4.jsonl
+2e1534f05adbc493b195a665fcf61f290ef4434f998e47856a1a1ae19ec0e744  g4-sample.jsonl
+sg1a.jsonl (SG1 (a)) cmp vs frozen: equal

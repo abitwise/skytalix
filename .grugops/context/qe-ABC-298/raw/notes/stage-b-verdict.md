@@ -1,0 +1,36 @@
+# qe-ABC-298 verdict: **FAIL**. SG3 is NOT MET (F4). `G6` and `NFR-008` are UNRESOLVED, not read, because the window ended on the miss as sealed. `ABC-298` does not merge, and V3 closes by the owner's question-2 yes
+
+QE, task `qe-ABC-298`, closing `ADR-0077` d9 step 7, on `grugops/qe-ABC-298` at `dd8e2404`. Stage A is `…c0727df9` and `…e7d15923`, and the PREREG is `…c981798f`, sealed at `19d0ba57`. Stage B's readings are in `…125e3e29`, and the miss is in `failed-attempt` `…77448919`.
+
+| row | grade | basis |
+|---|---|---|
+| stage 0, SG0, SG1 (a)–(c), SG2 (a)–(c), gates (typecheck, lint, build, default lane, pin lanes, `G1` 54 / 58) | **MET** (stage A) | `…c0727df9`; no F1, F2, F3, F6 or F8 |
+| **SG3** (d7, `ADR-0055` D3-V2, unpinned) | **NOT MET (F4)** | H ÷ B 0.962736 kiwipete, 0.973838 position-6 (one re-run, owed by spread), 0.959488 start. Every board valid; bar ≥ 1.03 on two and ≥ 1.00 on the third |
+| **`G6`** (`NFR-005` "≥ base") | **UNRESOLVED: not read** | PREREG § 5: a NOT MET ends the window. Not a miss, and not a pass. No figure exists |
+| **`NFR-008`** (d11, H − B ≤ +0.10 s, one worker, one core) | **UNRESOLVED: not read** | the same. No paired figure exists. The Engineer's INFO one-worker walls (≈ 26 s) grade nothing |
+| **`ABC-298` overall** | **FAIL** | F4: NOT MET with SG0–SG2 green |
+
+## What follows (d7, F4, d12; the owner's question 2, `…44810861`)
+- **Not merged.** `main` keeps `src/` `bba42fb7`. QE merges nothing in any case.
+- **BA/PM closes `ABC-298` as dropped**, and **V3 closes.** No wider form follows without a new ADR and his word.
+- **No re-read is owed or allowed.**
+  - The read is valid on all three boards: spread, agreement, count, admission, unshared, below 85 °C. A bar miss is not a void.
+  - `G6` and `NFR-008` cannot change F4, and are not owed for a build that does not merge. If the ticket were ever re-opened, they would be read then under a fresh PREREG. That is the owner's and the Architect's call, not a QE debt.
+- **UAT (d9 step 8):** nothing to sign. The ticket does not ship.
+- **Board:** QE makes no board move: no `In Review → Ready for UAT`, no `→ In Security/NFR`. The close is BA/PM's, and this brief forbids board edits.
+
+## Gaps and INFO
+- **QE-298-m (LOW, from stage A), still open.** 2 of the 12 mocking files are not byte-unchanged. Their mock blocks are unchanged and green. It is moot for a build that does not merge.
+- **QE-298-q (INFO).** `origin/main` (`71b2beb4`, 2026-11-05) is stale, an ancestor of `main` 352 commits behind. § 1 read the local `main` (`bfdff004`, `src/` `bba42fb7`), which is the `main` every earlier hop read.
+- **QE-298-r (INFO).** The host carried one idle containerised node process, about 34 h old, 0 % CPU. Its arguments name vitest, but not as a `/vitest` path.
+  - No sealed detector counts it. `session.sh`'s info snapshot counts it as 1.
+  - It is not load. It may be what a looser detector would report as a "foreign vitest".
+  - Class and count only; no command line is recorded.
+- **QE-298-s (INFO).** Kiwipete's largest admitted foreign-cores figure was 0.796, against the 0.8 line. The monitoring tool sat at 21–35 % of one core in 26 of 40 run windows.
+  - Both builds saw it under the interleaved order, and all 15 graded pairs read below 1.00.
+  - No admission rule moves on it, and none would change the grade.
+- **No `UNKNOWN - verify` figure enters this grade.** Only the cause of the slowdown is unmeasured (`…77448919`).
+
+## Holds
+- **Stage A:** six holds, 52 min 57 s in all (`…c0727df9`).
+- **Stage B:** one hold, 08:15:35Z–08:18:43Z, 3 min 08 s. Holds 2 and 3 were not taken. The window ran from the go line (08:13:08Z) to 08:18:43Z, and nothing else of this hop ran in it.

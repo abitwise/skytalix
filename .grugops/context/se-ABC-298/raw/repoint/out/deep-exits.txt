@@ -1,0 +1,26 @@
+deep SEARCH_DEEP:search exit 0
+deep SEARCH_DEEP:search.pvs-lmr exit 0
+deep SEARCH_DEEP:search.ordering exit 0
+deep SEARCH_DEEP:search.futility exit 0
+deep SEARCH_DEEP:quiescence exit 0
+deep SEARCH_DEEP:transposition exit 0
+deep SEARCH_DEEP:see exit 0
+deep SEARCH_DEEP:evaluate.taper exit 0
+deep SEARCH_DEEP:evaluate.passer exit 0
+hold exit 0
+deep ENGINE_DEEP:engine.capacity exit 0
+deep ENGINE_DEEP:transposition exit 0
+deep ENGINE_DEEP:gameend exit 0
+deep ENGINE_DEEP:book exit 0
+deep ENGINE_DEEP:evaluate.pawns exit 0
+deep ENGINE_DEEP:quiescence exit 0
+deep ENGINE_DEEP:search.ordering exit 0
+deep ENGINE_DEEP:search.pvs-lmr exit 0
+deep ENGINE_DEEP:levels exit 0
+hold exit 0
+deep PUZZLE_DEEP=weakened:puzzle-suite exit 1
+deep ZOBRIST_DEEP:zobrist exit 0
+deep INPUT_DEEP:line-input exit 0
+deep CLI_DEEP:cli.real-engine exit 0
+deep UCI_DEEP:uci.real-engine exit 0
+hold exit 0
