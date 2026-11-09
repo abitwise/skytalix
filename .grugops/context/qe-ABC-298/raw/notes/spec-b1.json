@@ -1,0 +1,6 @@
+{
+  "refs": ["qe-ABC-298", "ABC-298", "ADR-0077", "ADR-0077 d7", "ADR-0077 d9 step 7", "ADR-0055 D3-V2", "SG3", "G6", "NFR-008", "PREREG", "qe-ABC-298/20261109T001340Z-qe-e2e-decision-c981798f", "orch-2026-10-30a", "dd8e2404", "2893bdde", "bba42fb7", "b8d055c9"],
+  "notes": [
+    { "kind": "observation", "confidence": "high: run on the sealed PREREG unchanged (22/22 script hashes equal), mechanical grade by grade.mjs, every board valid (spread after the one owed re-run, agreement, 5/5 admitted, unshared, below 85 C); holds 2 and 3 not run by PREREG § 5", "bodyFile": "stage-b-hold1.md" }
+  ]
+}

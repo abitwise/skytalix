@@ -1,0 +1,7 @@
+# sg3 hold start 2026-11-09T08:15:35Z: processes above 5 % CPU, by command name, count only
+  abtop 1
+  node-MainThread 1
+  vitest(node|npm|npx): 1; cutechess-cli: 0
+# after SG3 2026-11-09T08:18:43Z: processes above 5 % CPU, by command name, count only
+  abtop 1
+  vitest(node|npm|npx): 1; cutechess-cli: 0

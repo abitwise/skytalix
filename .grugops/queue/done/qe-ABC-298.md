@@ -35,3 +35,38 @@ Publish: sealed notes (contextRoot = the worktree's .grugops/context, `at` from 
 - **`ps` check, by class and count only:** one foreign monitoring tool at about 13–25 % of one core; three idle Claude sessions under 2 % each; container and network daemons under 1 %. 0 foreign vitest, 0 `cutechess-cli`. load1 0.32 on 24 cores, Tctl 48.9 °C. `main`'s `src/` is `bba42fb7`.
 - **Rulings for the window:** QE-298-k: SG3 and `G6` run unpinned, as sealed. QE-298-n: `NFR-008` is graded only on H − B ≤ +0.10 s, and the 10 s legs are INFO.
 - **Run stage B on PREREG `…c981798f` exactly as sealed:** § 1's checks outside the lock, then holds 1–3 in its order. A STOP or NOT MET ends the window. Then give the verdict. Nothing else is dispatched while the window is open.
+
+## Stage B
+*by qe-e2e (claude-opus-5-5), at 2026-11-09T08:22:10Z, on `grugops/qe-ABC-298` at `dd8e2404`. Run on PREREG `…c981798f` as sealed, after the go line above.*
+- **Verdict: FAIL.** SG3 is **NOT MET (F4)**. `G6` and `NFR-008` are **UNRESOLVED, not read**: the window ended on the miss, by PREREG § 5. **`ABC-298` does not merge.** BA/PM closes it as dropped, and with the owner's question-2 yes, V3 closes. Nothing is owed to UAT. QE makes no board move.
+- **Notes (sealed, `.grugops/context/qe-ABC-298/`):**
+  - hold-1 readings: `…125e3e29`;
+  - `failed-attempt` `…77448919`;
+  - verdict (decision): `…77b0a7e8`.
+  
+  Raw files are in `raw/out/stage-b/`: `checks.txt`, `sg3/`, `session.txt`, `ps.txt`. Paths are written as placeholders, and foreign PIDs are masked.
+- **§ 1, outside the lock: all checks hold.**
+  - Scripts: 22 / 22 hashes equal.
+  - `main` is `bfdff004`, `src/` `bba42fb7`. B is `2893bdde` (`bba42fb7`), and H is `dd8e2404` (`b8d055c9`). They differ outside `src/` in `.grugops/` only.
+  - F8: no evaluation, quiescence or SEE change.
+  - Node v26.12.1.
+  - The trees, `g6/` and the arms B, H and H2 are built under `<scratch>/<home>/<repo>/qe-abc298b/`. H and H2 are `diff -r` empty.
+- **Hold 1, SG3** (S2, D3-V2, unpinned). Head ÷ base, unrounded:
+
+  | board | H ÷ B | note |
+  |---|---|---|
+  | kiwipete | **0.962736** | |
+  | position-6 | **0.973838** | its one re-run, owed for H's 5.51 % spread; the main reading was 0.951913 |
+  | start | **0.959488** | |
+
+  - Every board is valid: spread ≤ 5 %, agreement held, 5 / 5 admitted with 0 discarded, unshared, and Tctl medians about 74 °C.
+  - None of the 15 graded pairs reaches 1.00.
+  - (v1) held, with no STOP-identity. On kiwipete, base reached depth 10 in 4 of 5 runs, and head reached 9 in all 5.
+- **Holds 2 (`G6`) and 3 (`NFR-008`): not run** (§ 5: "NOT MET ends the window"). No figure of either exists.
+- **Lock:** one hold, 08:15:35Z–08:18:43Z, **3 min 08 s**, with nothing else in it. Stage A's six holds were 52 min 57 s.
+- **Gaps:**
+  - QE-298-m (LOW, stage A) stays open, and is moot without a merge.
+  - INFO QE-298-q: `origin/main` is a stale 2026-11-05 push.
+  - INFO QE-298-r: one idle containerised node process names vitest in its arguments. No sealed detector counts it.
+  - INFO QE-298-s: kiwipete's foreign cores peaked at 0.796, under the 0.8 line. The monitoring tool ran at 21–35 %.
+- **Host (by class and count):** load1 0.41–1.31, one monitoring tool, 0 foreign vitest by the sealed detectors, and 0 `cutechess-cli`.

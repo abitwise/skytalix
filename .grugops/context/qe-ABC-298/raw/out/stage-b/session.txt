@@ -1,0 +1,3 @@
+sg3 hold-start 2026-11-09T08:15:35Z load1 0.66
+sg3 sg3 exit=0 2026-11-09T08:18:43Z load1 1.14
+sg3 hold-end 2026-11-09T08:18:43Z load1 1.14

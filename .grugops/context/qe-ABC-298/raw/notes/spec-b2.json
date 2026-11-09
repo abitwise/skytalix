@@ -1,0 +1,6 @@
+{
+  "refs": ["qe-ABC-298", "ABC-298", "ADR-0077", "ADR-0077 d7", "ADR-0077 F4", "ADR-0077 d12", "SG3", "V3", "qe-ABC-298/20261109T082142Z-qe-e2e-observation-125e3e29", "qe-ABC-298/20261109T001340Z-qe-e2e-decision-c981798f", "arch-ABC-298-probe", "400c1b9e", "b8d055c9"],
+  "notes": [
+    { "kind": "failed-attempt", "confidence": "high on the miss (valid S2 read on all three boards, none of 15 graded pairs >= 1.00); the cause is judgement, UNKNOWN - verify", "bodyFile": "stage-b-failed.md" }
+  ]
+}
