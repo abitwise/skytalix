@@ -1,3 +1,4 @@
+_Updated: 2026-11-09T21:38:06Z — owner asks for one ticket to re-test the dropped work in groups (…21:37:44Z); qe-group-strategy writes the test strategy (records only, nothing run); BA/PM cuts the ticket after._
 _Updated: 2026-11-09T20:33:17Z — **ABC-309 merged; project complete.** No open tickets. Nothing pushed; the push is the owner's._
 _Updated: 2026-11-09T19:57:19Z — owner's art committed (18bb1a93); ABC-309 DoR 10/10 → In Development, se-ABC-309 (docs only)._
 _Updated: 2026-11-09T16:15:16Z — bapm-close-1109b merged: **EPIC-011 closed** (G1 NOT MET, R2 1 902.5 ± 49.1, G7 waived), ABC-306 dropped. Only ABC-309 (README) remains; waits on the owner's art file._
