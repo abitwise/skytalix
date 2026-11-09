@@ -1,3 +1,4 @@
+_Updated: 2026-11-09T09:18:51Z — **owner closes the project** (…a9c03e07): 15 tickets won't-do, EPIC-011 closes after R2; ABC-295 Ready, qe-ABC-295 PREREG; bapm- and arch-close-1109 records; README ticket last._
 _Updated: 2026-11-09T08:23:08Z — **ABC-298 NOT MET** (SG3 0.963 / 0.974 / 0.959, all valid; QE …77b0a7e8); V3 ends; records only to main; host released._
 _Updated: 2026-11-09T00:14:55Z — qe-ABC-298 stage A done, all rows met, timing PREREG sealed; stage B waits on the owner's held host._
 _Updated: 2026-11-08T23:11:29Z — se-ABC-298-repoint done, G4 byte-equal; ABC-298 In Review; qe-ABC-298 stage A running._
@@ -1552,7 +1553,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 - [ABC-293] ⏸ held under the owner's stop (…5bc9e701), no build without his word. E6: threats and tempo. A piece attacked by an enemy pawn and a hanging piece (attacked and not defended) cost  (Backlog; cut by bapm-epic011-areas 181da9e3; hold and owed ADR on the page)
 - [ABC-308] E5c outposts, split from ABC-292 by ADR-0076 d1. Held, no build; reopens on a third pull that names it, or a case of its own (S–M, P3, DoR 9/10; bapm-ABC-292-accept).
 - [ABC-294] E7b: endgame knowledge beyond E7a. Rook-pawn and wrong-coloured-bishop draws and named rook-ending rules scale (Backlog; cut by bapm-epic011-areas 181da9e3; hold and owed ADR on the page)
-- [ABC-295] R2: the second EPIC-011 milestone reading, on main at Phase 4's close: 200 games at 100 ms a move against Stoc (Backlog; cut by bapm-epic011-areas 181da9e3; hold and owed ADR on the page)
+- ~~[ABC-295]~~ → Ready 2026-11-09 (Phase 4 closed by the owner's project close, …a9c03e07).
 - [ABC-296] X1: a check extension at every depth. A move that gives check is searched one ply deeper wherever it occurs in (Backlog; cut by bapm-epic011-areas 181da9e3; hold and owed ADR on the page)
 - [ABC-297] X2: singular extension and internal iterative reduction (IIR). A hash move that a reduced-depth exclusion sear (Backlog; cut by bapm-epic011-areas 181da9e3; hold and owed ADR on the page)
 - ~~[ABC-298]~~ → In Design. V3: staged move generation. At a full-width node the hash move is tried before any move is generated, and capt (Backlog; cut by bapm-epic011-areas 181da9e3; hold and owed ADR on the page)
@@ -1588,7 +1589,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## Ready (WIP 0/8)
+## Ready (WIP 1/8)
+- [ABC-295] R2: 200 games at 100 ms vs Stockfish 19 at the band-rule E, R1's shape (DoR 10/10, S, P2). qe-ABC-295 seals its PREREG; games on an owner-held host (W asked at the read).
 - ~~[ABC-301]~~ → In Development. E2s second pull: one bounded fit on main with E4a's structure; KD/FP freed, U held 0; B-T0–B-T8 (B-T8 two r reads at 0.5 s, ~5 h, owner-approved). Scope 0 preconditions first (after NFR-008 headroom ruling).
 - ~~[ABC-271]~~ → In Development E4a structure only at 0 (ADR-0070 ACCEPTED form (a); DoR 10/10, S, P3). QE freeze first (qe-ABC-271-freeze), then se-ABC-271. No games.
 
