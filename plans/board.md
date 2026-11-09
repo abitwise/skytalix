@@ -1,3 +1,4 @@
+_Updated: 2026-11-09T22:47:19Z — ABC-311 merged (projected level ratings in README; QE PASS_WITH_GAPS …cb74c9fc). No open tickets._
 _Updated: 2026-11-09T22:41:19Z — owner: projected level ratings into the README; ABC-311 cut by note …03f8f6f9 (docs only); se-ABC-311 building, QE checks after._
 _Updated: 2026-11-09T22:39:26Z — ABC-310 dropped by the owner (too much work for the likely gain); no open tickets._
 _Updated: 2026-11-09T21:57:27Z — ABC-310 cut (group re-test, held, DoR 8/10; strategy …720e934d); owner Q1–Q5 open; nothing running._
@@ -1705,6 +1706,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready to Release (WIP 0/4)
 
 ## Done (WIP unlimited)
+- [ABC-311] README: projected level ratings (unmeasured, labelled). Done 2026-11-09, QE PASS_WITH_GAPS …cb74c9fc; low gaps G1–G4 not taken.
 - [ABC-310] Group re-test: dropped 2026-11-09 by the owner before any work; nothing run.
 - [ABC-309] README: owner's art, GUI setup for Arena / Cute Chess / BanksiaGUI, three UCI options, R2 1 902.5 ± 49.1. Done 2026-11-09, QE PASS_WITH_GAPS …d2329c61. Last ticket.
 - [ABC-306] E5d mobility: dropped 2026-11-09, project closed (owner …810191ff).
