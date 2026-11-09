@@ -1,3 +1,4 @@
+_Updated: 2026-11-09T16:07:37Z — **R2 VALID**: 63.0 % at E 1 810, X = 1 902.5 ± 49.1 (+96 on R1); host released; bapm-close-1109b (R2-A4, EPIC-011 close, G7 waived, ABC-306 dropped, ABC-309 lines) next._
 _Updated: 2026-11-09T09:29:11Z — bapm-close-1109 merged: 15 tickets dropped (project closed), ABC-298 NOT MET, EPIC-011 close lines, ABC-309 cut (last); qe-ABC-295 PREREG sealed (…4151e128), games wait on the owner's held host._
 _Updated: 2026-11-09T09:24:52Z — arch-close-1109 merged: ADR-0077 not in force (F4), ADR-0058 and an ADR-0025 amendment not delivered, ADR-0060 and ADR-0062 withdrawn, ADR-0056 Phase 4 closed; bapm-close-1109 and qe-ABC-295 running._
 _Updated: 2026-11-09T09:18:51Z — **owner closes the project** (…a9c03e07): 15 tickets won't-do, EPIC-011 closes after R2; ABC-295 Ready, qe-ABC-295 PREREG; bapm- and arch-close-1109 records; README ticket last._
@@ -1592,8 +1593,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 
-## Ready (WIP 1/8)
-- [ABC-295] R2: 200 games at 100 ms vs Stockfish 19 at the band-rule E, R1's shape (DoR 10/10, S, P2). qe-ABC-295 seals its PREREG; games on an owner-held host (W asked at the read).
+## Ready (WIP 0/8)
 - ~~[ABC-301]~~ → In Development. E2s second pull: one bounded fit on main with E4a's structure; KD/FP freed, U held 0; B-T0–B-T8 (B-T8 two r reads at 0.5 s, ~5 h, owner-approved). Scope 0 preconditions first (after NFR-008 headroom ruling).
 - ~~[ABC-271]~~ → In Development E4a structure only at 0 (ADR-0070 ACCEPTED form (a); DoR 10/10, S, P3). QE freeze first (qe-ABC-271-freeze), then se-ABC-271. No games.
 
@@ -1699,6 +1699,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready to Release (WIP 0/4)
 
 ## Done (WIP unlimited)
+- [ABC-295] R2 read 2026-11-09: 122/8/70, 63.0 % at E 1 810, X = 1 902.5 ± 49.1 (QE …e11c410e); milestone none; R2-A4 to BA/PM.
 - [ABC-298] V3 hash-first (ADR-0077): closed NOT MET 2026-11-09. Identity held; SG3 0.963 / 0.974 / 0.959 vs ≥ 1.03 (qe-ABC-298 …77b0a7e8); F4 ends V3, no wider form. Code stays on grugops/ABC-298, unmerged.
 - [ABC-292] E5 bishop pair and rook files: closed NOT MET 2026-11-08 at its probe (ADR-0076 d13 rule 2, PR7 G1 53/58 vs 54/58), not built, not re-played. The owner's stop fired (…5bc9e701).
 - [ABC-289] Q2 delta pruning: closed NOT MET 2026-11-08 on OQ-0074-2 (a) (…23d30c72). Branch grugops/ABC-289 kept, unmerged.
