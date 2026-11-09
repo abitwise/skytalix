@@ -1,3 +1,4 @@
+_Updated: 2026-11-09T20:33:17Z — **ABC-309 merged; project complete.** No open tickets. Nothing pushed; the push is the owner's._
 _Updated: 2026-11-09T19:57:19Z — owner's art committed (18bb1a93); ABC-309 DoR 10/10 → In Development, se-ABC-309 (docs only)._
 _Updated: 2026-11-09T16:15:16Z — bapm-close-1109b merged: **EPIC-011 closed** (G1 NOT MET, R2 1 902.5 ± 49.1, G7 waived), ABC-306 dropped. Only ABC-309 (README) remains; waits on the owner's art file._
 _Updated: 2026-11-09T16:07:37Z — **R2 VALID**: 63.0 % at E 1 810, X = 1 902.5 ± 49.1 (+96 on R1); host released; bapm-close-1109b (R2-A4, EPIC-011 close, G7 waived, ABC-306 dropped, ABC-309 lines) next._
@@ -1461,8 +1462,7 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   clean append target. Roles append a one-line ticket row under the matching column as work
   moves, e.g. (this is a comment, NOT a live row — the generic `ABC-` prefix shows format only):
 
-    ## In Development (WIP 1/3)
-- [ABC-309] README: owner's art (committed), GUI setup for Arena, Cute Chess, BanksiaGUI, three UCI options, R2 1 902.5 ± 49.1. DoR 10/10; se-ABC-309 building. Last ticket.
+    ## In Development (WIP 0/3)
 - [ABC-301] E2s second pull, scopes 1–4 (one bounded fit). se-ABC-301-fit running.
 - ~~[ABC-283]~~ → Blocked. The O1h+O3s+S1 bundle (ABC-233 history, ABC-234 SEE ordering, ABC-236 root aspiration) on one branch; one read of 100 games at 100 ms, GAIN ≥ 50.0 (owner's word, …4c4cb03d). se-ABC-283 running; rulings …3851bf43.
     - [ABC-014] Asset allocation chart  (owner: Software Engineer, since: 2026-06-01)
@@ -1701,6 +1701,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready to Release (WIP 0/4)
 
 ## Done (WIP unlimited)
+- [ABC-309] README: owner's art, GUI setup for Arena / Cute Chess / BanksiaGUI, three UCI options, R2 1 902.5 ± 49.1. Done 2026-11-09, QE PASS_WITH_GAPS …d2329c61. Last ticket.
 - [ABC-306] E5d mobility: dropped 2026-11-09, project closed (owner …810191ff).
 - [ABC-295] R2 read 2026-11-09: 122/8/70, 63.0 % at E 1 810, X = 1 902.5 ± 49.1 (QE …e11c410e); milestone none; R2-A4 to BA/PM.
 - [ABC-298] V3 hash-first (ADR-0077): closed NOT MET 2026-11-09. Identity held; SG3 0.963 / 0.974 / 0.959 vs ≥ 1.03 (qe-ABC-298 …77b0a7e8); F4 ends V3, no wider form. Code stays on grugops/ABC-298, unmerged.

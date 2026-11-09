@@ -1,8 +1,8 @@
 ---
 id: ABC-309
 title: "README: the owner's ASCII art and step-by-step chess GUI setup"
-status: backlog
-column: Backlog
+status: done
+column: Done
 size: S
 priority: P2
 epic: "— (the owner's ruling orch-2026-10-30a …a9c03e07 item 3; the README's first ticket, ABC-216, sat in EPIC-006, done; EPIC-011 closes after R2)"
@@ -10,6 +10,8 @@ feature: —
 ---
 
 # ABC-309: README, the owner's ASCII art and step-by-step chess GUI setup
+
+> *2026-11-09T20:33:17Z, Orchestrator: Done. QE PASS_WITH_GAPS …d2329c61 signs UAT (docs only, no src/ change). Merged into main. Low gaps carried: the Arena, BanksiaGUI and Windows routes are untested and marked so in the README; the macOS Settings label is unverified.*
 
 > **2026-11-09, by BA/PM: R2's figure is in; Q1 and Q2 answered; DoR 9/10, Backlog, waiting on one input, the art** (task `bapm-close-1109b`,
 > records only, at `main` `638ac8a5`; nothing run). Sources: QE `qe-ABC-295` verdict `…e11c410e`; the owner's answer 5 (`orch-2026-10-30a`
