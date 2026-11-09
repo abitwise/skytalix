@@ -1,3 +1,4 @@
+_Updated: 2026-11-09T00:14:55Z — qe-ABC-298 stage A done, all rows met, timing PREREG sealed; stage B waits on the owner's held host._
 _Updated: 2026-11-08T23:11:29Z — se-ABC-298-repoint done, G4 byte-equal; ABC-298 In Review; qe-ABC-298 stage A running._
 _Updated: 2026-11-08T22:12:53Z — arch-ABC-298-stop merged: three source rows re-pointed, not F2; se-ABC-298-repoint runs the re-reads and G4._
 _Updated: 2026-11-08T22:04:12Z — se-ABC-298 STOP: values identical, three source-shape rows red; not merged; arch-ABC-298-stop rules._
