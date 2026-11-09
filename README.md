@@ -49,7 +49,7 @@ Level 1 is the weakest, 7 the strongest, and 5 is the default. The times are app
 
 | Level | 1 | 2 | 3 | 4 | 5 | 6 | 7 |
 |---|---|---|---|---|---|---|---|
-| Time per move | 0.1 s | 0.2 s | 0.3 s | 1 s | 3 s | 5 s | 30 s |
+| Time per move | 0.1 s | 0.2 s | 0.3 s | 1 s | 4 s | 5 s | 30 s |
 
 ## Strength
 
@@ -86,31 +86,43 @@ The engine has three UCI options:
 
 ### Arena
 
-These steps follow Arena 3.5.1 on Windows.
+These steps are written for Arena 3.5.1 on Windows. Arena's menu names are not given here,
+because they have not been checked against Arena itself.
 
 1. In a terminal, in the clone, run `npm install` and then `npm run build`. This writes
    `dist\uci.js`.
-2. Choose **Engines > Install New Engine...** and select `node.exe` from your Node.js
-   folder. If Arena asks for the engine type, choose UCI. Arena takes the program here and its
-   argument in a separate field: choose **Engines > Manage...**, select the new engine, and on
-   the **Details** tab set **Command Line Parameters** to `<clone>\dist\uci.js`. Name the
-   engine `skytalix`.
-3. Load skytalix with **Engines > Load Engine...**, then choose **Engines > Configure** to set
-   `Skill Level`, `OwnBook` and `TimeMode`. The table above lists their values.
-4. Start a game with **File > New** and make your move. skytalix plays the other side.
+2. Open Arena's engine manager and add a new UCI engine. Set its program to `node.exe` from
+   your Node.js folder and its command-line parameter to `<clone>\dist\uci.js`. Name the
+   engine `skytalix`. If there is no field for a parameter, set the program to the
+   `skytalix.cmd` file of Cute Chess's Windows route instead (untested).
+3. Make skytalix the active engine and open its UCI options to set `Skill Level`, `OwnBook`
+   and `TimeMode`. The table above lists their values.
+4. Start a new game with skytalix as the opponent, and make your move.
 
 ### Cute Chess
 
-These steps follow Cute Chess 1.5.1 on Linux.
+These steps follow Cute Chess 1.5.1 on Linux. Step 2's route, a script run through its first
+line, is for Linux and macOS; it was tested on Linux. Step 2 ends with a route for Windows.
 
 1. In the clone, run `npm install`, `npm run build` and then `chmod +x dist/uci.js`. The
-   build writes `dist/uci.js`.
+   build writes `dist/uci.js`. On Windows, skip `chmod`.
 2. Choose **Tools > Settings**, open the **Engines** tab and click **Add**. Cute Chess's
    **Command** field takes a program and no separate argument, so `node <clone>/dist/uci.js`
    there does not start. Set **Command** to `<clone>/dist/uci.js` instead: its first line,
    `#!/usr/bin/env node`, runs it with `node`. This needs `node` on the `PATH` Cute Chess
    sees, so start Cute Chess from a shell where `node --version` works. Set **Name** to
    `skytalix` and **Protocol** to `uci`.
+
+   **On Windows** that first line does not run the script. Instead, save a file named
+   `skytalix.cmd` in the clone with this one line, and set **Command** to
+   `<clone>\skytalix.cmd`:
+
+   ```bat
+   @node "%~dp0dist\uci.js"
+   ```
+
+   This needs `node --version` to work in a new Command Prompt. **This Windows route is
+   untested.**
 3. On the **Advanced** tab, click **Detect**. `Skill Level`, `OwnBook` and `TimeMode` appear
    there and can be set. The table above lists their values. Click **OK**.
 4. Choose **Game > New...**. Set one side to **Human** and the other to **CPU** with
@@ -118,17 +130,18 @@ These steps follow Cute Chess 1.5.1 on Linux.
 
 ### BanksiaGUI
 
-These steps follow BanksiaGUI 0.58 on Windows.
+These steps are written for BanksiaGUI 0.58 on Windows. BanksiaGUI's menu names are not given
+here, because they have not been checked against BanksiaGUI itself.
 
 1. In a terminal, in the clone, run `npm install` and then `npm run build`. This writes
    `dist\uci.js`.
-2. Open the engine list with **Engines > Engine Manager** and click **Add**. Set the
-   command to `node.exe` from your Node.js folder and the **Arguments** field to
-   `<clone>\dist\uci.js`. Set the protocol to UCI and name the engine `skytalix`.
-3. In the same window, select skytalix and open its options to set `Skill Level`, `OwnBook`
-   and `TimeMode`. The table above lists their values.
-4. Start a new game with **File > New Game**, choose skytalix as the opponent, and make your
-   move.
+2. Open BanksiaGUI's engine manager and add a new engine. Set its program to `node.exe` from
+   your Node.js folder and its argument to `<clone>\dist\uci.js`. Set the protocol to UCI and
+   name the engine `skytalix`. If there is no field for an argument, set the program to the
+   `skytalix.cmd` file of Cute Chess's Windows route instead (untested).
+3. Open skytalix's engine options to set `Skill Level`, `OwnBook` and `TimeMode`. The table
+   above lists their values.
+4. Start a new game with skytalix as the opponent, and make your move.
 
 ## Development
 
