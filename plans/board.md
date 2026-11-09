@@ -1,3 +1,4 @@
+_Updated: 2026-11-09T09:24:52Z — arch-close-1109 merged: ADR-0077 not in force (F4), ADR-0058 and an ADR-0025 amendment not delivered, ADR-0060 and ADR-0062 withdrawn, ADR-0056 Phase 4 closed; bapm-close-1109 and qe-ABC-295 running._
 _Updated: 2026-11-09T09:18:51Z — **owner closes the project** (…a9c03e07): 15 tickets won't-do, EPIC-011 closes after R2; ABC-295 Ready, qe-ABC-295 PREREG; bapm- and arch-close-1109 records; README ticket last._
 _Updated: 2026-11-09T08:23:08Z — **ABC-298 NOT MET** (SG3 0.963 / 0.974 / 0.959, all valid; QE …77b0a7e8); V3 ends; records only to main; host released._
 _Updated: 2026-11-09T00:14:55Z — qe-ABC-298 stage A done, all rows met, timing PREREG sealed; stage B waits on the owner's held host._
