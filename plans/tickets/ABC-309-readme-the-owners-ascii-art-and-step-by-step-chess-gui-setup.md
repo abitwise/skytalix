@@ -257,3 +257,21 @@ Re-checks at the fix-2 tip: A1 no path under `src/`; A2 `cmp` exits 0; A5's live
 stay, `two options` counts 0; A6's three scans count 0 and the one absolute URL is the clone URL; A7's links are tracked, `npm run lint`
 (148 files) and `npm run build` exit 0; A8 `FIGlet` counts 0 and § Licence differs from `efd2230b` by the credit line and its blank line
 only. Not run: any GUI window, and any Windows or macOS host.
+
+**Fix 3, 2026-11-09 (task `se-ABC-309-fix3`, on `grugops/ABC-309` from `467a454f`), per QE's verdict `qe-ABC-309` `…f0e46abe` (FAIL on
+A4 only) and its observation `…6552f96c`.** `README.md` only, plus this block and the task's note. Fix 2's item 3 is withdrawn: it set a
+floor under level 5 at 4 s, off R2's scale.
+1. **A4:** § Strength's last sentence is now exactly "Level 5 normally has 4 s a move, not 100 ms. Its strength at 4 s was not measured."
+   It names the gap and gives no bound.
+2. **Time margin:** the few-ms overshoot advice moves out of the `simple-tournament` bullet into one sentence after the list, for every
+   `TimeMode`: "In every `TimeMode` a move can run a few milliseconds over its time, so give the engine a small time margin in the GUI."
+3. **Intro:** Cute Chess runs the script itself, "or on Windows a `skytalix.cmd` file that runs it".
+4. **`where node`:** the Arena and BanksiaGUI steps add "(use the first line it prints)".
+
+Re-checks at the fix-3 working tree: A1 `git diff --name-only efd2230b | grep -c '^src/'` prints 0; A2 `test -s` holds, line 1 is
+` ```text `, the `cmp` command exits 0; A4 every number in § Strength (1902.5, 49.1, Stockfish 19, `UCI_Elo` 1810, level 5, 100 ms, 200
+games, 100 openings, 63.0 %, 92.5) is in `…e11c410e`, the only other numbers are 40/15 (the disclaimer) and 4 s (level 5's time, as in
+§ Levels), and no other Elo figure or 4 s strength claim is in the file; A6 personal-path, IPv4 and e-mail scans count 0, the one absolute
+URL is the clone URL; A7 `AGENTS.md`, `LICENSE`, `NOTICE` are tracked, `npm run lint` (148 files) and `npm run build` exit 0; A8
+`FIGlet` counts 0 and § Licence differs from `efd2230b` by the credit line and its blank line only. Not run: any GUI window, and any
+Windows or macOS host.
