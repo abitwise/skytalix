@@ -57,9 +57,8 @@ One measured figure, on one scale: X = 1902.5 ± 49.1. skytalix at level 5 playe
 one at a time, from 100 openings with both colours, against Stockfish 19 with
 `UCI_LimitStrength` on and `UCI_Elo` 1810. Each side had 100 ms a move. skytalix scored
 63.0 %, which is +92.5 ± 49.1 Elo against 1810, so X = 1810 + 92.5. The figure holds on that
-scale only. It is not a 40/15 rating and not a rating-list figure. That 100 ms a move is
-much shorter than level 5's normal 4 s, so in normal play the default level should be at least
-that strong, but that was not measured.
+scale only. It is not a 40/15 rating and not a rating-list figure. Level 5 normally has 4 s
+a move, not 100 ms. Its strength at 4 s was not measured.
 
 ## Saved games
 
@@ -70,8 +69,8 @@ the clone. Nothing is saved when you `quit` or when input ends.
 
 skytalix speaks UCI. The engine is `dist/uci.js`, a script that `node` runs. Arena and
 BanksiaGUI are set to run `node` with the full path to `dist/uci.js` as its argument. Cute Chess
-takes no argument, so it is set to run the script itself. Below, `<clone>` stands for the full
-path of your clone.
+takes no argument, so it is set to run the script itself, or on Windows a `skytalix.cmd` file
+that runs it. Below, `<clone>` stands for the full path of your clone.
 
 The engine has three UCI options:
 
@@ -83,8 +82,11 @@ The engine has three UCI options:
 
 - `level` plays at most the `Skill Level`'s time per move.
 - `simple-tournament` searches a fixed 22 s a move and aims to stay within the clock it is
-  given. It can run over by a few milliseconds, so give it a small time margin in the GUI.
+  given.
 - `uci-clock-mode` spends the clock the GUI gives it, at most 59.5 s a move.
+
+In every `TimeMode` a move can run a few milliseconds over its time, so give the engine a small
+time margin in the GUI.
 
 `Skill Level` is read only while `TimeMode` is `level`.
 
@@ -96,10 +98,10 @@ Arena's menu names are not given here, because they have not been checked agains
 1. In a terminal, in the clone, run `npm install` and then `npm run build`. This writes
    `dist\uci.js`.
 2. Open Arena's engine manager and add a new UCI engine. Set its program to the full path of
-   `node.exe`, which `where node` prints in a Command Prompt, and its command-line parameter
-   to `<clone>\dist\uci.js`. Name the engine `skytalix`. If there is no field for a
-   parameter, save a file named `skytalix.cmd` in the clone with the one line
-   `@node "%~dp0dist\uci.js"`, and set the program to `<clone>\skytalix.cmd` instead.
+   `node.exe`, which `where node` prints in a Command Prompt (use the first line it prints),
+   and its command-line parameter to `<clone>\dist\uci.js`. Name the engine `skytalix`. If
+   there is no field for a parameter, save a file named `skytalix.cmd` in the clone with the
+   one line `@node "%~dp0dist\uci.js"`, and set the program to `<clone>\skytalix.cmd` instead.
 3. Make skytalix the active engine and open its UCI options to set `Skill Level`, `OwnBook`
    and `TimeMode`. The table above lists their values.
 4. Start a new game with skytalix as the opponent, and make your move.
@@ -142,10 +144,11 @@ against BanksiaGUI itself.
 1. In a terminal, in the clone, run `npm install` and then `npm run build`. This writes
    `dist\uci.js`.
 2. Open BanksiaGUI's engine manager and add a new engine. Set its program to the full path of
-   `node.exe`, which `where node` prints in a Command Prompt, and its argument to
-   `<clone>\dist\uci.js`. Set the protocol to UCI and name the engine `skytalix`. If there is
-   no field for an argument, save a file named `skytalix.cmd` in the clone with the one line
-   `@node "%~dp0dist\uci.js"`, and set the program to `<clone>\skytalix.cmd` instead.
+   `node.exe`, which `where node` prints in a Command Prompt (use the first line it prints),
+   and its argument to `<clone>\dist\uci.js`. Set the protocol to UCI and name the engine
+   `skytalix`. If there is no field for an argument, save a file named `skytalix.cmd` in the
+   clone with the one line `@node "%~dp0dist\uci.js"`, and set the program to
+   `<clone>\skytalix.cmd` instead.
 3. Open skytalix's engine options to set `Skill Level`, `OwnBook` and `TimeMode`. The table
    above lists their values.
 4. Start a new game with skytalix as the opponent, and make your move.
