@@ -1,3 +1,4 @@
+_Updated: 2026-11-09T16:15:16Z — bapm-close-1109b merged: **EPIC-011 closed** (G1 NOT MET, R2 1 902.5 ± 49.1, G7 waived), ABC-306 dropped. Only ABC-309 (README) remains; waits on the owner's art file._
 _Updated: 2026-11-09T16:07:37Z — **R2 VALID**: 63.0 % at E 1 810, X = 1 902.5 ± 49.1 (+96 on R1); host released; bapm-close-1109b (R2-A4, EPIC-011 close, G7 waived, ABC-306 dropped, ABC-309 lines) next._
 _Updated: 2026-11-09T09:29:11Z — bapm-close-1109 merged: 15 tickets dropped (project closed), ABC-298 NOT MET, EPIC-011 close lines, ABC-309 cut (last); qe-ABC-295 PREREG sealed (…4151e128), games wait on the owner's held host._
 _Updated: 2026-11-09T09:24:52Z — arch-close-1109 merged: ADR-0077 not in force (F4), ADR-0058 and an ADR-0025 amendment not delivered, ADR-0060 and ADR-0062 withdrawn, ADR-0056 Phase 4 closed; bapm-close-1109 and qe-ABC-295 running._
@@ -1564,7 +1565,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 - ~~[ABC-299]~~ → Done 2026-11-09, dropped: project closed by the owner (…a9c03e07; bapm-close-1109). R3: the third EPIC-011 milestone reading, on main after Phase 5: 200 games at 100 ms a move against Stockfish  (Backlog
 - ~~[ABC-282]~~ → Ready. W1 (was size M, P2, DoR 9/10; ADR owed → arch-ABC-282; builds after ABC-283, both edit the deepening loop; must land before the first 40/15 reading). Cut by bapm-W1-bundle-cut 9be6befd.
 - ~~[ABC-271]~~ → Done (stale line; page status done, delivered with ABC-283). **2026-11-04: design done (arch-ABC-271 df6a873f): ADR-0070 PROPOSED. Relation 
-- [EPIC-011] skytalix climbs toward 3 000 Elo, read at 40/15, on a classical measured path (owner: BA/PM, size: XL, priority: P2, since 2026-11-01; ADR-0056 accepted in direction; ADR-0055 O1; starts after EPIC-009 and EPIC-010 close; phases 0–5; milestones 2 200…3 000 (proposed); open owner calls Q-3K-2, Q-3K-4, Q-3K-6, Q-3K-7, Q-3K-8, rest of Q-3K-1) **2026-11-01: STARTED (EPIC-010 closed). Phase 0 done (ABC-255, ABC-262; ABC-256 dropped). Phase 1 first: ABC-238 (T1) then ABC-237 (T2) — design owed: the ADR revising ABC-081 A1 and the ADR-0025 amendment → `arch-epic011-phase1`. Threads (ADR-0057 PROPOSED) wait owner OQ-1.**
+- ~~[EPIC-011]~~ → Done 2026-11-09, closed: G1 NOT MET, R2 X = 1 902.5 ± 49.1, G7 waived (owner …810191ff; bapm-close-1109b). skytalix climbs toward 3 000 Elo, read at 40/15, on a classical measured path (owner: BA/PM, size
 - ~~[ABC-257]~~ → Done 2026-11-09, dropped: project closed by the owner (…a9c03e07; bapm-close-1109). T3: the TT is kept across the moves of one game, re-tried after deeper cutoffs and depth-preferred replacement (superse
 - ~~[ABC-258]~~ → Done 2026-11-09, dropped: project closed by the owner (…a9c03e07; bapm-close-1109). T4: a larger TT, 8 MiB inside NFR-009 (more only on the owner's word) (EPIC-011 Phase 1; size: S, priority: P3, DoR 8/1
 - ~~[ABC-233]~~ → Done 2026-11-04, delivered by ABC-283 (58e90d07). History heuristic for quiet moves, cleared per search (size: M, priority: P3, DoR 9/10; milestone 2; waits ADR; after ABC-240 (shared orderMoves)) **→ EPIC-011 2026-11-01 (bapm-epic011-dedupe; id kept)**
@@ -1699,6 +1700,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready to Release (WIP 0/4)
 
 ## Done (WIP unlimited)
+- [ABC-306] E5d mobility: dropped 2026-11-09, project closed (owner …810191ff).
 - [ABC-295] R2 read 2026-11-09: 122/8/70, 63.0 % at E 1 810, X = 1 902.5 ± 49.1 (QE …e11c410e); milestone none; R2-A4 to BA/PM.
 - [ABC-298] V3 hash-first (ADR-0077): closed NOT MET 2026-11-09. Identity held; SG3 0.963 / 0.974 / 0.959 vs ≥ 1.03 (qe-ABC-298 …77b0a7e8); F4 ends V3, no wider form. Code stays on grugops/ABC-298, unmerged.
 - [ABC-292] E5 bishop pair and rook files: closed NOT MET 2026-11-08 at its probe (ADR-0076 d13 rule 2, PR7 G1 53/58 vs 54/58), not built, not re-played. The owner's stop fired (…5bc9e701).
