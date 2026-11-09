@@ -1,8 +1,9 @@
 ---
 id: ABC-295
 title: "R2: the second EPIC-011 milestone reading, on main at Phase 4's close: 200 games at 100 ms a move against Stockfish 19 UCI_LimitStrength at the band-rule E, in R1's shape, reported as X ± Y on that scale with the highest milestone met named (QE reading, records only; no code)"
-status: ready
-column: Ready
+status: done
+column: Done
+closed: "2026-11-09, merged to local main at 06f4e0be (from grugops/qe-ABC-295; records only, no code); QE qe-ABC-295 reading …e11c410e VALID: 122 / 8 / 70, 126.0 / 200 (63.0 %) against Stockfish 19 at E 1 810, Elo +92.5 ± 49.1, X = 1 902.5 ± 49.1 (cluster ± 42.3), highest milestone none; R2-A1..A3 MET by QE, R2-A4 met by bapm-close-1109b (EPIC-011 R2 row and G2). Front matter by bapm-close-1109b"
 size: S
 priority: P2
 epic: EPIC-011
@@ -11,6 +12,28 @@ adr: "ADR-0056 D5 / D6 item 7 (R milestone readings) and C4's 100 ms outside-rea
 ---
 
 # ABC-295: R2, the milestone reading at Phase 4's close
+
+> **CLOSED 2026-11-09, DONE, by BA/PM** (task `bapm-close-1109b`, records only, at `main` `638ac8a5`; nothing run).
+> **Merged to local `main` at `06f4e0be`** from `grugops/qe-ABC-295` (records only). Source: QE `qe-ABC-295` verdict `…e11c410e` and
+> readings `…1245d022` (PREREG `…4151e128`); the owner's held host and pre-approved step (`orch-2026-10-30a` `…810191ff` items 1–2).
+>
+> **Result: VALID, read once.** On `main` `e069b49a` (`src/` `bba42fb7`), host ALONE (0 foreign processes in 213 samples):
+>
+> | row | bar | read | result |
+> |---|---|---|---|
+> | R2-A1 | 200 / 200, 0 faults, 0 time losses | 200 / 200; faults 0; 0 time losses either side; depth guard 0 of 10 608 | MET |
+> | R2-A2 | every scope-3 figure; the command as run | W / D / L **122 / 8 / 70**, **126.0 / 200 (63.0 %)**, Elo **+92.5 ± 49.1** against E 1 810, **X = 1 902.5 ± 49.1** (opening-cluster ± 42.3), `G11` reported; highest milestone **none** (E < 2 200); both tool variables set, paths redacted; `control:` line byte-equal (`ABC-275` A6) | MET |
+> | R2-A3 | ≤ 1 h or asked | 0.60 h measured (estimate 0.4–0.9 h); band rule: E 1 810 confirmed, no step, no second run; the owner's pre-approved step not used | MET |
+> | R2-A4 | `EPIC-011` § Phases R2 row and G2 cite the figure | written by this hop (`bapm-close-1109b`) | MET |
+>
+> - **R2 against R1 (reported, not graded):** X₂ − X₁ = 1 902.5 − 1 806.5 = **+96.0**; about ± 68 combined, so about +28 to +164. Each is one
+>   200-game sample on the same E, control, openings and pins. Its own scale: never compared with the 4 s ≈ 2 074, never pooled into S′.
+> - **One move-cap draw, as QE gives it:** round 24 (opening 24), Stockfish White and `skytalix` Black, adjudicated a draw at 400 plies by
+>   `-maxmoves 200`, with Stockfish showing `+M3` at the last move. It gives `skytalix` at most +0.5: at 125.5 / 200 the score would be
+>   62.75 %, about +91 Elo, with the same band outcome. R2-A1 does not count it as a fault; the tool reports it on its own line.
+> - **No product finding.** `G1` (40/15), C4's anchors and R3 (`ABC-299`, closed won't-do) are out of scope. `EPIC-011`'s `G7` 400-game read is
+>   waived by the owner (`…810191ff` item 3), so this is the epic's last reading.
+> - The board move is the Orchestrator's (made at `397b892c`).
 
 > **READY, 2026-11-09, by BA/PM** (task `bapm-close-1109`, records only, at `main` `e069b49a`; nothing run): the hold is met. **Phase 4 is closed by the closures** of the project's close, the Orchestrator's ruling under § Dependencies (`orch-2026-10-30a` `…a9c03e07` item 1), and the owner's yes runs R2 as this page stands (item 2). DoR 10/10, unchanged. Nothing else on this page moves.
 

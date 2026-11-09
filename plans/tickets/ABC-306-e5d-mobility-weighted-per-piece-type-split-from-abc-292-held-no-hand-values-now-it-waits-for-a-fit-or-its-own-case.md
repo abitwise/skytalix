@@ -1,8 +1,8 @@
 ---
 id: ABC-306
 title: "E5d: mobility weighted per piece type in place of one shared weight (a re-try of dropped ABC-207), split from ABC-292. Held: no hand values now; it waits for a fit or its own case"
-status: backlog
-column: Backlog
+status: dropped
+column: Done
 size: S
 priority: P3
 epic: EPIC-011
@@ -11,6 +11,8 @@ adr: "owed (the Architect's), when the hold lifts: an ADR-0031 change: per-piece
 ---
 
 # ABC-306: mobility per piece (E5d)
+
+> **CLOSED WON'T-DO, 2026-11-09, by BA/PM** (task `bapm-close-1109b`, records only, at `main` `638ac8a5`; nothing run): project closed by the owner 2026-11-09 (`orch-2026-10-30a` `…a9c03e07`); this ticket closes as dropped on his answer 4 (`…810191ff`), like the 15 others. Status `dropped`, column Done: closed, not delivered. The page below stands as the record; the board move is the Orchestrator's.
 
 > **Split from `ABC-292` 2026-11-05 by BA/PM: DoR 9/10, Backlog, HELD** (task `bapm-wait-lines-1105`, records only, at `main` `a38315bf`; nothing
 > run). Source: `ABC-292`'s split rule, fired by the order the Orchestrator accepted (`…ba8265e9`, brief `bapm-wait-lines-1105`). The id was
