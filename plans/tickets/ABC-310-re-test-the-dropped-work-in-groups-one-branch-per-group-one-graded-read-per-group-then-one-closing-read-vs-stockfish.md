@@ -1,8 +1,8 @@
 ---
 id: ABC-310
 title: "Re-test the dropped work in groups: one branch per group, one graded read per group, then one closing read vs Stockfish"
-status: backlog
-column: Backlog
+status: dropped
+column: Done
 size: XL
 priority: P2
 epic: "— (the owner's ask, orch-2026-10-30a …092956f8; EPIC-011 and every earlier epic are closed, and the repo cuts an owner ask outside an open epic without one, as ABC-309; the per-group children name ABC-310 as their parent)"
@@ -11,6 +11,8 @@ adr: "none of its own. The instruments are ADR-0056 (C2′, CF1–CF10, R-BUNDLE
 ---
 
 # ABC-310: re-test the dropped work in groups, then one closing read against Stockfish
+
+> *2026-11-09T22:39:26Z, Orchestrator: dropped by the owner before any work ("this indeed seems a lot of work, let's discard the plan, it might not give benefits"). Context: only 9 of the 27 members have code, and only ABC-289 and ABC-291 merge into main without src conflicts (dry-run merge-tree, 2026-11-09). Nothing was run.*
 
 > **Cut 2026-11-09 by BA/PM: XL, P2, DoR 8/10, Backlog, HELD** (task `bapm-group-retest`, records only, at `main` `782c6cda`;
 > nothing run, built, timed or played). Sources: the owner's words and the groups, Orchestrator `orch-2026-10-30a` `…092956f8`
