@@ -194,3 +194,84 @@ left, down from two.
 
 **DoR 9/10. Left in Backlog until `assets/readme-art.txt` is non-empty and reachable from the build branch; then row 10 holds and the ticket
 can go to Ready with no other change to this page.**
+
+## Result
+
+*2026-11-09, by the Software Engineer (task `se-ABC-309`, branch `grugops/ABC-309` from `main` `efd2230b`). Docs only: `README.md`,
+this block and the task's notes. Nothing under `src/`; `assets/readme-art.txt` untouched.*
+
+| row | evidence at the tip | state |
+|---|---|---|
+| A1 | `git diff --name-only efd2230b` lists `README.md`, this page and `.grugops/context/se-ABC-309/` only | met |
+| A2 | `test -s assets/readme-art.txt` (404 bytes, final newline, no line that is exactly ` ``` `); `sed -n '2,/^```$/p' README.md \| sed '$d' \| cmp - assets/readme-art.txt` exits 0. The tagline line stays | met |
+| A3 | § Use with a chess GUI has three `###` subsections, Arena, Cute Chess, BanksiaGUI; 4 numbered steps each (12 of 12); each names a version and an OS; step 3 names all three options and points at the one table. *Fix 2026-11-09 (`se-ABC-309-fix`, the Orchestrator's rulings `…4b413e8c`):* Cute Chess's menu labels stay (verified from its 1.5.1 source); its step 2 says the script route is for Linux and macOS and adds a Windows route (a one-line `skytalix.cmd`), marked untested in the README. Arena's and BanksiaGUI's steps name the action only, with no menu label; the README says their menu names are unchecked. Their versions (3.5.1, 0.58) stay `UNKNOWN - verify`. *Fix 2 2026-11-09 (`se-ABC-309-fix2`, QE's FAIL `…858d4098`):* the Arena and BanksiaGUI subsections each say in bold that their steps have not been tried in that GUI | met in shape; the Arena, BanksiaGUI and Windows routes untested and marked so in the README; owed to QE |
+| A4 | § Strength: X = 1902.5 ± 49.1; Stockfish 19, `UCI_LimitStrength` on, `UCI_Elo` 1810; level 5; 100 ms a move each side; 200 games from 100 openings with both colours, one at a time; 63.0 %, +92.5 ± 49.1 against 1810; X = 1810 + 92.5; "not a 40/15 rating and not a rating-list figure". Each number is in `qe-ABC-295` `…e11c410e`. No 1806.5, no 2074, no other Elo figure | met |
+| A5 | the table equals the live `uci` reply of the built `dist/uci.js` (3 of 3 `option name` lines); 22 s and 59.5 s equal `SIMPLE_TOURNAMENT_BUDGET_MS` (22 000) and `CLOCK_MODE_MAX_BUDGET_MS` (60 000 − 500); `grep -c 'two options' README.md` prints 0. Commands added: `npm install`, `npm run build`, `chmod +x dist/uci.js`, `node --version`; each ran and exited 0 in this worktree, not on a fresh clone | met |
+| A6 | the four `ABC-216` A8 scans count 0; the one absolute URL is the repository's clone URL, unchanged | met |
+| A7 | relative links `AGENTS.md`, `LICENSE`, `NOTICE` are each listed by `git ls-files`; `npm run lint` and `npm run build` exit 0 | met |
+| A8 | `grep -c 'FIGlet' README.md` prints 0; the diff of § Licence removes only the credit line and the blank line before it | met |
+
+**Deviation, Cute Chess step 2 (A3, "command `node` and the argument").** Cute Chess's Add Engine dialog has a **Command** field and no
+argument field, and its saved engine entry has no arguments key. It starts the whole field as one program, so `node <path>` there does not
+start: run on this host through the same library, `cutechess-cli` 1.5.1 with `cmd=node <full path>/dist/uci.js` prints "Cannot execute
+command". The README's step 2 says so and sets **Command** to the script itself after `chmod +x dist/uci.js`: its first line,
+`#!/usr/bin/env node`, runs it with `node`. That route started and played under `cutechess-cli` with three options set. The step still names
+`node` and the full path to `dist/uci.js`, but not as a separate argument. It is the Orchestrator's to rule whether A3 reads as met.
+
+UAT waived by measurement: `git diff --name-only efd2230b | grep '^src/'` prints nothing. The QE verdict is owed.
+
+**Fix, 2026-11-09 (task `se-ABC-309-fix`, on `grugops/ABC-309` from `a0d041e2`), per the Orchestrator's rulings `orch-2026-10-30a`
+`…4b413e8c`.** `README.md` only, plus this block and the task's note.
+1. **Cute Chess step 2:** the shebang route is stated as for Linux and macOS (tested on Linux, under `cutechess-cli` 1.5.1). A Windows route
+   follows: save `skytalix.cmd` in the clone with the one line `@node "%~dp0dist\uci.js"` and set **Command** to it. This host has no
+   Windows and no Wine, so it was not run; the README says plainly that it is untested. Step 1 says to skip `chmod` on Windows.
+2. **Arena and BanksiaGUI:** every menu label is gone. Each step names the action: open the engine manager, add a new UCI engine, set the
+   program to `node.exe` and its parameter or argument to `<clone>\dist\uci.js`; open the engine's options; start a new game with skytalix as
+   the opponent. If the GUI has no argument field, the step points to the `skytalix.cmd` route (untested). Each subsection says its menu
+   names were not checked against the GUI.
+3. **§ Levels:** each cell re-read against `LEVELS` in `src/levels.ts`, which both the CLI and the `uci` session use: 100, 180, 330, 1 000,
+   4 000, 5 000 and 30 000 ms. Level 5 is now **4 s** (was 3 s). The other cells hold under the section's "approximate": 0.18 → 0.2 s,
+   0.33 → 0.3 s. Weakest 1, strongest 7, default 5 equal `EASIEST_LEVEL`, `HARDEST_LEVEL`, `DEFAULT_LEVEL`.
+
+Re-checks at the fix tip: A2 `cmp` exits 0 (the new `bat` fence sits below the art block); A5's live `uci` reply equals the table, 3 of 3,
+22 s and 59.5 s equal `SIMPLE_TOURNAMENT_CEILING_MS` and `CLOCK_MODE_CEILING_MS` − 500, `two options` counts 0; A6's three scans count 0
+and the one absolute URL is the clone URL; A7's links `AGENTS.md`, `LICENSE`, `NOTICE` are tracked, `npm run lint` (148 files) and
+`npm run build` exit 0; A8 `FIGlet` counts 0 and § Licence differs from `efd2230b` by the credit line and its blank line only.
+
+**Fix 2, 2026-11-09 (task `se-ABC-309-fix2`, on `grugops/ABC-309` from `1064eb4e`), per QE's verdict `qe-ABC-309` `…858d4098` (FAIL on
+A3 only) and its observation `…7f94de2f`.** `README.md` only, plus this block and the task's note.
+1. **A3:** the Arena and BanksiaGUI subsections each open with "**They have not been tried in Arena.**" / "**… in BanksiaGUI.**", as the
+   Cute Chess Windows route says "**This Windows route is untested.**"
+2. **Cute Chess on macOS:** step 2 says **Settings** is in the application menu there, not under **Tools** (Cute Chess 1.5.1
+   `mainwindow.cpp:191`, `PreferencesRole`, from QE's reading). Its label on macOS was not seen: `UNKNOWN - verify`.
+3. **§ Strength:** says 100 ms a move is much shorter than level 5's normal 4 s, so the default level in normal play should be at least
+   that strong, and that this was not measured.
+4. **`simple-tournament`:** "never past the clock it is given" becomes "aims to stay within the clock it is given. It can run over by a few
+   milliseconds, so give it a small time margin in the GUI", from QE's 202 ms on `movetime 200` (`AR-NFR004-A`). The 22 s stays.
+5. **`level`:** "plays at most the `Skill Level`'s time per move".
+6. **Readability:** the intro says Arena and BanksiaGUI run `node` with the path as its argument and Cute Chess runs the script itself. The
+   Arena and BanksiaGUI fallbacks are self-contained (the `skytalix.cmd` line is given in place), with no forward pointer to Cute Chess.
+   Both say to find `node.exe` with `where node` in a Command Prompt.
+
+Re-checks at the fix-2 tip: A1 no path under `src/`; A2 `cmp` exits 0; A5's live `uci` reply equals the table, 3 of 3, the 22 s and 59.5 s
+stay, `two options` counts 0; A6's three scans count 0 and the one absolute URL is the clone URL; A7's links are tracked, `npm run lint`
+(148 files) and `npm run build` exit 0; A8 `FIGlet` counts 0 and § Licence differs from `efd2230b` by the credit line and its blank line
+only. Not run: any GUI window, and any Windows or macOS host.
+
+**Fix 3, 2026-11-09 (task `se-ABC-309-fix3`, on `grugops/ABC-309` from `467a454f`), per QE's verdict `qe-ABC-309` `…f0e46abe` (FAIL on
+A4 only) and its observation `…6552f96c`.** `README.md` only, plus this block and the task's note. Fix 2's item 3 is withdrawn: it set a
+floor under level 5 at 4 s, off R2's scale.
+1. **A4:** § Strength's last sentence is now exactly "Level 5 normally has 4 s a move, not 100 ms. Its strength at 4 s was not measured."
+   It names the gap and gives no bound.
+2. **Time margin:** the few-ms overshoot advice moves out of the `simple-tournament` bullet into one sentence after the list, for every
+   `TimeMode`: "In every `TimeMode` a move can run a few milliseconds over its time, so give the engine a small time margin in the GUI."
+3. **Intro:** Cute Chess runs the script itself, "or on Windows a `skytalix.cmd` file that runs it".
+4. **`where node`:** the Arena and BanksiaGUI steps add "(use the first line it prints)".
+
+Re-checks at the fix-3 working tree: A1 `git diff --name-only efd2230b | grep -c '^src/'` prints 0; A2 `test -s` holds, line 1 is
+` ```text `, the `cmp` command exits 0; A4 every number in § Strength (1902.5, 49.1, Stockfish 19, `UCI_Elo` 1810, level 5, 100 ms, 200
+games, 100 openings, 63.0 %, 92.5) is in `…e11c410e`, the only other numbers are 40/15 (the disclaimer) and 4 s (level 5's time, as in
+§ Levels), and no other Elo figure or 4 s strength claim is in the file; A6 personal-path, IPv4 and e-mail scans count 0, the one absolute
+URL is the clone URL; A7 `AGENTS.md`, `LICENSE`, `NOTICE` are tracked, `npm run lint` (148 files) and `npm run build` exit 0; A8
+`FIGlet` counts 0 and § Licence differs from `efd2230b` by the credit line and its blank line only. Not run: any GUI window, and any
+Windows or macOS host.
