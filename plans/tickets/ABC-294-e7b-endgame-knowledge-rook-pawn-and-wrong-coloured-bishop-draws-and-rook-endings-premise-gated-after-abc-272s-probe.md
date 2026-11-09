@@ -1,8 +1,8 @@
 ---
 id: ABC-294
 title: "E7b: endgame knowledge beyond E7a. Rook-pawn and wrong-coloured-bishop draws and named rook-ending rules scale or correct the score, each premise-gated by a pre-registered probe, behind an ADR-0026 test-only off-door pair; after ABC-272's premise probe"
-status: backlog
-column: Backlog
+status: dropped
+column: Done
 size: M
 priority: P3
 epic: EPIC-011
@@ -11,6 +11,8 @@ adr: "owed (the Architect's): a premise probe first (pre-registered, ABC-272's s
 ---
 
 # ABC-294: rook-pawn, wrong-bishop and rook-ending knowledge (E7b)
+
+> **CLOSED WON'T-DO, 2026-11-09, by BA/PM** (task `bapm-close-1109`, records only, at `main` `e069b49a`; nothing run): project closed by the owner 2026-11-09 (`orch-2026-10-30a` `…a9c03e07`). Status `dropped`, column Done: closed, not delivered. The page below stands as the record; the board move is the Orchestrator's.
 
 > **Cut 2026-11-04 by BA/PM: DoR 9/10, Backlog, PREMISE-GATED** (task `bapm-epic011-areas`, records only, at `main`
 > `b274711c`; nothing run, built or timed). Source: the owner's ruling 3 (`orch-2026-10-30a` `…4c4cb03d`). `EPIC-011`

@@ -1,8 +1,8 @@
 ---
 id: ABC-290
 title: "E3b: king attack. Pieces attacking the enemy king's zone add a weighted, tapered term (a re-try of dropped ABC-205's term), with hand values fixed by a stated rule and judged on its own C2′"
-status: backlog
-column: Backlog
+status: dropped
+column: Done
 size: M
 priority: P2
 epic: EPIC-011
@@ -11,6 +11,8 @@ adr: "owed (the Architect's): a new ADR on main's tapered evaluation, form (b): 
 ---
 
 # ABC-290: king attack, attackers on the king zone (E3b)
+
+> **CLOSED WON'T-DO, 2026-11-09, by BA/PM** (task `bapm-close-1109`, records only, at `main` `e069b49a`; nothing run): project closed by the owner 2026-11-09 (`orch-2026-10-30a` `…a9c03e07`). Status `dropped`, column Done: closed, not delivered. The page below stands as the record; the board move is the Orchestrator's.
 
 > **HELD UNDER THE OWNER'S STOP: NOT BUILT WITHOUT HIS NEW WORD, 2026-11-08, by BA/PM** (task `bapm-ABC-292-closed`, records only, at `main` `6b8dd230`; nothing run). Sources:
 > `arch-ABC-292-probe` `…22e36b63`, the Orchestrator's `…5bc9e701`, and the owner's ruling `…23d30c72`.

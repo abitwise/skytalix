@@ -1,8 +1,8 @@
 ---
 id: ABC-295
 title: "R2: the second EPIC-011 milestone reading, on main at Phase 4's close: 200 games at 100 ms a move against Stockfish 19 UCI_LimitStrength at the band-rule E, in R1's shape, reported as X ± Y on that scale with the highest milestone met named (QE reading, records only; no code)"
-status: backlog
-column: Backlog
+status: ready
+column: Ready
 size: S
 priority: P2
 epic: EPIC-011
@@ -11,6 +11,8 @@ adr: "ADR-0056 D5 / D6 item 7 (R milestone readings) and C4's 100 ms outside-rea
 ---
 
 # ABC-295: R2, the milestone reading at Phase 4's close
+
+> **READY, 2026-11-09, by BA/PM** (task `bapm-close-1109`, records only, at `main` `e069b49a`; nothing run): the hold is met. **Phase 4 is closed by the closures** of the project's close, the Orchestrator's ruling under § Dependencies (`orch-2026-10-30a` `…a9c03e07` item 1), and the owner's yes runs R2 as this page stands (item 2). DoR 10/10, unchanged. Nothing else on this page moves.
 
 > **Cut 2026-11-04 by BA/PM: DoR 10/10, Backlog, HELD on its placement** (task `bapm-epic011-areas`, records only, at
 > `main` `b274711c`; nothing run). Source: the owner's ruling 3 (`orch-2026-10-30a` `…4c4cb03d`). `EPIC-011` § Phases

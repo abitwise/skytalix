@@ -1,8 +1,8 @@
 ---
 id: ABC-293
 title: "E6: threats and tempo. A piece attacked by an enemy pawn and a hanging piece (attacked and not defended) cost the side that owns it, and the side to move earns a tempo bonus, each tapered, with hand values fixed by a stated rule and judged on its own C2′"
-status: backlog
-column: Backlog
+status: dropped
+column: Done
 size: M
 priority: P3
 epic: EPIC-011
@@ -11,6 +11,8 @@ adr: "owed (the Architect's): a new ADR on main's tapered evaluation, form (b): 
 ---
 
 # ABC-293: threats and tempo (E6)
+
+> **CLOSED WON'T-DO, 2026-11-09, by BA/PM** (task `bapm-close-1109`, records only, at `main` `e069b49a`; nothing run): project closed by the owner 2026-11-09 (`orch-2026-10-30a` `…a9c03e07`). Status `dropped`, column Done: closed, not delivered. The page below stands as the record; the board move is the Orchestrator's.
 
 > **HELD UNDER THE OWNER'S STOP: NOT BUILT WITHOUT HIS NEW WORD, 2026-11-08, by BA/PM** (task `bapm-ABC-292-closed`, records only, at `main` `6b8dd230`; nothing run). Sources:
 > `arch-ABC-292-probe` `…22e36b63`, the Orchestrator's `…5bc9e701`, and the owner's ruling `…23d30c72`.

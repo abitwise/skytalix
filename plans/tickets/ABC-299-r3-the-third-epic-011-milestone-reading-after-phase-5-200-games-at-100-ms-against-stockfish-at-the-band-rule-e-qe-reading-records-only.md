@@ -1,8 +1,8 @@
 ---
 id: ABC-299
 title: "R3: the third EPIC-011 milestone reading, on main after Phase 5: 200 games at 100 ms a move against Stockfish 19 UCI_LimitStrength at the band-rule E, in R1's shape, reported as X ± Y on that scale with the highest milestone met named; above E 2 600, C3′'s probe first (QE reading, records only; no code)"
-status: backlog
-column: Backlog
+status: dropped
+column: Done
 size: S
 priority: P3
 epic: EPIC-011
@@ -11,6 +11,8 @@ adr: "ADR-0056 D5 / D6 item 7 (R milestone readings) and C4's 100 ms outside-rea
 ---
 
 # ABC-299: R3, the milestone reading after Phase 5
+
+> **CLOSED WON'T-DO, 2026-11-09, by BA/PM** (task `bapm-close-1109`, records only, at `main` `e069b49a`; nothing run): project closed by the owner 2026-11-09 (`orch-2026-10-30a` `…a9c03e07`). Status `dropped`, column Done: closed, not delivered. The page below stands as the record; the board move is the Orchestrator's.
 
 > **Cut 2026-11-04 by BA/PM: DoR 10/10, Backlog, HELD on its placement** (task `bapm-epic011-areas`, records only, at
 > `main` `b274711c`; nothing run). Source: the owner's ruling 3 (`orch-2026-10-30a` `…4c4cb03d`). `EPIC-011` § Phases

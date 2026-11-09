@@ -1,8 +1,8 @@
 ---
 id: ABC-257
 title: "T1 + T3: the transposition table is kept across the moves of one game together with ABC-238's deeper-entry cutoffs, its size unchanged, read on a pre-registered held-out bar; PAUSED by the owner's order (\"P yes\", 2026-11-02); ADR-0058 accepted, not in force until this ticket meets A8'"
-status: backlog
-column: Backlog
+status: dropped
+column: Done
 size: M
 priority: P3
 epic: EPIC-011
@@ -10,6 +10,8 @@ adr: "ADR-0025 decision 4 amendment of 2026-10-26: ACCEPTED by the owner (…2ae
 ---
 
 # ABC-257: keep the TT across moves, re-tried (T3)
+
+> **CLOSED WON'T-DO, 2026-11-09, by BA/PM** (task `bapm-close-1109`, records only, at `main` `e069b49a`; nothing run): project closed by the owner 2026-11-09 (`orch-2026-10-30a` `…a9c03e07`). Status `dropped`, column Done: closed, not delivered. The page below stands as the record; the board move is the Orchestrator's.
 
 > **STATUS 2026-11-02, by BA/PM: PAUSED BY THE OWNER'S ORDER (P); `ADR-0058` ACCEPTED, NOT IN FORCE (A)** (task
 > `bapm-threads-cut`, records only, at `main` `48f3fc01`; nothing run). His words (`orch-2026-10-30a` `…81ae2db4`,

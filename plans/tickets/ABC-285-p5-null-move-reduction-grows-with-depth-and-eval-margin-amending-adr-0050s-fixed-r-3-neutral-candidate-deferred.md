@@ -1,8 +1,8 @@
 ---
 id: ABC-285
 title: "P5: the null-move reduction R grows with remaining depth and the static eval margin, amending ADR-0050's fixed R = 3 (ABC-208), behind a test-only off-door pair; a NEUTRAL (invisible at 100 ms) candidate with a deep-depth bar; deferred"
-status: backlog
-column: Backlog
+status: dropped
+column: Done
 size: S
 priority: P3
 epic: EPIC-011
@@ -11,6 +11,8 @@ adr: "owed (the Architect's): an ADR-0050 amendment fixing R's rule (depth and m
 ---
 
 # ABC-285: null move whose R grows with depth and margin (P5)
+
+> **CLOSED WON'T-DO, 2026-11-09, by BA/PM** (task `bapm-close-1109`, records only, at `main` `e069b49a`; nothing run): project closed by the owner 2026-11-09 (`orch-2026-10-30a` `…a9c03e07`). Status `dropped`, column Done: closed, not delivered. The page below stands as the record; the board move is the Orchestrator's.
 
 > **Cut 2026-11-04 by BA/PM: DoR 9/10, Backlog, DEFERRED** (task `bapm-epic011-areas`, records only, at `main`
 > `b274711c`; nothing run, built or timed). Source: the owner's ruling 3 (`orch-2026-10-30a` `…4c4cb03d`). `EPIC-011`

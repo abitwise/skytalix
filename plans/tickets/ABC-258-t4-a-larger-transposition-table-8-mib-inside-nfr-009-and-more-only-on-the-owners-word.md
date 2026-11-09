@@ -1,14 +1,16 @@
 ---
 id: ABC-258
 title: "T4: a larger transposition table, 2^19 entries (8 MiB) inside NFR-009's 16 MiB, and more only on the owner's word (Q-3K-6)"
-status: backlog
-column: Backlog
+status: dropped
+column: Done
 size: S
 priority: P3
 epic: EPIC-011
 ---
 
 # ABC-258: a larger TT (T4)
+
+> **CLOSED WON'T-DO, 2026-11-09, by BA/PM** (task `bapm-close-1109`, records only, at `main` `e069b49a`; nothing run): project closed by the owner 2026-11-09 (`orch-2026-10-30a` `…a9c03e07`). Status `dropped`, column Done: closed, not delivered. The page below stands as the record; the board move is the Orchestrator's.
 
 > **STATUS 2026-11-02, by BA/PM: PAUSED BY THE OWNER'S ORDER (P); THE T2 AMENDMENT PARKED WITH IT (B)** (task
 > `bapm-threads-cut`, records only, at `main` `48f3fc01`; nothing run). His words (`orch-2026-10-30a` `…81ae2db4`,

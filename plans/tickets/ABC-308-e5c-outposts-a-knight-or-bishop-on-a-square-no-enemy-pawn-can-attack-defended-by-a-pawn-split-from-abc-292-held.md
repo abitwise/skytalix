@@ -1,8 +1,8 @@
 ---
 id: ABC-308
 title: "E5c: outposts. A knight or bishop on a square no enemy pawn can attack, defended by a pawn, earns a tapered term. Split from ABC-292 by ADR-0076 d1. Held: no build; it waits for a third pull that names it or a case of its own"
-status: backlog
-column: Backlog
+status: dropped
+column: Done
 size: S–M
 priority: P3
 epic: EPIC-011
@@ -11,6 +11,8 @@ adr: "owed (the Architect's), when the hold lifts: a new ADR on main's tapered e
 ---
 
 # ABC-308: outposts (E5c)
+
+> **CLOSED WON'T-DO, 2026-11-09, by BA/PM** (task `bapm-close-1109`, records only, at `main` `e069b49a`; nothing run): project closed by the owner 2026-11-09 (`orch-2026-10-30a` `…a9c03e07`). Status `dropped`, column Done: closed, not delivered. The page below stands as the record; the board move is the Orchestrator's.
 
 > **HELD UNDER THE OWNER'S STOP ON HAND VALUES; THE OUTPOSTS LINE, RULED, 2026-11-08, by BA/PM** (task `bapm-ABC-292-closed`, records only, at `main` `6b8dd230`; nothing run). Sources: the
 > Orchestrator's `…e63ff24f` and `…5bc9e701`, `arch-ABC-292-probe` `…22e36b63`, and the owner's ruling `…23d30c72`.

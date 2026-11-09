@@ -1,8 +1,8 @@
 ---
 id: ABC-272
 title: "E7a: won and drawish endings. A mop-up term drives the lone king to the edge in pawnless wins (KQK, KRK, KBNK), and a scale factor pulls drawish material toward 0 (the stronger side has no pawns and is less than a rook up; pure opposite-coloured bishops), each premise-gated, behind an ADR-0026 test-only off-door pair"
-status: backlog
-column: Backlog
+status: dropped
+column: Done
 size: M
 priority: P3
 epic: EPIC-011
@@ -11,6 +11,8 @@ adr: "owed (the Architect's): a premise probe first (pre-registered, below), the
 ---
 
 # ABC-272: won and drawish endings (E7a)
+
+> **CLOSED WON'T-DO, 2026-11-09, by BA/PM** (task `bapm-close-1109`, records only, at `main` `e069b49a`; nothing run): project closed by the owner 2026-11-09 (`orch-2026-10-30a` `…a9c03e07`). Status `dropped`, column Done: closed, not delivered. The page below stands as the record; the board move is the Orchestrator's.
 
 > **`ABC-269` MERGED, 2026-11-03, by BA/PM** (task `bapm-269-done`, records only, at `main` `128e3c6c`; nothing run).
 > `ABC-269` (E1) merged to local `main` at `54dee3f2` (QE PASS_WITH_GAPS `qe-ABC-269` `…eff2fe64`), so this page's wait
