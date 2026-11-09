@@ -50,3 +50,31 @@ Every run goes as `flock <scratch>/<home>/<repo>/host-test.lock <cmd>`, one core
 - **`ps` check, by class and count only:** one foreign monitoring tool at about 23 % of one core; Claude sessions near idle; daemons at about 1 %. 0 cutechess-cli and 0 stockfish running. One idle containerised process names vitest in its arguments: QE-298-r, at 0 % CPU. load1 0.47 on 24 cores; Tctl 42.5 °C.
 - **Main is now `8f86a69c`.** Since `e069b49a` it carries records only; `src/` is still `bba42fb7`. Read the sealed sha `e069b49a` as the PREREG names it, and check that the `src/` and harness trees are unchanged.
 - **Run stage B on PREREG `…4151e128` exactly as sealed,** then give the verdict.
+
+## Stage B
+*QE/E2E (claude-opus-5-5, qe-ABC-295), 2026-11-09, on `grugops/qe-ABC-295` at `3d67f457`; read sha `e069b49a` (`src/` `bba42fb7`, harness `tools/` `c361f429`; `main` `8f86a69c` has the same trees).*
+
+**Result: VALID. 126.0 / 200 (63.0 %) at E 1 810, Elo +92.5 ± 49.1, X = 1 902.5 ± 49.1. E is confirmed and no band step was needed. Highest milestone met: none.**
+- **Readings:** `20261109T160638Z-qe-e2e-observation-1245d022`. **Verdict:** `20261109T160639Z-qe-e2e-decision-e11c410e`. Read once under PREREG `…4151e128`, with the 5 sealed scripts' sha256s checked OK just before the launch.
+- **Run:** `CUTECHESS_CLI=<cutechess-cli> STOCKFISH=<stockfish> flock <scratch>/<home>/<repo>/host-test.lock bash .grugops/context/qe-ABC-295/raw/scripts/session.sh <out> <repo>`. Gates 1–4 passed (pins, trees, disk, W-check 0 / 0 / 0). `r` ran from 15:28:10Z to 16:04:06Z, exit 0, stop none. Then G11 and the read; the session ended 16:04:27Z. One run, one game at a time, one core.
+- **Scope-3 figures:**
+  - W / D / L: 122 / 8 / 70.
+  - Score: 63.0 %; as White 76.0 / 100, as Black 50.0 / 100.
+  - Elo against E: +92.5 ± 49.1 (LOS 100.0 %).
+  - X = 1 810 + 92.5 = 1 902.5 ± 49.1.
+  - Opening-cluster interval: ± 42.3 (iid ± 48.9).
+  - G11: e4, g3, exd6, d4, Kc1. Two of the five differ from R1's.
+  - Milestone: none.
+  - R2 − R1 = +96.0 (about ± 68 combined), reported, not graded.
+- **Validity:**
+  - 200 / 200 games; faults 0, unclassified 0.
+  - 0 time losses on either side.
+  - Depth guard: 0 of 10 608.
+  - skytalix latency: max 105 ms.
+  - One move-cap draw (round 24; Stockfish showed `+M3`). It is not a fault, and at most 0.5 points.
+- **Band:** P = 126.0 is inside 50–150 (outcome 2). The pre-approved step was not used, and there was no second run.
+- **Wall:** 0.60 h (`r` 35 min 56 s), against an estimate of 0.4–0.9 h.
+- **Host:** ALONE. 213 samples showed 0 foreign `vitest`, `cutechess-cli`, `stockfish` and `node`. load1 had a median of 1.40 (max 1.70). Tctl had a median of 74.0 °C (max 76.5 °C).
+- **Acceptance:** R2-A1, A2 and A3 are MET. R2-A4 is open: it is BA/PM's records hop (`EPIC-011` § Phases R2 row and G2). The board move is the Orchestrator's.
+- **Records:** `raw/out/r2/` and `raw/out/session/`, redacted by `raw/redact.sh`. That script was written after the seal and handles records only. The full 63 MB `r.out` stays in scratch; its sha256 is in `SHA256SUMS.unredacted-originals`. The build clone was deleted.
+- **Fences held:** no `src/`, ADR, ticket, EPIC or board edit. No push, force, amend, rebase or merge. No foreign process was touched or recorded beyond a count.

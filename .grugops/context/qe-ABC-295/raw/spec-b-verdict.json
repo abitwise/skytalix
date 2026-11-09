@@ -1,0 +1,4 @@
+{ "refs": ["qe-ABC-295", "grugops/qe-ABC-295", "ABC-295", "ABC-273", "ABC-275", "ABC-204", "EPIC-011", "ADR-0056", "ADR-0049", "R2", "C4", "G2", "G11", "FL", "W", "e069b49a", "bba42fb7", "c361f429", "tools/rating/rating.ts", "qe-ABC-295/20261109T092643Z-qe-e2e-decision-4151e128", "qe-ABC-295/20261109T092643Z-qe-e2e-observation-ba5495ab", "qe-ABC-273/20261103T135141Z-qe-e2e-decision-07b3c794", "orch-2026-10-30a/20261109T152701Z-orchestrator-decision-810191ff"],
+  "notes": [ { "kind": "decision",
+    "confidence": "high: read once per sealed PREREG 4151e128; 200/200 valid, 0 faults, 0 time losses, depth guard 0; figure 1902.5 +/- 49.1 is one 200-game sample on its own scale; gates nothing",
+    "bodyFile": "notes/note-b-verdict.md" } ] }

@@ -1,0 +1,5 @@
+launched 2026-11-09T15:28:10Z (r), r ended 2026-11-09T16:04:06Z exit 0 stop=none; G11 and read ended 2026-11-09T16:04:27Z; session exit 0
+driver: CUTECHESS_CLI=<cutechess-cli> STOCKFISH=<stockfish> flock <scratch>/<home>/<repo>/host-test.lock bash .grugops/context/qe-ABC-295/raw/scripts/session.sh <out> <repo>
+the r command it ran once: CUTECHESS_CLI=<cutechess-cli> STOCKFISH=<stockfish> node tools/rating/rating.ts r e069b49a <out> --elo 1810 --budget-ms 100 --rounds 100 --concurrency 1
+(both variables set to the pinned binaries: cutechess-cli 1.5.1 sha256 dc776901...2154f40a, Stockfish 19 sha256 c78c22a9...4593e352d2; both machine.txt tool lines = pin; paths redacted per ADR-0049 d4)
+harness: this worktree at 3d67f457 (tools/ c361f429); read sha e069b49a (src/ bba42fb7); main at the read was 8f86a69c with the same src/ and tools/ trees
