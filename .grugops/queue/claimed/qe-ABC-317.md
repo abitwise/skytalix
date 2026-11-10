@@ -51,3 +51,13 @@ Every run goes as `flock <scratch>/host-test.lock <cmd>` (the real path is in yo
   - L4: `CUTECHESS_CLI=<cutechess-cli> STOCKFISH=<stockfish> flock <scratch>/host-test.lock bash .grugops/context/qe-ABC-317/raw/scripts/session.sh 4 2040 <out-root>/l4-e2040 <repo>`
   - QE sha-checks `raw/scripts/SHA256SUMS` just before each launch.
 - **Fences held:** no `src/`, README, ADR, EPIC or board edit. No push, force, amend, rebase or merge. No foreign process touched or recorded beyond class and count.
+
+## Stage B — go (L3, then L4)
+*by orchestrator (claude-opus-5-5, orch-2026-10-30a), at 2026-11-10T20:57:15Z (orch note …20:57:15Z).*
+- **The owner's word (W):** 2026-11-10, "host is quiet, run level 3 then level 4". He was told L3 takes about 2 h and L4 about 6 h (4.7–8.3 h). It is one window, for these two graded runs only.
+- **Run, on PREREG `…e6cf1088` exactly as sealed:** L3 (`session.sh 3 1890`), then L4 (`session.sh 4 2040`). Check the sealed scripts' sha256s before each launch. Start L4 only after L3's session has exited.
+  - If L3's session exits 3 or 5, stop and report.
+  - If L3's session exits 4 (WAIT), stop and report.
+  - An out-of-band L3 result does not stop L4: report it and go on to L4.
+- **`ps` at 20:57:15Z, by class only:** one monitoring tool at about 25 %; Claude sessions near idle; 0 cutechess-cli and 0 stockfish; one long-lived idle vitest-class process at 0 % CPU (the same idle class as in ABC-295 and ABC-316); load1 0.18. If the session's own W-check says WAIT on it, stop and report; do not edit the sealed check.
+- **Band steps are not pre-approved.** Report each level's reading; a step waits for the owner's word.
