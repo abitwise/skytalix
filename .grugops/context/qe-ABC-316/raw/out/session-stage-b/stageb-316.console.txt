@@ -1,0 +1,20 @@
+2026-11-10T15:54:24Z L1 W-check 2026-11-10T15:54:24Z load1=0.49 tctl=33.1 tmp_free_mb=9088 foreign_vitest=0 foreign_cutechess=0 foreign_stockfish=0 foreign_node=0
+2026-11-10T15:54:24Z L1 launch r b6366a79 skill=1 E=1320 st=0.1 rounds=100 concurrency=1 runaway=6300s
+2026-11-10T16:31:01Z L1 end r tool_exit=0 stop=none
+2026-11-10T16:31:02Z L1 record machine.txt control line = sealed
+2026-11-10T16:31:02Z L1 record cmd.txt has [st=0.1 timemargin=50 restart=on 'option.Skill Level=1']
+2026-11-10T16:31:02Z L1 record cmd.txt has [st=0.1 timemargin=2000 restart=on]
+2026-11-10T16:31:02Z L1 record cmd.txt has [option.UCI_Elo=1320]
+2026-11-10T16:31:02Z L1 record cmd.txt has [-games 2 -rounds 100 -concurrency 1 -maxmoves 200]
+2026-11-10T16:31:02Z L1 end read rc=0
+2026-11-10T16:31:02Z stage-b L1 session exit 0
+2026-11-10T16:31:02Z L2 W-check 2026-11-10T16:31:02Z load1=1.11 tctl=41.9 tmp_free_mb=8227 foreign_vitest=0 foreign_cutechess=0 foreign_stockfish=0 foreign_node=0
+2026-11-10T16:31:02Z L2 launch r b6366a79 skill=2 E=1450 st=0.18 rounds=100 concurrency=1 runaway=11100s
+2026-11-10T17:20:58Z L2 end r tool_exit=0 stop=none
+2026-11-10T17:20:58Z L2 record machine.txt control line = sealed
+2026-11-10T17:20:58Z L2 record cmd.txt has [st=0.18 timemargin=50 restart=on 'option.Skill Level=2']
+2026-11-10T17:20:58Z L2 record cmd.txt has [st=0.18 timemargin=2000 restart=on]
+2026-11-10T17:20:58Z L2 record cmd.txt has [option.UCI_Elo=1450]
+2026-11-10T17:20:58Z L2 record cmd.txt has [-games 2 -rounds 100 -concurrency 1 -maxmoves 200]
+2026-11-10T17:20:58Z L2 end read rc=0
+2026-11-10T17:20:58Z stage-b L2 session exit 0

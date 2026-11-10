@@ -49,3 +49,26 @@ Every run goes as `flock <scratch>/host-test.lock <cmd>` (the real path is in yo
 - **`ps` check at 15:53:35Z, by class and count only:** one monitoring tool at about 26 % of one core; Claude sessions near idle; daemons at about 1 %. 0 cutechess-cli and 0 stockfish. One long-lived node process names vitest in its arguments, at 0 % CPU, running for about 2.7 days: the same idle class ABC-295 stage B logged. load1 0.69.
 - **Run stage B on PREREG `…c80a1080` exactly as sealed:** L1, then L2. Check the sealed scripts' sha256s just before the launch. If the session's own W-check says WAIT on the idle process above, stop and report: do not edit the sealed check.
 - **Band step:** not pre-approved. If a level lands outside 25–75 %, report it and stop that level; a step needs my word.
+
+## Stage B
+*QE/E2E (claude-opus-5-5, qe-ABC-316), 2026-11-10, on `grugops/qe-ABC-316` at `befef8d9` (harness `tools/` `6272e8d2`). Read sha `main` `b6366a79` (`src/` `21f3b304`).*
+
+**Result: both levels VALID. L1 is inside the band: E 1 320 confirmed, figure X = 1 499.5 ± 53.4. L2 is ABOVE the band (82.25 %): X = 1 716.4 ± 64.3 is not the level's figure. A step to E′ 1 720 needs your word. QE stopped; no step was run.**
+- **Notes:** readings `20261110T172335Z-qe-e2e-observation-659eb162`; verdict `20261110T172339Z-qe-e2e-decision-f44a427d`. Read once under PREREG `…c80a1080`. The four sealed scripts' sha256s were checked OK just before the launch.
+- **Run:** `CUTECHESS_CLI=<cutechess-cli> STOCKFISH=<stockfish> flock <scratch>/host-test.lock bash .grugops/context/qe-ABC-316/raw/scripts/stage-b.sh <out-root> <repo>`, under one lock hold, 15:54:24Z–17:20:58Z (1.44 h, against 1.6–3.6 h estimated). Gates 1–4 passed at both levels (W-check 0 / 0 / 0 each time). Stops: none. `stage-b.sh` exited 0.
+- **L1** (`--skill 1 --elo 1320`, `st` 0.1 s):
+  - 142 / 11 / 47, 147.5 / 200 = 73.75 % (White 72.0, Black 75.5).
+  - Elo +179.5 ± 53.4, so **X = 1 499.5 ± 53.4**. Cluster ± 53.9.
+  - Outcome 2, E confirmed. One move-cap draw (round 48, Stockfish failed to mate with Q+B); without it P = 147.0, the same outcome.
+  - Faults 0, time losses 0, depth guard 0 of 10 813. Latency max 105 ms.
+  - `r` 36 min 37 s. Host ALONE (217 samples).
+- **L2** (`--skill 2 --elo 1450`, `st` 0.18 s):
+  - 164 / 1 / 35, 164.5 / 200 = 82.25 % (White 83.0, Black 81.5).
+  - Elo +266.4 ± 64.3, so X = 1 716.4 ± 64.3, **outside the band; not the level's figure**. Cluster ± 69.0.
+  - Outcome 3. Faults 0, time losses 0, depth guard 0 of 8 360. Latency max 184 ms.
+  - `r` 49 min 56 s. Host ALONE for the SHARED classes (296 samples). Two single samples counted 1 `node` and 1 `stockfish`, at game boundaries; likely the tool's own engine restart (UNKNOWN - verify). Under FL this changes nothing.
+- **For you:** one upward L2 step at **E′ 1 720**: a new 200-game run, the sealed command with `--elo 1720`, about 50 min (45–90). It needs your word and the owner's held host (W held "for these games only"). Alternatively your ruling otherwise.
+- **Reported, not graded:** L2 − L1 = +216.9 ± about 84, provisional while L2 is outside the band. Both levels read stronger than the README's projections (L1 1 000–1 300, L2 1 300–1 550).
+- **Acceptance:** A3 is MET for L1 and OPEN for L2 (no figure yet). A4 waits on L2.
+- **Records:** `raw/out/l1-e1320/`, `raw/out/l2-e1450/` and `raw/out/session-*/`, redacted by `raw/redact.sh`. That script was written after the seal and handles records only. Each full `r.out` stays in scratch, with its sha256 in `SHA256SUMS.unredacted-originals`.
+- **Fences held:** no sealed script edited, no band step. No `src/`, README, ADR, EPIC or board edit. No push, force, amend, rebase or merge. No foreign process touched or recorded beyond class and count.

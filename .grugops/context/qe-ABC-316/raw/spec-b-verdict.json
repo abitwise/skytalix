@@ -1,0 +1,4 @@
+{ "refs": ["qe-ABC-316", "grugops/qe-ABC-316", "ABC-316", "A3", "ABC-204", "ABC-295", "ADR-0056", "ADR-0049", "FL", "W", "b6366a79", "21f3b304", "6272e8d2", "tools/rating/rating.ts", "src/levels.ts", "qe-ABC-316/20261110T155226Z-qe-e2e-decision-c80a1080", "qe-ABC-316/20261110T155221Z-qe-e2e-decision-495d816f", "orch-2026-10-30a/20261110T153717Z-orchestrator-decision-20c41f8c", "orch-2026-10-30a/20261110T154807Z-orchestrator-decision-f45053d2", "qe-ABC-295/20261109T160639Z-qe-e2e-decision-e11c410e"],
+  "notes": [ { "kind": "decision",
+    "confidence": "high: read once per sealed PREREG c80a1080; both levels 200/200 valid, 0 faults, 0 time losses, depth guard 0; L1 1499.5 +/- 53.4 inside the band (E confirmed); L2 82.25 % above the band, its 1716.4 +/- 64.3 is not the level's figure and a step to E' 1720 needs the Orchestrator's word; each is one 200-game sample on its own scale",
+    "bodyFile": "notes/note-b-verdict.md" } ] }
