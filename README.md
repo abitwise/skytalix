@@ -7,7 +7,7 @@
     '-----------'  >>------> [ BITWISE TACTICAL HORIZON ]
 ```
 
-**skytalix**: command-line chess against a club-strength engine.
+**skytalix**: [UCI](https://en.wikipedia.org/wiki/Universal_Chess_Interface) compatible chess engine with CLI interface. Works with chess GUIs. 
 
 ## Requirements
 
@@ -19,12 +19,24 @@
 git clone https://github.com/abitwise/skytalix.git skytalix
 cd skytalix
 npm install
+npm run build
+```
+
+Now install new chess GUI or use preinstalled GUI. Read more [here](#use-with-a-chess-gui).
+
+## Play using simple CLI interface
+
+Preferably use a Chess GUI instead the simple CLI interface.
+
+### Start without options
+
+```sh
 npm run chess
 ```
 
-## Play
+### Start with options
 
-Pass options after `--`:
+If you need to pass options, then do it after `--`:
 
 ```sh
 npm run chess -- --colour black --difficulty 3
@@ -55,7 +67,7 @@ a blunder rate and a projected strength:
 |---|---|---|---|---|---|---|---|
 | Time per move | 0.1 s | 0.2 s | 0.3 s | 1 s | 4 s | 5 s | 30 s |
 | Blunder rate | 40 % | 20 % | 10 % | 5 % | 0 | 0 | 0 |
-| Projected strength | ~1 000–1 300 | ~1 300–1 550 | ~1 550–1 750 | ~1 800–1 950 | ~2 150–2 250 | ~2 170–2 270 | ~2 300–2 450 |
+| Projected strength | ~1000–1300 | ~1300–1550 | ~1550–1750 | ~1800–1950 | ~2150–2250 | ~2170–2270 | ~2300–2450 |
 
 The times are approximate. At the blunder rate's share of its moves, the engine scores every
 move and deliberately picks a weaker one.
