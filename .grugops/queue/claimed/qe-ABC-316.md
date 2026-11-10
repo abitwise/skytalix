@@ -117,3 +117,28 @@ Every run goes as `flock <scratch>/host-test.lock <cmd>` (the real path is in yo
   - The diff against main is limited to README, CHANGELOG, tools/rating, and records.
 - **Check A5:** lint, typecheck, unit (one worker) and build on this tip, each alone under the lock. The `src/` diff against main must be empty, which gives the UAT waiver.
 - **Give a verdict for ABC-316 (PASS / PASS_WITH_GAPS / FAIL).** No games.
+
+## Stage C
+*QE/E2E (claude-opus-5-5, qe-ABC-316), 2026-11-10, on `grugops/qe-ABC-316` at `cce34844` (README branch merged at `0aa78af5`). Compared against `main` `b6366a79`. No games.*
+
+**Result: ABC-316 PASS_WITH_GAPS, with no blocking gap. A1 to A5 are all MET. The `src/` diff against `main` is empty, so the UAT waiver applies.**
+- **Notes:** checks `20261110T190651Z-qe-e2e-observation-6e27f0d0`; verdict `20261110T190716Z-qe-e2e-decision-a55b90ec`.
+- **A5 gates on the tip,** each alone under `flock <scratch>/host-test.lock`:
+  - lint 0 (150 files); typecheck 0; build 0.
+  - `VITEST_MAX_WORKERS=1 npm test` 0 (72 files, 2 740 / 2 740, 0 skipped).
+  - `pair-check.ts` 0 (52 / 52, 0 skipped).
+  - art cmp 0.
+- **`src/` diff:** `git diff --quiet main HEAD -- src` is true, with tree `21f3b304` on both sides. The waiver's reference command prints nothing.
+- **Diff scope:** README, CHANGELOG, `tools/rating/` (tree `6272e8d2`, as rated), `plans/board.md` (orchestrator state rows, `dcfbb147`) and `.grugops/` records. README and CHANGELOG are byte-equal to `0fb74440`.
+- **A4:**
+  - L1 `1 500 ± 53` traces to `…f44a427d` (1 499.5 ± 53.4). L2 `1 678 ± 49` traces to `…553195c0` (1 678.1 ± 48.5). E 1320 and 1720 match each run's `cmd.txt`, and so do the conditions (200 games, both sides at the level's `st`, Stockfish 19, `UCI_LimitStrength`).
+  - L3 to L7 are marked projected. Recomputed from `src/levels.ts`: L3 1849–1906, L4 1999–2052, L5 2169–2222, L6 2185–2241, L7 2314–2396. Each lies inside its table range. Blunder cost from the readings is 10.1 (L1) and 13.3–13.8 (L2), so "about 10 to 14" holds.
+  - The README is unchanged outside `## Levels`: the text before it and the text from `## Strength` to the end are each `cmp`-equal to `main`.
+- **Gaps** (README and CHANGELOG defects, reported, not fixed; none blocking):
+  1. The prose drops "less at longer times" from the time rule. The new figures do not need that change.
+  2. The table's upper edges sit 19–54 above the stated method's output (L3 19, L4 23, L5 28, L6 29, L7 54), and the README does not say why.
+  3. L1's `1 500` is a double rounding. The full-precision figure is 1 499.45, which rounds to 1 499.
+  4. `1 500` and `1 678` use a space separator; the README's other numbers have none.
+  5. CHANGELOG has no `[Unreleased]` link definition, while `[1.0.0]` has one.
+- **Not covered:** the Stockfish time scale between 100 and 180 ms (UNKNOWN - verify), the projections' own anchor error, and levels 3 to 7 measured.
+- **Fences held:** no games. No `src/`, README, ADR, EPIC or board edit. No push, merge, amend, force or rebase.
