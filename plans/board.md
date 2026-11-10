@@ -1,3 +1,4 @@
+_Updated: 2026-11-10T13:45:03Z — owner: 7 unmerged remote branches archived as archive/* tags and deleted (tickets already dropped); versioning agreed (SemVer, --version, tag + Release page, v1.0.0); ABC-315 cut by note (…13:44:36Z); se-ABC-315 building._
 _Updated: 2026-11-10T13:23:55Z — ABC-314 merged (QE PASS_WITH_GAPS …42a3def5). No open tickets._
 _Updated: 2026-11-10T13:20:14Z — owner ran bin/skytalix-uci in En Croissant on macOS (one game); ABC-314 cut by note (…13:20:02Z); se-ABC-314 building._
 _Updated: 2026-11-10T12:44:42Z — ABC-313 merged (QE PASS_WITH_GAPS …ea7dca64). No open tickets._
