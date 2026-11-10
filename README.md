@@ -11,7 +11,7 @@
 
 ## Requirements
 
-Node.js 22.18 or later. npm comes with it.
+[Node.js](https://nodejs.org/) 22.18 or later. npm comes with it.
 
 ## Quick start
 
@@ -80,11 +80,26 @@ the clone. Nothing is saved when you `quit` or when input ends.
 
 ## Use with a chess GUI
 
+Find your GUI and your OS here. The platforms are the ones each GUI publishes.
+
+| GUI | macOS | Linux | Windows | Run with skytalix | Link |
+|---|---|---|---|---|---|
+| Arena | no | yes | yes | Not tried | [playwitharena.de](http://www.playwitharena.de/) |
+| Cute Chess | yes, built from source | yes | yes | `dist/uci.js` run directly, on Linux. The launcher has not been tried | [github.com/cutechess/cutechess](https://github.com/cutechess/cutechess) |
+| BanksiaGUI | yes | yes | yes | Not tried | [banksiagui.com](https://banksiagui.com/) |
+| En Croissant | yes | yes | yes | Run by the owner through his own launcher. The launcher in `bin/` has not been tried | [encroissant.org](https://encroissant.org/) |
+
 skytalix speaks UCI. A GUI runs it through a launcher in the clone: `bin/skytalix-uci` on
 macOS and Linux, or `bin\skytalix-uci.cmd` on Windows. The launcher runs `dist/uci.js` with
 `node`, and on macOS and Linux it finds `node` even when the GUI starts it with a short `PATH`.
 It has been run on Linux only.
 **The Windows launcher is untested.** Below, `<clone>` stands for the full path of your clone.
+
+The launcher to give the GUI, per OS:
+
+- **macOS:** `<clone>/bin/skytalix-uci`. Not run on macOS.
+- **Linux:** `<clone>/bin/skytalix-uci`. Run on Linux.
+- **Windows:** `<clone>\bin\skytalix-uci.cmd`. **Untested.**
 
 First build the engine: in the clone, run `npm install` and then `npm run build`. This writes
 `dist/uci.js`. If it is missing, the launcher says to run `npm run build`.
@@ -107,53 +122,68 @@ time margin in the GUI.
 
 `Skill Level` is read only while `TimeMode` is `level`.
 
-### Arena
+### Arena — Linux, Windows
+
+Site: [Arena](http://www.playwitharena.de/)
 
 These steps are written for Arena 3.5.1 on Windows. **They have not been tried in Arena.**
+Arena for Linux is a separate download, 3.10beta.
 Arena's menu names are not given here, because they have not been checked against Arena itself.
 
 1. Build the engine, as above.
-2. Open Arena's engine manager and add a new UCI engine. Set its program to
-   `<clone>\bin\skytalix-uci.cmd` and name the engine `skytalix`.
+2. Open Arena's engine manager and add a new UCI engine. Name the engine `skytalix`. Set its
+   program to the launcher:
+   - Linux: `<clone>/bin/skytalix-uci`
+   - Windows: `<clone>\bin\skytalix-uci.cmd`
 3. Make skytalix the active engine and open its UCI options to set `Skill Level`, `OwnBook`
    and `TimeMode`. The table above lists their values.
 4. Start a new game with skytalix as the opponent, and make your move.
 
-### Cute Chess
+### Cute Chess — macOS, Linux, Windows
+
+Site: [Cute Chess](https://github.com/cutechess/cutechess)
 
 These steps follow Cute Chess 1.5.1 on Linux. Running `dist/uci.js` directly was tested there;
 the launcher has not been tried in Cute Chess. The Windows route is untested.
 
 1. Build the engine, as above.
 2. Choose **Tools > Settings** (on macOS, **Settings** is in the application menu instead),
-   open the **Engines** tab and click **Add**. Set **Command** to `<clone>/bin/skytalix-uci`,
-   or on Windows to `<clone>\bin\skytalix-uci.cmd`. Set **Name** to `skytalix` and
-   **Protocol** to `uci`.
+   open the **Engines** tab and click **Add**. Set **Name** to `skytalix` and **Protocol** to
+   `uci`. Set **Command** to the launcher:
+   - macOS and Linux: `<clone>/bin/skytalix-uci`
+   - Windows: `<clone>\bin\skytalix-uci.cmd`
 3. On the **Advanced** tab, click **Detect**. `Skill Level`, `OwnBook` and `TimeMode` appear
    there and can be set. The table above lists their values. Click **OK**.
 4. Choose **Game > New...**. Set one side to **Human** and the other to **CPU** with
    `skytalix`, pick a **Time Control**, and click **OK**.
 
-### BanksiaGUI
+### BanksiaGUI — macOS, Linux, Windows
+
+Site: [BanksiaGUI](https://banksiagui.com/)
 
 These steps are written for BanksiaGUI 0.58 on Windows. **They have not been tried in
 BanksiaGUI.** BanksiaGUI's menu names are not given here, because they have not been checked
 against BanksiaGUI itself.
 
 1. Build the engine, as above.
-2. Open BanksiaGUI's engine manager and add a new engine. Set its program to
-   `<clone>\bin\skytalix-uci.cmd`, set the protocol to UCI and name the engine `skytalix`.
+2. Open BanksiaGUI's engine manager and add a new engine. Set the protocol to UCI and name the
+   engine `skytalix`. Set its program to the launcher:
+   - macOS and Linux: `<clone>/bin/skytalix-uci`
+   - Windows: `<clone>\bin\skytalix-uci.cmd`
 3. Open skytalix's engine options to set `Skill Level`, `OwnBook` and `TimeMode`. The table
    above lists their values.
 4. Start a new game with skytalix as the opponent, and make your move.
 
-### En Croissant
+### En Croissant — macOS, Linux, Windows
+
+Site: [En Croissant](https://encroissant.org/)
 
 The owner ran skytalix in En Croissant on 2026-11-10 through a launcher he made himself, before `bin/skytalix-uci` existed. **These steps, with the launcher in `bin/`, have not been tried in En Croissant.** The Windows launcher is untested.
 
 1. Build the engine, as above.
 2. On the **Engines** page, add a local engine and select the launcher:
-   `<clone>/bin/skytalix-uci`, or on Windows `<clone>\bin\skytalix-uci.cmd`.
+   - macOS and Linux: `<clone>/bin/skytalix-uci`
+   - Windows: `<clone>\bin\skytalix-uci.cmd`
 
 ## Development
 
