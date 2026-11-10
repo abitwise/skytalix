@@ -1,3 +1,4 @@
+_Updated: 2026-11-10T19:08:17Z — **ABC-316 merged** (5272a7e3): L1 1 499.5 ± 53.4, L2 1 678.1 ± 48.5 measured; L3/L4 re-projected. No open tickets; levels 3 and 4 wait on the owner._
 _Updated: 2026-11-10T15:52:00Z — se-ABC-316 done (ebbeb615, gates green, src/ empty); ABC-316 In Review; qe-ABC-316 stage A running (no games)._
 _Updated: 2026-11-10T15:37:17Z — owner: option A, levels 1 and 2 first; ABC-316 cut by note (…20c41f8c); se-ABC-316 building the harness flag (no games)._
 _Updated: 2026-11-10T14:04:56Z — ABC-315 merged (QE PASS …3c485a64, Security R1 closed). Tag v1.0.0 on main, local; owner pushes it and publishes the Release page. No open tickets._
@@ -582,6 +583,7 @@ _Updated: 2026-10-22 19:20Z by Orchestrator — `ABC-199` built (`8c0c5c81`) →
 _Updated: 2026-10-22 19:15Z (UTC, `date -u`) by Architect/Design (`arch-design-ABC-200`, records only, at `main` `9c54df47`) — **ABC-200 design ruled, no STOP** (no ADR new, changed or reversed). One line reader per stream (`src/line-reader.ts`, memoized per source), the questions in `src/startup-questions.ts` on that reader, before the loop, inside every `cli.test.ts` pin; page build notes amended. Ready for the SE. The column move is the Orchestrator's (`…f612277c`)._
 _Updated: 2026-10-22 19:10Z by Orchestrator — `bapm-next-slice` merged: 45 drifted pages fixed; ABC-150 ruled done. EPIC-003, 004 and 005 → Done (all acceptance lines met). EPIC-006 is open (ABC-200, AC1/NFR-007 reading). EPIC-007 is open (M1, M2, M8(a): an owner question). `ABC-200` Ready → In Design (`arch-design-ABC-200`). Ready 0/8, In Design 1/2, In Development 1/3 (`…de0099fa`). Next free id ABC-201._
 _Updated: 2026-10-22 18:57Z (UTC, `date -u`) by BA/PM (`bapm-next-slice`, records only, at `main` `08d42d01`) — **record drift reconciled to this board** (the column record per `ABC-052` option A): 45 ticket pages' front matter now matches their `## Done` card and a merge on `main` — 35 `status`+`column` → `done`/`Done`, 2 → `dropped`/`Done` (`ABC-052` `da7ba9aa`, `ABC-111` `d18d0074`), 8 `column` only. **Left as ambiguous, not guessed:** `ABC-150` (Done here, but only its diagnosis merged and its lever went to `ABC-152`; `done` or `dropped` is a ruling), and `EPIC-003`–`006` (page and card both say Backlog; closing an epic is a card move). Recommended: close `EPIC-003`, `EPIC-004`, `EPIC-005` (every acceptance line met on Done tickets); keep `EPIC-006` open (G6, plus no fresh-clone `NFR-007` reading); keep `EPIC-007` open on M1, M2 and M8(a), which are owner-accepted but not tool-read (owner question). **Next slice cut: `ABC-200`** (Ready, M, P2, `EPIC-006`, DoR 10/10; Architect/Design ruling first, then SE): on a terminal, with a flag absent, `npm run chess` asks for colour and difficulty before the first board; Enter keeps white and level 5; pipes are byte-identical; merges after ABC-178's timing hop. The `## Ready` header count is the Orchestrator's; it should read 1/8. Next free id: ABC-201._
+- ABC-316 — levels 1 and 2 measured (1 499.5 ± 53.4, 1 678.1 ± 48.5), `r --skill`, README levels; merged 5272a7e3, QE PASS_WITH_GAPS …a55b90ec.
 - [ABC-302] **→ Done 2026-11-04** (merged ec4edd92; QE PASS_WITH_GAPS …051a910d, UAT waived; NFR-008 9.505 s graded, −0.38 s; A6 27/27). Survived the session kill: resumed, A8 and A6 not re-run.
 - [ABC-283] **→ Done 2026-11-04** (merged 58e90d07; QE PASS_WITH_GAPS …de1dc511 signs UAT; C2′ 59/27/14 = 66.0/100, Elo +115.2 ± 67.0; S′ 6/10 vs E1810; Levels 58/58; mate floor 0/190, 0/188 with K3). Delivers ABC-233, ABC-234, ABC-236. Gaps: QE-283-a NFR-008 → secnfr; b/c LOW carried.
 - ~~[ABC-271]~~ → Done (stale line; page status done, delivered with ABC-283). **→ Done 2026-11-04** (merged 872e5ffc; QE PASS_WITH_GAPS …74da20bf signs UAT; 
@@ -1482,8 +1484,7 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
 - ~~[ABC-283]~~ → Blocked. The O1h+O3s+S1 bundle (ABC-233 history, ABC-234 SEE ordering, ABC-236 root aspiration) on one branch; one read of 100 games at 100 ms, GAIN ≥ 50.0 (owner's word, …4c4cb03d). se-ABC-283 running; rulings …3851bf43.
     - [ABC-014] Asset allocation chart  (owner: Software Engineer, since: 2026-06-01)
 
-    ## In Review (WIP 1/3)
-- ABC-316 — measure levels 1 and 2 (…20c41f8c); A1 built (ebbeb615); qe-ABC-316 stage A (check + PREREG, no games).
+    ## In Review (WIP 0/3)
 - [ABC-282] W1. Built 7e4b1006 → qe-ABC-282 (A6 100 games at tc=40/8, GAIN ≥ 50.0; verdict signs UAT).
     - [ABC-012] Portfolio FX conversion  (PR: #41, QE: running)
 
