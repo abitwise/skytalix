@@ -1,3 +1,4 @@
+_Updated: 2026-11-10T14:04:56Z — ABC-315 merged (QE PASS …3c485a64, Security R1 closed). Tag v1.0.0 on main, local; owner pushes it and publishes the Release page. No open tickets._
 _Updated: 2026-11-10T13:45:03Z — owner: 7 unmerged remote branches archived as archive/* tags and deleted (tickets already dropped); versioning agreed (SemVer, --version, tag + Release page, v1.0.0); ABC-315 cut by note (…13:44:36Z); se-ABC-315 building._
 _Updated: 2026-11-10T13:23:55Z — ABC-314 merged (QE PASS_WITH_GAPS …42a3def5). No open tickets._
 _Updated: 2026-11-10T13:20:14Z — owner ran bin/skytalix-uci in En Croissant on macOS (one game); ABC-314 cut by note (…13:20:02Z); se-ABC-314 building._
@@ -1713,6 +1714,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready to Release (WIP 0/4)
 
 ## Done (WIP unlimited)
+- [ABC-315] Versioning: VERSIONING.md (SemVer), CHANGELOG.md, version 1.0.0, --version on both entry points. Done 2026-11-10, QE PASS …3c485a64; Security R1 closed (…0088bc3b); tag v1.0.0 created locally, owner pushes and publishes the Release page.
 - [ABC-314] README records the owner's macOS run: bin/skytalix-uci in En Croissant, one game (2026-11-10). Done 2026-11-10, QE PASS_WITH_GAPS …42a3def5; low gap G1 (owner's word, table rendering) open.
 - [ABC-313] README: GUI section per OS (GUI/OS table with links, per-OS launcher paths, platforms in headings), Node.js link. Done 2026-11-10, QE PASS_WITH_GAPS …ea7dca64; low gap G3 (rendering, GUIs on macOS/Windows not tried) open.
 - [ABC-312] Blunder row, README fixes, bin/skytalix-uci (macOS/Linux) and bin/skytalix-uci.cmd (Windows, untested). Done 2026-11-10, QE PASS_WITH_GAPS …ec4a005f; low gaps G7, G8 open.
