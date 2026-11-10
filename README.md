@@ -84,8 +84,8 @@ Find your GUI and your OS here. The platforms are the ones each GUI publishes.
 
 | GUI | macOS | Linux | Windows | Run with skytalix | Link |
 |---|---|---|---|---|---|
-| Arena | no | no | yes | Not tried | [playwitharena.de](http://www.playwitharena.de/) |
-| Cute Chess | yes | yes | yes | `dist/uci.js` run directly, on Linux. The launcher has not been tried | [github.com/cutechess/cutechess](https://github.com/cutechess/cutechess) |
+| Arena | no | yes | yes | Not tried | [playwitharena.de](http://www.playwitharena.de/) |
+| Cute Chess | yes, built from source | yes | yes | `dist/uci.js` run directly, on Linux. The launcher has not been tried | [github.com/cutechess/cutechess](https://github.com/cutechess/cutechess) |
 | BanksiaGUI | yes | yes | yes | Not tried | [banksiagui.com](https://banksiagui.com/) |
 | En Croissant | yes | yes | yes | Run by the owner through his own launcher. The launcher in `bin/` has not been tried | [encroissant.org](https://encroissant.org/) |
 
@@ -122,16 +122,19 @@ time margin in the GUI.
 
 `Skill Level` is read only while `TimeMode` is `level`.
 
-### Arena — Windows
+### Arena — Linux, Windows
 
 Site: [Arena](http://www.playwitharena.de/)
 
 These steps are written for Arena 3.5.1 on Windows. **They have not been tried in Arena.**
+Arena for Linux is a separate download, 3.10beta.
 Arena's menu names are not given here, because they have not been checked against Arena itself.
 
 1. Build the engine, as above.
-2. Open Arena's engine manager and add a new UCI engine. Set its program to the Windows
-   launcher, `<clone>\bin\skytalix-uci.cmd`, and name the engine `skytalix`.
+2. Open Arena's engine manager and add a new UCI engine. Name the engine `skytalix`. Set its
+   program to the launcher:
+   - Linux: `<clone>/bin/skytalix-uci`
+   - Windows: `<clone>\bin\skytalix-uci.cmd`
 3. Make skytalix the active engine and open its UCI options to set `Skill Level`, `OwnBook`
    and `TimeMode`. The table above lists their values.
 4. Start a new game with skytalix as the opponent, and make your move.
