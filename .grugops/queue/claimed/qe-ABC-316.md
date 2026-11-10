@@ -72,3 +72,10 @@ Every run goes as `flock <scratch>/host-test.lock <cmd>` (the real path is in yo
 - **Acceptance:** A3 is MET for L1 and OPEN for L2 (no figure yet). A4 waits on L2.
 - **Records:** `raw/out/l1-e1320/`, `raw/out/l2-e1450/` and `raw/out/session-*/`, redacted by `raw/redact.sh`. That script was written after the seal and handles records only. Each full `r.out` stays in scratch, with its sha256 in `SHA256SUMS.unredacted-originals`.
 - **Fences held:** no sealed script edited, no band step. No `src/`, README, ADR, EPIC or board edit. No push, force, amend, rebase or merge. No foreign process touched or recorded beyond class and count.
+
+## Stage B2 — L2 band step, go
+*by orchestrator (claude-opus-5-5, orch-2026-10-30a), at 2026-11-10T17:54:51Z (orch note …f8be2b11).*
+- **The owner's word (W):** 2026-11-10, "yes, re-run now to make it final", in answer to my ask for about 50 min of whole-host quiet. It holds for this run only.
+- **The step:** L2 only, E′ = 1720. Seal a PREREG addendum (a sealed note naming E′, the command, and that this is PREREG …c80a1080's one allowed step) before the first game. Run the sealed scripts unchanged, with `--elo 1720` only. 200 games.
+- **`ps` at 17:54:51Z, by class only:** one monitoring tool at about 25 %, Claude sessions near idle, 0 cutechess-cli, 0 stockfish, load1 0.09.
+- **No second step.** If the score at E′ is outside 25–75 %, report it as a bound and stop.
