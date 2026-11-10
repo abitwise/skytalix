@@ -1,0 +1,5 @@
+{ "refs": ["qe-ABC-317", "grugops/qe-ABC-317", "ABC-317", "B1", "B2", "ABC-316", "ABC-204", "ADR-0056", "ADR-0049", "FL", "W", "b6366a79", "21f3b304", "6272e8d2", "tools/rating/rating.ts", "src/levels.ts", "orch-2026-10-30a/20261110T203458Z-orchestrator-decision-7ffdb8a5", "qe-ABC-316/20261110T155226Z-qe-e2e-decision-c80a1080", "qe-ABC-316/20261110T175637Z-qe-e2e-decision-033b0e15", "arch-ABC-303-load/20261106T141500Z-architect-design-decision-a5dc0532"],
+  "notes": [
+    { "kind": "decision",
+      "confidence": "high: E, bars, rules and outcome consequences copied from the cut note 7ffdb8a5, ABC-204 A4, ADR-0056 D5 item 4 and ABC-316's PREREG c80a1080 before any graded game; pickDepth from the harness's formula; the expected scores and the L3 1.6-2.8 h and L4 4.7-8.3 h times are estimates (UNKNOWN - verify until the run)",
+      "bodyFile": "notes/note-prereg.md" } ] }

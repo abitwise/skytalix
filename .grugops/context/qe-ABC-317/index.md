@@ -1,0 +1,9 @@
+<!-- GENERATED — do not hand-edit. Re-run: node scripts/context-io.js render <task> -->
+# Context: qe-ABC-317
+
+## Current state
+
+| at | kind | by | confidence | verified_by | note |
+| --- | --- | --- | --- | --- | --- |
+| 2026-11-10T20:44:44Z | decision | qe-e2e | high: E, bars, rules and outcome consequences copied from the cut note 7ffdb8a5, ABC-204 A4, ADR-0056 D5 item 4 and ABC-316's PREREG c80a1080 before any graded game; pickDepth from the harness's formula; the expected scores and the L3 1.6-2.8 h and L4 4.7-8.3 h times are estimates (UNKNOWN - verify until the run) |  | # qe-ABC-317 PREREG for levels 3 and 4, sealed before any graded game: one 200-game reading per level (`r --skill 3 --elo 1890`, `r --skill 4 --elo 2040`) on `b6366a79` (`src/` `21f3b304`, the sha L1 and L2 were read on), each level startable alone with its own command. Estimated **L3 about 1.6–2.8 h (central 2.0 h); L4 about 4.7–8.3 h (central 6.1 h)**. RUNAWAY stops at 225 min (L3) and 672 min (L4). Validity, the figures and the band-rule consequence of each outcome are fixed here. A miss is reported, never re-played. The games wait for the Orchestrator's brief line citing the owner's held host (W) |
+| 2026-11-10T20:44:44Z | observation | qe-e2e | high: every check run by QE under the host lock on 2026-11-10, one at a time, outputs in raw/out; one 2-game smoke labelled not graded, no other game |  | # qe-ABC-317 stage A checks: pins = pin, trees as ABC-316 read, the L3 and L4 dry runs as A1 says, the session script's refusals and gates. One 2-game smoke at `--skill 4 --elo 2040`, NOT GRADED: control line = A1's, `Skill Level 4` and `UCI_Elo 2040` reach every engine process, every `go` is `go movetime 1000`, skytalix latency max 1 003 ms. Every engine run went under the host lock, one at a time |
