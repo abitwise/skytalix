@@ -79,3 +79,28 @@ Every run goes as `flock <scratch>/host-test.lock <cmd>` (the real path is in yo
 - **The step:** L2 only, E′ = 1720. Seal a PREREG addendum (a sealed note naming E′, the command, and that this is PREREG …c80a1080's one allowed step) before the first game. Run the sealed scripts unchanged, with `--elo 1720` only. 200 games.
 - **`ps` at 17:54:51Z, by class only:** one monitoring tool at about 25 %, Claude sessions near idle, 0 cutechess-cli, 0 stockfish, load1 0.09.
 - **No second step.** If the score at E′ is outside 25–75 %, report it as a bound and stop.
+
+## Stage B2
+*QE/E2E (claude-opus-5-5, qe-ABC-316), 2026-11-10, on `grugops/qe-ABC-316` at `7c152a01` (harness `tools/` `6272e8d2`). Read sha `main` `b6366a79` (`src/` `21f3b304`).*
+
+**Result: L2 at E′ 1 720 is VALID and INSIDE the band (44.00 %). L2's figure is X = 1 678.1 ± 48.5. This was the one step PREREG `…c80a1080` allows; no further step. A3 is MET for both levels.**
+- **Notes:** PREREG addendum `20261110T175637Z-qe-e2e-decision-033b0e15`, sealed and committed (`7c152a01`) before any game. Readings `20261110T190145Z-qe-e2e-observation-6c692664`. Verdict `20261110T190203Z-qe-e2e-decision-553195c0`.
+- **Scripts:** the sealed `session.sh` fixes E inside its level `case`, so the step ran `raw/scripts-b2/session.sh`.
+  - That copy differs by one token, `E=1450` → `E=1720` (one line, 2 bytes). Its `hostcheck.sh` and `read.mjs` are byte copies. The addendum sealed its sha256 `09d9966d…`.
+  - The sealed `raw/scripts/` are unedited. Both lists were sha-checked OK just before the launch.
+- **Run:** `CUTECHESS_CLI=<cutechess-cli> STOCKFISH=<stockfish> flock <scratch>/host-test.lock bash .grugops/context/qe-ABC-316/raw/scripts-b2/session.sh 2 <out-root>/l2-e1720 <repo>`, under one lock hold.
+  - W-check at 17:56:57Z: 0 / 0 / 0 / 0, load1 0.26, so not a WAIT.
+  - `r` ran 17:56:57Z–19:00:34Z, **63 min 37 s**, inside the 45–90 min estimate. Stops: none. Session exit 0.
+- **L2** (`--skill 2 --elo 1720`, `st` 0.18 s):
+  - **87 / 2 / 111, 88.0 / 200 = 44.00 %** (White 45.5, Black 42.5).
+  - Elo −41.9 ± 48.5, so **X = 1 678.1 ± 48.5**. Cluster ± 50.3.
+  - Outcome 2: this is the level's figure.
+  - Faults 0, time losses 0, depth guard 0 of 10 720 below depth 3 (the pick depth at 1 720). Latency max 185 ms against a 230 ms margin.
+  - Host ALONE: 0 foreign of any class in 377 samples. Tctl max 74.2 °C.
+- **Reported, not graded:**
+  - L2 − L1 = 1 678.1 − 1 499.5 = **+178.6 ± about 72**. The Stockfish time-scale difference between 100 and 180 ms is UNKNOWN - verify.
+  - The E 1 450 reading (X 1 716.4 ± 64.3) agrees within its error. It stands as read and is not pooled.
+  - Both levels read above the README's projections (L1 1 000–1 300, L2 1 300–1 550).
+- **Acceptance:** A3 is MET for both levels. A4 (README) can now take both figures with their scales. That is not QE's at this hop.
+- **Records:** `raw/out/l2-e1720/` and `raw/out/session-l2-e1720/`, redacted by `raw/redact.sh`. The full `r.out` stays in scratch, with its sha256 `0c02d295…`.
+- **Fences held:** one run, one step, no re-run. No sealed script edited. No `src/`, README, ADR, EPIC or board edit. No push, force, amend, rebase or merge. No foreign process touched or recorded beyond class and count.

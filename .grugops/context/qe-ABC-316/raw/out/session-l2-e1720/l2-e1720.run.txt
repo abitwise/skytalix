@@ -1,0 +1,18 @@
+chip: AMD Ryzen AI 9 HX 370 w/ Radeon 890M
+linux: 7.0.0-42-generic
+node: <node> v26.12.1
+cutechess-cli: cutechess-cli 1.5.1 sha256 dc77690113d9ae130f5d1b4c76fefb28f42620ac45a2bd4abb7dd8eb2154f40a = pin
+stockfish: id name Stockfish 19 sha256 c78c22a924e8d452e1089ec8d47826f7a276aba69373185e82cbac4593e352d2 = pin
+openings: <repo>/tools/rating/openings.epd sha256 0d7f7a72678cbf54c2c309dc5d664e7aac5de2c15bc54fe4247a437f51e82666
+harness: <repo> at 7c152a010a14fc6b66136351ee042419e76766d7
+concurrency: 1 (default 2)
+control: skytalix Skill Level=2 st=0.18 timemargin=50, stockfish st=0.18 timemargin=2000
+Elo difference: -41.9 +/- 48.5, LOS: 4.4 %, DrawRatio: 1.0 %
+W/L/D: 87/111/2  score: 0.440  games: 200 of 200
+draw ratio: 1.0 %
+faults: 0  unclassified: 0  move-cap draws: 0
+skytalix.stderr: 0 bytes
+stockfish.stderr: 0 bytes
+stockfish depth guard: 0 of 10720 moves below depth 3
+state: rating E + X ± Y = 1720 + -41.9 ± 48.5 = 1678.1 ± 48.5
+
