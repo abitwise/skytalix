@@ -1,3 +1,4 @@
+_Updated: 2026-11-10T15:37:17Z — owner: option A, levels 1 and 2 first; ABC-316 cut by note (…20c41f8c); se-ABC-316 building the harness flag (no games)._
 _Updated: 2026-11-10T14:04:56Z — ABC-315 merged (QE PASS …3c485a64, Security R1 closed). Tag v1.0.0 on main, local; owner pushes it and publishes the Release page. No open tickets._
 _Updated: 2026-11-10T13:45:03Z — owner: 7 unmerged remote branches archived as archive/* tags and deleted (tickets already dropped); versioning agreed (SemVer, --version, tag + Release page, v1.0.0); ABC-315 cut by note (…13:44:36Z); se-ABC-315 building._
 _Updated: 2026-11-10T13:23:55Z — ABC-314 merged (QE PASS_WITH_GAPS …42a3def5). No open tickets._
@@ -1475,7 +1476,8 @@ _Updated: 2026-08-20 by BA/PM (task `cut-nfr008-wall-2026-08-20`, Workflow 07) �
   clean append target. Roles append a one-line ticket row under the matching column as work
   moves, e.g. (this is a comment, NOT a live row — the generic `ABC-` prefix shows format only):
 
-    ## In Development (WIP 0/3)
+    ## In Development (WIP 1/3)
+- ABC-316 — measure levels 1 and 2 against Stockfish 19 (cut by note …20c41f8c); se-ABC-316 building `r --skill`.
 - [ABC-301] E2s second pull, scopes 1–4 (one bounded fit). se-ABC-301-fit running.
 - ~~[ABC-283]~~ → Blocked. The O1h+O3s+S1 bundle (ABC-233 history, ABC-234 SEE ordering, ABC-236 root aspiration) on one branch; one read of 100 games at 100 ms, GAIN ≥ 50.0 (owner's word, …4c4cb03d). se-ABC-283 running; rulings …3851bf43.
     - [ABC-014] Asset allocation chart  (owner: Software Engineer, since: 2026-06-01)
