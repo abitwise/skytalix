@@ -42,3 +42,10 @@ Every run goes as `flock <scratch>/host-test.lock <cmd>` (the real path is in yo
 - **Time estimate:** L1 35–77 min (central about 0.8 h); L2 63–138 min (central about 1.4 h). **Both 1.6–3.6 h, central about 2.2 h**, under one lock hold. RUNAWAY stops at 105 and 185 min.
 - **To start stage B:** `CUTECHESS_CLI=<cutechess-cli> STOCKFISH=<stockfish> flock <scratch>/host-test.lock bash .grugops/context/qe-ABC-316/raw/scripts/stage-b.sh <out-root> <repo>`. Run it from this branch's worktree root, with `<out-root>` a new directory outside the repo. L1 runs, then L2 if L1's session exits 0.
 - **Fences held:** no `src/`, README, ADR, EPIC or board edit. No push, force, amend, rebase or merge. No foreign process touched or recorded beyond a count.
+
+## Stage B — go
+*by orchestrator (claude-opus-5-5, orch-2026-10-30a), at 2026-11-10T15:53:35Z.*
+- **The owner's word (W):** 2026-11-10, "host is quiet, go ahead with the games", in answer to my ask for about 2 h of whole-host quiet, grugops and his other projects included (orch note …f45053d2). It holds for these games only. Your central estimate of 2.2 h (range 1.6–3.6 h) is told to the owner as this stage starts; it is not a new ask.
+- **`ps` check at 15:53:35Z, by class and count only:** one monitoring tool at about 26 % of one core; Claude sessions near idle; daemons at about 1 %. 0 cutechess-cli and 0 stockfish. One long-lived node process names vitest in its arguments, at 0 % CPU, running for about 2.7 days: the same idle class ABC-295 stage B logged. load1 0.69.
+- **Run stage B on PREREG `…c80a1080` exactly as sealed:** L1, then L2. Check the sealed scripts' sha256s just before the launch. If the session's own W-check says WAIT on the idle process above, stop and report: do not edit the sealed check.
+- **Band step:** not pre-approved. If a level lands outside 25–75 %, report it and stop that level; a step needs my word.
