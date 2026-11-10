@@ -4,6 +4,13 @@ All notable changes to skytalix are recorded here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the version numbers follow
 [VERSIONING.md](VERSIONING.md).
 
+## [Unreleased]
+
+### Changed
+
+- README Levels table: measured strengths for levels 1 and 2, and revised projections for levels 3
+  and 4.
+
 ## [1.0.0] - 2026-11-10
 
 The first versioned release: command-line chess against a club-strength engine, which also runs
