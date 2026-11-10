@@ -1345,7 +1345,16 @@ describe("ABC-042 — the accepted set is closed", () => {
   /** `ABC-101`'s rows: `--difficulty` and its seven level words, ruling 1. */
   const TABLE_DIFFICULTY = "--difficulty";
   const TABLE_LEVELS = ["1", "2", "3", "4", "5", "6", "7"] as const;
-  const TABLE = [...TABLE_FLAGS, TABLE_COLOUR, ...TABLE_VALUES, TABLE_DIFFICULTY, ...TABLE_LEVELS];
+  /** `ABC-315`'s row: `--version`, accepted only as the whole command line. */
+  const TABLE_VERSION = "--version";
+  const TABLE = [
+    ...TABLE_FLAGS,
+    TABLE_COLOUR,
+    ...TABLE_VALUES,
+    TABLE_DIFFICULTY,
+    ...TABLE_LEVELS,
+    TABLE_VERSION,
+  ];
 
   it("A6(i) — the exported enumeration EQUALS the table, element for element, both ways", () => {
     expect([...ACCEPTED_ARGUMENTS].sort()).toEqual([...TABLE].sort());
@@ -1360,6 +1369,7 @@ describe("ABC-042 — the accepted set is closed", () => {
       ["--unicode"],
       ...TABLE_VALUES.map((value) => [TABLE_COLOUR, value]),
       ...TABLE_LEVELS.map((level) => [TABLE_DIFFICULTY, level]),
+      [TABLE_VERSION],
     ];
 
     for (const argv of accepted) {
@@ -1543,6 +1553,11 @@ describe("ABC-042 — the accepted set is closed", () => {
         cases.push([TABLE_COLOUR, miss]);
       }
     }
+    // `ABC-315` — `--version`'s legal position is the whole command line, one token.
+    for (const miss of nearMisses(TABLE_VERSION)) {
+      derived.push(miss);
+      cases.push([miss]);
+    }
 
     // THE ROW PINS THE DERIVED COUNT, and it pins BOTH numbers because they differ and the
     // difference is a trap: 138 CASES over 134 DISTINCT strings. The four duplicates are deletions
@@ -1551,14 +1566,40 @@ describe("ABC-042 — the accepted set is closed", () => {
     // spelling, n = 7+9+8+5+5+6); 134 is what a uniqueness assertion may say. Asserting uniqueness
     // against 138 reds a CORRECT build, which is why both are written down here rather than left
     // for the next reader to re-derive.
-    expect(derived).toHaveLength(138);
-    expect(new Set(derived).size).toBe(134);
-    // It cannot false-RED a legal build: none of the 138 is an accepted spelling.
+    // `ABC-315` adds `--version`'s 30 (n = 9) with one more duplicate (either `-` gives
+    // `-version`): 168 cases over 163 distinct strings.
+    expect(derived).toHaveLength(168);
+    expect(new Set(derived).size).toBe(163);
+    // It cannot false-RED a legal build: none of the 168 is an accepted spelling.
     expect(
       derived.filter((miss) => (ACCEPTED_ARGUMENTS as readonly string[]).includes(miss)),
     ).toEqual([]);
     for (const argv of cases) {
       expect(resolveOptions(argv).ok, `argv ${JSON.stringify(argv)}`).toBe(false);
+    }
+  });
+
+  it("ABC-315 A4 — `--version` alone asks for the version; next to anything else it is refused and named", () => {
+    const alone = resolveOptions([TABLE_VERSION]);
+    if (!alone.ok) throw new Error("`--version` alone was rejected");
+    expect(alone.version).toBe(true);
+    for (const argv of [[], ["--ascii"], [TABLE_COLOUR, "black"], [TABLE_DIFFICULTY, "3"]]) {
+      const resolution = resolveOptions(argv);
+      if (!resolution.ok) throw new Error(`a documented argv was rejected: ${argv.join(" ")}`);
+      expect(resolution.version, `argv ${JSON.stringify(argv)}`).toBe(false);
+    }
+    for (const argv of [
+      [TABLE_VERSION, TABLE_VERSION],
+      [TABLE_VERSION, "--ascii"],
+      ["--unicode", TABLE_VERSION],
+      [TABLE_COLOUR, "white", TABLE_VERSION],
+      [TABLE_VERSION, TABLE_DIFFICULTY, "2"],
+    ]) {
+      const resolution = resolveOptions(argv);
+      expect(resolution.ok, `argv ${JSON.stringify(argv)}`).toBe(false);
+      if (resolution.ok) continue;
+      expect(resolution.problem).toBe("--version cannot be used with other arguments");
+      expect(resolution.offending).toEqual([TABLE_VERSION]);
     }
   });
 
@@ -3296,9 +3337,12 @@ describe("ABC-044 — the result screen reaches the player", () => {
     // screen. A build that wrote row by row would interleave with nothing today and would be a
     // different contract. ONE UNTIL `ABC-203` (2026-10-23): the second call site is the one
     // `PGN saved: <path>` line after the screen (`A11`), licensed by that ticket's design ruling
-    // (`A14` clarification), and it is named here so a third cannot arrive unseen.
-    expect(entry.match(/sink\.write\(/g)).toHaveLength(2);
+    // (`A14` clarification), and it is named here so a third cannot arrive unseen. TWO UNTIL
+    // `ABC-315` (2026-11-10): the third is the version line, written instead of a session when the
+    // command line is `--version` alone, and it is named here the same way.
+    expect(entry.match(/sink\.write\(/g)).toHaveLength(3);
     expect(entry.match(/sink\.write\(`PGN saved: /g)).toHaveLength(1);
+    expect(entry.match(/sink\.write\(`\$\{readVersionLine\(\)\}\\n`\)/g)).toHaveLength(1);
     expect(entry).toMatch(/renderResultScreen\(outcome,\s*history\)/);
   });
 
@@ -4464,9 +4508,9 @@ describe("ABC-101 — --difficulty selects a level, and the played engine is tha
   });
 
   it("ABC-212 A7 — the usage line is byte-exact, read off the existing refusal child", () => {
-    // 0 new spawns (`A12`): the same child `A5` above reads.
+    // 0 new spawns (`A12`): the same child `A5` above reads. `ABC-315` appends `[--version]`.
     expect(usageLineOf(CHILDREN.badColour.stderr)).toBe(
-      "usage: npm run chess -- [--colour white|black|random] [--difficulty 1|2|3|4|5|6|7] [--ascii | --unicode]",
+      "usage: npm run chess -- [--colour white|black|random] [--difficulty 1|2|3|4|5|6|7] [--ascii | --unicode] [--version]",
     );
   });
 

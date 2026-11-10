@@ -99,6 +99,7 @@ import { makeRenderSeam } from "./render-seam.ts";
 import { renderResultScreen } from "./result-screen.ts";
 import { askAbsentOptions } from "./startup-questions.ts";
 import { runTurnLoop } from "./turn-loop.ts";
+import { readVersionLine } from "./version-file.ts";
 
 /** The standard start position, in the spelling every test file in this repository uses. */
 const START_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
@@ -110,7 +111,7 @@ const START_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
  * printed. Do not tidy the separator away.
  */
 const USAGE =
-  "usage: npm run chess -- [--colour white|black|random] [--difficulty 1|2|3|4|5|6|7] [--ascii | --unicode]";
+  "usage: npm run chess -- [--colour white|black|random] [--difficulty 1|2|3|4|5|6|7] [--ascii | --unicode] [--version]";
 
 /** A refused command line is a failure, and the shell is told so. Nothing here calls `exit`. */
 const USAGE_EXIT_CODE = 1;
@@ -188,6 +189,13 @@ async function main(): Promise<void> {
   });
 
   try {
+    // `ABC-315` — `--version` alone: one line on the board's stdout, exit 0, and nothing else. After
+    // the error arm (`ADR-0016` clause 4), before any question, book or frame. Inside the `try`: a
+    // `package.json` that cannot be read ends as `INTERNAL_ERROR`, exit 70, no path (`R1`).
+    if (parsed.version) {
+      sink.write(`${readVersionLine()}\n`);
+      return;
+    }
     // `ABC-200` — BEFORE the glyph mode, the history and the book (`A9`). Not a TTY: 0 reads.
     const resolution = await askAbsentOptions(parsed, { source: stdin, output: sink });
     if (resolution === null) return;

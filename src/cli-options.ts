@@ -46,6 +46,9 @@ import type { Orientation } from "./render.ts";
  * `ABC-101` adds `--difficulty` and its value words, the ordinals `1`-`7` (`ABC-212` adds `6` and
  * `7`), weakest to strongest (ruling 1). They are opaque here: this module gives a level no
  * meaning (`RISK-002`).
+ *
+ * `ABC-315` adds `--version`, before `--difficulty` so that the level words stay the rest element.
+ * It is accepted ONLY as the whole command line; next to any other argument it is a usage error.
  */
 export const ACCEPTED_ARGUMENTS = [
   "--ascii",
@@ -54,6 +57,7 @@ export const ACCEPTED_ARGUMENTS = [
   "white",
   "black",
   "random",
+  "--version",
   "--difficulty",
   "1",
   "2",
@@ -64,7 +68,7 @@ export const ACCEPTED_ARGUMENTS = [
   "7",
 ] as const;
 
-const [ASCII, UNICODE, COLOUR, WHITE, BLACK, RANDOM, DIFFICULTY, ...DIFFICULTY_VALUES] =
+const [ASCII, UNICODE, COLOUR, WHITE, BLACK, RANDOM, VERSION, DIFFICULTY, ...DIFFICULTY_VALUES] =
   ACCEPTED_ARGUMENTS;
 
 /** A difficulty level: a plain ordinal, `1` weakest to `7` strongest. */
@@ -122,6 +126,12 @@ export type Resolution =
       readonly ok: true;
       readonly options: ResolvedOptions;
       readonly absent: { readonly colour: boolean; readonly difficulty: boolean };
+      /**
+       * `ABC-315` — `true` when the command line is `--version` and nothing else: the entry point
+       * prints the version and stops, and `options` and `absent` are the no-argument defaults,
+       * unused. Beside `options` for the same reason as `absent`.
+       */
+      readonly version: boolean;
     }
   | ({ readonly ok: false } & UsageError);
 
@@ -129,6 +139,7 @@ const UNRECOGNISED = "unrecognised argument";
 const MISSING_VALUE = "--colour needs one of white|black|random";
 const MISSING_DIFFICULTY = "--difficulty needs one of 1|2|3|4|5|6|7";
 const CONFLICTING_FLAGS = "--ascii and --unicode cannot be used together";
+const VERSION_ALONE = "--version cannot be used with other arguments";
 
 const reject = (problem: string, ...offending: readonly string[]): Resolution => ({
   ok: false,
@@ -169,6 +180,7 @@ export function resolveOptions(argv: readonly string[]): Resolution {
   let difficulty = DEFAULT_DIFFICULTY;
   let colourAbsent = true;
   let difficultyAbsent = true;
+  let version = false;
 
   for (let index = 0; index < argv.length; index++) {
     const token = argv[index] as string;
@@ -190,6 +202,11 @@ export function resolveOptions(argv: readonly string[]): Resolution {
       colour = value;
       colourAbsent = false;
       index++;
+      continue;
+    }
+    if (token === VERSION) {
+      if (argv.length !== 1) return reject(VERSION_ALONE, token);
+      version = true;
       continue;
     }
     if (token === DIFFICULTY) {
@@ -217,5 +234,6 @@ export function resolveOptions(argv: readonly string[]): Resolution {
     ok: true,
     options: optionsFor(colour, { ascii, unicode }, difficulty),
     absent: { colour: colourAbsent, difficulty: difficultyAbsent },
+    version,
   };
 }
