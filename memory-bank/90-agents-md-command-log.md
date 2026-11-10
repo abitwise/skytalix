@@ -129,6 +129,11 @@ WRITING RULES for this slot, enforced by
   even to say it does not - write that sentence elsewhere in `AGENTS.md`. The same block requires
   exactly one such slot (`ABC-071`) and a comment that closes inside it (`ABC-067`).
 
+`--version` (`ABC-315`, 2026-11-10). Accepted only as the whole command line: `npm run chess -- --version` prints
+`skytalix <version>`, the `package.json` version read at run time (`src/version-file.ts`), and exits 0; next to any other
+argument it is refused, exit 1. It is in the slot's option list and the usage line because `ABC-065`'s and `ABC-066`'s
+guards require every accepted argument in both.
+
 ## Regenerate the opening book (`ABC-093`) — `node tools/opening-book/compile.ts <dir>`
 
 RUN 2026-10-10, `scribe-book-regen-2026-10-10`, wave tip `39d87491`. The five source files were fetched

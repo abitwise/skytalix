@@ -40,6 +40,9 @@ npm run chess -- --ascii
 
 On a terminal, a missing `--colour` or `--difficulty` is asked for; Enter keeps the default.
 
+`npm run chess -- --version` prints the version, for example `skytalix 1.0.0`, and so does
+`bin/skytalix-uci --version`.
+
 Type moves in SAN (`e4`, `Nf3`) or as coordinates (`e2e4`). Type `help` during a game to list
 the commands, among them `moves`, `undo`, `resign` and `quit`.
 
@@ -194,6 +197,9 @@ npm run typecheck
 ```
 
 The full command list is in [AGENTS.md](AGENTS.md).
+
+Versions follow the rules in [VERSIONING.md](VERSIONING.md). [CHANGELOG.md](CHANGELOG.md) lists
+what each version changed.
 
 ## Licence
 
