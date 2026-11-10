@@ -1,0 +1,60 @@
+#!/bin/sh
+# skytalix UCI engine launcher for macOS and Linux. Point a chess GUI at this file.
+# It finds the clone from its own location, so it works from any directory and through a
+# symlink, and it finds node even when a GUI starts it with a short PATH.
+
+# Follow symlinks to this script, then go from bin/ up to the clone.
+self=$0
+while [ -L "$self" ]; do
+  link=$(readlink "$self")
+  case $link in
+    /*) self=$link ;;
+    *) self=$(dirname "$self")/$link ;;
+  esac
+done
+clone=$(CDPATH='' cd -P -- "$(dirname -- "$self")/.." && pwd -P) || exit 1
+
+engine=$clone/dist/uci.js
+if [ ! -f "$engine" ]; then
+  echo "skytalix-uci: $engine is missing; in $clone, run npm install, then run npm run build" >&2
+  exit 1
+fi
+
+# A GUI may start this with no HOME; on Linux it can still be looked up.
+home=${HOME:-$(getent passwd "$(id -u)" 2>/dev/null | cut -d: -f6)}
+
+node=$(command -v node 2>/dev/null)
+if [ -z "$node" ]; then
+  # Common install places: Homebrew, Volta, fnm, asdf. nvm and the system come after.
+  for candidate in \
+    /opt/homebrew/bin/node \
+    /usr/local/bin/node \
+    "$home/.volta/bin/node" \
+    "$home/.local/share/fnm/aliases/default/bin/node" \
+    "$home/Library/Application Support/fnm/aliases/default/bin/node" \
+    "$home/.fnm/aliases/default/bin/node" \
+    "$home/.asdf/shims/node"
+  do
+    if [ -x "$candidate" ]; then
+      node=$candidate
+      break
+    fi
+  done
+fi
+if [ -z "$node" ]; then
+  # nvm: the highest installed version, compared numerically (v22.18.0 beats v22.9.0).
+  nvm_dir=${NVM_DIR:-$home/.nvm}/versions/node
+  best=$(ls "$nvm_dir" 2>/dev/null | sed -n 's/^v\([0-9]*\)\.\([0-9]*\)\.\([0-9]*\)$/\1 \2 \3 &/p' | sort -n -k1,1 -k2,2 -k3,3 | tail -n 1 | cut -d' ' -f4)
+  if [ -n "$best" ] && [ -x "$nvm_dir/$best/bin/node" ]; then
+    node=$nvm_dir/$best/bin/node
+  fi
+fi
+if [ -z "$node" ] && [ -x /usr/bin/node ]; then
+  node=/usr/bin/node
+fi
+if [ -z "$node" ]; then
+  echo "skytalix-uci: node not found; install Node.js 22.18 or later, or put node on the PATH" >&2
+  exit 127
+fi
+
+exec "$node" "$engine" "$@"
