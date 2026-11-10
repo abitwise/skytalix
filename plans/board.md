@@ -1,3 +1,4 @@
+_Updated: 2026-11-10T10:39:53Z — owner: blunder row, README fixes and UCI launchers for macOS, Linux and Windows (En Croissant tested by the owner); ABC-312 cut by note (…10:39:36Z); se-ABC-312 building._
 _Updated: 2026-11-09T22:47:19Z — ABC-311 merged (projected level ratings in README; QE PASS_WITH_GAPS …cb74c9fc). No open tickets._
 _Updated: 2026-11-09T22:41:19Z — owner: projected level ratings into the README; ABC-311 cut by note …03f8f6f9 (docs only); se-ABC-311 building, QE checks after._
 _Updated: 2026-11-09T22:39:26Z — ABC-310 dropped by the owner (too much work for the likely gain); no open tickets._
