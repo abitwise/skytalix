@@ -1,0 +1,44 @@
+# qe-ABC-316 PREREG addendum for stage B2, sealed before its first game: **PREREG `…c80a1080`'s one allowed L2 step, at E′ 1 720.** One new 200-game run: `r b6366a79 <out> --skill 2 --elo 1720 --rounds 100 --concurrency 1`. Everything else is as sealed in `…c80a1080`: validity, figures, FL, W, the stops and the re-run rules. **No further step.** A score outside 25–75 % at E′ is reported as a bound, not a figure. Estimated about 50 min (45–90)
+
+QE/E2E, task `qe-ABC-316`, stage B2, branch `grugops/qe-ABC-316` at `3dbfa834`. Authority: the brief's `## Stage B2 — L2 band step, go` block and orch note `orch-2026-10-30a/…f8be2b11` (the owner's word, 2026-11-10: "yes, re-run now to make it final"; W for this run only). Reason for the step: the stage B verdict `…f44a427d`, L2 at E 1 450 scored 164.5 / 200 (82.25 %), outcome 3 of `…c80a1080`.
+
+## E′, fixed by the sealed rule (not chosen here)
+- E′ = E + Δ = 1 450 + 266.4 = 1 716.4, rounded to 10: **1 720**, inside the 1 320–3 190 clamp. The Orchestrator's note names the same value.
+- This is **the one step** `…c80a1080` allows at L2. It is not a re-run of the E 1 450 reading, which stands as read. The two runs are **never pooled**.
+- Stockfish's pick depth (`pickDepth`) at E′ 1 720 is **3** (level 2.95; it was 2 at E 1 450). The tool's depth guard reads `below depth 3`. That is the validity bar here, in place of `depth 2`.
+
+## The command
+`CUTECHESS_CLI=<cutechess-cli> STOCKFISH=<stockfish> node tools/rating/rating.ts r b6366a79 <out> --skill 2 --elo 1720 --rounds 100 --concurrency 1`
+- It is L2's sealed command with `--elo 1720` and no other change: 200 games, openings 1–100 with both colours, `-maxmoves 200`. skytalix gets `st=0.18 timemargin=50 restart=on option.Skill Level=2`. Stockfish gets `st=0.18 timemargin=2000 restart=on`, `Threads 1`, `Hash 16`, `UCI_LimitStrength true`, `UCI_Elo 1720`.
+- Read sha `main` `b6366a79` (`src/` `21f3b304`); harness `tools/` `6272e8d2`. The pins are those of `…c80a1080`.
+
+## The scripts: the sealed ones, changed only by E′
+- The sealed `session.sh` fixes E inside its level `case` (`2) E=1450`). E is not an argument, and `stage-b.sh` always runs L1 first, so the sealed bytes cannot run this step unchanged.
+- **`raw/scripts-b2/session.sh`** (sha256 `09d9966d29698e1f34a31aa6890ae9a002c77a5f4b4392178fb45db627b8500c`) is the sealed `session.sh` (`3fc10849…`) with one token changed, `2) E=1450` to `2) E=1720`. `diff` shows that one line, and `cmp` 2 bytes. RUNAWAY stays 185 min (`11100` s). Gates, sampler, stops, record check and the `read.mjs` call are unchanged; they all take E from that one variable.
+- `raw/scripts-b2/hostcheck.sh` and `raw/scripts-b2/read.mjs` are byte copies of the sealed ones (`7f2843dc…`, `740f1658…`). `session.sh` loads them from its own folder. List: `raw/scripts-b2/SHA256SUMS`.
+- The sealed `raw/scripts/` files are not edited. They were checked OK against `raw/scripts/SHA256SUMS` before this seal. They are checked again before the launch, and so is `raw/scripts-b2/SHA256SUMS`.
+- **Launch, one level, one hold of the host lock:**
+  `CUTECHESS_CLI=<cutechess-cli> STOCKFISH=<stockfish> flock <scratch>/host-test.lock bash .grugops/context/qe-ABC-316/raw/scripts-b2/session.sh 2 <out-root>/l2-e1720 <repo>`
+  It runs from the worktree root, with `<out-root>` a new empty directory under `<scratch>`, outside `<repo>`. The session's gates 1–4 run as sealed. **If gate 4 (W's check) says WAIT, QE stops and reports.** There is no retry and the check is not edited.
+- The record check expects `control: skytalix Skill Level=2 st=0.18 timemargin=50, stockfish st=0.18 timemargin=2000` and `option.UCI_Elo=1720` in `cmd.txt`. `read.mjs` runs as `read.mjs <out> 2 1720 180`.
+
+## Validity, figures and outcomes: as `…c80a1080`, at E′
+- **Validity:** the six bars of `…c80a1080`, with the depth guard at depth 3. That is: 200 / 200 games; `faults: 0` and `unclassified: 0`; 0 skytalix time losses at 230 ms; `0 of N moves below depth 3`; no UNRESOLVED, THERMAL or RUNAWAY; the record check passes, with `Skill Level 2` and `UCI_Elo 1720` in every process that got a `go`.
+- **Reported:** W / D / L, P of 200, the score and colour split, Δ ± Y, **X = 1 720 + Δ ± Y**, the cluster interval, latency, terminations, wall time and the host samples. The scale is the README Strength section's, with Stockfish 19 `UCI_Elo` 1 720 and both sides at `st` 0.18 s.
+- **Outcomes at E′** (P = skytalix's points of 200):
+  1. **VOID, UNRESOLVED or a skytalix fault:** no figure. The rules of `…c80a1080` apply, and any re-run is asked of the owner first.
+  2. **50.0 ≤ P ≤ 150.0:** X = 1 720 + Δ ± Y is **L2's figure**.
+  3. **P > 150.0:** **no further step.** Reported as a **lower bound**: "L2 is above about 1 720 + Δ − Y on this scale" (the 95 % lower end). If Δ is not finite (P = 200), only "above 1 720".
+  4. **P < 50.0:** **no further step.** Reported as an **upper bound**: "L2 is below about 1 720 + Δ + Y on this scale" (the 95 % upper end).
+- **L2 − L1** is reported, not graded, only under outcome 2. It uses L1's figure, 1 499.5 ± 53.4.
+- QE never re-runs on its own word, never re-plays a clean reading and never pools runs.
+
+## Host (W and FL), as `…c80a1080`
+- W: the owner's word in `…f8be2b11`, for this run only. Gate 4 runs once, before the launch.
+- FL: unchanged. Foreign load after the first game changes no line. It is logged by class and count only, and no foreign process is touched. SHARED is the label when foreign `vitest` or `cutechess-cli` shows in more than 20 % of samples.
+
+## Time estimate (an estimate, not a reading)
+- Stage B's L2 ran 49 min 56 s at 83.9 plies a game. A stronger Stockfish may lengthen games, and the depth may move a little at 0.18 s (**UNKNOWN - verify**). **About 50 min, range 45–90.** RUNAWAY stops at 185 min. An overrun under RUNAWAY voids nothing.
+
+## Records handling (not the read method)
+- Records are redacted with `raw/redact.sh`, as in stage B, into `raw/out/l2-e1720/` and `raw/out/session-l2-e1720/`. The full `r.out` stays in scratch, with its sha256 kept.
