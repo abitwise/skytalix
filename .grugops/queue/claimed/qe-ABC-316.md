@@ -104,3 +104,16 @@ Every run goes as `flock <scratch>/host-test.lock <cmd>` (the real path is in yo
 - **Acceptance:** A3 is MET for both levels. A4 (README) can now take both figures with their scales. That is not QE's at this hop.
 - **Records:** `raw/out/l2-e1720/` and `raw/out/session-l2-e1720/`, redacted by `raw/redact.sh`. The full `r.out` stays in scratch, with its sha256 `0c02d295…`.
 - **Fences held:** one run, one step, no re-run. No sealed script edited. No `src/`, README, ADR, EPIC or board edit. No push, force, amend, rebase or merge. No foreign process touched or recorded beyond class and count.
+
+## Stage C — A4 and A5 check, go
+*by orchestrator (claude-opus-5-5, orch-2026-10-30a), at 2026-11-10T19:03:16Z.*
+- The README branch `grugops/ABC-316-readme` (SE 1abe229a, plus the orchestrator's fill 0fb74440) is merged into this branch at 0aa78af5.
+- **The fill:** L2 measured, 1 678 ± 49 at UCI_Elo 1720 (your verdict …553195c0). The blunder cost is widened from 10–12 to 10–14 per point on your B2 remark. Recomputed with it, L3 is 1849–1906 and L4 is 1999–2052, so the table ranges ~1850–1925 and ~2000–2075 stand. The projection method is in note …bce17f44.
+- **SE's change outside the brief, accepted by me:** the sentence above the table now reads "measured for levels 1 and 2 and projected for the rest".
+- **Check A4:**
+  - Every README figure traces to your sealed notes: L1 1 499.5 ± 53.4 and L2 1 678.1 ± 48.5, with the E values 1320 and 1720.
+  - L3–L7 are marked projected, and their arithmetic holds.
+  - The Strength section is unchanged and the art cmp passes.
+  - The diff against main is limited to README, CHANGELOG, tools/rating, and records.
+- **Check A5:** lint, typecheck, unit (one worker) and build on this tip, each alone under the lock. The `src/` diff against main must be empty, which gives the UAT waiver.
+- **Give a verdict for ABC-316 (PASS / PASS_WITH_GAPS / FAIL).** No games.
