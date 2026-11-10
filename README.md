@@ -83,6 +83,7 @@ the clone. Nothing is saved when you `quit` or when input ends.
 skytalix speaks UCI. A GUI runs it through a launcher in the clone: `bin/skytalix-uci` on
 macOS and Linux, or `bin\skytalix-uci.cmd` on Windows. The launcher runs `dist/uci.js` with
 `node`, and on macOS and Linux it finds `node` even when the GUI starts it with a short `PATH`.
+It has been run on Linux only.
 **The Windows launcher is untested.** Below, `<clone>` stands for the full path of your clone.
 
 First build the engine: in the clone, run `npm install` and then `npm run build`. This writes
@@ -148,7 +149,7 @@ against BanksiaGUI itself.
 
 ### En Croissant
 
-Tested by the owner on 2026-11-10. The Windows launcher is untested.
+The owner ran skytalix in En Croissant on 2026-11-10 through a launcher he made himself, before `bin/skytalix-uci` existed. **These steps, with the launcher in `bin/`, have not been tried in En Croissant.** The Windows launcher is untested.
 
 1. Build the engine, as above.
 2. On the **Engines** page, add a local engine and select the launcher:
