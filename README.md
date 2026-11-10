@@ -87,17 +87,17 @@ Find your GUI and your OS here. The platforms are the ones each GUI publishes.
 | Arena | no | yes | yes | Not tried | [playwitharena.de](http://www.playwitharena.de/) |
 | Cute Chess | yes, built from source | yes | yes | `dist/uci.js` run directly, on Linux. The launcher has not been tried | [github.com/cutechess/cutechess](https://github.com/cutechess/cutechess) |
 | BanksiaGUI | yes | yes | yes | Not tried | [banksiagui.com](https://banksiagui.com/) |
-| En Croissant | yes | yes | yes | Run by the owner through his own launcher. The launcher in `bin/` has not been tried | [encroissant.org](https://encroissant.org/) |
+| En Croissant | yes | yes | yes | On macOS, the owner played one game through `bin/skytalix-uci` (2026-11-10). Not tried on Linux or Windows | [encroissant.org](https://encroissant.org/) |
 
 skytalix speaks UCI. A GUI runs it through a launcher in the clone: `bin/skytalix-uci` on
 macOS and Linux, or `bin\skytalix-uci.cmd` on Windows. The launcher runs `dist/uci.js` with
 `node`, and on macOS and Linux it finds `node` even when the GUI starts it with a short `PATH`.
-It has been run on Linux only.
+It has been run on Linux and macOS.
 **The Windows launcher is untested.** Below, `<clone>` stands for the full path of your clone.
 
 The launcher to give the GUI, per OS:
 
-- **macOS:** `<clone>/bin/skytalix-uci`. Not run on macOS.
+- **macOS:** `<clone>/bin/skytalix-uci`. Run on macOS, in En Croissant.
 - **Linux:** `<clone>/bin/skytalix-uci`. Run on Linux.
 - **Windows:** `<clone>\bin\skytalix-uci.cmd`. **Untested.**
 
@@ -178,7 +178,7 @@ against BanksiaGUI itself.
 
 Site: [En Croissant](https://encroissant.org/)
 
-The owner ran skytalix in En Croissant on 2026-11-10 through a launcher he made himself, before `bin/skytalix-uci` existed. **These steps, with the launcher in `bin/`, have not been tried in En Croissant.** The Windows launcher is untested.
+On 2026-11-10 the owner followed these steps on macOS with `bin/skytalix-uci` and played one game. **They have not been tried in En Croissant on Linux or Windows.** The Windows launcher is untested.
 
 1. Build the engine, as above.
 2. On the **Engines** page, add a local engine and select the launcher:
