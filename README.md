@@ -61,22 +61,27 @@ the commands, among them `moves`, `undo`, `resign` and `quit`.
 ## Levels
 
 Level 1 is the weakest, 7 the strongest, and 5 is the default. Each level has a time per move,
-a blunder rate and a projected strength:
+a blunder rate and a strength, measured for levels 1 and 2 and projected for the rest:
 
 | Level | 1 | 2 | 3 | 4 | 5 | 6 | 7 |
 |---|---|---|---|---|---|---|---|
 | Time per move | 0.1 s | 0.2 s | 0.3 s | 1 s | 4 s | 5 s | 30 s |
 | Blunder rate | 40 % | 20 % | 10 % | 5 % | 0 | 0 | 0 |
-| Projected strength | ~1000–1300 | ~1300–1550 | ~1550–1750 | ~1800–1950 | ~2150–2250 | ~2170–2270 | ~2300–2450 |
+| Strength | 1 500 ± 53, measured | L2-PENDING | ~1850–1925, projected | ~2000–2075, projected | ~2150–2250, projected | ~2170–2270, projected | ~2300–2450, projected |
 
 The times are approximate. At the blunder rate's share of its moves, the engine scores every
 move and deliberately picks a weaker one.
 
-The strength figures are projections, not measurements. They are drawn from the one measured
-figure in the Strength section below (1902.5 ± 49.1 at 100 ms a move, with no blunders) and two
-assumptions: about +50 to +60 Elo for each doubling of time, less at longer times, and, for the
-levels that blunder, a penalty which was not measured. They are on the Strength section's scale
-only, and are not FIDE or online ratings.
+Levels 1 and 2 were measured. Each played 200 games against Stockfish 19 with
+`UCI_LimitStrength` on: level 1 against `UCI_Elo` 1320, level 2 against `UCI_Elo` L2-ELO-PENDING.
+Both sides had the level's own time per move, and the level's blunder rate was on.
+
+Levels 3 to 7 are projections, not measurements. Levels 5 to 7 come from the measured
+1902.5 ± 49.1 at 100 ms a move in the Strength section below, and about +50 to +60 Elo for each
+doubling of time. Levels 3 and 4 also subtract a blunder cost of about 10 to 12 Elo for each
+percentage point of blunder rate, estimated from the level 1 and level 2 readings.
+
+All these figures are on the Strength section's scale only, and are not FIDE or online ratings.
 
 ## Strength
 
