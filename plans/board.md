@@ -1,3 +1,4 @@
+_Updated: 2026-11-10T12:33:03Z — owner: GUI section per OS, GUI links, Node.js link; ABC-313 cut by note (…12:32:46Z); se-ABC-313 building._
 _Updated: 2026-11-10T10:59:07Z — ABC-312 merged (QE PASS_WITH_GAPS …ec4a005f). No open tickets._
 _Updated: 2026-11-10T10:39:53Z — owner: blunder row, README fixes and UCI launchers for macOS, Linux and Windows (En Croissant tested by the owner); ABC-312 cut by note (…10:39:36Z); se-ABC-312 building._
 _Updated: 2026-11-09T22:47:19Z — ABC-311 merged (projected level ratings in README; QE PASS_WITH_GAPS …cb74c9fc). No open tickets._
