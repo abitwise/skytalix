@@ -54,7 +54,14 @@ function main(): void {
     sink.on("error", (error) => {
       if ((error as NodeJS.ErrnoException).code !== "EPIPE") throw error;
     });
-    sink.write(`${readVersionLine()}\n`);
+    // `R1`: a `package.json` that cannot be read ends like any internal failure: one fixed line,
+    // exit 70, no stack and no path.
+    try {
+      sink.write(`${readVersionLine()}\n`);
+    } catch {
+      process.stderr.write(`${INTERNAL_ERROR}\n`);
+      process.exitCode = INTERNAL_ERROR_EXIT_CODE;
+    }
     return;
   }
 
