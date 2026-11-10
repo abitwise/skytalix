@@ -132,7 +132,9 @@ WRITING RULES for this slot, enforced by
 `--version` (`ABC-315`, 2026-11-10). Accepted only as the whole command line: `npm run chess -- --version` prints
 `skytalix <version>`, the `package.json` version read at run time (`src/version-file.ts`), and exits 0; next to any other
 argument it is refused, exit 1. It is in the slot's option list and the usage line because `ABC-065`'s and `ABC-066`'s
-guards require every accepted argument in both.
+guards require every accepted argument in both. Without the `--` separator npm takes `--version` as its own flag:
+`npm run chess --version` prints npm's version (`11.20.0`, measured 2026-11-10), exits 0 and does not run the CLI, so
+the slot's 'a value-less flag is dropped and the game runs with defaults' does not hold for `--version`.
 
 ## Regenerate the opening book (`ABC-093`) — `node tools/opening-book/compile.ts <dir>`
 

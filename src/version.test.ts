@@ -85,3 +85,29 @@ describe("ABC-315 A4 — `--version` through each delivered entry point", () => 
     expect(child.status).toBe(1);
   });
 });
+
+/**
+ * `ABC-315` `G2` — the `EPIPE` arm on `src/uci.ts`'s `--version` path, read as text (no child). Without
+ * the arm, `--version | true` exits non-zero; no spawn row here can close the reader reliably, so the
+ * shape is pinned: the arm is registered before the one write, re-throws any other code, and the
+ * block writes once (inside `R1`'s `try`).
+ */
+describe("ABC-315 G2 — uci `--version` installs its EPIPE arm before its one write", () => {
+  it('the versionOnly block: `sink.on("error"` before the write, a re-throw, exactly one write', () => {
+    const source = readFileSync(UCI, "utf8");
+    const start = source.indexOf("if (versionOnly) {");
+    expect(start).toBeGreaterThanOrEqual(0);
+    const end = source.indexOf("\n  }\n", start);
+    expect(end).toBeGreaterThan(start);
+    const block = source.slice(start, end);
+    const arm = block.indexOf('sink.on("error"');
+    // biome-ignore lint/suspicious/noTemplateCurlyInString: this string IS source, and `${` is its subject
+    const write = block.indexOf("sink.write(`${readVersionLine()}\\n`)");
+    expect(arm).toBeGreaterThanOrEqual(0);
+    expect(write).toBeGreaterThan(arm);
+    expect(block.slice(arm, write)).toMatch(
+      /if \(\(error as NodeJS\.ErrnoException\)\.code !== "EPIPE"\) throw error;/,
+    );
+    expect(block.split("sink.write(").length - 1).toBe(1);
+  });
+});
