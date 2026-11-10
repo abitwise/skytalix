@@ -1,0 +1,79 @@
+# qe-ABC-316 PREREG for levels 1 and 2, sealed before any graded game: one 200-game reading per level (`r --skill 1 --elo 1320`, then `r --skill 2 --elo 1450`) on `main` `b6366a79` (`src/` `21f3b304`), in R2's shape at each level's own time. Estimated **1.6–3.6 h for both, central about 2.2 h** (L1 about 0.8 h, L2 about 1.4 h). Validity, the figures and the band-rule consequence of each outcome are fixed here. A miss is reported, never re-played. The games wait for the Orchestrator's brief line citing the owner's held host (W)
+
+QE/E2E, task `qe-ABC-316`, stage A, branch `grugops/qe-ABC-316`. Sealed before any graded game; before it ran only the dry checks and one 2-game smoke labelled NOT GRADED (this task's stage A observation note). Sources: the cut note `orch-2026-10-30a/…20c41f8c` (A1–A5; the owner's "option A, levels 1 and 2 first", his word for a run over 1 h), the brief `qe-ABC-316`, SE's `se-ABC-316/…be0266ce` and `…58aabc47`, R2's PREREG `qe-ABC-295/…4151e128` and reading `…1245d022` / `…e11c410e` (the model), `ABC-204` A4 and `ADR-0056` D5 item 4 (the band rule), and FL / W (`arch-ABC-303-load/…a5dc0532`).
+
+## Subject
+- **The sha to read: `main` `b6366a79`.** `src/` tree `21f3b304`; `src/levels.ts` blob `df0fbae5` (L1 `budgetMs` 100, rate 0.4; L2 180, rate 0.2). Since R2's sha `e069b49a` (`src/` `bba42fb7`), only `ABC-315`'s `--version` work reached `src/` (`cli.ts`, `uci.ts`, `version-file.ts`); no search, evaluation or level change.
+  - If `main` moves by the read with records only, the read still runs on `b6366a79` and names it. If `main`'s `src/` moves, the read still runs on `b6366a79` and QE says so; whether that is still the subject is the Orchestrator's call.
+- **Harness:** `tools/rating/rating.ts` in this task's worktree, `tools/` `6272e8d2` (`ABC-316` A1, SE's `ebbeb615`, A1 verdict PASS in this task's note). The harness takes each level's `st` from the worktree's `src/levels.ts`, so the session also gates on the worktree's `src/` = `21f3b304` and a clean `tools/` and `src/`.
+- **Pins:** `cutechess-cli` 1.5.1, sha256 `dc776901…2154f40a`; Stockfish 19, sha256 `c78c22a9…4593e352d2`; openings `tools/rating/openings.epd` sha256 `0d7f7a72…e82666`. `node` v26.12.1. Paths stay out of the records (`ADR-0049` d4).
+
+## E, fixed by the cut note (not chosen here)
+- **L1: E 1 320**, Stockfish 19's `UCI_Elo` floor; L1 is projected at about 1 000–1 300. Expected score over that range: 13.7–47.1 %. A score below 25 % (X below about 1 129) is possible and cannot step down (the floor).
+- **L2: E 1 450**, near its projected 1 300–1 550. Expected score over that range: 29.7–64.0 %.
+- These are estimates from the README's projections, which carry an unmeasured blunder penalty. A blunder plays the strict second-best root move, which is often close to the best, so either level may read stronger than projected; an upward step is possible at either level. **UNKNOWN - verify until the run.**
+- Stockfish's pick depth (`pickDepth`): **1 at E 1 320, 2 at E 1 450**. The tool's depth guard reads against them.
+
+## The commands (one per level)
+`CUTECHESS_CLI=<cutechess-cli> STOCKFISH=<stockfish> node tools/rating/rating.ts r b6366a79 <out> --skill 1 --elo 1320 --rounds 100 --concurrency 1`
+`CUTECHESS_CLI=<cutechess-cli> STOCKFISH=<stockfish> node tools/rating/rating.ts r b6366a79 <out> --skill 2 --elo 1450 --rounds 100 --concurrency 1`
+- 200 games each: openings 1–100, each with both colours, one game at a time, one core, `-maxmoves 200`.
+- L1: skytalix `st=0.1 timemargin=50 restart=on option.Skill Level=1`; Stockfish 19 `st=0.1 timemargin=2000 restart=on`, `Threads 1`, `Hash 16`, `UCI_LimitStrength true`, `UCI_Elo 1320`.
+- L2: the same with `st=0.18` on both sides, `Skill Level=2`, `UCI_Elo 1450`.
+- skytalix's blunder draw is seeded from `Math.random` per process, so games do not reproduce; a second run differs by chance alone.
+- **Both run from `raw/scripts/stage-b.sh` under ONE hold of the host lock:**
+  `CUTECHESS_CLI=<cutechess-cli> STOCKFISH=<stockfish> flock <scratch>/host-test.lock bash .grugops/context/qe-ABC-316/raw/scripts/stage-b.sh <out-root> <repo>`
+  from this branch's worktree root. `<out-root>` is a new directory outside `<repo>`. L1 runs first (`<out-root>/l1-e1320`); L2 (`<out-root>/l2-e1450`) starts only if L1's session exits 0, that is, if a reading was written, whatever it says. Before the launch QE checks the scripts against `raw/scripts/SHA256SUMS`.
+- **Each level's session (`session.sh L`)**, in this order:
+  1. Gate 1: the three pins. Gate 2: the read sha's `src/` = `21f3b304`, the worktree's `tools/` = `6272e8d2` and `src/` = `21f3b304`, both clean. Gate 3: at least 1 024 MB free where `<out>` is written. A miss: no game (exit 3); QE stops and reports.
+  2. Gate 4, **W's check**: one `hostcheck.sh` line. Any foreign `vitest`, `cutechess-cli` or `stockfish` is a **WAIT, not a read** (exit 4). It runs again before L2.
+  3. The level's command, once. A sampler logs every 10 s: elapsed, games done, load1, Tctl, free space, and foreign `vitest`, `cutechess-cli`, `stockfish`, `node` **by count only**.
+  4. The record check: `machine.txt`'s control line byte-equal to `control: skytalix Skill Level=L st=S timemargin=50, stockfish st=S timemargin=2000`, and `cmd.txt` carrying the level's tokens.
+  5. `read.mjs <out> L E st`, offline.
+- **Two stops, own processes only.** THERMAL: the median of the last 30 Tctl samples is above 85 °C. RUNAWAY: **105 min for L1, 185 min for L2** since launch (a build allowance plus 200 games at a mean of 300 plies at the level's `st`, far above any estimate below). Either makes that level's reading **VOID** and stops stage B. The session signals only the tool and its own descendants, never a foreign process.
+
+## Host gates (W and FL), as in ABC-295
+- **W.** The first game starts only after the Orchestrator's brief line citing the owner's held host. W is asked at this read and never inherited. The session's own check (gate 4) is the class-and-count `ps` check, before each level.
+- **FL.** Foreign load after a level's first game changes no line of the read. No game is voided, stopped, paused or replayed for it, and **no foreign process is touched**. It is logged and reported **by class and count only. No foreign command line, pid, user or path is written anywhere.** If foreign `vitest` or `cutechess-cli` shows in more than 20 % of a level's samples, that reading is labelled SHARED; the label is reported and voids nothing.
+
+## Validity, per level. Any miss gives that level no figure
+- 200 of 200 games complete (the tool's count and 200 results in the PGN).
+- The tool's `faults: 0` and `unclassified: 0` (either side's illegal move, disconnect, stall, time loss, missing result).
+- skytalix loses **0 games on time** at the 50 ms margin (`st` + 50: 150 ms at L1, 230 ms at L2).
+- The depth guard reads `0 of N moves below depth 1` (L1) / `depth 2` (L2).
+- The tool's state is not `UNRESOLVED`; neither stop fired.
+- The record check passes, and `read.mjs` shows `Skill Level L` and `UCI_Elo E` in every engine process that got a `go` (`missing or other 0`).
+- **Reported, not graded:** skytalix latency go → bestmove against the level's `st` (median, p95, p99, max; moves over `st` + 10; moves at or over `st` + 50, which would already be a time loss), and Stockfish's the same.
+
+## The UNRESOLVED and re-run rules
+- **VOID** (THERMAL or RUNAWAY): no figure; stage B stops there. A re-read is a second run, **asked of the owner first**.
+- **UNRESOLVED** (a Stockfish or harness fault, a missing game or file, no Elo line, the depth guard): no figure for that level. Any re-run is **asked of the owner first**; QE does not start it.
+- **A skytalix fault or time loss:** no figure for that level. It is also a product finding on `main`, named with its game, for the Orchestrator. A re-run is the owner's call, asked first.
+- QE never re-runs on its own word, never re-plays a clean reading, and never pools two runs.
+
+## Reported per level (only validity is graded)
+- W / D / L, points P of 200, score %, the colour split.
+- `cutechess-cli`'s `Elo difference` Δ ± Y against E, and **X = E + Δ ± Y** (the tool's state line), on the README Strength section's scale: "Stockfish 19 `UCI_Elo` E, skytalix at level L (`Skill Level` L, `st` = the level's time, `timemargin` 50), Stockfish `st` the same, this host". Stockfish at L2 has 180 ms, not R2's 100 ms; its strength at a given `UCI_Elo` may move a little with time (**UNKNOWN - verify**), stated with the L2 figure.
+- The opening-cluster interval (100 two-game clusters), beside the iid ±.
+- Terminations, move-cap draws, plies per game, latency (above), wall time, games per hour, the host samples (load1, Tctl median and max, foreign counts by class).
+- L2 − L1 with both ± stated, **reported, not graded**.
+
+## The band-rule consequence of each outcome (`ABC-204` A4, `ADR-0056` D5 item 4; the cut note)
+Let P be skytalix's points of 200 at a level. A step is one new 200-game run at E′ = E + Δ, rounded to 10 and clamped to 1 320–3 190. **One step per level, run only on the Orchestrator's word;** QE stops and returns the question.
+1. **VOID, UNRESOLVED or a skytalix fault:** no figure (rules above).
+2. **50.0 ≤ P ≤ 150.0:** E is confirmed. X = E + Δ ± Y is that level's figure. No step.
+3. **P > 150.0 (above 75 %), either level:** an upward step is allowed, on the Orchestrator's word. This run's X is reported, labelled "outside the band; not the level's figure".
+4. **P < 50.0 (below 25 %) at L2:** a downward step is allowed, on the Orchestrator's word, with E′ clamped at 1 320. Label as in 3.
+5. **P < 50.0 at L1 (E 1 320, the floor):** no step is possible. The reading is reported as an **upper bound, not a figure**: "L1 is below about 1 320 + Δ + Y on this scale" (the 95 % upper end). If Δ is not finite (P = 0), only "below Stockfish 19's floor of 1 320 on this scale". The same applies to an L2 step that clamps at 1 320 and still reads below 25 %.
+
+## Time estimate (an estimate, not a reading). Total over 1 h: the owner's choice of option A is his word for it (cut note); W is still asked at run time
+- R2 measured 35 min 56 s for 200 games at 100 ms, 105 plies a game on average. Both sides think a fixed `st` a move, so a game takes about plies × `st` (92–98 ms a ply at L1 in the smoke, book moves and restarts included). Clone and build: under 1 min a level (the smoke's took about 3 s).
+- Game length at these levels is not known. Weaker play may run longer: the smoke's two games were 142 and 317 plies. Range: 105 (R2's mean) to 230 plies; central guess 140.
+- **L1** (0.1 s): 35–77 min, central about **47 min (0.8 h)**.
+- **L2** (0.18 s): 63–138 min, central about **84 min (1.4 h)** (the cut note's 1.8 × R2 ≈ 65 min is the low end).
+- **Both: about 1.6–3.6 h, central about 2.2 h**, under one lock hold. The worst case, both levels running to RUNAWAY, holds the host 4.8 h.
+- An overrun under RUNAWAY is reported as an estimate miss and is not a reason to void. A band step adds about one level's time again, on the Orchestrator's word.
+
+## Scripts (fixed at this seal; `raw/scripts/SHA256SUMS`)
+- `stage-b.sh` `e44bc09e…` (the entry), `session.sh` `3fc10849…` (per level; qe-ABC-295's without G11, with the level, the worktree `src/` gate and the record check), `hostcheck.sh` `7f2843dc…` (byte copy of qe-ABC-295's), `read.mjs` `740f1658…` (qe-ABC-273/295's with latency bands at `st` + 10 and `st` + 50, and the per-process option count).
+- Records handling after the run (which files are committed, `r.out` as non-debug lines with the original's sha256, path redaction) is not the read method and may be written after the seal. Every committed file passes `records-path-check`.

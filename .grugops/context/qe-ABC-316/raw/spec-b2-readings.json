@@ -1,0 +1,4 @@
+{ "refs": ["qe-ABC-316", "grugops/qe-ABC-316", "ABC-316", "A3", "ABC-204", "ABC-295", "ADR-0056", "ADR-0049", "FL", "W", "b6366a79", "21f3b304", "6272e8d2", "tools/rating/rating.ts", "src/levels.ts", "qe-ABC-316/20261110T155226Z-qe-e2e-decision-c80a1080", "qe-ABC-316/20261110T175637Z-qe-e2e-decision-033b0e15", "qe-ABC-316/20261110T172339Z-qe-e2e-decision-f44a427d", "orch-2026-10-30a/20261110T175451Z-orchestrator-decision-f8be2b11"],
+  "notes": [ { "kind": "observation",
+    "confidence": "high: L2 at E' 1720 run once under one host-lock hold 2026-11-10 17:56:57-19:00:35Z per the sealed addendum 033b0e15 to PREREG c80a1080, with both script lists sha-checked OK; figures from the tool's own records and read.mjs; foreign load by class and count only (0 in 377 samples)",
+    "bodyFile": "notes/note-b2-readings.md" } ] }

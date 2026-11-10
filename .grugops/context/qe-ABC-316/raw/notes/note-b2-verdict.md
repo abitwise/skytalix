@@ -1,0 +1,60 @@
+# qe-ABC-316 stage B2 verdict, read once per the addendum `…033b0e15` to PREREG `…c80a1080`. **L2 at E′ 1 720: VALID, 88.0 / 200 (44.00 %), inside the band (outcome 2). L2's figure is X = 1 678.1 ± 48.5.** This was the one step PREREG `…c80a1080` allows; no further step. With L1's 1 499.5 ± 53.4 from stage B, A3 is MET for both levels
+
+QE/E2E, task `qe-ABC-316`, stage B2. The run, the host and the records are in the stage B2 readings observation `20261110T190145Z-qe-e2e-observation-6c692664`, sealed just before this note. This note is a reading, not a merge gate. Raw records: `raw/out/l2-e1720/` and `raw/out/session-l2-e1720/`.
+
+## The figure, on the README Strength section's scale
+The scale is: "Stockfish 19 `UCI_Elo` E, skytalix at level 2 (`Skill Level` 2, `st` 0.18 s, `timemargin` 50), Stockfish `st` the same, this host".
+
+| | L2 (`st` 0.18 s, E′ 1 720) |
+|---|---|
+| W / D / L (skytalix) | **87 / 2 / 111** |
+| points / score | **88.0 / 200 = 44.00 %** (White 45.5, Black 42.5) |
+| Elo Δ against E′ (`cutechess-cli`) | **−41.9 ± 48.5** (LOS 4.4 %) |
+| X = E′ + Δ ± Y (the tool's state line) | **1 678.1 ± 48.5** (1 629.6–1 726.6) |
+| opening-cluster interval | ± 50.3 (iid ± 48.4) |
+| band outcome (PREREG) | **2: inside 25–75 %; X is L2's figure** |
+| validity | **MET** |
+| wall (`r`) | 63 min 37 s |
+| host | ALONE (377 samples, 0 foreign of any class) |
+
+## Validity, against the six bars of `…c80a1080` (the depth guard at depth 3, per the addendum)
+- 200 of 200 games, with 200 results in the PGN.
+- `faults: 0` and `unclassified: 0`.
+- skytalix lost **0 games on time**. Its max latency was 185 ms against a 230 ms margin, with 0 moves over 190 ms. Stockfish also had 0 time losses.
+- Depth guard: `0 of 10720 moves below depth 3`.
+- The state line reads `rating`, not UNRESOLVED. Neither THERMAL nor RUNAWAY fired.
+- The record check passed. The control line is byte-equal and `option.UCI_Elo=1720` is in `cmd.txt`. `Skill Level 2` and `UCI_Elo 1720` reached 200 of 200 processes with a `go`, 0 missing or other.
+- **No skytalix fault and no product finding.**
+
+## The band rule, applied as sealed
+- P = 88.0 lies inside 50.0–150.0, so this is outcome 2. **X = 1 678.1 ± 48.5 is L2's figure.**
+- This is PREREG `…c80a1080`'s one allowed L2 step. **No further step** is possible, and none is needed.
+- The E 1 450 reading (82.25 %, X 1 716.4 ± 64.3) stands as read, labelled "outside the band; not the level's figure". **It is not pooled with this run.** The two Xs differ by 38.3, against a combined ± of about 80, so they agree. This is reported, not graded.
+
+## Reported, not graded
+- **L2 − L1 = 1 678.1 − 1 499.5 = +178.6.** L1 is ± 53.4 and L2 ± 48.5; in quadrature that is about ± 72.1, so the difference lies at about +106 to +251.
+  - Stockfish has 180 ms at L2 and 100 ms at L1. Its strength at a given `UCI_Elo` may move a little with time (**UNKNOWN - verify**), so part of the difference may be the scale, not skytalix.
+  - E differs too: 1 320 at L1, 1 720 at L2.
+- **Against the README's projections**, L2 is projected at 1 300–1 550 and reads 1 678.1 ± 48.5: stronger, as L1 also is (1 499.5 against 1 000–1 300). The PREREG's stated reason (a blunder plays the strict second-best root move, often close to the best) is an inference, not a measurement.
+- The draw rate is 1.0 %. Plies a game: median 89, mean 107.1, longer than at E 1 450 (83.9).
+
+## Acceptance (QE's reading against the cut note `…20c41f8c`)
+- **A3, "one figure per level": MET for both levels.**
+  - L1: 1 499.5 ± 53.4 at E 1 320, from stage B (`…f44a427d`).
+  - L2: 1 678.1 ± 48.5 at E′ 1 720, from this run.
+  - Both are valid, inside the band, and each is one 200-game sample on its own scale.
+- **A1 and A2:** PASS in stage A (`…495d816f`, `…c80a1080`), unchanged.
+- **A4 (README) and A5:** not QE's at this hop. A4 can now take both figures, with their scales.
+
+## Gaps
+- **None blocking.**
+- The Stockfish time-scale correction between 100 and 180 ms is not covered (**UNKNOWN - verify**). It bears only on the reported L2 − L1, not on either figure.
+- Not covered by this ticket: levels 3–7 and the 40/15 claim.
+- The sealed `session.sh` fixed E inside its level `case`, so the step ran a copy that differs by that one token, `E=1450` → `E=1720`. The addendum sealed the copy's sha256 before the run. A future PREREG could take E as an argument.
+
+## Fences held
+- The sealed `raw/scripts/` were sha-checked OK before the seal and before the launch, and were not edited. The B2 copy was sha-checked OK before the launch.
+- One run and one step, and no re-run.
+- No `src/`, README, ADR, EPIC or board edit.
+- No push, force, amend, rebase or merge.
+- No foreign process was touched or recorded beyond class and count.

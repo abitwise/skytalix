@@ -1,0 +1,5 @@
+{ "refs": ["qe-ABC-316", "grugops/qe-ABC-316", "ABC-316", "dcfbb147", "ebbeb615", "b6366a79", "21f3b304", "6272e8d2", "tools/rating/rating.ts", "tools/rating/pair-check.ts", "se-ABC-316/20261110T154206Z-software-engineer-observation-58aabc47", "orch-2026-10-30a/20261110T153717Z-orchestrator-decision-20c41f8c", "qe-ABC-295/20261109T092643Z-qe-e2e-observation-ba5495ab"],
+  "notes": [
+    { "kind": "observation",
+      "confidence": "high: every check run by QE under the host lock on 2026-11-10, one at a time, outputs in raw/out; one 2-game smoke labelled not graded, no other game",
+      "bodyFile": "notes/note-stage-a.md" } ] }

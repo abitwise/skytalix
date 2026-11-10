@@ -3,7 +3,8 @@
  * `Skill Level` 6 token on both builds, none on `r` or `d`); `ABC-255` adds `d` at 100 ms and `r` at
  * 500 ms, with today's prints unchanged; `ABC-275` adds `r` at 100 ms (R1), Stockfish at st=0.1, and
  * `--elo` above 2 600 refused there. `ABC-276` adds `r` / `d`'s sealing step (A4) and the usage
- * text (A5). `ABC-300` adds `d --tc 40/8` (A1, A2, A5). Not a lane file (`NFR-008`): its
+ * text (A5). `ABC-300` adds `d --tc 40/8` (A1, A2, A5). `ABC-316` adds `r --skill L` (A1): L1 and
+ * L2's whole vectors, R2's committed command unchanged, and the refusals. Not a lane file (`NFR-008`): its
  * name is not `*.test.*`, so `npm test` never collects it, and nothing in the lane imports it.
  *
  *   node --test tools/rating/pair-check.ts
@@ -28,6 +29,7 @@ import { join } from "node:path";
 import { after, describe, test } from "node:test";
 import { fileURLToPath } from "node:url";
 import { gunzipSync } from "node:zlib";
+import { LEVELS } from "../../src/levels.ts";
 import {
   type Block,
   coverageCauses,
@@ -906,13 +908,15 @@ describe("ABC-276: r and d seal their records as rpair does; usage names r's 100
   test("A5: no mode, and rpair --budget-ms 100, print the usage text with r's 100", () => {
     const sha = git("rev-parse", "--short=12", "HEAD");
     const usage = [
-      "usage: node tools/rating/rating.ts r <sha> <out-dir> [--elo E] [--budget-ms 500|100] [--rounds N] [--concurrency C]",
+      "usage: node tools/rating/rating.ts r <sha> <out-dir> [--elo E] [--budget-ms 500|100 | --skill L] [--rounds N] [--concurrency C]",
       "       node tools/rating/rating.ts d <candidate-sha> <base-sha> <out-dir> [--budget-ms B | --tc 40/8] [--rounds N] [--concurrency C]",
       "       node tools/rating/rating.ts rpair <base-sha> <candidate-sha> <out-dir> [--elo E] [--rounds N] [--concurrency C]",
       "       --concurrency: 1–8; default R 2, D 3, rpair 2",
       "       --budget-ms: R 500 or 100 (default 4000); D 3000 (default), 2500, 2000, 1500, 1000 or 100",
       // ABC-300 A4: the one existing row updated, to name d's --tc.
       "       --tc: D only, 40/8: both sides tc=40/8 timemargin=0 TimeMode uci-clock-mode; not with --budget-ms",
+      // ABC-316: r's line names --skill, and one row for it.
+      "       --skill: R only, 1–4: skytalix Skill Level=L st=level budget timemargin=50, Stockfish the same st; not with --budget-ms",
       "       rpair: --elo default 1910; --rounds 10–100 in tens, default 100 (10 = one block per build, 40 games)",
       "       --dry-run (any mode): print the cutechess-cli arguments and stop",
       "",
@@ -1024,6 +1028,118 @@ describe("ABC-300: d --tc 40/8 plays a clock on both sides; other values and --b
         group.filter((a) => a.startsWith("option.")).join(),
         "option.TimeMode=uci-clock-mode",
       );
+    }
+  });
+});
+
+describe("ABC-316: r --skill L plays level L's budget on both sides; R2's command unchanged; refusals", () => {
+  const sha = git("rev-parse", "--short=12", "HEAD");
+  const files = join(SCRATCH, "abc316");
+  const f = files.startsWith(homedir()) ? `<home>${files.slice(homedir().length)}` : files;
+  const dry = (...args: string[]) => harness(...args, "--dry-run");
+  const argvOf = (...args: string[]): string[] => {
+    const run = dry(...args);
+    assert.equal(run.status, 0, run.stderr);
+    assert.equal(existsSync(files), false);
+    const blocks = argvBlocks(run.stdout);
+    assert.equal(blocks.length, 1);
+    return blocks[0]?.argv ?? [];
+  };
+  const tail = ["--rounds", "100", "--concurrency", "1"];
+  /** R2's vector (`qe-ABC-295` r2 `cmd.txt`) at E. */
+  const r2 = (elo: string): string[] =>
+    argvOf("r", sha, files, "--budget-ms", "100", "--elo", elo, ...tail);
+
+  test("A1: R2's command is byte-equal to its committed cmd.txt", () => {
+    const cmd = readFileSync(join(REPO, ".grugops/context/qe-ABC-295/raw/out/r2/cmd.txt"), "utf8");
+    const argv = r2("1810");
+    const sf = argv.indexOf("name=stockfish") + 1;
+    const text = argv
+      .map((a, i) => (i === sf ? "cmd=<stockfish>" : a.replaceAll(f, "<out>")))
+      .join(" ");
+    assert.equal(`${text} > <out>/r.out 2>&1\n`, cmd);
+  });
+
+  for (const [level, elo, st] of [
+    [1, "1320", "0.1"],
+    [2, "1450", "0.18"],
+  ] as const) {
+    test(`A1: L${level} is R2's vector with both st=${st} and Skill Level=${level} after skytalix's restart=on`, () => {
+      assert.equal(String(LEVELS[level].budgetMs / 1000), st);
+      const argv = argvOf("r", sha, files, "--skill", String(level), "--elo", elo, ...tail);
+      const base = r2(elo);
+      // The first restart=on is skytalix's (its engine group comes first).
+      const restart = base.indexOf("restart=on");
+      assert.ok(restart < base.indexOf("name=stockfish"));
+      const expected = base.flatMap((arg, i) =>
+        arg === "st=0.1"
+          ? [`st=${st}`]
+          : i === restart
+            ? [arg, `option.Skill Level=${level}`]
+            : [arg],
+      );
+      assert.deepEqual(argv, expected);
+      const [skytalix, stockfish] = engineGroups(argv);
+      assert.ok(skytalix?.includes(`st=${st}`) && skytalix.includes("timemargin=50"));
+      assert.ok(stockfish?.includes(`st=${st}`) && stockfish.includes("timemargin=2000"));
+      assert.equal(
+        stockfish?.some((a) => a.startsWith("option.Skill")),
+        false,
+      );
+    });
+  }
+
+  test("A1: --skill 3 and 4 read their budget from LEVELS; --elo keeps 1320–3190 under --skill", () => {
+    for (const level of [3, 4] as const) {
+      const argv = argvOf("r", sha, files, "--skill", String(level));
+      assert.equal(argv.filter((a) => a === `st=${LEVELS[level].budgetMs / 1000}`).length, 2);
+      assert.ok(argv.includes(`option.Skill Level=${level}`));
+    }
+    for (const elo of ["2601", "3190"]) {
+      assert.ok(
+        argvOf("r", sha, files, "--skill", "1", "--elo", elo).includes(`option.UCI_Elo=${elo}`),
+      );
+    }
+    const low = dry("r", sha, files, "--skill", "1", "--elo", "1319");
+    assert.equal(low.status, 1);
+    assert.match(low.stderr, /--elo 1319: not 1320–3190/);
+  });
+
+  test("A1: --skill with --budget-ms is refused, naming both flags, in either order", () => {
+    for (const budget of ["100", "500"]) {
+      for (const order of [
+        ["--skill", "1", "--budget-ms", budget],
+        ["--budget-ms", budget, "--skill", "1"],
+      ]) {
+        const run = dry("r", sha, files, ...order);
+        assert.equal(run.status, 1, order.join(" "));
+        assert.equal(argvBlocks(run.stdout).length, 0, order.join(" "));
+        assert.match(run.stderr, /--skill and --budget-ms: r takes one or the other, not both/);
+        assert.equal(existsSync(files), false);
+      }
+    }
+  });
+
+  test("A1: --skill outside 1–4 is refused, naming the value", () => {
+    for (const value of ["0", "5", "7", "1.0", "01", "x"]) {
+      const run = dry("r", sha, files, "--skill", value);
+      assert.equal(run.status, 1, value);
+      assert.equal(argvBlocks(run.stdout).length, 0, value);
+      assert.ok(run.stderr.includes(`--skill ${value}: r takes only 1, 2, 3 or 4`), run.stderr);
+      assert.equal(existsSync(files), false);
+    }
+  });
+
+  test("A1: d and rpair refuse --skill with the usage text, as any unknown flag", () => {
+    for (const args of [
+      ["d", sha, sha, files, "--skill", "1"],
+      ["rpair", sha, sha, files, "--skill", "1"],
+    ]) {
+      const run = dry(...args);
+      assert.equal(run.status, 1, args.join(" "));
+      assert.equal(run.stdout, "", args.join(" "));
+      assert.match(run.stderr, /^usage: /, args.join(" "));
+      assert.equal(existsSync(files), false);
     }
   });
 });

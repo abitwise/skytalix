@@ -1,0 +1,21 @@
+games 200; W/D/L 142/11/47; points 147.5 of 200 = 73.75 %; Elo(score) 179.5
+  as White: 72.0 / 100
+  as Black: 75.5 / 100
+openings 100 (sizes [2]); FEN mismatches 0; opening rounds 1-100
+iid per game (trinomial): SE(score) 0.0301; 95 % +/- 52.9 Elo; deff 1.000; effective games 200
+per opening cluster (2 games x 100, both colours) = opening-cluster interval: SE(score) 0.0306; 95 % +/- 53.9 Elo; deff 1.039; effective games 192
+terminations (skytalix's view):
+  draw: Draw by adjudication: maximal game length  1
+  draw: Draw by fifty moves rule  8
+  draw: Draw by insufficient mating material  1
+  draw: Draw by stalemate  1
+  loss: Black mates  25
+  loss: White mates  22
+  win: Black mates  73
+  win: White mates  69
+time losses (PGN result text): 0; "loses on time" lines in r.out: 0
+plies per game: median 79, mean 108.4; game seconds: mean 10.2, max 40
+latency skytalix: moves 10860 median 100 p95 102 p99 102 max 105 ms; >110 0 >=150(margin) 0
+latency stockfish: moves 10813 median 100 p95 100 p99 101 max 102 ms; >110 0 >=150(margin) 0
+Skill Level 1: processes with a go 200; got 1 200; missing or other 0
+UCI_Elo 1320: processes with a go 200; got 1320 200; missing or other 0

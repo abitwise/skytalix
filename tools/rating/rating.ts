@@ -2,7 +2,7 @@
  * `ABC-204` — the rating harness. It drives `cutechess-cli` 1.5.1 in two modes, with the pins of
  * the ABC-204 page's `## Design ruling`, and reads `EPIC-008` § The two readings:
  *
- *   node tools/rating/rating.ts r <sha> <out-dir> [--elo E] [--budget-ms 500|100] [--rounds N] [--concurrency C]
+ *   node tools/rating/rating.ts r <sha> <out-dir> [--elo E] [--budget-ms 500|100 | --skill L] [--rounds N] [--concurrency C]
  *   node tools/rating/rating.ts d <candidate-sha> <base-sha> <out-dir> [--budget-ms B | --tc 40/8] [--rounds N] [--concurrency C]
  *   node tools/rating/rating.ts rpair <base-sha> <candidate-sha> <out-dir> [--elo E] [--rounds N] [--concurrency C]
  *
@@ -52,6 +52,12 @@
  * and `option.TimeMode=uci-clock-mode` in place of `st=` and `timemargin=`, and `machine.txt` a
  * `control:` line. `40/8` is the only value, and `--tc` with `--budget-ms` is refused. The control
  * still reaches skytalix only through cutechess-cli and the shipped option (`ADR-0056` R-TC).
+ *
+ * `ABC-316` — `r --skill L` (L 1–4) reads one level: skytalix gets `option.Skill Level=L` and
+ * `st` = `LEVELS[L].budgetMs` from `src/levels.ts` with `timemargin` 50 ms, and Stockfish the same
+ * `st` with `timemargin` 2 000, its other pins unchanged. `--skill` with `--budget-ms` is refused,
+ * and the 2 600 cap of R1 does not apply (E keeps 1320–3190). `machine.txt` gets a `control:` line with
+ * the level and both `st`. Without `--skill`, `r`'s argument vector is as before.
  */
 import { execFileSync, spawn } from "node:child_process";
 import { createHash } from "node:crypto";
@@ -74,6 +80,7 @@ import {
 import { cpus, homedir, hostname, loadavg, platform, release, userInfo } from "node:os";
 import { basename, dirname, join, relative, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
+import { LEVELS } from "../../src/levels.ts";
 import { artifactRecord } from "./dist-manifest.ts";
 import { OPENINGS_SHA256 } from "./openings.ts";
 import {
@@ -122,6 +129,9 @@ const R_SHORT_BUDGET_MS = 100;
 const R_BUDGETS_MS = [R_SMOKE_BUDGET_MS, R_SHORT_BUDGET_MS];
 /** `ABC-275` (`ADR-0056` D5): at 100 ms, an E above this waits for C3′'s probe, so `r` refuses it. */
 const R_SHORT_ELO_MAX = 2600;
+/** `ABC-316`: the levels `r --skill` takes, and skytalix's fixed `timemargin` at each. */
+const R_SKILLS = /^[1-4]$/;
+const SKILL_MARGIN_MS = 50;
 /** `ABC-300` (`ADR-0071` D10): the one clock `d --tc` takes. */
 const D_TC = "40/8";
 /** Stockfish's `st` in `r`: 0.1 at R1's 100 ms (`ABC-275`), else 0.5; its `timemargin` is 2 000 at each. */
@@ -162,12 +172,13 @@ const eloNumber = (text: string): number =>
 
 function usage(): never {
   console.error(
-    "usage: node tools/rating/rating.ts r <sha> <out-dir> [--elo E] [--budget-ms 500|100] [--rounds N] [--concurrency C]\n" +
+    "usage: node tools/rating/rating.ts r <sha> <out-dir> [--elo E] [--budget-ms 500|100 | --skill L] [--rounds N] [--concurrency C]\n" +
       "       node tools/rating/rating.ts d <candidate-sha> <base-sha> <out-dir> [--budget-ms B | --tc 40/8] [--rounds N] [--concurrency C]\n" +
       "       node tools/rating/rating.ts rpair <base-sha> <candidate-sha> <out-dir> [--elo E] [--rounds N] [--concurrency C]\n" +
       "       --concurrency: 1–8; default R 2, D 3, rpair 2\n" +
       "       --budget-ms: R 500 or 100 (default 4000); D 3000 (default), 2500, 2000, 1500, 1000 or 100\n" +
       "       --tc: D only, 40/8: both sides tc=40/8 timemargin=0 TimeMode uci-clock-mode; not with --budget-ms\n" +
+      "       --skill: R only, 1–4: skytalix Skill Level=L st=level budget timemargin=50, Stockfish the same st; not with --budget-ms\n" +
       "       rpair: --elo default 1910; --rounds 10–100 in tens, default 100 (10 = one block per build, 40 games)\n" +
       "       --dry-run (any mode): print the cutechess-cli arguments and stop",
   );
@@ -418,6 +429,8 @@ export interface ArgSpec {
   readonly skill?: number;
   /** `d --tc` only (`ABC-300`): both sides' clock, in place of `st=` and `timemargin=`; absent, none. */
   readonly tc?: string | undefined;
+  /** `r --skill` only (`ABC-316`): the level; skytalix's `Skill Level` and margin 50, Stockfish's `st` = budget. */
+  readonly level?: number | undefined;
 }
 
 /** `ABC-247`: the `Skill Level` `rpair` gives skytalix on both builds. */
@@ -433,10 +446,15 @@ export function cutechessArgs(spec: ArgSpec): string[] {
     `arg=${join(clone, "dist/uci.js")}`,
     `dir=${clone}`,
     ...(spec.tc === undefined
-      ? [`st=${ms / 1000}`, `timemargin=${timemarginMs(ms)}`]
+      ? [
+          `st=${ms / 1000}`,
+          `timemargin=${spec.level === undefined ? timemarginMs(ms) : SKILL_MARGIN_MS}`,
+        ]
       : [`tc=${spec.tc}`, "timemargin=0"]),
     "restart=on",
-    ...(spec.skill === undefined ? [] : [`option.Skill Level=${spec.skill}`]),
+    ...((spec.skill ?? spec.level) === undefined
+      ? []
+      : [`option.Skill Level=${spec.skill ?? spec.level}`]),
     ...(spec.tc === undefined ? [] : ["option.TimeMode=uci-clock-mode"]),
     `stderr=${join(files, `${name}.stderr`)}`,
   ];
@@ -446,7 +464,7 @@ export function cutechessArgs(spec: ArgSpec): string[] {
           "-engine",
           "name=stockfish",
           `cmd=${STOCKFISH}`,
-          `st=${stockfishSt(budget)}`,
+          `st=${spec.level === undefined ? stockfishSt(budget) : budget / 1000}`,
           "timemargin=2000",
           "restart=on",
           "option.Threads=1",
@@ -845,7 +863,7 @@ async function main(argv: string[]): Promise<void> {
   const mode = positional[0];
   if (mode === "rpair") return rpair(positional, flags, dryRun);
   if ((mode !== "r" && mode !== "d") || positional.length !== (mode === "r" ? 3 : 4)) usage();
-  const allowed = mode === "r" ? ["--elo", "--rounds"] : ["--rounds", "--tc"];
+  const allowed = mode === "r" ? ["--elo", "--rounds", "--skill"] : ["--rounds", "--tc"];
   allowed.push("--budget-ms", "--concurrency");
   if ([...flags.keys()].some((flag) => !allowed.includes(flag))) usage();
   // ABC-300 scope 4: the clock is checked as text before any git, build or process start.
@@ -853,18 +871,28 @@ async function main(argv: string[]): Promise<void> {
   if (tc !== undefined && flags.has("--budget-ms"))
     throw new Error("--tc and --budget-ms: d takes one or the other, not both");
   if (tc !== undefined && tc !== D_TC) throw new Error(`--tc ${tc}: d takes only ${D_TC}`);
+  // ABC-316: the level is checked as text too; its budget is the shipped level's, read from LEVELS.
+  const skill = flags.get("--skill");
+  if (skill !== undefined && flags.has("--budget-ms"))
+    throw new Error("--skill and --budget-ms: r takes one or the other, not both");
+  if (skill !== undefined && !R_SKILLS.test(skill))
+    throw new Error(`--skill ${skill}: r takes only 1, 2, 3 or 4`);
+  const level = skill === undefined ? undefined : (Number(skill) as 1 | 2 | 3 | 4);
   const shas = positional
     .slice(1, -1)
     .map((ref) => run("git", ["rev-parse", "--verify", `${ref}^{commit}`]));
   const elo = Number(flags.get("--elo") ?? 1650);
   const budgetFlag = flags.get("--budget-ms");
-  const budget = Number(budgetFlag ?? (mode === "r" ? R_BUDGET_MS : 3000));
+  const budget =
+    level === undefined
+      ? Number(budgetFlag ?? (mode === "r" ? R_BUDGET_MS : 3000))
+      : LEVELS[level].budgetMs;
   const rounds = Number(flags.get("--rounds") ?? (mode === "r" ? 100 : 200));
   if (!Number.isInteger(elo) || elo < 1320 || elo > 3190)
     throw new Error(`--elo ${elo}: not 1320–3190`);
   if (mode === "r" && budgetFlag !== undefined && !R_BUDGETS_MS.includes(budget))
     throw new Error(`--budget-ms ${budgetFlag}: r takes only ${R_BUDGETS_MS.join(" or ")}`);
-  if (mode === "r" && budget === R_SHORT_BUDGET_MS && elo > R_SHORT_ELO_MAX)
+  if (mode === "r" && level === undefined && budget === R_SHORT_BUDGET_MS && elo > R_SHORT_ELO_MAX)
     throw new Error(
       `--elo ${elo}: above ${R_SHORT_ELO_MAX} at --budget-ms ${budgetFlag}; C3′'s probe runs first`,
     );
@@ -883,7 +911,17 @@ async function main(argv: string[]): Promise<void> {
   const out = resolve(positional.at(-1) as string);
   if (dryRun) {
     const clones = names.map((name) => join(out, `clone-${name}`));
-    const args = cutechessArgs({ mode, files: out, clones, elo, budget, rounds, concurrency, tc });
+    const args = cutechessArgs({
+      mode,
+      files: out,
+      clones,
+      elo,
+      budget,
+      rounds,
+      concurrency,
+      tc,
+      level,
+    });
     console.log(`${mode} dry run: nothing is built, started or written\ncutechess-cli argv:`);
     console.log(argvText(args));
     return;
@@ -899,8 +937,14 @@ async function main(argv: string[]): Promise<void> {
     ...(tc !== undefined
       ? [`control: skytalix and base tc=${tc} timemargin=0 TimeMode=uci-clock-mode`]
       : []),
+    // ABC-316: the level and both sides' st are recorded.
+    ...(level !== undefined
+      ? [
+          `control: skytalix Skill Level=${level} st=${budget / 1000} timemargin=${SKILL_MARGIN_MS}, stockfish st=${budget / 1000} timemargin=2000`,
+        ]
+      : []),
     // ABC-255 scope 3: a short control is recorded; every other run's record is as before.
-    ...(SHORT_MARGIN_MS.has(budget)
+    ...(level === undefined && SHORT_MARGIN_MS.has(budget)
       ? [
           `control: skytalix${mode === "d" ? " and base" : ""} st=${budget / 1000} timemargin=${timemarginMs(budget)}${
             mode === "r" && budget === R_SHORT_BUDGET_MS
@@ -921,7 +965,17 @@ async function main(argv: string[]): Promise<void> {
   const clones: string[] = [];
   for (const [i, name] of names.entries())
     clones.push(await buildArtifact(out, name, shas[i] as string));
-  const args = cutechessArgs({ mode, files: out, clones, elo, budget, rounds, concurrency, tc });
+  const args = cutechessArgs({
+    mode,
+    files: out,
+    clones,
+    elo,
+    budget,
+    rounds,
+    concurrency,
+    tc,
+    level,
+  });
   const outFile = join(out, `${mode}.out`);
   writeFileSync(
     join(out, "cmd.txt"),
