@@ -1,0 +1,5 @@
+{ "refs": ["qe-ABC-316", "grugops/qe-ABC-316", "ABC-316", "A2", "A3", "ABC-204", "ABC-295", "ADR-0056", "ADR-0049", "FL", "W", "b6366a79", "21f3b304", "6272e8d2", "tools/rating/rating.ts", "src/levels.ts", "orch-2026-10-30a/20261110T153717Z-orchestrator-decision-20c41f8c", "qe-ABC-295/20261109T092643Z-qe-e2e-decision-4151e128", "qe-ABC-295/20261109T160639Z-qe-e2e-decision-e11c410e", "arch-ABC-303-load/20261106T141500Z-architect-design-decision-a5dc0532"],
+  "notes": [
+    { "kind": "decision",
+      "confidence": "high: E, bars, rules and outcome consequences copied from the cut note 20c41f8c, ABC-204 A4, ADR-0056 D5 item 4 and R2's PREREG before any graded game; the expected scores and the 1.6-3.6 h time are estimates (UNKNOWN - verify until the run)",
+      "bodyFile": "notes/note-prereg.md" } ] }

@@ -21,3 +21,24 @@ Read the cut note `.grugops/context/orch-2026-10-30a/notes/20261110T153717Z-orch
    - the time estimate for each level and the total. R2: 36 min at 100 ms.
 3. **STOP and report.** Graded games run only on a later brief line from me citing the owner's held host.
 Every run goes as `flock <scratch>/host-test.lock <cmd>` (the real path is in your dispatch prompt only), one core, one at a time, with one vitest worker. Records carry placeholders only. Never kill foreign processes. No src/, README, ADR, EPIC or board edit. Publish sealed typed notes (`at` from `date -u` run just before each). Add a `## Stage A` block to this brief. Commit on your branch and run `node tools/grugops/records-path-check.js --base main` first. No push, force, amend, rebase or merge into main. Commit messages end with "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>".
+
+## Stage A
+*QE/E2E (claude-opus-5-5, qe-ABC-316), 2026-11-10, on `grugops/qe-ABC-316` from `dcfbb147` (SE's A1 at `ebbeb615`, `tools/` `6272e8d2`). Read sha `main` `b6366a79` (`src/` `21f3b304`).*
+
+**Result: A1 PASS; PREREG sealed; stopped before any graded game. One 2-game smoke, NOT GRADED; no other game.**
+- **A1 verdict:** `20261110T155221Z-qe-e2e-decision-495d816f`, **PASS**. Checks: `…observation-c8bdbf73`.
+  - Gates on the tip, each alone under the lock: lint 0; typecheck 0; `VITEST_MAX_WORKERS=1 npm test` 0 (2 740 / 2 740, 0 skipped); build 0; `pair-check.ts` 52 / 52.
+  - Dry runs with the pinned tools: L1 and L2 vectors are R2's with only `st`, `Skill Level` and `UCI_Elo` changed. R2's argv is `cmp`-equal to its committed `cmd.txt`. Every refusal holds (`raw/out/dry/refusals.txt`). The `src/` diff against `main` is empty.
+  - One non-blocking gap: the harness reads `LEVELS` from its own worktree, not from the sha it rates. The session gates on the two being equal.
+- **Smoke (NOT GRADED):** `r b6366a79 <out> --skill 1 --elo 1320 --rounds 1 --concurrency 1`, 2 games, exit 0.
+  - `machine.txt`: `control: skytalix Skill Level=1 st=0.1 timemargin=50, stockfish st=0.1 timemargin=2000` (= A1).
+  - faults 0, time losses 0, depth guard 0 of 230; skytalix latency max 103 ms.
+  - Each skytalix process got `Skill Level value 1`.
+  - Records: `raw/out/smoke-l1-not-graded/`.
+- **Pins:** `cutechess-cli` 1.5.1 `dc776901…` = pin; Stockfish 19 `c78c22a9…` = pin; openings `0d7f7a72…` = pin; `node` v26.12.1.
+- **PREREG:** `20261110T155226Z-qe-e2e-decision-c80a1080`, sealed 15:52:26Z before any graded game. Scripts: `raw/scripts/SHA256SUMS`; the entry is `stage-b.sh` `e44bc09e…`.
+  - E 1 320 (L1) and 1 450 (L2), as cut. 200 games each. One band step per level, only on your word; L1 below 25 % is reported as an upper bound.
+  - Re-runs are asked of the owner first. W and FL as in ABC-295.
+- **Time estimate:** L1 35–77 min (central about 0.8 h); L2 63–138 min (central about 1.4 h). **Both 1.6–3.6 h, central about 2.2 h**, under one lock hold. RUNAWAY stops at 105 and 185 min.
+- **To start stage B:** `CUTECHESS_CLI=<cutechess-cli> STOCKFISH=<stockfish> flock <scratch>/host-test.lock bash .grugops/context/qe-ABC-316/raw/scripts/stage-b.sh <out-root> <repo>`. Run it from this branch's worktree root, with `<out-root>` a new directory outside the repo. L1 runs, then L2 if L1's session exits 0.
+- **Fences held:** no `src/`, README, ADR, EPIC or board edit. No push, force, amend, rebase or merge. No foreign process touched or recorded beyond a count.

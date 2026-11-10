@@ -1,0 +1,10 @@
+<!-- GENERATED — do not hand-edit. Re-run: node scripts/context-io.js render <task> -->
+# Context: qe-ABC-316
+
+## Current state
+
+| at | kind | by | confidence | verified_by | note |
+| --- | --- | --- | --- | --- | --- |
+| 2026-11-10T15:52:21Z | decision | qe-e2e | high: each A1 clause checked by QE's own dry runs with the pinned tools, the gates on the branch tip and one not-graded 2-game smoke; rpair and d checked only through their refusal and the existing pair-check suites |  | # qe-ABC-316 A1 verdict: **PASS** — `r --skill L` on `grugops/ABC-316` `ebbeb615` (`tools/` `6272e8d2`) does what A1 says, `src/` diff empty, gates green; one non-blocking gap named |
+| 2026-11-10T15:52:21Z | observation | qe-e2e | high: every check run by QE under the host lock on 2026-11-10, one at a time, outputs in raw/out; one 2-game smoke labelled not graded, no other game |  | # qe-ABC-316 stage A checks: pins = pin, the gates green on the branch tip, R2's argv byte-equal, the L1 and L2 dry runs and every refusal as A1 says, `src/` diff empty. One 2-game smoke, NOT GRADED, read `machine.txt`'s control line on a real run. Every command ran under the host lock, one at a time |
+| 2026-11-10T15:52:26Z | decision | qe-e2e | high: E, bars, rules and outcome consequences copied from the cut note 20c41f8c, ABC-204 A4, ADR-0056 D5 item 4 and R2's PREREG before any graded game; the expected scores and the 1.6-3.6 h time are estimates (UNKNOWN - verify until the run) |  | # qe-ABC-316 PREREG for levels 1 and 2, sealed before any graded game: one 200-game reading per level (`r --skill 1 --elo 1320`, then `r --skill 2 --elo 1450`) on `main` `b6366a79` (`src/` `21f3b304`), in R2's shape at each level's own time. Estimated **1.6–3.6 h for both, central about 2.2 h** (L1 about 0.8 h, L2 about 1.4 h). Validity, the figures and the band-rule consequence of each outcome are fixed here. A miss is reported, never re-played. The games wait for the Orchestrator's brief line citing the owner's held host (W) |

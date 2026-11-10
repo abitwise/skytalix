@@ -1,0 +1,5 @@
+{ "refs": ["qe-ABC-316", "grugops/qe-ABC-316", "ABC-316", "A1", "ebbeb615", "6272e8d2", "b6366a79", "tools/rating/rating.ts", "tools/rating/pair-check.ts", "src/levels.ts", "se-ABC-316/20261110T154157Z-software-engineer-decision-be0266ce", "se-ABC-316/20261110T154206Z-software-engineer-observation-58aabc47", "orch-2026-10-30a/20261110T153717Z-orchestrator-decision-20c41f8c"],
+  "notes": [
+    { "kind": "decision",
+      "confidence": "high: each A1 clause checked by QE's own dry runs with the pinned tools, the gates on the branch tip and one not-graded 2-game smoke; rpair and d checked only through their refusal and the existing pair-check suites",
+      "bodyFile": "notes/note-a1-verdict.md" } ] }
