@@ -20,3 +20,6 @@ Read `VERSIONING.md` and the cut note `.grugops/context/orch-2026-10-30a/notes/2
    - the art cmp;
    - `npm run chess -- --version` and `bin/skytalix-uci --version` after the build: paste both outputs.
 Every run goes as `flock <scratch>/host-test.lock <cmd>` (the real path is in your dispatch prompt only). Publish one sealed observation note (`at` from `date -u`). Add a `## Result` block to this brief. Run `node tools/grugops/records-path-check.js --base main` before committing. No push, tag, force, amend, rebase or merge into main. Commit messages end with "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>".
+
+## Result
+Done, 2026-11-11T08:15Z. Commit `f42537b2` on `grugops/ABC-319` (base `a3129d31`); no tag. Files: package.json, package-lock.json, CHANGELOG.md, README.md, src/levels.test.ts. D1–D3 as briefed. D4, each alone under the host lock: lint 0 (150 files), typecheck 0, unit 72 files 2740/2740, 0 skipped, build 0, art cmp 0, both `--version` print `skytalix 1.1.0`. records-path-check clean. Note `20261111T081519Z-software-engineer-observation-dcf277c7`. Flag: `src/version-file.ts` line 2 doc comment still shows `skytalix 1.0.0` as an example (out of width, left).
