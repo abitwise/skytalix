@@ -1,6 +1,6 @@
 <div align="center">
 
-  <img src="assets/skytalix_logo_256px.jpeg" alt="skytalix logo" width="256" height="256">
+  <img src="assets/skytalix_logo_256px.png" alt="skytalix logo" width="256" height="256">
 
 </div>
 
