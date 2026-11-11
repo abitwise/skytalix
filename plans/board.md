@@ -1633,8 +1633,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 1/3)
-- ABC-318 — level 6 thinks 10 s a move (was 5 s), owner 2026-11-11 (…f1dce7dd); arch-, secnfr- and se-ABC-318 running.
+## In Development (WIP 0/3)
 
 
 
@@ -1663,6 +1662,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 ## In Review (WIP 1/3)
+- ABC-318 — level 6 thinks 10 s a move (…f1dce7dd); arch, secnfr, se and fix merged on grugops/qe-ABC-318; qe-ABC-318 checking.
 
 
 

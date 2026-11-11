@@ -55,7 +55,7 @@
  * Ruled at `ABC-078`'s security/NFR gate (`plans/nfr-catalog.md`, `NFR-004` clause B): this module
  * owns the MECHANISM, `EPIC-006` owns the CHOOSING, and a ceiling is the bound every choice must
  * land inside rather than a choice. `ABC-212` (`ADR-0045` § AMENDMENT A3): `NFR-004`'s ceiling is
- * per level (5 s at 1-5, 7 s at 6, 32 s at 7), and this ONE clamp sits at the largest ceiling in
+ * per level (5 s at 1-5, 12 s at 6 since `ABC-318`, 32 s at 7), and this ONE clamp sits at the largest ceiling in
  * force. `ABC-221` (`ADR-0052` D6) moved it to 60 000, UCI `TimeMode` `uci-clock-mode`'s ceiling;
  * each level's own ceiling is held by its budget, and each mode's by its own cap. So a raw call is
  * bounded at 60 s, and every surface hands in a level- or mode-derived budget. **The residual is
@@ -204,7 +204,7 @@ export const DEFAULT_BUDGET_MS = 4_000;
  * `NFR-004`'s hard ceiling, in milliseconds: the largest ceiling in force, 60 s, UCI `TimeMode`
  * `uci-clock-mode`'s (`ADR-0052` D6, `ABC-221`; `ADR-0045` § AMENDMENT A3's one-clamp shape). A
  * bound on the MECHANISM, not a difficulty: it is honoured here whatever a caller passes. Each
- * level's own, lower ceiling (5 s at 1-5, 7 s at 6, 32 s at 7) is held by that level's budget in
+ * level's own, lower ceiling (5 s at 1-5, 12 s at 6, 32 s at 7) is held by that level's budget in
  * `src/levels.ts`, and each mode's by its cap in `src/uci-session.ts`, not here. `EPIC-006`
  * chooses a budget; it does not choose the ceiling.
  */

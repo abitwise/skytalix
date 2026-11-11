@@ -54,6 +54,14 @@ id: ADR-0045
 > - **Not here:** the `NFR-004` / `NFR-005` catalog text (Security/NFR), the ladder re-take (Orchestrator; STALE under
 >   `ADR-0038` d6), and `AGENTS.md` (the Scribe).
 
+> **Amended 2026-11-11: level 6 to 10 000 ms (`ABC-318`), on the owner's word.** His word, verbatim (Orchestrator note
+> `orch-2026-10-30a/…f1dce7dd`, a transcription and not a stamp): *"go with 10 s for level 6"*. It answers OQ-212-1's
+> revisit (A1). Written by Architect/Design (task `arch-ABC-318`), records only. See § AMENDMENT 2026-11-11 at the end.
+> `LEVELS[6]` goes from `{ 5000, 0 }` to `{ 10000, 0 }`, and level 6's `NFR-004` ceiling from 7 s to **12 s** (budget +
+> 2 s, the owner's accepted rule). In force at `ABC-318`'s merge; until then `main` stays 5 000 ms and 7 s. Rate 0,
+> levels 1–5 and 7, `DEFAULT_LEVEL` (5), `HARDEST_LEVEL` (7) and `HARD_CEILING_MS` (60 000) do not move. Dated lines in
+> A1, A3, A4 and § AMENDMENT 2026-10-24's § Consequences point to that section; no old text is changed.
+
 **accepted** 2026-10-19 by Olger Oeselg (owner), as proposed. The owner's menu answers, verbatim (note
 `.grugops/context/wave-2026-09-25/notes/20261019T130500Z-orchestrator-decision-owner-word-adr0045-accepted-q1-q3-abc171-rows-1a9c7f42.md`,
 a transcription, not a stamp):
@@ -500,6 +508,9 @@ note is `arch-design-ABC-212` (observation).
 | 6 | **5 000** | **0** | 1.67x time, rate 0 → 0 *(1.25x from 2026-10-30)* |
 | 7 (hardest) | **30 000** | **0** | 6x time, rate 0 → 0 |
 
+*2026-11-11 (`ABC-318`, § AMENDMENT 2026-11-11): level 6 is **10 000** / 0 from `ABC-318`'s merge. The 5 → 6 step is
+then 2.5x, and the 6 → 7 step 3x.*
+
 - **D1's "every adjacent pair differs by more than time alone" no longer holds for 5v6 and 6v7.** All three levels
   have rate 0, so each of those two steps is time alone. The sentence stays true for 1v2 through 4v5.
 - The ordering row still holds over 1..7: budgets never fall, rates never rise, and each step improves one of the two.
@@ -507,6 +518,10 @@ note is `arch-design-ABC-212` (observation).
   positions, with a different move on 2 of 50. It is kept at 5 s on the owner's own number (OQ-212-1), to be
   revisited with harness data. Level 7 is predicted at about +2.3 ply over level 5 (2.67x per ply). That figure is
   `UNKNOWN - verify` until `ABC-212` `A15` reads it.
+  - *Resolved 2026-11-11 (`ABC-318`): the revisit came with harness data. Levels 1–4 are measured (`ABC-316`,
+    `ABC-317`), and on the projection they anchor, 5 s sat +16–24 Elo over level 5, inside one reading's ± 48. The
+    owner set 10 s. Level 6 is projected at ~2310–2410, about +65–100 over level 5, and about 0.9 ply deeper (2.5x at
+    2.67x per ply). Both figures are `UNKNOWN - verify` until level 6 is read. See § AMENDMENT 2026-11-11.*
 
 ### A2 (D2). The default stays 5, and the hardest is 7
 
@@ -544,6 +559,8 @@ note is `arch-design-ABC-212` (observation).
     `ceiling(L) − budget ≥ 2 000 ms` at every level (2 000 at 5, 6 and 7, more below). *(2026-10-30, `ABC-228`,
     `ADR-0053` d10: **1 000 at 5**, still 2 000 at 6 and 7. Level 5's ceiling stays 5 s. 1 000 ms is about 30×
     `AR-NFR004-A`'s ≤ 31 ms overshoot.)*
+    - *2026-11-11 (`ABC-318`): level 6's ceiling is **12 s** for its 10 000 budget, still 2 000 under it. The ceiling
+      follows the owner's rule, budget + 2 s.*
   - `AR-NFR004-A`'s ≤ 31 ms overshoot sits inside that margin. The `ABC-212` `A5` data row pins this.
 - **Rejected: a ceiling per level.** It would need one of two changes. Each departs from the points, and each would go
   back to the owner:
@@ -587,6 +604,7 @@ note is `arch-design-ABC-212` (observation).
   - **D11:** `max 7`. Rate 0 is levels 5–7, and rate above 0 is levels 1–4.
   - **D5:** `isready` and `stop` during a search are answered at most one budget late: about 5 s at levels 1–5, 7 s at
     6 and 32 s at 7. Accepted (below). No worker.
+    - *2026-11-11 (`ABC-318`): about 12 s at 6. `ADR-0044` D5 carries the dated line.*
   - The D6 row "`depth`/`nodes`/`mate` at a level with a blunder rate (1–4)" is unchanged.
 - **D5's first worker trigger ("the owner lifts the 5 s ceiling for UCI") fired. Ruled: the latency is accepted at
   levels 6–7, and the worker is not owed first** (OQ-212-3, delegated by the owner).
@@ -597,6 +615,7 @@ note is `arch-design-ABC-212` (observation).
     - after a `stop` sent mid-search it kills the engine after `IdleTimeout` (default 15 000 ms);
     - it sends that `stop` at a game end or when pondering, not in timed play.
     So level 6 (≤ 7 s) fits, and level 7 (≤ 32 s) does not, if such a `stop` comes.
+    *(2026-11-11, `ABC-318`: level 6 is ≤ 12 s, still under `IdleTimeout`'s 15 000 ms, so it still fits.)*
   - Other GUIs are `UNKNOWN - verify`.
   - The worker also stays out because it would add a file that `dist/uci.js` loads, which reopens D8's fence
     (§ Addendum 2026-10-21).
@@ -619,11 +638,14 @@ note is `arch-design-ABC-212` (observation).
   Security/NFR places it in `plans/nfr-catalog.md` at `ABC-212`'s gate, with the mechanism line from A3.
   *(2026-10-30, `ADR-0053` d10: "≤ 3 s at default difficulty" becomes ≤ 4 s, and the 5 s ceiling at levels 1–5 stays.
   The catalog edit is Security/NFR's, at `ABC-228`'s gate.)*
+  *(2026-11-11, `ABC-318`: "7 s at level 6" reads **12 s**, by the same budget + 2 s rule. The catalog edit is
+  Security/NFR's, at `ABC-318`'s gate.)*
 - **`AR-NFR004-A`:**
   - its "the hardest level is the default, so clause A covers it" is retired. The hardest level (7) is covered by
     clause B per level.
   - The catalog's "if a level's budget ever reaches `HARD_CEILING_MS` …" no longer fires. Level 6's 5 000 is 2 000
     under its own ceiling of 7 000, and 30 000 is under the 32 000 clamp.
+    *(2026-11-11, `ABC-318`: 10 000 under 12 000, still 2 000.)*
 - **`NFR-005`:** unchanged. Its referent is level 5 at 3 s, with level 5's 5 s ceiling. *(2026-10-30, `ABC-228`,
   `ADR-0053` d10: the referent is level 5 at 4 s. The depth-6 FAIL floor and the depth-7 WARN do not move. The catalog
   text is Security/NFR's.)*
@@ -648,3 +670,90 @@ A data revert:
 
 The pins that `ABC-212`'s list licenses, the `ADR-0044` fold lines and the `NFR-004` catalog text go back with them.
 No mechanism code is involved. Levels 1–5 never moved, so no verdict goes STALE.
+
+## AMENDMENT 2026-11-11 — level 6 thinks 10 s; its ceiling is 12 s (`ABC-318`)
+
+**Status: the owner's word, recorded.** He said, verbatim (Orchestrator note
+`.grugops/context/orch-2026-10-30a/notes/20261111T073837Z-orchestrator-decision-f1dce7dd.md`, a transcription and not a
+stamp): *"go with 10 s for level 6"*. It answers OQ-212-1's revisit (A1: "kept at 5 s on the owner's own number …, to
+be revisited with harness data"). It is a requirement change, MINOR per `VERSIONING.md`. Written by Architect/Design
+(task `arch-ABC-318`) at `main` `902680b7`. Records only: no code ran, no game was played, nothing was timed. This is
+a forward-only amendment. Above it, only the dated lines listed in § Status were added.
+
+### The decision
+
+- **`LEVELS[6]` = `{ budgetMs: 10000, blunderRate: 0 }`** (was 5 000). The rate stays 0.
+- **Level 6's `NFR-004` ceiling is 12 s** (was 7 s). It is not a new number: it is the owner's accepted rule, "a level
+  above 5 gets its budget + 2 s" (§ AMENDMENT 2026-10-24 § Consequences, OD-212-1 (a)).
+- **In force at `ABC-318`'s merge.** The code is the SE's (`se-ABC-318`, C3). The catalog line is Security/NFR's
+  (`secnfr-ABC-318`, C2).
+
+### Why: the `ABC-316` and `ABC-317` readings
+
+- **Measured** against Stockfish 19 on the README Strength scale:
+  - level 1: 1499.5 ± 53.4 (`qe-ABC-316` `…f44a427d`);
+  - level 2: 1678.1 ± 48.5 (`…553195c0`);
+  - level 3: 1909.1 ± 47.9 (`qe-ABC-317` `…181f12c9`);
+  - level 4: 2094.3 ± 47.9 (`…75bd7076`).
+- **The projection** (Orchestrator `…152bb16f`): level 4's no-blunder figure at 1 s (2144–2164), plus +50–75 per
+  doubling beyond 1 s.
+- **At 5 s, level 6 sat 0.32 doublings over level 5's 4 s.** That is +16–24 Elo, inside one reading's ± 48, so the two
+  levels cannot be told apart. This is A1's "plays almost like level 5", in Elo terms.
+- **At 10 s it is 1.32 doublings over level 5:** ~2310–2410, about +65–100. The spacing 4 → 10 → 30 s is 1.32 and 1.58
+  doublings, roughly even.
+- **Every level 5–7 figure is projected, `UNKNOWN - verify`.** No game was read for this amendment, and none is owed by
+  `ABC-318` (level 6 stays projected).
+
+### Checked at `main` `902680b7`: these still hold
+
+- **The ordering row** (`src/levels.test.ts` A1) over 1..7. Budgets do not fall (4 000 ≤ 10 000 ≤ 30 000). Rates do not
+  rise (0, 0, 0). The 5 → 6 and 6 → 7 steps each improve the budget.
+- **A1:** 5v6 and 6v7 are still time alone. D1's "more than time alone" still holds for 1v2 through 4v5.
+- **A2:** `DEFAULT_LEVEL` 5, `HARDEST_LEVEL` 7 and `EASIEST_LEVEL` 1. `LEVELS[DEFAULT_LEVEL]` = `{ DEFAULT_BUDGET_MS, 0 }`
+  = `{ 4000, 0 }`. `NFR-005`'s referent does not move.
+- **A3:**
+  - the mechanism, with no third `Level` field;
+  - `ceiling(L) − budget`: 2 000 at 6 (12 000 − 10 000) and at 7, 1 000 at 5. `AR-NFR004-A`'s ≤ 31 ms sits inside;
+  - every level budget ≤ 30 000, and the largest level ceiling is still 32 000, at level 7. `HARD_CEILING_MS` (60 000)
+    is above it. So `src/levels.test.ts` clause B's three pins hold unchanged (the clamp at 60 000, the largest level
+    ceiling at 32 000, and the second ≤ the first). `min(10 000, 60 000)` is 10 000, so the clamp does not bind.
+- **A4:**
+  - `Skill Level` stays a spin, 1–7. Rate 0 (levels 5–7) still takes the `chooseMove` path with D12's limits;
+  - a bare `go` at `Skill Level` 6 searches 10 000 (`ADR-0044` D4.2's cap), and a longer `movetime` is capped there;
+  - the busy latency at level 6 is about 12 s. That is still under cutechess's `IdleTimeout` (15 000 ms), so A4's
+    ruling holds: the latency is accepted, and the worker is not owed first;
+  - the A4 probe's "6 000 at 6" is history (the old budget, at a virtual step of 1 000).
+- **A5:** levels 6–7 stay outside the ladder, and no 5v6 verdict is owed. `ABC-087` test note 4 is not engaged: 10 s is
+  the owner's number, set on a projection and not tuned to a ladder result.
+- **D3 and `ADR-0038` decision 1:** a level is still a budget plus a rate. **`ABC-101` A7:** a level is still an opaque
+  ordinal. The projected Elo lives in the README, not in the level's data.
+- **`NFR-009`:** `ABC-212`'s 30 s reading (≤ 16 MiB, flat) covers 10 s. No re-read is owed.
+- **`ADR-0052`:** `simple-tournament` and `uci-clock-mode` do not read `Skill Level`, so they do not change. Its A1 row's
+  "22 s sits between 6 and 7" still holds (10 s < 22 s < 30 s).
+- **Not checked here, the SE's at C3 (`UNKNOWN - verify`):**
+  - `NFR-008`: a default-lane row that plays level 6 at its budget on a fixed virtual step reads the clock about twice
+    as often;
+  - the levels deep lane's real-clock level 6 row (`src/levels.test.ts`, `ABC-212` A4) now takes about 10 s per search,
+    so its wall grows.
+
+### Owed elsewhere (not edited here)
+
+- **`src/levels.ts`'s header comment** (`:47–50`): "at 5 s" and "7 s at 6" move with C3, in the same diff.
+  - `ADR-0052` D8's dated line (`QE-221-b`) and A3's fold line above both fire on this ticket. The next ticket whose
+    diff touches `src/levels.ts` corrects three more stale words, as comment-only lines:
+    - `:42`'s "`NFR-004`'s 3 s" reads 4 s;
+    - `:49–50`'s "at least 2 s under it" is 1 s at level 5;
+    - "`HARD_CEILING_MS` is the largest of them" becomes: the clamp sits at the largest ceiling in force (60 s,
+      `uci-clock-mode`), at or above every level ceiling.
+  - The `se-ABC-318` brief does not name this. It is routed to the Orchestrator.
+- **`NFR-004`'s catalog line:** Security/NFR (C2).
+- **README, CHANGELOG, `AGENTS.md` and the `rating.ts` comment:** the SE (C3, C4).
+- **`ADR-0053` decision 10's "the level 5 → 6 step shrinks to 1.25x"** is history. The step is 2.5x from `ABC-318`'s
+  merge. That ADR is outside this hop's width.
+- **`ABC-212` OQ-212-1, `EPIC-008`, the traceability and the board:** BA/PM and the Orchestrator, as they rule.
+
+### Rollback
+
+A data revert: `LEVELS[6]` goes back to `{ 5000, 0 }` and level 6's ceiling to 7 s. The pins, the catalog line, the
+README and the CHANGELOG go back with them. No mechanism code is involved. No verdict goes stale: level 6 was never read
+(A5).
