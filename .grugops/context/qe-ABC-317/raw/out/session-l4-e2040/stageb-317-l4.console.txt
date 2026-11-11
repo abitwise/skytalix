@@ -1,0 +1,18 @@
+scripts/session.sh: OK
+scripts/hostcheck.sh: OK
+scripts/read.mjs: OK
+2026-11-10T23:02:51Z load1=0.44 tctl=36.4 tmp_free_mb=6434 foreign_vitest=0 foreign_cutechess=0 foreign_stockfish=0 foreign_node=0
+2026-11-10T23:02:51Z
+2026-11-10T23:02:51Z L4 E2040 W-check 2026-11-10T23:02:51Z load1=0.44 tctl=36.5 tmp_free_mb=6434 foreign_vitest=0 foreign_cutechess=0 foreign_stockfish=0 foreign_node=0
+2026-11-10T23:02:51Z L4 E2040 launch r b6366a79 skill=4 E=2040 st=1 rounds=100 concurrency=1 runaway=40300s
+2026-11-11T04:42:45Z L4 E2040 end r tool_exit=0 stop=none
+2026-11-11T04:42:45Z L4 E2040 record machine.txt control line = sealed
+2026-11-11T04:42:45Z L4 E2040 record cmd.txt has [st=1 timemargin=50 restart=on 'option.Skill Level=4']
+2026-11-11T04:42:45Z L4 E2040 record cmd.txt has [st=1 timemargin=2000 restart=on]
+2026-11-11T04:42:45Z L4 E2040 record cmd.txt has [option.UCI_Elo=2040]
+2026-11-11T04:42:45Z L4 E2040 record cmd.txt has [-games 2 -rounds 100 -concurrency 1 -maxmoves 200]
+2026-11-11T04:42:45Z L4 E2040 end read rc=0
+SESSION_EXIT=0
+2026-11-11T04:42:45Z
+
+[exited with code 0]

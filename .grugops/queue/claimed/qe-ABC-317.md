@@ -61,3 +61,26 @@ Every run goes as `flock <scratch>/host-test.lock <cmd>` (the real path is in yo
   - An out-of-band L3 result does not stop L4: report it and go on to L4.
 - **`ps` at 20:57:15Z, by class only:** one monitoring tool at about 25 %; Claude sessions near idle; 0 cutechess-cli and 0 stockfish; one long-lived idle vitest-class process at 0 % CPU (the same idle class as in ABC-295 and ABC-316); load1 0.18. If the session's own W-check says WAIT on it, stop and report; do not edit the sealed check.
 - **Band steps are not pre-approved.** Report each level's reading; a step waits for the owner's word.
+
+## Stage B
+*QE/E2E (claude-opus-5-5, qe-ABC-317), 2026-11-10/11, on `grugops/qe-ABC-317` from `a44dc556` (harness `tools/` `6272e8d2`, worktree `src/` `21f3b304`). Read sha `b6366a79` (`src/` `21f3b304`).*
+
+**Result: both levels VALID and INSIDE the band (outcome 2): E confirmed at both. L3 = 1 909.1 ± 47.9 (E 1 890); L4 = 2 094.3 ± 47.9 (E 2 040). No step needed or run. B2 is MET for both levels.**
+- **Notes:** L3 readings `20261110T230239Z-qe-e2e-observation-6431da57`, verdict `20261110T230239Z-qe-e2e-decision-181f12c9`. L4 readings `20261111T044345Z-qe-e2e-observation-66b23e6c`, verdict `20261111T044345Z-qe-e2e-decision-75bd7076`. Read once each under PREREG `…e6cf1088`.
+- **Run:** `session.sh 3 1890`, then `session.sh 4 2040`, each under its own lock hold, as sealed. The sealed scripts' sha256s were checked OK just before each launch, which was gated on that check. L3's records were committed (`45ba8992`) before L4 started.
+- **L3** (`--skill 3 --elo 1890`, `st` 0.33 s):
+  - **103 / 5 / 92, 105.5 / 200 = 52.75 %** (White 58.5, Black 47.0).
+  - Elo +19.1 ± 47.9, so **X = 1 909.1 ± 47.9**. Cluster ± 46.5.
+  - Faults 0, time losses 0, depth guard 0 of 11 449 below depth 4. Latency max 335 ms (margin 380).
+  - W-check 20:58:04Z 0 / 0 / 0 / 0. `r` 20:58:04Z–23:01:22Z, **123 min 18 s** (estimate 94–165, central 121). Stops none; session exit 0.
+  - Host ALONE for the SHARED classes (732 samples). One game-boundary sample counted 1 `stockfish` and 1 `node`.
+- **L4** (`--skill 4 --elo 2040`, `st` 1 s):
+  - **111 / 9 / 80, 115.5 / 200 = 57.75 %** (White 58.0, Black 57.5).
+  - Elo +54.3 ± 47.9, so **X = 2 094.3 ± 47.9**. Cluster ± 48.0.
+  - Faults 0, time losses 0, depth guard 0 of 10 549 below depth 5. Latency max 1 004 ms (margin 1 050).
+  - W-check 23:02:51Z 0 / 0 / 0 / 0. `r` 23:02:51Z–04:42:45Z, **339 min 54 s** (estimate 283–500, central 367). Stops none; session exit 0.
+  - Host ALONE for the SHARED classes (2 018 samples). Three game-boundary samples counted 1 `node` or 1 `stockfish`.
+  - The game-boundary counts at both levels match ABC-316's pattern, likely the tool's own engine restart (UNKNOWN - verify). Under FL they change nothing.
+- **Reported, not graded:** L3 − L2 = +231.0 ± about 68; L4 − L3 = +185.2 ± about 68. Stockfish's `st` differs between levels (UNKNOWN - verify, its time-scale effect). L3 is inside its projection (~1 850–1 925). L4's centre is 19 above its projection's top (~2 000–2 075), within error; that is B3's to weigh against L5–L7.
+- **Records:** `raw/out/l3-e1890/`, `raw/out/l4-e2040/` and `raw/out/session-l*/`, redacted by `raw/redact.sh` (a one-line-header copy of qe-ABC-316's, written after the seal; records only). The full `r.out` files stay in scratch, with their sha256s. Both build clones were deleted.
+- **Fences held:** no sealed script edited, no band step, no re-run. No `src/`, README, ADR, EPIC or board edit. No push, force, amend, rebase or merge. No foreign process touched or recorded beyond class and count.
