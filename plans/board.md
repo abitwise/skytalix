@@ -1,3 +1,4 @@
+_Updated: 2026-11-11T04:51:01Z — **ABC-317 merged** (69984d56): L3 1 909.1, L4 2 094.3 measured; L5–L7 re-projected. Option A complete. No open tickets; three README wording gaps carried._
 _Updated: 2026-11-10T20:34:58Z — owner: levels 3 and 4 next; ABC-317 cut by note; qe-ABC-317 stage A (PREREG, no games). Board fix: ABC-316's Done row moved from a record block into ## Done._
 _Updated: 2026-11-10T19:08:17Z — **ABC-316 merged** (5272a7e3): L1 1 499.5 ± 53.4, L2 1 678.1 ± 48.5 measured; L3/L4 re-projected. No open tickets; levels 3 and 4 wait on the owner._
 _Updated: 2026-11-10T15:52:00Z — se-ABC-316 done (ebbeb615, gates green, src/ empty); ABC-316 In Review; qe-ABC-316 stage A running (no games)._
@@ -1659,7 +1660,6 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 ## In Review (WIP 1/3)
-- ABC-317 — measure levels 3 and 4 (cut by note …7ffdb8a5); qe-ABC-317 stage A (PREREG, no games).
 
 
 
@@ -1719,6 +1719,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready to Release (WIP 0/4)
 
 ## Done (WIP unlimited)
+- [ABC-317] Levels 3 and 4 measured vs Stockfish 19 (L3 1 909.1 ± 47.9 at E 1890; L4 2 094.3 ± 47.9 at E 2040); README levels 1–4 measured, 5–7 re-projected; ABC-316's gaps closed. Done 2026-11-11 (merged 69984d56; QE PASS_WITH_GAPS …6298d7f0, UAT waived, src/ empty).
 - [ABC-316] Levels 1 and 2 measured vs Stockfish 19 (L1 1 499.5 ± 53.4 at E 1320; L2 1 678.1 ± 48.5 at E′ 1720), `r --skill`, README levels with L3/L4 re-projected. Done 2026-11-10 (merged 5272a7e3; QE PASS_WITH_GAPS …a55b90ec, UAT waived, src/ empty).
 - [ABC-315] Versioning: VERSIONING.md (SemVer), CHANGELOG.md, version 1.0.0, --version on both entry points. Done 2026-11-10, QE PASS …3c485a64; Security R1 closed (…0088bc3b); tag v1.0.0 created locally, owner pushes and publishes the Release page.
 - [ABC-314] README records the owner's macOS run: bin/skytalix-uci in En Croissant, one game (2026-11-10). Done 2026-11-10, QE PASS_WITH_GAPS …42a3def5; low gap G1 (owner's word, table rendering) open.
