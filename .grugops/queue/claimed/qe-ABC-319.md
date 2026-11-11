@@ -26,3 +26,13 @@ Read `VERSIONING.md`, the cut note `.grugops/context/orch-2026-10-30a/notes/2026
 4. **D4 gates on the tip,** each alone under the lock, with one worker: lint, typecheck, unit, build.
 5. **Verdict:** PASS, PASS_WITH_GAPS or FAIL. It signs UAT per the 2026-10-22 ruling. The src/ diff is a test file only, so check the waiver with AGENTS.md's reference command and record the result.
 Every run goes as `flock <scratch>/host-test.lock <cmd>` (the real path is in your dispatch prompt only). Publish sealed notes (`at` from `date -u`). Add a `## Result` block to this brief. Run `records-path-check --base main`, then commit. No push, tag, merge, amend, force or rebase. Commit messages end with "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>".
+
+## Result
+**PASS**, 2026-11-11T08:19Z, on tip `796c3a99` (SE commit `f42537b2`). D1–D4 met; QE ran every check itself, each run alone under the host lock.
+- D1: both lock fields and package.json read 1.1.0, with nothing else in the lock changed. Both `--version` print `skytalix 1.1.0` after the build. No version is hard-coded in code or bin.
+- D2: the four measured figures were recomputed from the sealed W/D/L counts and all round correctly. There is no projected figure, an empty Unreleased sits above the entry, and the links are right.
+- D3: L6 reads `~2310–2420`. The README changes on 2 lines and the art cmp exits 0. `levels.test.ts` changes 2 text lines, with 0 assertion lines.
+- D4: lint 0 (150 files), typecheck 0, unit 72 files 2740/2740 with 0 skipped, build 0.
+- Waiver: the reference command is empty, so zero production lines and UAT is waived.
+- Non-blocking: the `src/version-file.ts` line 2 doc example still shows 1.0.0, and it is also in dist.
+- Notes: `20261111T081841Z-qe-e2e-observation-1983f7fb`, `20261111T081855Z-qe-e2e-decision-50c91fb6`.
