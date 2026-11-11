@@ -1,3 +1,4 @@
+_Updated: 2026-11-11T08:19:34Z — **ABC-319 merged; v1.1.0 tagged locally.** Owner pushes main and tag v1.1.0 and publishes the Release page. No open tickets. Optional next: L5 reading (plan in memory-bank/60-progress.md § Next action)._
 _Updated: 2026-11-11T08:13:02Z — owner: release v1.1.0; ABC-319 cut by note (…54f06923); se-ABC-319 building (version, CHANGELOG, two bundled gaps)._
 _Updated: 2026-11-11T08:10:49Z — **ABC-318 merged** (f30aeb0b): level 6 is 10 s a move. No open tickets. v1.1.0 release and an optional L5 reading wait on the owner; plan in memory-bank/60-progress.md § Next action._
 _Updated: 2026-11-11T07:38:37Z — owner: level 6 to 10 s; ABC-318 cut by note (…f1dce7dd); arch-ABC-318 (ADR-0045 amendment), secnfr-ABC-318 (NFR-004) and se-ABC-318 (code and docs) running in parallel._
@@ -1664,7 +1665,6 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 ## In Review (WIP 1/3)
-- ABC-319 — release v1.1.0 (…54f06923); built f42537b2; qe-ABC-319 checking.
 
 
 
@@ -1724,6 +1724,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready to Release (WIP 0/4)
 
 ## Done (WIP unlimited)
+- [ABC-319] Release v1.1.0: version 1.1.0, CHANGELOG 1.1.0 (measured L1–L4 only), README L6 ~2310–2420, stale "3 s" test text. Done 2026-11-11 (merged 376e9fc3; QE PASS …50c91fb6; UAT waived, zero production lines). Tag v1.1.0 local; owner pushes it and publishes the Release page.
 - [ABC-318] Level 6 thinks 10 s a move (was 5 s; L6 ceiling 12 s); ADR-0045/0044/0052 and NFR-004 amended; README L6 ~2310–2410 projected, ABC-317's three gaps closed. Done 2026-11-11 (merged f30aeb0b; QE PASS_WITH_GAPS …387f257c signs UAT).
 - [ABC-317] Levels 3 and 4 measured vs Stockfish 19 (L3 1 909.1 ± 47.9 at E 1890; L4 2 094.3 ± 47.9 at E 2040); README levels 1–4 measured, 5–7 re-projected; ABC-316's gaps closed. Done 2026-11-11 (merged 69984d56; QE PASS_WITH_GAPS …6298d7f0, UAT waived, src/ empty).
 - [ABC-316] Levels 1 and 2 measured vs Stockfish 19 (L1 1 499.5 ± 53.4 at E 1320; L2 1 678.1 ± 48.5 at E′ 1720), `r --skill`, README levels with L3/L4 re-projected. Done 2026-11-10 (merged 5272a7e3; QE PASS_WITH_GAPS …a55b90ec, UAT waived, src/ empty).

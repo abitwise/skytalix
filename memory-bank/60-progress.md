@@ -955,6 +955,8 @@ Levels 5–7 are projected (orch note …152bb16f): L5 ~2240–2320, L6 ~2260–
 
 *How to run a level.* `tools/rating/rating.ts r <sha> <out> --skill L --elo E --rounds 100 --concurrency 1` (`--skill` takes 1–4 today). Model the QE hop on `qe-ABC-317`: stage A pins, a 2-game smoke and a sealed PREREG; then the owner's held-host word (W) per window; then stage B; then a README hop and a QE check. The band rule allows one step per level, on the owner's word. Walls so far: L1 37 min, L2 50–64 min, L3 2.1 h, L4 5.7 h. Games at the level's time take about 200 × 110 plies × `st`.
 
+*Update 2026-11-11T08:19Z:* item 4 DONE: v1.1.0 released in ABC-319 (merged 376e9fc3, tag v1.1.0 local; the owner pushes). The L6 edge and the "3 s" test text are fixed there. Left: the `src/version-file.ts` line 2 doc example still says 1.0.0 (next docs pass); item 3, the optional L5 reading.
+
 *Update 2026-11-11T08:10Z:* items 1 and 2 are DONE in ABC-318 (merged f30aeb0b; owner chose 10 s; README gaps closed). Left from ABC-318 (QE …387f257c): L6's top edge should read ~2420 (outward rounding of 2413.1), and stale "3 s" text in `src/levels.test.ts` lines 395 and 404. Bundle both into the next docs change. Next: item 4 (v1.1.0, MINOR) on the owner's word; item 3 optional.
 
 *Open, in order:*
