@@ -1,3 +1,4 @@
+_Updated: 2026-11-11T07:21:01Z — plan written to memory-bank/60-progress.md § Next action (2026-11-11): owner's L6 time question (recommend 10 s), three README gaps, optional L5 reading, optional v1.1.0. Nothing running._
 _Updated: 2026-11-11T04:51:01Z — **ABC-317 merged** (69984d56): L3 1 909.1, L4 2 094.3 measured; L5–L7 re-projected. Option A complete. No open tickets; three README wording gaps carried._
 _Updated: 2026-11-10T20:34:58Z — owner: levels 3 and 4 next; ABC-317 cut by note; qe-ABC-317 stage A (PREREG, no games). Board fix: ABC-316's Done row moved from a record block into ## Done._
 _Updated: 2026-11-10T19:08:17Z — **ABC-316 merged** (5272a7e3): L1 1 499.5 ± 53.4, L2 1 678.1 ± 48.5 measured; L3/L4 re-projected. No open tickets; levels 3 and 4 wait on the owner._
