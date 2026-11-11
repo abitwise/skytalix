@@ -8,8 +8,8 @@ All notable changes to skytalix are recorded here. The format follows
 
 ### Changed
 
-- README Levels table: measured strengths for levels 1 and 2, and revised projections for levels 3
-  and 4.
+- README Levels table: measured strengths for levels 1 to 4, and revised projections for levels 5
+  to 7.
 
 ## [1.0.0] - 2026-11-10
 
@@ -47,4 +47,5 @@ It is not a 40/15 rating and not a rating-list figure. Level 5 normally has 4 s 
 - `--version` on `npm run chess` and on `bin/skytalix-uci` prints the version, for example
   `skytalix 1.0.0`.
 
+[Unreleased]: https://github.com/abitwise/skytalix/compare/v1.0.0...HEAD
 [1.0.0]: https://github.com/abitwise/skytalix/releases/tag/v1.0.0
