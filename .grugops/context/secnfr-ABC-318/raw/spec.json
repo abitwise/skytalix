@@ -1,0 +1,9 @@
+{
+  "refs": ["secnfr-ABC-318", "ABC-318", "NFR-004", "NFR-005", "NFR-008", "NFR-009", "NFR-011", "NFR-012", "AR-NFR004-A", "AR-UCI-BUSY", "SEC-212-a", "SEC-318-a", "ADR-0045", "ABC-212", "ABC-228", "src/levels.ts", "src/levels.test.ts", "plans/nfr-catalog.md",
+    "orch-2026-10-30a/20261111T073837Z-orchestrator-decision-f1dce7dd",
+    "902680b7"],
+  "notes": [
+    { "kind": "observation", "confidence": "high on the file reads and the timeout arithmetic; the no-change rating is Security/NFR's judgement; nothing run", "bodyFile": "notes/observation.md" },
+    { "kind": "decision", "confidence": "high; the ceiling is the row's owner-accepted budget + 2 s rule applied to the owner's 10 s; nothing run", "bodyFile": "notes/decision.md" }
+  ]
+}
