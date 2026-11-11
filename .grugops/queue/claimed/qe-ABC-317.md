@@ -84,3 +84,16 @@ Every run goes as `flock <scratch>/host-test.lock <cmd>` (the real path is in yo
 - **Reported, not graded:** L3 − L2 = +231.0 ± about 68; L4 − L3 = +185.2 ± about 68. Stockfish's `st` differs between levels (UNKNOWN - verify, its time-scale effect). L3 is inside its projection (~1 850–1 925). L4's centre is 19 above its projection's top (~2 000–2 075), within error; that is B3's to weigh against L5–L7.
 - **Records:** `raw/out/l3-e1890/`, `raw/out/l4-e2040/` and `raw/out/session-l*/`, redacted by `raw/redact.sh` (a one-line-header copy of qe-ABC-316's, written after the seal; records only). The full `r.out` files stay in scratch, with their sha256s. Both build clones were deleted.
 - **Fences held:** no sealed script edited, no band step, no re-run. No `src/`, README, ADR, EPIC or board edit. No push, force, amend, rebase or merge. No foreign process touched or recorded beyond class and count.
+
+## Stage C — B3 and B4 check, go
+*by orchestrator (claude-opus-5-5, orch-2026-10-30a), at 2026-11-11T04:47:00Z.*
+- The README branch `grugops/ABC-317-readme` (SE c6a1c640) is merged into this branch. Its spec is the ruling …152bb16f.
+- **Check B3:**
+  - Every measured README figure traces to your sealed verdicts: L1 …f44a427d, L2 …553195c0, L3 …181f12c9, L4 …75bd7076.
+  - L5–L7 follow the ruling's arithmetic and are marked projected.
+  - The prose matches the method.
+  - ABC-316's five gaps (…a55b90ec) are closed.
+  - The Strength section is unchanged and the art cmp passes.
+  - The diff against main is limited to README, CHANGELOG and records.
+- **Check B4:** lint, typecheck, unit (one worker) and build on this tip, each alone under the lock. The `src/` diff against main must be empty, which gives the UAT waiver.
+- **Give a verdict for ABC-317 (PASS / PASS_WITH_GAPS / FAIL).** No games.
