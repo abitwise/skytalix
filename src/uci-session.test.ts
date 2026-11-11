@@ -1090,10 +1090,10 @@ describe("ABC-212 A9 — Skill Level reaches 7, and levels 6-7 take the rate-0 p
     expect(handed).toEqual({ budgetMs: 30_000 });
   });
 
-  it("a bare go at 6 hands the engine 5 000 ms", () => {
+  it("a bare go at 6 hands the engine 10 000 ms (ABC-318)", () => {
     const { handed, setupLines } = budgetAt(["setoption name Skill Level value 6"], "go");
     expect(setupLines).toEqual([[]]);
-    expect(handed).toEqual({ budgetMs: 5_000 });
+    expect(handed).toEqual({ budgetMs: 10_000 });
   });
 
   it("go movetime 60000 at 7 hands the engine 30 000 (the level caps G)", () => {
@@ -1978,7 +1978,7 @@ describe("ABC-220 — TimeMode simple-tournament over UCI (ADR-0052)", () => {
         ["3", 330, 0.1],
         ["4", 1_000, 0.05],
         ["5", 4_000, 0],
-        ["6", 5_000, 0],
+        ["6", 10_000, 0], // ABC-318: 5 000 -> 10 000
         ["7", 30_000, 0],
       ]);
       expect(DEFAULT_LEVEL).toBe(5);
@@ -2052,7 +2052,7 @@ describe("ABC-220 — TimeMode simple-tournament over UCI (ADR-0052)", () => {
       expect(rig220.draws.count).toBe(0);
     });
 
-    it("Skill Level 6 set in the setting takes effect when TimeMode returns to level: a bare go is level 6's 5 000", () => {
+    it("Skill Level 6 set in the setting takes effect when TimeMode returns to level: a bare go is level 6's 10 000 (ABC-318)", () => {
       const rig220 = session220();
       rig220.send(SIMPLE_TOURNAMENT);
       expect(rig220.send("setoption name Skill Level value 6")).toEqual([]);
@@ -2060,7 +2060,7 @@ describe("ABC-220 — TimeMode simple-tournament over UCI (ADR-0052)", () => {
       rig220.send("go");
       expect(rig220.send("setoption name TimeMode value level")).toEqual([]);
       rig220.send("go");
-      expect(rig220.handed.map(({ budgetMs }) => budgetMs)).toEqual([T_MS, 5_000]);
+      expect(rig220.handed.map(({ budgetMs }) => budgetMs)).toEqual([T_MS, 10_000]);
     });
   });
 

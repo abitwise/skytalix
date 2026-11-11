@@ -44,9 +44,10 @@ export interface Level {
  * costs time (about one ply at the top two steps, about two-thirds of one at the bottom two) and
  * doubles the blunder rate.
  *
- * `ADR-0045` § AMENDMENT 2026-10-24 (`ABC-212`): levels 6 and 7 sit above the default, at 5 s
- * and 30 s, rate 0. Each of those two steps is time alone. The hardest is 7, not the default.
- * Each level's `NFR-004` ceiling (5 s at 1-5, 7 s at 6, 32 s at 7) is held by its budget, at
+ * `ADR-0045` § AMENDMENT 2026-10-24 (`ABC-212`): levels 6 and 7 sit above the default, at 10 s
+ * (5 s until `ABC-318`) and 30 s, rate 0. Each of those two steps is time alone. The hardest
+ * is 7, not the default.
+ * Each level's `NFR-004` ceiling (5 s at 1-5, 12 s at 6, 32 s at 7) is held by its budget, at
  * least 2 s under it; `HARD_CEILING_MS` is the largest of them. No level claims an Elo number;
  * `ABC-085` proves the ordering of 1-5, levels 6-7 are outside its ladder, and these values are
  * not tuned to it.
@@ -57,7 +58,7 @@ export const LEVELS: Readonly<Record<1 | 2 | 3 | 4 | 5 | 6 | 7, Level>> = Object
   3: Object.freeze({ budgetMs: 330, blunderRate: 0.1 }),
   4: Object.freeze({ budgetMs: 1_000, blunderRate: 0.05 }),
   5: Object.freeze({ budgetMs: 4_000, blunderRate: 0 }),
-  6: Object.freeze({ budgetMs: 5_000, blunderRate: 0 }),
+  6: Object.freeze({ budgetMs: 10_000, blunderRate: 0 }), // ABC-318: 5 000 -> 10 000
   7: Object.freeze({ budgetMs: 30_000, blunderRate: 0 }),
 });
 

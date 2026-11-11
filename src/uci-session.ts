@@ -32,7 +32,7 @@
  * ONE THREAD (`ADR-0044` D5). `go` searches to its budget inside `handleLine`, so a `stop` that
  * arrives later finds the search already finished; `infinite` and `ponder` only HOLD the answer.
  * So `isready` and `stop` sent during a search are answered at most one budget late: about 5 s at
- * levels 1-5, 7 s at 6 and 32 s at 7 (`ABC-212`). That latency is accepted, with no worker
+ * levels 1-5, 12 s at 6 (`ABC-318`) and 32 s at 7 (`ABC-212`). That latency is accepted, with no worker
  * (`ADR-0045` § AMENDMENT A4): a GUI that times out on `isready` or `stop` mid-search should be
  * used at level 5 or below. In `TimeMode` `simple-tournament` they are answered at most one budget
  * plus the abort overshoot (`AR-NFR004-A`) late, so 22 s read to the whole second (22 000 ms plus

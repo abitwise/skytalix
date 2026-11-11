@@ -65,9 +65,9 @@ a blunder rate and a strength, measured for levels 1 to 4 and projected for the 
 
 | Level | 1 | 2 | 3 | 4 | 5 | 6 | 7 |
 |---|---|---|---|---|---|---|---|
-| Time per move | 0.1 s | 0.2 s | 0.3 s | 1 s | 4 s | 5 s | 30 s |
+| Time per move | 0.1 s | 0.2 s | 0.3 s | 1 s | 4 s | 10 s | 30 s |
 | Blunder rate | 40 % | 20 % | 10 % | 5 % | 0 | 0 | 0 |
-| Strength | 1499 ± 53, measured | 1678 ± 49, measured | 1909 ± 48, measured | 2094 ± 48, measured | ~2240–2320, projected | ~2260–2340, projected | ~2390–2540, projected |
+| Strength | 1499 ± 53, measured | 1678 ± 49, measured | 1909 ± 48, measured | 2094 ± 48, measured | ~2240–2320, projected | ~2310–2410, projected | ~2380–2540, projected |
 
 The times are approximate. At the blunder rate's share of its moves, the engine scores every
 move and deliberately picks a weaker one.
@@ -77,10 +77,11 @@ Levels 1 to 4 were measured. Each played 200 games against Stockfish 19 with
 Both sides had the level's own time per move, and the level's blunder rate was on.
 
 Levels 5 to 7 do not blunder, and their figures are projections, not measurements. They start
-from level 4's figure with its blunder cost added back, about 2144 to 2164 at 1 s a move. Then
-they add about +50 to +75 Elo for each doubling of time beyond 1 s. That is less than the
-roughly +75 for each doubling seen between 0.1 s and 1 s, because the gain falls at longer
-times.
+from level 4's figure with its blunder cost added back, about 2144 to 2164 at 1 s a move. That
+cost is about 10 to 14 Elo for each percentage point of blunder rate, so 50 to 70 at level 4's
+5 %. Then they add about +50 to +75 Elo for each doubling of time beyond 1 s. That is less than
+the about +73 to +79 per doubling between the Strength section's 1902.5 at 0.1 s and level 4 at
+1 s, because the gain falls at longer times.
 
 Stockfish also had each level's time per move. How that moves its strength at a given
 `UCI_Elo` was not measured.
