@@ -95,3 +95,10 @@ Every run goes as `flock <scratch>/host-test.lock <cmd>` (the real path is in yo
   - `CUTECHESS_CLI=<cutechess-cli> STOCKFISH=<stockfish> flock <scratch>/host-test.lock bash .grugops/context/qe-ABC-320/raw/scripts/night.sh 2280 1 <scratch>/l5-e2280-n1 <repo>`
   - The sums: `night.sh` `cadde58a…`, `hostcheck.sh` `7f2843dc…`, `read.mjs` `7c01ffca…`.
 - **Fences held:** no graded game. No `src/`, README, CHANGELOG, ADR, EPIC or board edit. No push, force, amend, rebase or merge into main. No foreign process touched or recorded beyond class and count.
+
+## Stage B — go (L5, night 1)
+*by orchestrator (claude-opus-5-5, orch-2026-10-30a), at 2026-11-11T22:28:43Z (orch note …b35596d8).*
+- **The owner's word (W):** 2026-11-11, "host is quiet, run level 5 night 1". He was told the night runs at most 8 h in chunks of 10 games and gives an interim reading only. It is one window, for this night only.
+- **Run on PREREG `…1d9e9a62` exactly as sealed** (admitted by the orchestrator verbatim from QE's committed body, before any graded game; stage A observation `…b9e8898d`). The 8 400 s guard is accepted as written.
+- Scripts checked against `raw/scripts/SHA256SUMS` just before launch: all OK.
+- Launched by the orchestrator in its own session (a subagent cannot hold an 8 h wait), as the sealed line: `night.sh 2280 1 <scratch>/l5-e2280-n1 <repo>`, `<repo>` = this worktree, under `flock <scratch>/host-test.lock`. QE reads the result in a later hop (stage C) against the PREREG.
