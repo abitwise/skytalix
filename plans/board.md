@@ -1,3 +1,4 @@
+_Updated: 2026-11-11T21:44:52Z — owner: one night, max 8 h, for level 5; ABC-320 cut by note (…972c91df); se-ABC-320 building the segment harness (no games). Graded games wait on the owner's held-host word._
 _Updated: 2026-11-11T08:19:34Z — **ABC-319 merged; v1.1.0 tagged locally.** Owner pushes main and tag v1.1.0 and publishes the Release page. No open tickets. Optional next: L5 reading (plan in memory-bank/60-progress.md § Next action)._
 _Updated: 2026-11-11T08:13:02Z — owner: release v1.1.0; ABC-319 cut by note (…54f06923); se-ABC-319 building (version, CHANGELOG, two bundled gaps)._
 _Updated: 2026-11-11T08:10:49Z — **ABC-318 merged** (f30aeb0b): level 6 is 10 s a move. No open tickets. v1.1.0 release and an optional L5 reading wait on the owner; plan in memory-bank/60-progress.md § Next action._
@@ -1636,7 +1637,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 0/3)
+## In Development (WIP 1/3)
+- [ABC-320] L5 night 1 (≤ 8 h, E 2280, interim) and the segment harness (`--skill 1–7`, `--start`, combine). Cut 2026-11-11 (…972c91df); se-ABC-320 building C1 (tools only, no games).
 
 
 
