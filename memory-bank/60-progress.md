@@ -940,6 +940,34 @@ the same explicit instruction.
 
 ## Next action
 
+**2026-11-11 — level strength: option A done, the rest planned. Pick up here.** Owner: "write this plan down so we can continue a bit later".
+
+*Where things stand.* Levels 1–4 are measured against Stockfish 19 on the README Strength scale (ABC-316, ABC-317; merged 69984d56, board 3f9b5286):
+
+| Level | Time per move | Blunder rate | Strength | Stockfish E |
+|---|---|---|---|---|
+| 1 | 0.1 s | 40 % | 1499.5 ± 53.4 | 1320 |
+| 2 | 0.18 s | 20 % | 1678.1 ± 48.6 | 1720 (after one band step from 1450) |
+| 3 | 0.33 s | 10 % | 1909.1 ± 47.9 | 1890 |
+| 4 | 1 s | 5 % | 2094.3 ± 47.9 | 2040 |
+
+Levels 5–7 are projected (orch note …152bb16f): L5 ~2240–2320, L6 ~2260–2340, L7 ~2390–2540. The anchor is L4 with its blunder cost added back (2144–2164 at 1 s), plus +50–75 per doubling beyond 1 s. Nothing is pushed: the owner pushes `main`, and the v1.0.0 tag if it is not yet pushed.
+
+*How to run a level.* `tools/rating/rating.ts r <sha> <out> --skill L --elo E --rounds 100 --concurrency 1` (`--skill` takes 1–4 today). Model the QE hop on `qe-ABC-317`: stage A pins, a 2-game smoke and a sealed PREREG; then the owner's held-host word (W) per window; then stage B; then a README hop and a QE check. The band rule allows one step per level, on the owner's word. Walls so far: L1 37 min, L2 50–64 min, L3 2.1 h, L4 5.7 h. Games at the level's time take about 200 × 110 plies × `st`.
+
+*Update 2026-11-11T08:19Z:* item 4 DONE: v1.1.0 released in ABC-319 (merged 376e9fc3, tag v1.1.0 local; the owner pushes). The L6 edge and the "3 s" test text are fixed there. Left: the `src/version-file.ts` line 2 doc example still says 1.0.0 (next docs pass); item 3, the optional L5 reading.
+
+*Update 2026-11-11T08:10Z:* items 1 and 2 are DONE in ABC-318 (merged f30aeb0b; owner chose 10 s; README gaps closed). Left from ABC-318 (QE …387f257c): L6's top edge should read ~2420 (outward rounding of 2413.1), and stale "3 s" text in `src/levels.test.ts` lines 395 and 404. Bundle both into the next docs change. Next: item 4 (v1.1.0, MINOR) on the owner's word; item 3 optional.
+
+*Open, in order:*
+1. **Owner decision: level 6's time per move.** L5 is 4 s and L6 5 s: 0.32 doublings, so the gap is projected at +16–24 Elo, inside one reading's ± 48. They are not distinguishable. L6's 5 s was the owner's own number (OQ-212-1, ADR-0045 A1, "to be revisited with harness data"). Changing it is a requirement change, and per VERSIONING.md it is MINOR (a level retuned).
+   - Projected L6 by time: 8 s ~2290–2390; **10 s ~2310–2410**; 12 s ~2320–2430; 15 s ~2340–2460.
+   - Orchestrator recommendation: **10 s**. It is about +65–100 over L5. Spacing 4 → 10 → 30 is roughly even in doublings (1.3 and 1.6). The wait stays tolerable for a human.
+   - If changed: an ADR-0045 amendment; `src/levels.ts` L6 `budgetMs`; the tests and snapshots that pin 5 000 or the L6 ceiling (7 s becomes budget + 2 s); README, CHANGELOG and the UCI docs.
+2. **README wording, three gaps** (QE …6298d7f0). L7's low edge should read ~2380. State the 10–14 per point blunder cost behind 2144–2164. Reword "+50–75 is less than roughly +75" as +73–79 from 1902.5 at 0.1 s. Bundle these with item 1's README change (owner's bundle rule).
+3. **Optional: measure L5** (4 s). `--skill` must accept 5, a small harness change. That is about 200 × 110 × 4 s × 2 sides ≈ 24–27 h of held host, plus a band step of the same size if needed. It needs the owner's word for a run over 1 h and a window. Measure L6 only after item 1 settles its time. L7 at 30 s is about 8 days: not planned.
+4. **Optional: release v1.1.0** after items 1–2 (MINOR if L6 changes, else PATCH). The orchestrator tags locally; the owner pushes and publishes the Release page.
+
 **2026-09-19 — session closed at the owner's word; read `plans/board.md`'s top header first.** In order:
 
 1. **Three QE hops** (`In Review`): `ABC-046` (`quit`/`new` — read `A8`'s "one line" vs three, the over-cap-line gap, M9), `ABC-118` (lane inventory — reproduce M1–M4 in a `git init`ed copy). Both builds are merged on `main`; QE branches off `main`.

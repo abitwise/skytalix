@@ -92,6 +92,13 @@ resolve. Since the 2026-10-18 revision that slug is no longer true: see § Revis
 >
 > In force at `ABC-230`'s merge. Both rows carry a dated pointer in place.
 
+> **Amended 2026-11-11 by `ADR-0045` § AMENDMENT 2026-11-11 (`ABC-318`, the owner's word "go with 10 s for level 6",
+> note `…f1dce7dd`; dated lines added by Architect/Design, task `arch-ABC-318`).** Level 6 thinks **10 000 ms** (was
+> 5 000), and its `NFR-004` ceiling is **12 s** (was 7 s; budget + 2 s). The 2026-10-24 pointer's "Levels 6 (5 000 ms)"
+> above reads 10 000 from `ABC-318`'s merge. D4.4's and D5's 2026-10-24 folds carry a dated line. D4.1, D4.2 and D11's
+> rules are unchanged: a bare `go` at `Skill Level` 6 searches 10 000, and rate 0 is still levels 5–7.
+> `HARD_CEILING_MS` (60 000) does not move. No other decision here moves.
+
 **accepted** 2026-10-18 by Olger Oeselg (owner), verbatim "accept the revised ADR-0044 and EPIC-007" (note
 `.grugops/context/wave-2026-09-25/notes/20261018T113000Z-orchestrator-decision-owner-word-engine-private-adr0044-epic007-accepted-c3e81a57.md`).
 Owner menu: licence → private ("let's keep private for now"); Q14 → keep `npm run chess`; Q15 → moot
@@ -396,6 +403,8 @@ budget. There is no `info` line, and no way to read `stop` while `chooseMove` ho
    level by its budget, as above (≤ 30 000), `simple-tournament` by T, and `uci-clock-mode` by its 59 500 cap. Clause
    B's raw-call bound is 60 s (Security/NFR, `787820c3`). Levels 1–7 are value-identical; QE read `level` equal to
    base on 14 742 `go` records.)*
+   *(2026-11-11, `ABC-318`, `ADR-0045` § AMENDMENT 2026-11-11: level 6's ceiling is **12 s**, for its 10 000 budget,
+   still 2 000 under it. Every level budget stays ≤ 30 000, and the clamp stays 60 000.)*
 5. **The `TimeMode` budgets (D4.5).** *(Added 2026-10-30 by BA/PM, task `bapm-ABC-220-merge-fold`, from `ADR-0052` D2
    and D3, in force from `ABC-220`'s merge `ec1e835b`.)* D4.1–D4.4 above are unchanged, and they govern `TimeMode
    level`, the default. While `TimeMode` is not `level`, D4.1's `G` and D4.2's level cap are not used, and `Skill
@@ -432,6 +441,8 @@ handled in order afterwards. The consequences are accepted and stated:
 - *(Folded 2026-10-24, `ADR-0045` A4, `ABC-212`: `isready` and `stop` during a search are answered at most one
   budget late: about 5 s at levels 1–5, 7 s at level 6 and 32 s at level 7. Accepted, with no worker. One
   `bestmove` per `go` still holds.)*
+- *(2026-11-11, `ABC-318`, `ADR-0045` § AMENDMENT 2026-11-11: about **12 s** at level 6. That is still under
+  cutechess's `IdleTimeout` (15 000 ms), so the acceptance stands, with no worker.)*
 - *(Folded 2026-10-30 by BA/PM, task `bapm-ABC-220-merge-fold`, `ADR-0052` D7, at `ABC-220`'s merge `ec1e835b`: in
   `TimeMode` `simple-tournament`, `isready` and `stop` during a search are answered at most one budget +
   `AR-NFR004-A` late: ≤ 22 s, read to the whole second (< 22 500 ms). Accepted, with no worker. One `readyok` per

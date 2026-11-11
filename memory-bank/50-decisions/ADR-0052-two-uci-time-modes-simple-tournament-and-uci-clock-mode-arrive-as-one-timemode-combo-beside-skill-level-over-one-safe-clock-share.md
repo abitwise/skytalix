@@ -44,6 +44,11 @@ Architect/Design (task `arch-adr-accept-0052-0053-0054`).
   the file that row lives in. D1's refusal text is read for the values offered at each build. D7 states how its
   latency bound is read. The dated lines are in D1, D7, D8 and D9. **No requirement moved,** so nothing goes to the
   owner: the bound (≤ 100 ms), the order, the count and "no line lost" are D7's, unchanged.
+- **Dated 2026-11-11 by Architect/Design** (task `arch-ABC-318`, records only, at `main` `902680b7`), on the owner's
+  word "go with 10 s for level 6" (note `…f1dce7dd`; `ADR-0045` § AMENDMENT 2026-11-11). Level 6 thinks 10 000 ms, and
+  its `NFR-004` ceiling is **12 s** (was 7 s; budget + 2 s). Dated lines are in D6, A1 and § Consequences, where this
+  ADR restates level 6's figures. **No decision here moves.** The modes do not read `Skill Level`, every level budget
+  stays ≤ 30 000, and the clamp stays 60 000. In force at `ABC-318`'s merge.
 
 Previously **proposed** 2026-10-29 by Architect/Design (task `arch-epic009-settings`), at `main` `b5df6cde`.
 ~~**The owner accepts or declines it.** Nothing is built on it, and no `EPIC-009` build ticket leaves `Backlog` on it,
@@ -258,6 +263,8 @@ real `δ` from cutechess's per-move times.
   `ADR-0045` A3's shape (`RF-1`): one absolute clamp at the largest ceiling. Each setting's own ceiling is held by its
   data, at the setting:
   - levels 1–7 by `LEVELS[L].budgetMs`, unchanged (5, 7, 32 s);
+    - *2026-11-11 (`ABC-318`): 5, **12** and 32 s. Level 6's budget is 10 000, still ≤ 30 000, so the next bullet
+      holds.*
   - `simple-tournament` by T (22 000, equal to its ceiling; the overshoot is `AR-NFR004-A`);
   - `uci-clock-mode` by `CLOCK_MODE_MAX_BUDGET_MS` (59 500 under 60 000).
 - **Levels 1–7 are value-identical after the move.** Every level budget is ≤ 30 000, so `min(budget, 60 000)` =
@@ -432,6 +439,9 @@ real `δ` from cutechess's per-move times.
 `ADR-0071` (PROPOSED, `ABC-282`), in `uci-clock-mode` under a clock only. No decision here moves: `C`, T, both caps, the
 reserve, the overhead and the ceilings stay. Early stop on a stable root and more time on a hard move stay out.
 
+*Dated 2026-11-11 (`arch-ABC-318`, records only).* A1's "6 (5 s)" reads 10 s from `ABC-318`'s merge. The reason still
+holds: 22 s sits between 6 (10 s) and 7 (30 s).
+
 ## Consequences
 
 - **`NFR-004`, proposed text for the owner** (Security/NFR places it at each gate):
@@ -445,6 +455,9 @@ reserve, the overhead and the ceilings stay. Early stop on a stable root and mor
     catalog's `NFR-004` row is right, and "≤ 3 s" here is history. The level-5 comparisons in § Status and D3 ("its
     3 000 ms budget … ≤ 3 s clause") and in the `AR-NFR004-A` bullet below ("level 5's ≤ 3 s") read 4 000 ms and
     ≤ 4 s the same way. No decision changes.)*
+    *(2026-11-11, `arch-ABC-318`, `ADR-0045` § AMENDMENT 2026-11-11: "7 s at level 6" in the quoted sentence reads
+    **12 s** from `ABC-318`'s merge, by the same budget + 2 s rule. The catalog edit is Security/NFR's, at `ABC-318`'s
+    gate.)*
   - **At the `uci-clock-mode` build**, appended: *"; 60 s in UCI `TimeMode` `uci-clock-mode` (budget ≤ 59.5 s). The
     engine's one clamp sits at the largest ceiling in force, 60 s."* `HARD_CEILING_MS` = 60 000.
   - `AR-NFR004-A` (≤ ~31 ms) is re-read by Security/NFR at 22 s, and at 59.5 s at the clock-mode gate. At 22 s it now

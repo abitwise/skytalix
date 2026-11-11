@@ -1,0 +1,4 @@
+{ "refs": ["qe-ABC-317", "grugops/qe-ABC-317", "ABC-317", "B2", "ABC-316", "ABC-204", "ADR-0056", "ADR-0049", "FL", "W", "b6366a79", "21f3b304", "6272e8d2", "tools/rating/rating.ts", "src/levels.ts", "qe-ABC-317/20261110T204444Z-qe-e2e-decision-e6cf1088", "orch-2026-10-30a/20261110T205715Z-orchestrator-decision-4a94110f"],
+  "notes": [ { "kind": "observation",
+    "confidence": "high: L3 at E 1890 run once under one host-lock hold 2026-11-10 20:58:04-23:01:22Z per the sealed PREREG e6cf1088, with the sealed scripts sha-checked OK just before; figures from the tool's own records and read.mjs; foreign load by class and count only (0 SHARED-class in 732 samples)",
+    "bodyFile": "notes/note-b-l3-readings.md" } ] }

@@ -1,0 +1,11 @@
+session.sh 2 1890 <scratch>/qe317/u1 <repo> -> exit 2: usage: session.sh <3|4> <E> <out> <repo>
+session.sh 5 1890 <scratch>/qe317/u1 <repo> -> exit 2: usage: session.sh <3|4> <E> <out> <repo>
+session.sh 3 1895 <scratch>/qe317/u1 <repo> -> exit 2: usage: session.sh <3|4> <E> <out> <repo> (E: a multiple of 10, 1320-3190)
+session.sh 3 1310 <scratch>/qe317/u1 <repo> -> exit 2: usage: session.sh <3|4> <E> <out> <repo> (E: a multiple of 10, 1320-3190)
+session.sh 4 3200 <scratch>/qe317/u1 <repo> -> exit 2: usage: session.sh <3|4> <E> <out> <repo> (E: a multiple of 10, 1320-3190)
+session.sh 4 abc <scratch>/qe317/u1 <repo> -> exit 2: usage: session.sh <3|4> <E> <out> <repo> (E: a multiple of 10, 1320-3190)
+session.sh 4 2040 <scratch>/qe317/u1 -> exit 2: usage: session.sh <3|4> <E> <out> <repo>
+session.sh 4 2040 <scratch>/qe317/qe317-missing/x <repo> -> exit 2: out's parent does not exist
+session.sh 4 2040 <repo>/tmp-out <repo> -> exit 2: out lies inside the repo
+session.sh 4 2040 <scratch>/qe317 <repo> -> exit 2: out exists
+session.sh 3 -> exit 2: usage: session.sh <3|4> <E> <out> <repo> (E: a multiple of 10, 1320-3190)

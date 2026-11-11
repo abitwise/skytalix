@@ -1,0 +1,5 @@
+{ "refs": ["qe-ABC-317", "grugops/qe-ABC-317", "ABC-317", "B1", "559656a0", "b6366a79", "21f3b304", "6272e8d2", "tools/rating/rating.ts", "src/levels.ts", "orch-2026-10-30a/20261110T203458Z-orchestrator-decision-7ffdb8a5", "qe-ABC-316/20261110T155221Z-qe-e2e-observation-c8bdbf73"],
+  "notes": [
+    { "kind": "observation",
+      "confidence": "high: every check run by QE under the host lock on 2026-11-10, one at a time, outputs in raw/out; one 2-game smoke labelled not graded, no other game",
+      "bodyFile": "notes/note-stage-a.md" } ] }

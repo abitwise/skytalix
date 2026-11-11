@@ -92,7 +92,7 @@ const easiest = LEVELS[EASIEST_LEVEL];
 
 /**
  * `ceiling(L)`, from `NFR-004`'s accepted text (`ADR-0045` § AMENDMENT 2026-10-24, `ABC-212`
- * § Design ruling 1): 5 s at levels 1-5, 7 s at 6, 32 s at 7. A TEST-LOCAL transcription, never
+ * § Design ruling 1): 5 s at levels 1-5, 12 s at 6 (`ABC-318`), 32 s at 7. A TEST-LOCAL transcription, never
  * a production export: the engine holds one clamp, and each level's ceiling is held by its budget.
  */
 const CEILING_MS = {
@@ -101,7 +101,7 @@ const CEILING_MS = {
   3: 5_000,
   4: 5_000,
   5: 5_000,
-  6: 7_000,
+  6: 12_000, // ABC-318: L6's budget 5 000 -> 10 000, so its ceiling 7 000 -> 12 000
   7: 32_000,
 } as const satisfies Record<keyof typeof LEVELS, number>;
 
@@ -267,7 +267,7 @@ describe("ABC-174 A1 — the table is ADR-0045 D1's", () => {
       3: { budgetMs: 330, blunderRate: 0.1 },
       4: { budgetMs: 1_000, blunderRate: 0.05 },
       5: { budgetMs: 4_000, blunderRate: 0 }, // ABC-228, ADR-0053 d10 (ii): 3 000 -> 4 000
-      6: { budgetMs: 5_000, blunderRate: 0 },
+      6: { budgetMs: 10_000, blunderRate: 0 }, // ABC-318: 5 000 -> 10 000
       7: { budgetMs: 30_000, blunderRate: 0 },
     });
     expect(Object.isFrozen(LEVELS)).toBe(true);
@@ -285,8 +285,8 @@ describe("ABC-174 A2 — the default is level 5 (ABC-212: no longer the top)", (
 });
 
 describe("ABC-212 A1 — levels 6 and 7 above the default (ADR-0045 § AMENDMENT A1-A2)", () => {
-  it("LEVELS[6] is { 5 000, 0 } and LEVELS[7] is { 30 000, 0 }", () => {
-    expect(LEVELS[6]).toEqual({ budgetMs: 5_000, blunderRate: 0 });
+  it("LEVELS[6] is { 10 000, 0 } (ABC-318) and LEVELS[7] is { 30 000, 0 }", () => {
+    expect(LEVELS[6]).toEqual({ budgetMs: 10_000, blunderRate: 0 });
     expect(LEVELS[7]).toEqual({ budgetMs: 30_000, blunderRate: 0 });
   });
 
@@ -392,7 +392,7 @@ describe("ABC-174 A7 — the time budget, from the data (NFR-004; ADR-0038 decis
 });
 
 // ---------------------------------------------------------------------------
-// A6 — the default is the 3 s level, and a rate-0 level IS the shipped engine.
+// A6 — the default is the 4 s level, and a rate-0 level IS the shipped engine.
 // ---------------------------------------------------------------------------
 
 describe("A6 — the default level", () => {
@@ -401,7 +401,7 @@ describe("A6 — the default level", () => {
     expect(LEVELS[DEFAULT_LEVEL].budgetMs).toBe(DEFAULT_BUDGET_MS);
   });
 
-  it("never blunders, so `NFR-005`'s reading on `chooseMove` at 3 s IS this level's reading", () => {
+  it("never blunders, so `NFR-005`'s reading on `chooseMove` at 4 s IS this level's reading", () => {
     expect(LEVELS[DEFAULT_LEVEL].blunderRate).toBe(0);
   });
 
@@ -1168,14 +1168,14 @@ if (RUN_DEEP) {
 
   /**
    * `ABC-212` A4: levels 6 and 7 on the REAL clock, `A5`'s positions. Each move spends its budget
-   * (no early stop, § "Up to 30 s") and stays inside its `NFR-004` ceiling. About 2.5 min and
-   * 5 min of wall: run at width 1 on a quiet host, never beside an `EPIC-008` reading. The log
+   * (no early stop, § "Up to 30 s") and stays inside its `NFR-004` ceiling. About 5 min each
+   * (level 6 at 10 s since `ABC-318`) of wall: run at width 1 on a quiet host, never beside an `EPIC-008` reading. The log
    * carries the max and the max completed depth (a depth of 100 or more goes to Architect/Design,
    * `KEY_ARRAY_CAPACITY`).
    */
   describe("ABC-212 A4 — levels 6 and 7 spend their budget, inside their ceiling, on the REAL clock [deep]", () => {
     for (const [id, count, timeout] of [
-      [6, 30, 300_000],
+      [6, 30, 420_000], // ABC-318: 30 x 10 s is 300 s of budget, so the guard is level 7's
       [7, 10, 420_000],
     ] as const) {
       it(

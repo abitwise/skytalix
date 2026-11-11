@@ -52,7 +52,7 @@ npm run chess -- --ascii
 
 On a terminal, a missing `--colour` or `--difficulty` is asked for; Enter keeps the default.
 
-`npm run chess -- --version` prints the version, for example `skytalix 1.0.0`, and so does
+`npm run chess -- --version` prints the version, for example `skytalix 1.1.0`, and so does
 `bin/skytalix-uci --version`.
 
 Type moves in SAN (`e4`, `Nf3`) or as coordinates (`e2e4`). Type `help` during a game to list
@@ -61,25 +61,30 @@ the commands, among them `moves`, `undo`, `resign` and `quit`.
 ## Levels
 
 Level 1 is the weakest, 7 the strongest, and 5 is the default. Each level has a time per move,
-a blunder rate and a strength, measured for levels 1 and 2 and projected for the rest:
+a blunder rate and a strength, measured for levels 1 to 4 and projected for the rest:
 
 | Level | 1 | 2 | 3 | 4 | 5 | 6 | 7 |
 |---|---|---|---|---|---|---|---|
-| Time per move | 0.1 s | 0.2 s | 0.3 s | 1 s | 4 s | 5 s | 30 s |
+| Time per move | 0.1 s | 0.2 s | 0.3 s | 1 s | 4 s | 10 s | 30 s |
 | Blunder rate | 40 % | 20 % | 10 % | 5 % | 0 | 0 | 0 |
-| Strength | 1 500 ± 53, measured | 1 678 ± 49, measured | ~1850–1925, projected | ~2000–2075, projected | ~2150–2250, projected | ~2170–2270, projected | ~2300–2450, projected |
+| Strength | 1499 ± 53, measured | 1678 ± 49, measured | 1909 ± 48, measured | 2094 ± 48, measured | ~2240–2320, projected | ~2310–2420, projected | ~2380–2540, projected |
 
 The times are approximate. At the blunder rate's share of its moves, the engine scores every
 move and deliberately picks a weaker one.
 
-Levels 1 and 2 were measured. Each played 200 games against Stockfish 19 with
-`UCI_LimitStrength` on: level 1 against `UCI_Elo` 1320, level 2 against `UCI_Elo` 1720.
+Levels 1 to 4 were measured. Each played 200 games against Stockfish 19 with
+`UCI_LimitStrength` on, against `UCI_Elo` 1320, 1720, 1890 and 2040 respectively.
 Both sides had the level's own time per move, and the level's blunder rate was on.
 
-Levels 3 to 7 are projections, not measurements. Levels 5 to 7 come from the measured
-1902.5 ± 49.1 at 100 ms a move in the Strength section below, and about +50 to +60 Elo for each
-doubling of time. Levels 3 and 4 also subtract a blunder cost of about 10 to 14 Elo for each
-percentage point of blunder rate, estimated from the level 1 and level 2 readings.
+Levels 5 to 7 do not blunder, and their figures are projections, not measurements. They start
+from level 4's figure with its blunder cost added back, about 2144 to 2164 at 1 s a move. That
+cost is about 10 to 14 Elo for each percentage point of blunder rate, so 50 to 70 at level 4's
+5 %. Then they add about +50 to +75 Elo for each doubling of time beyond 1 s. That is less than
+the about +73 to +79 per doubling between the Strength section's 1902.5 at 0.1 s and level 4 at
+1 s, because the gain falls at longer times.
+
+Stockfish also had each level's time per move. How that moves its strength at a given
+`UCI_Elo` was not measured.
 
 All these figures are on the Strength section's scale only, and are not FIDE or online ratings.
 

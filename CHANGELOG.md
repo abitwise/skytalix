@@ -6,10 +6,24 @@ All notable changes to skytalix are recorded here. The format follows
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-11-11
+
+Strength, measured only: levels 1 to 4 against Stockfish 19 with `UCI_LimitStrength`, 200 games
+each, both sides at the level's time per move:
+
+- Level 1: 1499 ± 53, at `UCI_Elo` 1320.
+- Level 2: 1678 ± 49, at `UCI_Elo` 1720.
+- Level 3: 1909 ± 48, at `UCI_Elo` 1890.
+- Level 4: 2094 ± 48, at `UCI_Elo` 2040.
+
+These figures are on the scale of the README's Strength section only. They are not FIDE or
+online ratings.
+
 ### Changed
 
-- README Levels table: measured strengths for levels 1 and 2, and revised projections for levels 3
-  and 4.
+- Level 6 thinks 10 s a move (was 5 s).
+- README Levels table: measured strengths for levels 1 to 4, revised projections for levels 5
+  to 7, level 6 at 10 s, and the blunder cost behind the projections stated.
 
 ## [1.0.0] - 2026-11-10
 
@@ -47,4 +61,6 @@ It is not a 40/15 rating and not a rating-list figure. Level 5 normally has 4 s 
 - `--version` on `npm run chess` and on `bin/skytalix-uci` prints the version, for example
   `skytalix 1.0.0`.
 
+[Unreleased]: https://github.com/abitwise/skytalix/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/abitwise/skytalix/releases/tag/v1.1.0
 [1.0.0]: https://github.com/abitwise/skytalix/releases/tag/v1.0.0
