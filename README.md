@@ -1,3 +1,9 @@
+<div align="center">
+
+  <img src="assets/skytalix_logo_256px.jpeg" alt="skytalix logo" width="256" height="256">
+
+</div>
+
 ```text
       _   _   _     ____  __ __ __  __ ______ ___    __    ____ _  __
      / \_/ \_/ \   / ___// //_/\ \/ //_  __//   |  / /   /  _/| |/ /
