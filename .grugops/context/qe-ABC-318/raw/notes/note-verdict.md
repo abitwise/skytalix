@@ -1,0 +1,44 @@
+# qe-ABC-318 verdict for ABC-318: **PASS_WITH_GAPS, no blocking gap.** C1–C5 are met on tip `fb6edbc8`. `LEVELS[6]` is 10 000 and every other level is unchanged. Every L6 pin moved to the exact new value, and nothing was weakened. Level 6 reads 30 / 30 moves at 10000–10002 ms against its 12 s ceiling on the real clock. All gates are green. This ticket has production lines, so there is no waiver: this verdict signs UAT per the 2026-10-22 ruling.
+
+QE/E2E, task `qe-ABC-318`. The checks, commands and counts are in the observation sealed just before this note.
+
+## Acceptance (cut note `…f1dce7dd`)
+- **C1 MET.** ADR-0045, ADR-0044 and ADR-0052 got dated additions only (0 deleted lines). They carry the owner's word, 10 000 ms and 12 s, the "plays almost like level 5" resolution line, and the ordering row, which still holds. They are consistent with the code.
+- **C2 MET.** `NFR-004` reads "~~7 s~~ 12 s at level 6" with a dated amendment. A character diff of the row shows insertions only. `SEC-318-a` is resolved by the SE's 420 000 guard: the row took 300 012 ms. `SEC-212-a`'s "about 7 s" at ~2620 sits in the dated 2026-10-24 section, kept as history by the file's convention. The dated `ABC-318` note at ~3150 suffices, so it is not a gap.
+- **C3 MET.**
+  - `LEVELS[6]` = `{ 10_000, 0 }`, and levels 1–5 and 7 are unchanged.
+  - Every L6 pin moved, nothing was weakened, and no `.snap` changed.
+  - The production diff is `levels.ts` (one code line) plus comments in `levels.ts`, `engine.ts` and `uci-session.ts`.
+  - The rpair argv is unchanged (pair-check 52 / 52).
+  - The `fb6edbc8` line-43 "4 s" is correct against `NFR-005`/`NFR-004` since `ABC-228`.
+- **C4 MET as written.**
+  - README: 10 s, `~2310–2410` (L6), `~2380–2540` (L7).
+  - QE …6298d7f0's three gaps are closed: L7's low edge is outward, the blunder cost is stated, and the comparison reads +73 to +79 from 1902.5.
+  - The art cmp passes, and the README outside Levels is identical.
+  - CHANGELOG has the line.
+- **C5 MET.**
+  - lint, typecheck, unit 2740 / 2740 (one worker) and build pass.
+  - pair-check 52 / 52 passes; skip count 0; integrity `No findings.`
+  - The levels deep lane passes WHOLE, 58 / 58 in 727 s.
+  - UCI session deep `A8′` passes.
+
+## Gaps (none blocking; reported, not fixed)
+1. **L6's projected top edge is not rounded outward.**
+   - The method gives 2164 + 75 × log2 10 = 2413.1. Outward to tens, as L5 (2320) and L7 (2380, 2540) are rounded, that is 2420. The cut note and the README both write 2410.
+   - This is the same class as ABC-317 gap 1. 3.1 Elo is far inside ± 48, the cell reads `~`, and the README matches the cut note verbatim.
+   - The Orchestrator's call: `~2310–2420`, or the ruling restated as "nearest ten".
+2. **Stale "3 s" test wording, pre-existing on `main`, outside this diff.**
+   - `src/levels.test.ts:395` reads "A6 — the default is the 3 s level", and `:404` reads "`NFR-005`'s reading on `chooseMove` at 3 s IS this level's reading".
+   - Both have been stale since `ABC-228`; the same word was fixed in `src/levels.ts:43`. No assertion is wrong (A6 pins 4 000).
+   - Text only, for a later diff that touches the file.
+3. **The SE's record was wrong, and the work is now covered.** Note `…ca282d42` said no row in the rest of the levels lane reads L6. `A2` (deep) and the UCI `A8′` row do. Both were run here and both pass.
+
+## Not covered (UNKNOWN - verify)
+- L6's strength, 2310–2410: projected; no games, per the cut note.
+- The rest of the UCI session deep lane (269 rows; no L6 row).
+- Rendered Markdown.
+- ADR-0053 d10's "5 → 6 step 1.25x", which is history from the merge (Architect `…1c4c6d88`, outside this hop).
+
+## Fences held
+- No `src/`, README, ADR, catalog or board edit.
+- No push, merge, amend, force or rebase.
