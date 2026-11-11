@@ -2,9 +2,10 @@
  * `ABC-204` — the rating harness. It drives `cutechess-cli` 1.5.1 in two modes, with the pins of
  * the ABC-204 page's `## Design ruling`, and reads `EPIC-008` § The two readings:
  *
- *   node tools/rating/rating.ts r <sha> <out-dir> [--elo E] [--budget-ms 500|100 | --skill L] [--rounds N] [--concurrency C]
+ *   node tools/rating/rating.ts r <sha> <out-dir> [--elo E] [--budget-ms 500|100 | --skill L] [--rounds N] [--start S] [--concurrency C]
  *   node tools/rating/rating.ts d <candidate-sha> <base-sha> <out-dir> [--budget-ms B | --tc 40/8] [--rounds N] [--concurrency C]
  *   node tools/rating/rating.ts rpair <base-sha> <candidate-sha> <out-dir> [--elo E] [--rounds N] [--concurrency C]
+ *   node tools/rating/rating.ts rsum <r-out-dir>…
  *
  * Any mode takes `--dry-run`: it prints the `cutechess-cli` argument vector(s) (and, for `rpair`, the
  * block schedule) and stops. It builds nothing, starts no engine and writes no file.
@@ -59,6 +60,14 @@
  * `st` with `timemargin` 2 000, its other pins unchanged. `--skill` with `--budget-ms` is refused,
  * and the 2 600 cap of R1 does not apply (E keeps 1320–3190). `machine.txt` gets a `control:` line with
  * the level and both `st`. Without `--skill`, `r`'s argument vector is as before.
+ *
+ * `ABC-320` — `r --skill` takes L 1–7 (levels 5–7 at `st` 4, 10 and 30, the same margins), and
+ * `r --start S` plays openings S … S + rounds − 1 (≤ 100) as `rpair`'s blocks do (`start=S`), so one
+ * reading can be played as segments. `machine.txt` gets a `start:` line. Without either flag, `r`'s
+ * argument vector is as before. `rsum` reads segment out-dirs as `r` wrote them, refuses segments
+ * that differ in sha, level, E, `st`, tool pins or openings sha, or whose opening ranges overlap or
+ * leave a gap, and prints one pooled reading by cutechess-cli 1.5.1's formula (`readBuild`, as
+ * `rpair` pools a build's blocks). It plays nothing and writes nothing.
  */
 import { execFileSync, spawn } from "node:child_process";
 import { createHash } from "node:crypto";
@@ -130,8 +139,8 @@ const R_SHORT_BUDGET_MS = 100;
 const R_BUDGETS_MS = [R_SMOKE_BUDGET_MS, R_SHORT_BUDGET_MS];
 /** `ABC-275` (`ADR-0056` D5): at 100 ms, an E above this waits for C3′'s probe, so `r` refuses it. */
 const R_SHORT_ELO_MAX = 2600;
-/** `ABC-316`: the levels `r --skill` takes, and skytalix's fixed `timemargin` at each. */
-const R_SKILLS = /^[1-4]$/;
+/** `ABC-316`: the levels `r --skill` takes (`ABC-320`: 1–7), and skytalix's fixed `timemargin` at each. */
+const R_SKILLS = /^[1-7]$/;
 const SKILL_MARGIN_MS = 50;
 /** `ABC-300` (`ADR-0071` D10): the one clock `d --tc` takes. */
 const D_TC = "40/8";
@@ -173,13 +182,16 @@ const eloNumber = (text: string): number =>
 
 function usage(): never {
   console.error(
-    "usage: node tools/rating/rating.ts r <sha> <out-dir> [--elo E] [--budget-ms 500|100 | --skill L] [--rounds N] [--concurrency C]\n" +
+    "usage: node tools/rating/rating.ts r <sha> <out-dir> [--elo E] [--budget-ms 500|100 | --skill L] [--rounds N] [--start S] [--concurrency C]\n" +
       "       node tools/rating/rating.ts d <candidate-sha> <base-sha> <out-dir> [--budget-ms B | --tc 40/8] [--rounds N] [--concurrency C]\n" +
       "       node tools/rating/rating.ts rpair <base-sha> <candidate-sha> <out-dir> [--elo E] [--rounds N] [--concurrency C]\n" +
+      "       node tools/rating/rating.ts rsum <r-out-dir>…\n" +
       "       --concurrency: 1–8; default R 2, D 3, rpair 2\n" +
       "       --budget-ms: R 500 or 100 (default 4000); D 3000 (default), 2500, 2000, 1500, 1000 or 100\n" +
       "       --tc: D only, 40/8: both sides tc=40/8 timemargin=0 TimeMode uci-clock-mode; not with --budget-ms\n" +
-      "       --skill: R only, 1–4: skytalix Skill Level=L st=level budget timemargin=50, Stockfish the same st; not with --budget-ms\n" +
+      "       --skill: R only, 1–7: skytalix Skill Level=L st=level budget timemargin=50, Stockfish the same st; not with --budget-ms\n" +
+      "       --start: R only, 1–100: the first opening (start=S); S + rounds − 1 ≤ 100\n" +
+      "       rsum: one pooled reading of r segments with one sha, level, E, st, pins and openings, contiguous openings\n" +
       "       rpair: --elo default 1910; --rounds 10–100 in tens, default 100 (10 = one block per build, 40 games)\n" +
       "       --dry-run (any mode): print the cutechess-cli arguments and stop",
   );
@@ -424,8 +436,8 @@ export interface ArgSpec {
   readonly budget: number;
   readonly rounds: number;
   readonly concurrency: number;
-  /** `rpair` only: the block's first opening, as `-openings … start=S`. */
-  readonly start?: number;
+  /** `rpair`'s block, or `r --start` (`ABC-320`): the first opening, as `-openings … start=S`. */
+  readonly start?: number | undefined;
   /** `rpair` only (`ABC-247`): skytalix's `Skill Level`, as `option.Skill Level=L`; absent, none. */
   readonly skill?: number;
   /** `d --tc` only (`ABC-300`): both sides' clock, in place of `st=` and `timemargin=`; absent, none. */
@@ -606,17 +618,18 @@ const pad2 = (n: number): string => String(n).padStart(2, "0");
  * pooled `Elo difference` line, and a check that the formula gives each block's own printed line.
  */
 export function readBuild(
-  build: Build,
+  build: string,
   schedule: readonly Block[],
   played: readonly BlockResult[],
   elo: number,
   epd: readonly string[],
+  unit = "block",
 ): BuildReading {
   const causes: string[] = [];
   const scores = new Map<number, number[]>();
   let [w, l, d] = [0, 0, 0];
   for (const { block, judged, games } of played) {
-    const tag = `block ${pad2(block.index)}`;
+    const tag = `${unit} ${pad2(block.index)}`;
     for (const c of judged.causes) causes.push(`${tag}: ${c}`);
     for (const c of coverageCauses(games, block.start, block.rounds, epd, "skytalix"))
       causes.push(`${tag}: ${c}`);
@@ -636,7 +649,7 @@ export function readBuild(
       scores.set(k, [...(scores.get(k) ?? []), ...v]);
   }
   if (played.length < schedule.length)
-    causes.push(`blocks: ${played.length} of ${schedule.length} played`);
+    causes.push(`${unit}s: ${played.length} of ${schedule.length} played`);
   const n = w + l + d;
   const pinned = 2 * schedule.reduce((s, b) => s + b.rounds, 0);
   const pooled = n > 0 ? cutechessElo(w, l, d) : undefined;
@@ -644,7 +657,7 @@ export function readBuild(
   const lines = [
     line === undefined
       ? `${build}: Elo difference: (no score)`
-      : `${build}: Elo difference: ${line.x} +/- ${line.y} (cutechess-cli 1.5.1's formula on ${played.length} blocks' pooled score)`,
+      : `${build}: Elo difference: ${line.x} +/- ${line.y} (cutechess-cli 1.5.1's formula on ${played.length} ${unit}s' pooled score)`,
     `  W/L/D: ${w}/${l}/${d}  score: ${n > 0 ? ((w + d / 2) / n).toFixed(3) : "?"}  games: ${n} of ${pinned}`,
     `  draw ratio: ${n > 0 ? ((100 * d) / n).toFixed(1) : "?"} %`,
   ];
@@ -851,6 +864,125 @@ async function rpair(positional: string[], flags: Map<string, string>, dryRun: b
   sealRecords(out, recordFiles);
 }
 
+/** `ABC-320`: one `r` segment, as its out-dir's records give it; the keys `rsum` must find equal. */
+export interface Segment {
+  readonly dir: string;
+  readonly sha: string;
+  readonly level: string;
+  readonly elo: string;
+  readonly st: string;
+  readonly pins: string;
+  readonly openings: string;
+  readonly start: number;
+  readonly rounds: number;
+}
+
+/** Reads a segment from `artifacts.txt`, `machine.txt` and `cmd.txt` as `r` writes them. */
+export function segmentOf(dir: string): Segment {
+  const read = (name: string): string => readFileSync(join(dir, name), "utf8");
+  const [artifacts, machine, cmd] = ["artifacts.txt", "machine.txt", "cmd.txt"].map(read) as [
+    string,
+    string,
+    string,
+  ];
+  const field = (text: string, re: RegExp, what: string): string => {
+    const found = re.exec(text)?.[1];
+    if (found === undefined) throw new Error(`${dir}: no ${what} in its r records`);
+    return found;
+  };
+  const pin = (tool: string): string =>
+    field(machine, new RegExp(`^${tool}: .* sha256 ([0-9a-f]{64})`, "m"), `${tool} sha256`);
+  return {
+    dir,
+    sha: field(artifacts, /^skytalix ([0-9a-f]{40}) /m, "skytalix sha"),
+    level: /'option\.Skill Level=(\d+)'/.exec(cmd)?.[1] ?? "none",
+    elo: field(cmd, / option\.UCI_Elo=(\d+) /, "UCI_Elo"),
+    st: [...cmd.matchAll(/ st=(\S+) /g)].map((m) => m[1]).join(" and "),
+    pins: `cutechess-cli ${pin("cutechess-cli")}, stockfish ${pin("stockfish")}`,
+    openings: field(machine, /^openings: .* sha256 ([0-9a-f]{64})$/m, "openings sha256"),
+    start: Number(/ start=(\d+) /.exec(cmd)?.[1] ?? 1),
+    rounds: Number(field(cmd, / -rounds (\d+) /, "-rounds")),
+  };
+}
+
+const openingRange = (s: Segment): string => `${s.start}–${s.start + s.rounds - 1}`;
+const SEGMENT_KEYS = {
+  sha: "sha",
+  level: "level",
+  elo: "E",
+  st: "st",
+  pins: "pins",
+  openings: "openings sha256",
+} as const;
+
+/**
+ * `ABC-320`: `rsum`'s refusals. Sorted by first opening, every segment must agree with the first on
+ * each key, and start where the one before it ended. Returns the sorted segments.
+ */
+export function checkSegments(segments: readonly Segment[]): Segment[] {
+  const sorted = [...segments].sort((a, b) => a.start - b.start);
+  const first = sorted[0] as Segment;
+  for (const [key, name] of Object.entries(SEGMENT_KEYS) as [keyof typeof SEGMENT_KEYS, string][]) {
+    const odd = sorted.find((s) => s[key] !== first[key]);
+    if (odd !== undefined)
+      throw new Error(
+        `segments differ in ${name}: ${first[key]} (${first.dir}) and ${odd[key]} (${odd.dir})`,
+      );
+  }
+  for (const [i, s] of sorted.entries()) {
+    const prev = sorted[i - 1];
+    if (prev === undefined || s.start === prev.start + prev.rounds) continue;
+    const how = s.start < prev.start + prev.rounds ? "overlap" : "leave a gap";
+    throw new Error(
+      `openings ${openingRange(prev)} (${prev.dir}) and ${openingRange(s)} (${s.dir}) ${how}`,
+    );
+  }
+  return sorted;
+}
+
+/** `rating.ts rsum`: one pooled reading of `r` segments (`ABC-320`); it plays and writes nothing. */
+function rsum(positional: string[], flags: Map<string, string>): void {
+  if (positional.length < 2 || flags.size > 0) usage();
+  const segments = checkSegments(positional.slice(1).map((dir) => segmentOf(resolve(dir))));
+  const first = segments[0] as Segment;
+  const last = segments.at(-1) as Segment;
+  if (sha256File(OPENINGS) !== first.openings)
+    throw new Error(
+      `openings sha256 ${sha256File(OPENINGS)} is not the segments' ${first.openings}`,
+    );
+  const epd = readFileSync(OPENINGS, "utf8").split("\n");
+  const elo = Number(first.elo);
+  const schedule: Block[] = segments.map((s, i) => ({
+    index: i + 1,
+    start: s.start,
+    rounds: s.rounds,
+    order: ["base", "candidate"],
+  }));
+  // Each segment is judged as `r` judged it, then pooled as `rpair` pools a build's blocks.
+  const played = segments.map((s, i): BlockResult => {
+    const judged = summarise({ mode: "r", out: s.dir, games: 2 * s.rounds, elo }, undefined, [
+      "skytalix.stderr",
+      "stockfish.stderr",
+    ]);
+    const pgnPath = join(s.dir, "r.pgn");
+    const games = pgnGames(existsSync(pgnPath) ? readFileSync(pgnPath, "utf8") : "");
+    return { block: schedule[i] as Block, judged, games };
+  });
+  const lines = [
+    `rsum: ${segments.length} r segments pooled; nothing is played or written`,
+    `skytalix ${first.sha}  Skill Level ${first.level}  E ${elo}  st ${first.st}  openings sha256 ${first.openings}`,
+    `pins: ${first.pins}`,
+    ...played.map(({ judged: { wld } }, i) => {
+      const s = segments[i] as Segment;
+      const n = wld === undefined ? "?" : wld[0] + wld[1] + wld[2];
+      return `segment ${pad2(i + 1)} ${s.dir}: openings ${openingRange(s)}, games ${n} of ${2 * s.rounds}, W/L/D ${wld?.join("/") ?? "?"}`;
+    }),
+    `openings covered: ${first.start}–${last.start + last.rounds - 1} (${last.start + last.rounds - first.start} of ${PAIR_ROUNDS})`,
+    ...readBuild("pooled", schedule, played, elo, epd, "segment").lines,
+  ];
+  console.log(redacted(lines.join("\n")));
+}
+
 async function main(argv: string[]): Promise<void> {
   const flags = new Map<string, string>();
   const positional: string[] = [];
@@ -863,8 +995,9 @@ async function main(argv: string[]): Promise<void> {
   }
   const mode = positional[0];
   if (mode === "rpair") return rpair(positional, flags, dryRun);
+  if (mode === "rsum") return rsum(positional, flags);
   if ((mode !== "r" && mode !== "d") || positional.length !== (mode === "r" ? 3 : 4)) usage();
-  const allowed = mode === "r" ? ["--elo", "--rounds", "--skill"] : ["--rounds", "--tc"];
+  const allowed = mode === "r" ? ["--elo", "--rounds", "--skill", "--start"] : ["--rounds", "--tc"];
   allowed.push("--budget-ms", "--concurrency");
   if ([...flags.keys()].some((flag) => !allowed.includes(flag))) usage();
   // ABC-300 scope 4: the clock is checked as text before any git, build or process start.
@@ -877,8 +1010,13 @@ async function main(argv: string[]): Promise<void> {
   if (skill !== undefined && flags.has("--budget-ms"))
     throw new Error("--skill and --budget-ms: r takes one or the other, not both");
   if (skill !== undefined && !R_SKILLS.test(skill))
-    throw new Error(`--skill ${skill}: r takes only 1, 2, 3 or 4`);
-  const level = skill === undefined ? undefined : (Number(skill) as 1 | 2 | 3 | 4);
+    throw new Error(`--skill ${skill}: r takes only 1 to 7`);
+  const level = skill === undefined ? undefined : (Number(skill) as keyof typeof LEVELS);
+  // ABC-320: the first opening, checked as text; its range against the 100 openings once rounds is read.
+  const startFlag = flags.get("--start");
+  if (startFlag !== undefined && (!/^[1-9]\d*$/.test(startFlag) || Number(startFlag) > PAIR_ROUNDS))
+    throw new Error(`--start ${startFlag}: not an integer from 1 to ${PAIR_ROUNDS}`);
+  const start = startFlag === undefined ? undefined : Number(startFlag);
   const shas = positional
     .slice(1, -1)
     .map((ref) => run("git", ["rev-parse", "--verify", `${ref}^{commit}`]));
@@ -901,6 +1039,10 @@ async function main(argv: string[]): Promise<void> {
     throw new Error(`--budget-ms ${budget}: not one of ${D_BUDGETS_MS}`);
   if (!Number.isInteger(rounds) || rounds < 1)
     throw new Error(`--rounds ${rounds}: not a positive integer`);
+  if (start !== undefined && start + rounds - 1 > PAIR_ROUNDS)
+    throw new Error(
+      `--start ${start} --rounds ${rounds}: openings ${start}–${start + rounds - 1} run past ${PAIR_ROUNDS}`,
+    );
   // Q4's frozen widths are the default; a flag value is checked as text, so `2.0` or `0x2` is refused.
   const defaultConcurrency = mode === "r" ? 2 : 3;
   const concurrencyFlag = flags.get("--concurrency");
@@ -922,6 +1064,7 @@ async function main(argv: string[]): Promise<void> {
       concurrency,
       tc,
       level,
+      start,
     });
     console.log(`${mode} dry run: nothing is built, started or written\ncutechess-cli argv:`);
     console.log(argvText(args));
@@ -944,6 +1087,8 @@ async function main(argv: string[]): Promise<void> {
           `control: skytalix Skill Level=${level} st=${budget / 1000} timemargin=${SKILL_MARGIN_MS}, stockfish st=${budget / 1000} timemargin=2000`,
         ]
       : []),
+    // ABC-320: a segment's first opening is recorded.
+    ...(start !== undefined ? [`start: ${start} (openings ${start}–${start + rounds - 1})`] : []),
     // ABC-255 scope 3: a short control is recorded; every other run's record is as before.
     ...(level === undefined && SHORT_MARGIN_MS.has(budget)
       ? [
@@ -976,6 +1121,7 @@ async function main(argv: string[]): Promise<void> {
     concurrency,
     tc,
     level,
+    start,
   });
   const outFile = join(out, `${mode}.out`);
   writeFileSync(
