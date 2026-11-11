@@ -1,3 +1,4 @@
+_Updated: 2026-11-11T08:10:49Z — **ABC-318 merged** (f30aeb0b): level 6 is 10 s a move. No open tickets. v1.1.0 release and an optional L5 reading wait on the owner; plan in memory-bank/60-progress.md § Next action._
 _Updated: 2026-11-11T07:38:37Z — owner: level 6 to 10 s; ABC-318 cut by note (…f1dce7dd); arch-ABC-318 (ADR-0045 amendment), secnfr-ABC-318 (NFR-004) and se-ABC-318 (code and docs) running in parallel._
 _Updated: 2026-11-11T07:21:01Z — plan written to memory-bank/60-progress.md § Next action (2026-11-11): owner's L6 time question (recommend 10 s), three README gaps, optional L5 reading, optional v1.1.0. Nothing running._
 _Updated: 2026-11-11T04:51:01Z — **ABC-317 merged** (69984d56): L3 1 909.1, L4 2 094.3 measured; L5–L7 re-projected. Option A complete. No open tickets; three README wording gaps carried._
@@ -1662,7 +1663,6 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 ## In Review (WIP 1/3)
-- ABC-318 — level 6 thinks 10 s a move (…f1dce7dd); arch, secnfr, se and fix merged on grugops/qe-ABC-318; qe-ABC-318 checking.
 
 
 
@@ -1722,6 +1722,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready to Release (WIP 0/4)
 
 ## Done (WIP unlimited)
+- [ABC-318] Level 6 thinks 10 s a move (was 5 s; L6 ceiling 12 s); ADR-0045/0044/0052 and NFR-004 amended; README L6 ~2310–2410 projected, ABC-317's three gaps closed. Done 2026-11-11 (merged f30aeb0b; QE PASS_WITH_GAPS …387f257c signs UAT).
 - [ABC-317] Levels 3 and 4 measured vs Stockfish 19 (L3 1 909.1 ± 47.9 at E 1890; L4 2 094.3 ± 47.9 at E 2040); README levels 1–4 measured, 5–7 re-projected; ABC-316's gaps closed. Done 2026-11-11 (merged 69984d56; QE PASS_WITH_GAPS …6298d7f0, UAT waived, src/ empty).
 - [ABC-316] Levels 1 and 2 measured vs Stockfish 19 (L1 1 499.5 ± 53.4 at E 1320; L2 1 678.1 ± 48.5 at E′ 1720), `r --skill`, README levels with L3/L4 re-projected. Done 2026-11-10 (merged 5272a7e3; QE PASS_WITH_GAPS …a55b90ec, UAT waived, src/ empty).
 - [ABC-315] Versioning: VERSIONING.md (SemVer), CHANGELOG.md, version 1.0.0, --version on both entry points. Done 2026-11-10, QE PASS …3c485a64; Security R1 closed (…0088bc3b); tag v1.0.0 created locally, owner pushes and publishes the Release page.

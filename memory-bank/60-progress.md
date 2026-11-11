@@ -955,6 +955,8 @@ Levels 5–7 are projected (orch note …152bb16f): L5 ~2240–2320, L6 ~2260–
 
 *How to run a level.* `tools/rating/rating.ts r <sha> <out> --skill L --elo E --rounds 100 --concurrency 1` (`--skill` takes 1–4 today). Model the QE hop on `qe-ABC-317`: stage A pins, a 2-game smoke and a sealed PREREG; then the owner's held-host word (W) per window; then stage B; then a README hop and a QE check. The band rule allows one step per level, on the owner's word. Walls so far: L1 37 min, L2 50–64 min, L3 2.1 h, L4 5.7 h. Games at the level's time take about 200 × 110 plies × `st`.
 
+*Update 2026-11-11T08:10Z:* items 1 and 2 are DONE in ABC-318 (merged f30aeb0b; owner chose 10 s; README gaps closed). Left from ABC-318 (QE …387f257c): L6's top edge should read ~2420 (outward rounding of 2413.1), and stale "3 s" text in `src/levels.test.ts` lines 395 and 404. Bundle both into the next docs change. Next: item 4 (v1.1.0, MINOR) on the owner's word; item 3 optional.
+
 *Open, in order:*
 1. **Owner decision: level 6's time per move.** L5 is 4 s and L6 5 s: 0.32 doublings, so the gap is projected at +16–24 Elo, inside one reading's ± 48. They are not distinguishable. L6's 5 s was the owner's own number (OQ-212-1, ADR-0045 A1, "to be revisited with harness data"). Changing it is a requirement change, and per VERSIONING.md it is MINOR (a level retuned).
    - Projected L6 by time: 8 s ~2290–2390; **10 s ~2310–2410**; 12 s ~2320–2430; 15 s ~2340–2460.
