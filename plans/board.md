@@ -1,3 +1,4 @@
+_Updated: 2026-11-11T08:13:02Z — owner: release v1.1.0; ABC-319 cut by note (…54f06923); se-ABC-319 building (version, CHANGELOG, two bundled gaps)._
 _Updated: 2026-11-11T08:10:49Z — **ABC-318 merged** (f30aeb0b): level 6 is 10 s a move. No open tickets. v1.1.0 release and an optional L5 reading wait on the owner; plan in memory-bank/60-progress.md § Next action._
 _Updated: 2026-11-11T07:38:37Z — owner: level 6 to 10 s; ABC-318 cut by note (…f1dce7dd); arch-ABC-318 (ADR-0045 amendment), secnfr-ABC-318 (NFR-004) and se-ABC-318 (code and docs) running in parallel._
 _Updated: 2026-11-11T07:21:01Z — plan written to memory-bank/60-progress.md § Next action (2026-11-11): owner's L6 time question (recommend 10 s), three README gaps, optional L5 reading, optional v1.1.0. Nothing running._
@@ -1663,6 +1664,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 ## In Review (WIP 1/3)
+- ABC-319 — release v1.1.0 (…54f06923); built f42537b2; qe-ABC-319 checking.
 
 
 

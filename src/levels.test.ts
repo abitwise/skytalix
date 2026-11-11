@@ -392,7 +392,7 @@ describe("ABC-174 A7 — the time budget, from the data (NFR-004; ADR-0038 decis
 });
 
 // ---------------------------------------------------------------------------
-// A6 — the default is the 3 s level, and a rate-0 level IS the shipped engine.
+// A6 — the default is the 4 s level, and a rate-0 level IS the shipped engine.
 // ---------------------------------------------------------------------------
 
 describe("A6 — the default level", () => {
@@ -401,7 +401,7 @@ describe("A6 — the default level", () => {
     expect(LEVELS[DEFAULT_LEVEL].budgetMs).toBe(DEFAULT_BUDGET_MS);
   });
 
-  it("never blunders, so `NFR-005`'s reading on `chooseMove` at 3 s IS this level's reading", () => {
+  it("never blunders, so `NFR-005`'s reading on `chooseMove` at 4 s IS this level's reading", () => {
     expect(LEVELS[DEFAULT_LEVEL].blunderRate).toBe(0);
   });
 

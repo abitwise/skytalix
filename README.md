@@ -52,7 +52,7 @@ npm run chess -- --ascii
 
 On a terminal, a missing `--colour` or `--difficulty` is asked for; Enter keeps the default.
 
-`npm run chess -- --version` prints the version, for example `skytalix 1.0.0`, and so does
+`npm run chess -- --version` prints the version, for example `skytalix 1.1.0`, and so does
 `bin/skytalix-uci --version`.
 
 Type moves in SAN (`e4`, `Nf3`) or as coordinates (`e2e4`). Type `help` during a game to list
@@ -67,7 +67,7 @@ a blunder rate and a strength, measured for levels 1 to 4 and projected for the 
 |---|---|---|---|---|---|---|---|
 | Time per move | 0.1 s | 0.2 s | 0.3 s | 1 s | 4 s | 10 s | 30 s |
 | Blunder rate | 40 % | 20 % | 10 % | 5 % | 0 | 0 | 0 |
-| Strength | 1499 ± 53, measured | 1678 ± 49, measured | 1909 ± 48, measured | 2094 ± 48, measured | ~2240–2320, projected | ~2310–2410, projected | ~2380–2540, projected |
+| Strength | 1499 ± 53, measured | 1678 ± 49, measured | 1909 ± 48, measured | 2094 ± 48, measured | ~2240–2320, projected | ~2310–2420, projected | ~2380–2540, projected |
 
 The times are approximate. At the blunder rate's share of its moves, the engine scores every
 move and deliberately picks a weaker one.
