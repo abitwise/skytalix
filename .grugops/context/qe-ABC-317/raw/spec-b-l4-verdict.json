@@ -1,0 +1,4 @@
+{ "refs": ["qe-ABC-317", "grugops/qe-ABC-317", "ABC-317", "B2", "ABC-316", "ABC-204", "ADR-0056", "ADR-0049", "FL", "W", "b6366a79", "21f3b304", "6272e8d2", "tools/rating/rating.ts", "src/levels.ts", "qe-ABC-317/20261110T204444Z-qe-e2e-decision-e6cf1088", "qe-ABC-317/20261110T230239Z-qe-e2e-decision-181f12c9", "orch-2026-10-30a/20261110T203458Z-orchestrator-decision-7ffdb8a5", "orch-2026-10-30a/20261110T205715Z-orchestrator-decision-4a94110f", "qe-ABC-316/20261110T190203Z-qe-e2e-decision-553195c0"],
+  "notes": [ { "kind": "decision",
+    "confidence": "high: read once per the sealed PREREG e6cf1088; 200/200 valid, 0 faults, 0 time losses, depth guard 0 at depth 5; 57.75 % inside the band, so E 2040 is confirmed and L4's figure is 2094.3 +/- 47.9; B2 met for both levels; each figure is one 200-game sample on its own scale; differences between levels reported, not graded",
+    "bodyFile": "notes/note-b-l4-verdict.md" } ] }

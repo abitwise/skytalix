@@ -1,0 +1,53 @@
+# qe-ABC-317 stage B, L3 verdict, read once per PREREG `…e6cf1088`. **L3 at E 1 890: VALID, 105.5 / 200 (52.75 %), inside the band (outcome 2). E is confirmed; L3's figure is X = 1 909.1 ± 47.9.** No step is needed. L4 goes next under the same W, as the go block orders
+
+QE/E2E, task `qe-ABC-317`, stage B. The run, the host and the records are in the L3 readings observation sealed just before this note. This note is a reading, not a merge gate. Raw records: `raw/out/l3-e1890/` and `raw/out/session-l3-e1890/`.
+
+## The figure, on the README Strength section's scale
+The scale is: "Stockfish 19 `UCI_Elo` E, skytalix at level 3 (`Skill Level` 3, `st` 0.33 s, `timemargin` 50), Stockfish `st` the same, this host".
+
+| | L3 (`st` 0.33 s, E 1 890) |
+|---|---|
+| W / D / L (skytalix) | **103 / 5 / 92** |
+| points / score | **105.5 / 200 = 52.75 %** (White 58.5, Black 47.0) |
+| Elo Δ against E (`cutechess-cli`) | **+19.1 ± 47.9** (LOS 78.5 %) |
+| X = E + Δ ± Y (the tool's state line) | **1 909.1 ± 47.9** (1 861.2–1 957.0) |
+| opening-cluster interval | ± 46.5 (iid ± 47.7) |
+| band outcome (PREREG) | **2: inside 25–75 %; E confirmed; X is L3's figure** |
+| validity | **MET** |
+| wall (`r`) | 123 min 18 s |
+| host | ALONE for the SHARED classes (732 samples) |
+
+## Validity, against the PREREG's bars
+- 200 of 200 games, with 200 results in the PGN.
+- `faults: 0` and `unclassified: 0`.
+- skytalix lost **0 games on time**. Its max latency was 335 ms against a 380 ms margin, with 0 moves over 340 ms. Stockfish also had 0 time losses.
+- Depth guard: `0 of 11449 moves below depth 4` (`pickDepth(1890)` = 4).
+- The state line reads `rating`, not UNRESOLVED. Neither THERMAL nor RUNAWAY fired.
+- The record check passed. The control line is byte-equal and `option.UCI_Elo=1890` is in `cmd.txt`. `Skill Level 3` and `UCI_Elo 1890` reached 200 of 200 processes with a `go`, 0 missing or other.
+- **No skytalix fault and no product finding.**
+
+## The band rule, applied as sealed
+- P = 105.5 lies inside 50.0–150.0, so this is outcome 2. **E 1 890 is confirmed and X = 1 909.1 ± 47.9 is L3's figure.** No step.
+
+## Reported, not graded
+- **L3 − L2 = 1 909.1 − 1 678.1 = +231.0.** L2 is ± 48.5 and L3 ± 47.9; in quadrature about ± 68.2, so the difference lies at about +163 to +299.
+  - Stockfish thinks 0.33 s at L3 and 0.18 s at L2. Its strength at a given `UCI_Elo` may move with time (**UNKNOWN - verify**), so part of the difference may be the scale, not skytalix.
+- **Against the projection** (~1 850–1 925, from the README fill), L3 reads 1 909.1 ± 47.9: inside it.
+- The draw rate is 2.5 %. Plies a game: median 93, mean 114.5. The White / Black split (58.5 / 47.0) is reported; it is inside chance for 100 games a colour.
+
+## Acceptance (QE's reading against the cut note `…7ffdb8a5`)
+- **B2, L3: MET.** One valid run on the brief line citing W, with a figure.
+- **B2, L4:** open; it runs next.
+- B1 passed in stage A; B3 and B4 are not QE's at this hop.
+
+## Gaps
+- **None blocking.**
+- The Stockfish time-scale correction between 0.18 s and 0.33 s is not covered (**UNKNOWN - verify**). It bears only on the reported L3 − L2, not on the figure.
+- One sampler sample counted 1 foreign `stockfish` and 1 `node` at a game boundary (UNKNOWN - verify whether it is the tool's own restart). Under FL it changes nothing.
+
+## Fences held
+- The sealed `raw/scripts/` were sha-checked OK just before the launch and were not edited.
+- One run, no step, no re-run.
+- No `src/`, README, ADR, EPIC or board edit.
+- No push, force, amend, rebase or merge.
+- No foreign process was touched or recorded beyond class and count.
