@@ -40,7 +40,7 @@ export interface Level {
  * strongest. `EPIC-006` reads it by those integers and attaches no meaning to them.
  *
  * `ADR-0045` D1-D2: the default (5) is the shipped engine at `NFR-004`'s 4 s, never blundering,
- * so `NFR-005`'s reading on `chooseMove` at 3 s is this level's reading. Each step down from 5
+ * so `NFR-005`'s reading on `chooseMove` at 4 s is this level's reading. Each step down from 5
  * costs time (about one ply at the top two steps, about two-thirds of one at the bottom two) and
  * doubles the blunder rate.
  *
