@@ -1635,8 +1635,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 1/3)
-- ABC-319 — release v1.1.0 (owner 2026-11-11, …54f06923); se-ABC-319 building.
+## In Development (WIP 0/3)
 
 
 
@@ -1665,6 +1664,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 ## In Review (WIP 1/3)
+- ABC-319 — release v1.1.0 (…54f06923); built f42537b2; qe-ABC-319 checking.
 
 
 
