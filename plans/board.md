@@ -1,3 +1,4 @@
+_Updated: 2026-11-11T07:38:37Z — owner: level 6 to 10 s; ABC-318 cut by note (…f1dce7dd); arch-ABC-318 (ADR-0045 amendment), secnfr-ABC-318 (NFR-004) and se-ABC-318 (code and docs) running in parallel._
 _Updated: 2026-11-11T07:21:01Z — plan written to memory-bank/60-progress.md § Next action (2026-11-11): owner's L6 time question (recommend 10 s), three README gaps, optional L5 reading, optional v1.1.0. Nothing running._
 _Updated: 2026-11-11T04:51:01Z — **ABC-317 merged** (69984d56): L3 1 909.1, L4 2 094.3 measured; L5–L7 re-projected. Option A complete. No open tickets; three README wording gaps carried._
 _Updated: 2026-11-10T20:34:58Z — owner: levels 3 and 4 next; ABC-317 cut by note; qe-ABC-317 stage A (PREREG, no games). Board fix: ABC-316's Done row moved from a record block into ## Done._
@@ -1632,7 +1633,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 0/3)
+## In Development (WIP 1/3)
+- ABC-318 — level 6 thinks 10 s a move (was 5 s), owner 2026-11-11 (…f1dce7dd); arch-, secnfr- and se-ABC-318 running.
 
 
 
