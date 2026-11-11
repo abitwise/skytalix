@@ -34,8 +34,9 @@
  *
  * `ABC-247` — `rpair` also gives skytalix `option.Skill Level=6` (`PAIR_SKILL_LEVEL`) on both builds.
  * `go()` caps `go movetime 4000` at `LEVELS[skill].budgetMs`, and the default level 5 is 3 000 ms on
- * a base before `ABC-228`. Level 6 is 5 000 ms and rate 0 at every SHA in `EPIC-010`, so both builds
- * search the 4 000 ms `ADR-0053` d10 names. `r` and `d` send no `Skill Level` (the shipped level 5).
+ * a base before `ABC-228`. Level 6 is 5 000 ms and rate 0 at every SHA in `EPIC-010`, and 10 000 ms
+ * from `ABC-318`, above the cap either way, so both builds search the 4 000 ms `ADR-0053` d10 names;
+ * the argv is unchanged. `r` and `d` send no `Skill Level` (the shipped level 5).
  *
  * `ABC-255` — the owner's reads (`ADR-0056` C2′, C3″, S′). `d --budget-ms 100` plays both sides at
  * `st=0.1` with `timemargin` 50 ms: the change read is `--rounds 50` (100 games), the epic read

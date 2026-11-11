@@ -8,8 +8,9 @@ All notable changes to skytalix are recorded here. The format follows
 
 ### Changed
 
-- README Levels table: measured strengths for levels 1 to 4, and revised projections for levels 5
-  to 7.
+- Level 6 thinks 10 s a move (was 5 s).
+- README Levels table: measured strengths for levels 1 to 4, revised projections for levels 5
+  to 7, level 6 at 10 s, and the blunder cost behind the projections stated.
 
 ## [1.0.0] - 2026-11-10
 
