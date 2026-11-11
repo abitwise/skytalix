@@ -97,3 +97,35 @@ Every run goes as `flock <scratch>/host-test.lock <cmd>` (the real path is in yo
   - The diff against main is limited to README, CHANGELOG and records.
 - **Check B4:** lint, typecheck, unit (one worker) and build on this tip, each alone under the lock. The `src/` diff against main must be empty, which gives the UAT waiver.
 - **Give a verdict for ABC-317 (PASS / PASS_WITH_GAPS / FAIL).** No games.
+
+## Stage C
+*QE/E2E (claude-opus-5-5, qe-ABC-317), 2026-11-11, on `grugops/qe-ABC-317` at `41afdc90` (README branch `c6a1c640` merged by `a25f500b`), against `main` `559656a0`. No games.*
+
+**Result: PASS_WITH_GAPS for ABC-317, no blocking gap. B1–B4 MET. The `src/` diff against `main` is empty, so the UAT waiver applies.**
+- **Notes:** checks `20261111T044946Z-qe-e2e-observation-8586e284`; verdict `20261111T045008Z-qe-e2e-decision-6298d7f0`.
+- **B4 gates,** each alone under `flock <scratch>/host-test.lock`, all exit 0:
+  - lint (150 files);
+  - typecheck;
+  - unit with `VITEST_MAX_WORKERS=1`: 72 files, 2 740 / 2 740, 0 skipped;
+  - build;
+  - `pair-check.ts`: 52 / 52, 0 skipped;
+  - the art cmp.
+  - The tree stayed clean.
+- **Scope:**
+  - `src/` is `21f3b304` and `tools/` is `6272e8d2` on both sides. The waiver command prints nothing.
+  - Changed: README, CHANGELOG and `.grugops/` records only. README and CHANGELOG are byte-equal to `c6a1c640`.
+  - README outside `## Levels` hashes the same as on `main`.
+- **B3:**
+  - L1–L4 (`1499 ± 53`, `1678 ± 49`, `1909 ± 48`, `2094 ± 48`) trace to `…f44a427d`, `…553195c0`, `…181f12c9` and `…75bd7076`. They were also recomputed from W / D / L at full precision.
+  - L5–L7 follow `…152bb16f` and are marked projected.
+  - The Stockfish-time caveat is stated.
+  - ABC-316's five gaps are closed.
+- **Gaps, none blocking (reported, not fixed):**
+  1. L7's low edge: the method gives 2 389.3, which rounds outward to 2 380. The ruling and the README write 2 390. The ruling is the source.
+  2. The blunder cost (10–14 a point) is no longer stated, so the 2144–2164 anchor cannot be rebuilt from the README.
+  3. "+50 to +75 … less than the roughly +75" has a top equal to its comparator (ruled 73–79). The 0.1 s point (the Strength section's 1902.5) is not named.
+- **Not covered:**
+  - Stockfish's time-scale effect (UNKNOWN - verify).
+  - The projections' anchor error.
+  - `v1.0.0` on the remote (UNKNOWN - verify; it exists locally).
+- **Fences held:** no games. No `src/`, README, CHANGELOG, ADR, EPIC or board edit. No push, merge, amend, force or rebase.
