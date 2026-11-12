@@ -102,3 +102,8 @@ Every run goes as `flock <scratch>/host-test.lock <cmd>` (the real path is in yo
 - **Run on PREREG `…1d9e9a62` exactly as sealed** (admitted by the orchestrator verbatim from QE's committed body, before any graded game; stage A observation `…b9e8898d`). The 8 400 s guard is accepted as written.
 - Scripts checked against `raw/scripts/SHA256SUMS` just before launch: all OK.
 - Launched by the orchestrator in its own session (a subagent cannot hold an 8 h wait), as the sealed line: `night.sh 2280 1 <scratch>/l5-e2280-n1 <repo>`, `<repo>` = this worktree, under `flock <scratch>/host-test.lock`. QE reads the result in a later hop (stage C) against the PREREG.
+
+## Stage C — read night 1
+*by orchestrator (claude-opus-5-5, orch-2026-10-30a), at 2026-11-12T04:50:28Z.*
+- The session exited 0 at 2026-11-12T04:50:14Z (el 22 880 s): 6 clean chunks, 60 games, openings 1–30; the guard refused chunk 31; next start 31. Out-root `<scratch>/l5-e2280-n1`, console `<scratch>/l5-n1.console` (both unread by QE so far).
+- Read it against PREREG `…1d9e9a62` exactly: every validity line, the interim reading (labelled interim, 60 games), the band probe, latency, FL (class and count only, SHARED label if it applies), and the estimate against the walls. Commit redacted records under `raw/out/l5-e2280-n1/` on the `redact.sh` model; keep the raw chunk out-dirs in scratch (rsum needs `r.out` for the full reading). Publish an observation and a verdict note (or their bodies if you have no note tool). No game, no re-run.
