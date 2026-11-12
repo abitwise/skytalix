@@ -1,0 +1,50 @@
+# qe-ABC-320 verdict: **PASS. ABC-320 (C1 plus night 1) is fit to merge.** Night 1 of L5 is VALID. Its interim at E 2 280 is 39.5 / 60 = 65.83 %, X = 2 393.9 ± 94.7 (interim, 60 games, not L5's figure). The band probe is not triggered and no step is due. Night 2 continues from opening 31 at E 2 280, on a new W. No blocking gap. One medium gap: night 1's raw `r.out` lives on a tmpfs scratch, and the 200-game `rsum` needs it
+
+QE/E2E, task `qe-ABC-320`, stage C, branch `grugops/qe-ABC-320` at `f456e625`, 2026-11-12. The evidence is the stage C observation sealed just before this note; records are in `raw/out/l5-e2280-n1/`. No game, no re-run, no engine start in this hop. This note is QE's reading and verdict. Merge and deploy stay with the humans.
+
+## Against the cut note `…972c91df`
+- **C1 (harness): MET.** It was checked in this task's C1 check: `pair-check` 66 / 66, lint and typecheck by QE; byte-equal L1–L4 and no-`--start` argv; the refusals; the pooled formula.
+  - Night 1 used it for real. `r --skill 5 --start S` ran six segments.
+  - `machine.txt` wrote each `start:` line right.
+  - `rsum` pooled the six into cutechess-cli 1.5.1's formula. QE's own recomputation from 39 / 1 / 20 gives ± 94.8 on the 95 % score bounds, against the tool's ± 94.7.
+- **C2 (stage A): MET.** The pins, the 2-game smoke (NOT GRADED) and the PREREG were sealed before any graded game and admitted verbatim as `…1d9e9a62`.
+- **C3 (night 1): MET.** It ran only on the orchestrator's Stage B line citing W.
+  - Every PREREG validity line is MET: 6 / 6 chunks clean; 0 skytalix time losses; options and `go movetime 4000` in 60 / 60 processes; depth guard 0 of 2 952; record check and state line in every chunk; `rsum` without a refusal over openings 1–30.
+  - The interim and the band probe were reported as sealed.
+  - The night wrote `next start: 31`.
+- **C4 (gates): MET on unchanged trees.**
+  - The SE ran lint, `VITEST_MAX_WORKERS=1 npm test` (2 740 / 2 740, 0 skipped), build and `pair-check` (66 / 66), each alone under the host lock.
+  - QE re-ran lint, typecheck and `pair-check` at C1.
+  - `tools/` `2ae53ab1` and `src/` `b668b153` are unchanged since. The branch's `src/` diff from `main` is empty, so the zero-production-lines waiver applies.
+  - README and CHANGELOG are rightly untouched, since L5's 200 games are not complete.
+
+## What the reading says (reported, not graded)
+- **The band rule:** the 95 % score interval is 53.8–77.8 %, not wholly outside 25–75 %. **No step** (`ABC-204` A4, `ADR-0056` D5 item 4, as sealed).
+- **Against the projection:** L5 was projected at about 2 240–2 320, an expected 44.3–55.7 % at E 2 280. It reads 65.8 %, X = 2 393.9 ± 94.7. The centre is 74 above the projected top, and E 2 280 lies just below X's interval (2 299–2 489).
+  - If the score held at this mix over 200 games, its 95 % interval would be about 59–72 %: still inside the band, so E 2 280 would stand. **This is an estimate, UNKNOWN - verify**; the full reading decides.
+- **The colour split** is 58.3 % as White against 73.3 % as Black, 30 games each. The difference is about 1.2 SE, so it is not significant at 60 games.
+- **Interim L5 − L4:** 2 393.9 − 2 094.3 ≈ +300, with about ± 106 in quadrature. Stockfish thinks 4 s here and 1 s at L4. Its strength at a given `UCI_Elo` may move with time (**UNKNOWN - verify**, the PREREG's named risk), so part of this gap may be the scale.
+
+## Gaps, by severity
+- **Blocking: none.**
+- **Medium (process, the full reading):** `rsum` reads each segment's raw `r.out` (C1 gap 3). Night 1's six raw out-dirs (about 50 MB) live under `<scratch>`, which is on **tmpfs** on this host.
+  - A reboot or a scratch clean-up before the 200 are pooled loses them. The committed records carry only `r.summary.out`, and `rsum` has not been shown to read that.
+  - Losing them would cost the 60 graded games, about 6.4 h of held host.
+  - QE did not move them; the brief keeps them in scratch. **Recommend:** the Orchestrator asks the owner for a durable location outside the repo before night 2, or a later ticket lets `rsum` read a redacted record.
+- **Low (carried from C1, unchanged):**
+  1. `rsum` does not compare the harness tree, `timemargin`, `-maxmoves`, `Threads`, `Hash` or concurrency. `night.sh`'s gate 2 covered this for night 1, and night 2 must run on the same `tools/` `2ae53ab1`.
+  2. `rsum` prints only the pooled state.
+  3. `rsum` needs `CUTECHESS_CLI` and `STOCKFISH` set although it starts no engine.
+- **Low (FL attribution):** one foreign `stockfish` sample sat at a game boundary, and there were three single foreign `node` samples. Whether they are the tool's own restarts is **UNKNOWN - verify**. Under FL they change nothing, and the host was ALONE for the SHARED classes.
+- **Info (estimate):** the night ran 60 games in 6 h 21 min, inside the 30–70 estimate. The 8 400 s guard left about 1.5 chunks of the 8 h unused, as the PREREG named. On the measured rate, openings 31–100 may take two more nights rather than three (estimate).
+
+## Next (not QE's to start)
+- Night 2: `night.sh 2280 31 <new out-root> <repo>` from this branch's worktree, after `sha256sum -c raw/scripts/SHA256SUMS`, on the Orchestrator's line citing a new W. Its chunks are pooled with night 1's in one `rsum` once openings 1–100 are covered.
+
+## Fences held
+- No game, re-run or engine start.
+- The sealed `raw/scripts/` check OK and were not edited.
+- The raw chunk dirs were kept and nothing in scratch was deleted.
+- No `src/`, README, CHANGELOG, ADR, EPIC or board edit.
+- No push, force, amend, rebase or merge.
+- No foreign process was touched or recorded beyond class and count.

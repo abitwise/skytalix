@@ -107,3 +107,44 @@ Every run goes as `flock <scratch>/host-test.lock <cmd>` (the real path is in yo
 *by orchestrator (claude-opus-5-5, orch-2026-10-30a), at 2026-11-12T04:50:28Z.*
 - The session exited 0 at 2026-11-12T04:50:14Z (el 22 880 s): 6 clean chunks, 60 games, openings 1–30; the guard refused chunk 31; next start 31. Out-root `<scratch>/l5-e2280-n1`, console `<scratch>/l5-n1.console` (both unread by QE so far).
 - Read it against PREREG `…1d9e9a62` exactly: every validity line, the interim reading (labelled interim, 60 games), the band probe, latency, FL (class and count only, SHARED label if it applies), and the estimate against the walls. Commit redacted records under `raw/out/l5-e2280-n1/` on the `redact.sh` model; keep the raw chunk out-dirs in scratch (rsum needs `r.out` for the full reading). Publish an observation and a verdict note (or their bodies if you have no note tool). No game, no re-run.
+
+## Stage C
+*QE/E2E (claude-opus-5-5, qe-ABC-320), 2026-11-12, on `grugops/qe-ABC-320` from `f456e625`. Read against PREREG `…1d9e9a62`. No game, no re-run, no engine start. Under `flock <scratch>/host-test.lock`, `rsum` and `read.mjs 5 2280 4000` were re-run over the six chunk dirs, and both came out byte-equal to the session's own.*
+
+**Result: PASS. ABC-320 (C1 plus night 1) is fit to merge.** Night 1 is VALID: interim **39 / 20 / 1, 39.5 / 60 = 65.83 %, X = 2 393.9 ± 94.7 (interim, 60 games, not L5's figure)**. The band probe is not triggered; no step. Night 2 runs from opening 31 at E 2 280 on a new W.
+
+The notes are NOT admitted: there is no `propose_note` in this session. The bodies are `raw/notes/note-c-night1.md` (observation) and `raw/notes/note-c-verdict.md` (decision), with kinds and refs in `raw/spec-c.json`. Records: `raw/out/l5-e2280-n1/`. The raw chunk dirs stay in `<scratch>/l5-e2280-n1`.
+
+- **Validity, all MET:**
+  1. 6 / 6 chunks clean, with no VOID; RUNAWAY and THERMAL did not fire.
+  2. skytalix lost 0 games on time. Terminations: 59 mates and 1 fifty-move draw.
+  3. `Skill Level 5` and `UCI_Elo 2280` reached 60 / 60 processes. Every `go` was `go movetime 4000`: skytalix 2 962, Stockfish 2 952.
+  4. Depth guard 0 of 2 952 below 6. The record check passed and every state line reads `rating`; faults 0 in every chunk.
+  5. `rsum` pooled 1–30 contiguously without a refusal.
+  - Gates 1–3 passed at launch; the W-check was 0 / 0 / 0 / 0.
+- **Interim:**
+  - Colour split: White 17.5 / 30 (58.3 %), Black 22.0 / 30 (73.3 %).
+  - Opening-cluster interval ± 89.8, against iid ± 92.6.
+  - Pairs: 12 swept, 14 split, 1 at 1.5, 3 lost.
+- **Band probe:** the 95 % score interval is 53.8–77.8 %, not wholly outside 25–75 %.
+- **Latency:**
+  - skytalix median 4 001, p95 4 002, p99 4 002, max 4 004 ms; 0 over 4 010, 0 at or over 4 050.
+  - Stockfish max 4 002 ms.
+- **FL:** 2 264 samples.
+  - foreign vitest 0, cutechess-cli 0;
+  - stockfish 1 sample (count 1, at a game boundary);
+  - node 3 samples (count 1).
+  - Not SHARED. Tctl max 74.8 °C.
+- **Estimate against the walls:**
+  - 60 games in 6 h 21 min (22 880 s), inside the estimated 30–70; the central estimate was 50.
+  - Chunks ran 54.7–71.2 min, mean 63.5, against the estimated 56–117.
+  - Plies a game: mean 98.6, median 87, max 214. Seconds a ply: 3.855.
+  - The worst chunk was 1 109 plies / 4 274 s, against the guard's 2 000 / 8 400.
+  - The guard left about 1.5 chunks unused.
+- **Gaps:**
+  - **None blocking.**
+  - **Medium:** night 1's raw `r.out`, which the 200-game `rsum` needs, sits on tmpfs scratch. Ask the owner for a durable location before night 2.
+  - **Low:** C1 gaps 1, 2 and 4 stand. Whether the 4 single foreign samples are the tool's own restarts is UNKNOWN - verify.
+  - **Info:** the Stockfish time scale is UNKNOWN - verify. Openings 31–100 may take 2 nights, not 3 (an estimate).
+- **C4:** the SE's lint, unit (2 740 / 2 740), build and pair-check, plus QE's lint, typecheck and pair-check, all ran on `tools/` `2ae53ab1` and `src/` `b668b153`, both unchanged since. The `src/` diff is empty, so the waiver applies.
+- **Fences held:** no game, no edit of the sealed scripts, nothing in scratch deleted. No `src/`, README, CHANGELOG, ADR, EPIC or board edit. No push, force, amend, rebase or merge.
