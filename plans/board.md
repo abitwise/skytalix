@@ -1,3 +1,4 @@
+_Updated: 2026-11-12T22:48:44Z — **L5 night 2 running** (ABC-321, from opening 31, E 2280; W …b354e881, about 7 h window). Nothing else may take the host lock until it ends._
 _Updated: 2026-11-12T04:59:17Z — **ABC-320 merged** (673a8a00): L5 night 1 valid, 60 games, interim 2 393.9 ± 94.7; no band step. Gates green on main. Night 1 raw records copied to a durable disk. No open tickets; L5 night 2 waits on the owner._
 _Updated: 2026-11-11T22:28:53Z — **L5 night 1 running** (ABC-320; E 2280, chunks of 10 games, guard 8 h; W …b35596d8; PREREG …1d9e9a62, admitted for QE). C1 PASS (…b9e8898d). Nothing else may take the host lock until it ends._
 _Updated: 2026-11-11T21:53:46Z — se-ABC-320 done (5a8fbd8c; notes admitted by the orchestrator, SE had no note tool); qe-ABC-320 C1 check and stage A (smoke, PREREG; no graded games)._
@@ -1640,7 +1641,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 0/3)
+## In Development (WIP 1/3)
+- [ABC-321] L5 night 2: openings from 31 at E 2280 on PREREG …1d9e9a62, sealed scripts unchanged. Cut 2026-11-12 (…b354e881, owner's W for about 7 h). Running from 2026-11-12T22:48:44Z; expected end about 05:00–05:30Z, hard stop 06:48:44Z.
 
 
 
