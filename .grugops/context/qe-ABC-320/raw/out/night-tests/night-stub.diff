@@ -1,0 +1,16 @@
+23c23
+< E=${1:-}; FIRST=${2:-}; ROOT=${3:-}; REPO=${4:-}; HERE=$(cd "$(dirname "$0")" && pwd)
+---
+> E=${1:-}; FIRST=${2:-}; ROOT=${3:-}; REPO=${4:-}; HERE=$SCRIPTS
+26c26
+< CAP=28800; CHUNK_WORST=8400                    # 8 h; 2 000 plies x 4.05 s + 300 s
+---
+> CAP=$TCAP; CHUNK_WORST=$TWORST
+66c66
+<   node tools/rating/rating.ts r "$SHA" "$OUT" --skill "$L" --elo "$E" --rounds "$ROUNDS" --start "$START" --concurrency 1 > "$OUT.run.txt" 2>&1 &
+---
+>   bash "$STUB" "$OUT" "$START" "$E" > "$OUT.run.txt" 2>&1 &
+69c69
+<     sleep 10
+---
+>     sleep 1

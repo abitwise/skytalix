@@ -4,7 +4,9 @@
  * 500 ms, with today's prints unchanged; `ABC-275` adds `r` at 100 ms (R1), Stockfish at st=0.1, and
  * `--elo` above 2 600 refused there. `ABC-276` adds `r` / `d`'s sealing step (A4) and the usage
  * text (A5). `ABC-300` adds `d --tc 40/8` (A1, A2, A5). `ABC-316` adds `r --skill L` (A1): L1 and
- * L2's whole vectors, R2's committed command unchanged, and the refusals. Not a lane file (`NFR-008`): its
+ * L2's whole vectors, R2's committed command unchanged, and the refusals. `ABC-320` adds L1–L7's
+ * whole vectors (L3 and L4 against their committed commands), `r --start S` and its refusals, and
+ * `rsum`'s pooling of two hand-checked fixture segments and its refusals. Not a lane file (`NFR-008`): its
  * name is not `*.test.*`, so `npm test` never collects it, and nothing in the lane imports it.
  *
  *   node --test tools/rating/pair-check.ts
@@ -30,6 +32,7 @@ import { after, describe, test } from "node:test";
 import { fileURLToPath } from "node:url";
 import { gunzipSync } from "node:zlib";
 import { LEVELS } from "../../src/levels.ts";
+import { OPENINGS_SHA256 } from "./openings.ts";
 import {
   type Block,
   coverageCauses,
@@ -908,15 +911,19 @@ describe("ABC-276: r and d seal their records as rpair does; usage names r's 100
   test("A5: no mode, and rpair --budget-ms 100, print the usage text with r's 100", () => {
     const sha = git("rev-parse", "--short=12", "HEAD");
     const usage = [
-      "usage: node tools/rating/rating.ts r <sha> <out-dir> [--elo E] [--budget-ms 500|100 | --skill L] [--rounds N] [--concurrency C]",
+      "usage: node tools/rating/rating.ts r <sha> <out-dir> [--elo E] [--budget-ms 500|100 | --skill L] [--rounds N] [--start S] [--concurrency C]",
       "       node tools/rating/rating.ts d <candidate-sha> <base-sha> <out-dir> [--budget-ms B | --tc 40/8] [--rounds N] [--concurrency C]",
       "       node tools/rating/rating.ts rpair <base-sha> <candidate-sha> <out-dir> [--elo E] [--rounds N] [--concurrency C]",
+      // ABC-320: the rsum line, r's --start, --skill 1–7, and one row each for --start and rsum.
+      "       node tools/rating/rating.ts rsum <r-out-dir>…",
       "       --concurrency: 1–8; default R 2, D 3, rpair 2",
       "       --budget-ms: R 500 or 100 (default 4000); D 3000 (default), 2500, 2000, 1500, 1000 or 100",
       // ABC-300 A4: the one existing row updated, to name d's --tc.
       "       --tc: D only, 40/8: both sides tc=40/8 timemargin=0 TimeMode uci-clock-mode; not with --budget-ms",
       // ABC-316: r's line names --skill, and one row for it.
-      "       --skill: R only, 1–4: skytalix Skill Level=L st=level budget timemargin=50, Stockfish the same st; not with --budget-ms",
+      "       --skill: R only, 1–7: skytalix Skill Level=L st=level budget timemargin=50, Stockfish the same st; not with --budget-ms",
+      "       --start: R only, 1–100: the first opening (start=S); S + rounds − 1 ≤ 100",
+      "       rsum: one pooled reading of r segments with one sha, level, E, st, pins and openings, contiguous openings",
       "       rpair: --elo default 1910; --rounds 10–100 in tens, default 100 (10 = one block per build, 40 games)",
       "       --dry-run (any mode): print the cutechess-cli arguments and stop",
       "",
@@ -1120,12 +1127,13 @@ describe("ABC-316: r --skill L plays level L's budget on both sides; R2's comman
     }
   });
 
-  test("A1: --skill outside 1–4 is refused, naming the value", () => {
-    for (const value of ["0", "5", "7", "1.0", "01", "x"]) {
+  // ABC-320: the range is 1–7 now; 5 and 7 are read (see its describe), 8 is refused.
+  test("A1: --skill outside 1–7 is refused, naming the value", () => {
+    for (const value of ["0", "8", "1.0", "01", "x"]) {
       const run = dry("r", sha, files, "--skill", value);
       assert.equal(run.status, 1, value);
       assert.equal(argvBlocks(run.stdout).length, 0, value);
-      assert.ok(run.stderr.includes(`--skill ${value}: r takes only 1, 2, 3 or 4`), run.stderr);
+      assert.ok(run.stderr.includes(`--skill ${value}: r takes only 1 to 7`), run.stderr);
       assert.equal(existsSync(files), false);
     }
   });
@@ -1140,6 +1148,276 @@ describe("ABC-316: r --skill L plays level L's budget on both sides; R2's comman
       assert.equal(run.stdout, "", args.join(" "));
       assert.match(run.stderr, /^usage: /, args.join(" "));
       assert.equal(existsSync(files), false);
+    }
+  });
+});
+
+describe("ABC-320: r --skill 1–7, r --start S, and rsum's pooled reading of segments", () => {
+  const sha = git("rev-parse", "--short=12", "HEAD");
+  const files = join(SCRATCH, "abc320");
+  const f = files.startsWith(homedir()) ? `<home>${files.slice(homedir().length)}` : files;
+  const dry = (...args: string[]) => harness(...args, "--dry-run");
+  const argvOf = (...args: string[]): string[] => {
+    const run = dry(...args);
+    assert.equal(run.status, 0, run.stderr);
+    assert.equal(existsSync(files), false);
+    return argvBlocks(run.stdout)[0]?.argv ?? [];
+  };
+  const tail = ["--rounds", "100", "--concurrency", "1"];
+  /** A dry-run vector as `r` records it in `cmd.txt`: placeholders for the out-dir and Stockfish. */
+  const asCmd = (argv: string[]): string => {
+    const sf = argv.indexOf("name=stockfish") + 1;
+    const text = argv
+      .map((a, i) => (i === sf ? "cmd=<stockfish>" : a.replaceAll(f, "<out>")))
+      .map((a) => (a.includes(" ") ? `'${a}'` : a))
+      .join(" ");
+    return `${text} > <out>/r.out 2>&1\n`;
+  };
+
+  test("A1: --skill 3 and 4 are byte-equal to QE's committed L3 and L4 commands (qe-ABC-317)", () => {
+    for (const [level, elo] of [
+      [3, "1890"],
+      [4, "2040"],
+    ] as const) {
+      const cmd = readFileSync(
+        join(REPO, `.grugops/context/qe-ABC-317/raw/out/l${level}-e${elo}/cmd.txt`),
+        "utf8",
+      );
+      const argv = argvOf("r", sha, files, "--skill", String(level), "--elo", elo, ...tail);
+      assert.equal(asCmd(argv), cmd);
+    }
+  });
+
+  for (const [level, st] of [
+    [1, "0.1"],
+    [2, "0.18"],
+    [3, "0.33"],
+    [4, "1"],
+    [5, "4"],
+    [6, "10"],
+    [7, "30"],
+  ] as const) {
+    test(`A1: L${level} is R2's vector with both st=${st} and Skill Level=${level} after skytalix's restart=on`, () => {
+      assert.equal(String(LEVELS[level].budgetMs / 1000), st);
+      const argv = argvOf("r", sha, files, "--skill", String(level), "--elo", "2280", ...tail);
+      const base = argvOf("r", sha, files, "--budget-ms", "100", "--elo", "2280", ...tail);
+      const restart = base.indexOf("restart=on");
+      const expected = base.flatMap((arg, i) =>
+        arg === "st=0.1"
+          ? [`st=${st}`]
+          : i === restart
+            ? [arg, `option.Skill Level=${level}`]
+            : [arg],
+      );
+      assert.deepEqual(argv, expected);
+      const [skytalix, stockfish] = engineGroups(argv);
+      assert.ok(skytalix?.includes(`st=${st}`) && skytalix.includes("timemargin=50"));
+      assert.ok(stockfish?.includes(`st=${st}`) && stockfish.includes("timemargin=2000"));
+      assert.ok(stockfish?.includes("option.UCI_Elo=2280"));
+    });
+  }
+
+  test("A2: --start S adds start=S after order=sequential, as rpair's blocks; nothing else moves", () => {
+    const args = ["r", sha, files, "--skill", "5", "--elo", "2280", "--rounds", "5"];
+    const plain = argvOf(...args, "--concurrency", "1");
+    assert.equal(
+      plain.some((a) => a.startsWith("start=")),
+      false,
+    );
+    for (const start of ["1", "6", "96"]) {
+      const argv = argvOf(...args, "--start", start, "--concurrency", "1");
+      const at = plain.indexOf("order=sequential") + 1;
+      assert.deepEqual(argv, [...plain.slice(0, at), `start=${start}`, ...plain.slice(at)]);
+    }
+    // The block token is rpair's own: block 2 of a pair opens at 11.
+    const pair = argvBlocks(dry("rpair", sha, sha, files, "--rounds", "20").stdout);
+    assert.ok(pair[2]?.argv.includes("start=11"));
+    assert.ok(argvOf("r", sha, files, "--start", "100", "--rounds", "1").includes("start=100"));
+  });
+
+  test("A2: --start refusals: not 1–100, or S + rounds − 1 past 100; d and rpair refuse the flag", () => {
+    for (const value of ["0", "101", "-1", "1.0", "01", "x"]) {
+      const run = dry("r", sha, files, "--start", value, "--rounds", "1");
+      assert.equal(run.status, 1, value);
+      assert.equal(argvBlocks(run.stdout).length, 0, value);
+      assert.ok(run.stderr.includes(`--start ${value}: not an integer from 1 to 100`), run.stderr);
+    }
+    for (const [start, rounds] of [
+      ["2", undefined],
+      ["96", "6"],
+      ["100", "2"],
+    ] as const) {
+      const run = dry("r", sha, files, "--start", start, ...(rounds ? ["--rounds", rounds] : []));
+      const n = Number(rounds ?? 100);
+      assert.equal(run.status, 1, start);
+      assert.ok(
+        run.stderr.includes(
+          `--start ${start} --rounds ${n}: openings ${start}–${Number(start) + n - 1} run past 100`,
+        ),
+        run.stderr,
+      );
+    }
+    for (const args of [
+      ["d", sha, sha, files, "--start", "1"],
+      ["rpair", sha, sha, files, "--start", "1"],
+    ]) {
+      const run = dry(...args);
+      assert.equal(run.status, 1, args.join(" "));
+      assert.match(run.stderr, /^usage: /);
+    }
+    assert.equal(existsSync(files), false);
+  });
+
+  // rsum: fixture segments as `r` writes them (sealed: placeholders in cmd.txt and machine.txt).
+  const SUBJECT = "b6366a7910f95a91a689188712ce7289bdbbdac9";
+  const CC = "dc77690113d9ae130f5d1b4c76fefb28f42620ac45a2bd4abb7dd8eb2154f40a";
+  const SF = "c78c22a924e8d452e1089ec8d47826f7a276aba69373185e82cbac4593e352d2";
+  interface Seg {
+    start?: number;
+    rounds: number;
+    wld: [number, number, number];
+    sha?: string;
+    level?: number;
+    elo?: number;
+    sf?: string;
+    openings?: string;
+    budget?: number;
+  }
+  let made = 0;
+  function segment(seg: Seg): string {
+    const dir = join(SCRATCH, "abc320-seg", String(++made));
+    mkdirSync(dir, { recursive: true });
+    const { rounds, wld } = seg;
+    const start = seg.start ?? 1;
+    const level = seg.level ?? 5;
+    const args = rating.cutechessArgs({
+      mode: "r",
+      files: "<out>",
+      clones: ["<out>/clone-skytalix"],
+      elo: seg.elo ?? 2280,
+      budget: seg.budget ?? LEVELS[level as keyof typeof LEVELS].budgetMs,
+      rounds,
+      concurrency: 1,
+      start: seg.start,
+      level,
+    });
+    writeFileSync(
+      join(dir, "cmd.txt"),
+      `<cutechess-cli> ${args.map((a) => (a.includes(" ") ? `'${a}'` : a)).join(" ")} > <out>/r.out 2>&1\n`,
+    );
+    writeFileSync(
+      join(dir, "artifacts.txt"),
+      `skytalix ${seg.sha ?? SUBJECT} dist/ (1 files) tree sha256 ${"0".repeat(64)}\n`,
+    );
+    writeFileSync(
+      join(dir, "machine.txt"),
+      [
+        `cutechess-cli: cutechess-cli 1.5.1 sha256 ${CC} = pin`,
+        `stockfish: id name Stockfish 19 sha256 ${seg.sf ?? SF} = pin`,
+        `openings: <repo>/tools/rating/openings.epd sha256 ${seg.openings ?? OPENINGS_SHA256}`,
+        "",
+      ].join("\n"),
+    );
+    // Games 1 … w won by skytalix, then l lost, then d drawn; round r is opening start + r − 1.
+    const finished: string[] = [];
+    const pgn: string[] = [];
+    for (let g = 1; g <= 2 * rounds; g++) {
+      const round = Math.ceil(g / 2);
+      const skyWhite = g % 2 === 1;
+      const kind = g <= wld[0] ? "win" : g <= wld[0] + wld[1] ? "loss" : "draw";
+      const whiteWins = (kind === "win") === skyWhite;
+      const result = kind === "draw" ? "1/2-1/2" : whiteWins ? "1-0" : "0-1";
+      const text =
+        kind === "draw" ? "Draw by 3-fold repetition" : whiteWins ? "White mates" : "Black mates";
+      const [white, black] = skyWhite ? ["skytalix", "stockfish"] : ["stockfish", "skytalix"];
+      finished.push(`Finished game ${g} (${white} vs ${black}): ${result} {${text}}`);
+      pgn.push(
+        `[Event "?"]\n[Round "${round}"]\n[White "${white}"]\n[Black "${black}"]\n[Result "${result}"]\n[FEN "${EPD[start + round - 2]} 0 1"]\n\n1. a3 {+0.10/20 4.00s} a6 {-0.10/20 4.00s} ${result}\n`,
+      );
+    }
+    const e = cutechessElo(...wld);
+    const n = wld[0] + wld[1] + wld[2];
+    writeFileSync(
+      join(dir, "r.out"),
+      `${finished.join("\n")}\nScore of skytalix vs stockfish: ${wld.join(" - ")}  [${((wld[0] + wld[2] / 2) / n).toFixed(3)}] ${n}\nElo difference: ${eloText(e.x)} +/- ${eloText(e.y)}, LOS: 99.0 %, DrawRatio: 50.0 %\n`,
+    );
+    writeFileSync(join(dir, "r.pgn"), pgn.join("\n"));
+    writeFileSync(join(dir, "skytalix.stderr"), "");
+    writeFileSync(join(dir, "stockfish.stderr"), "");
+    return dir;
+  }
+
+  test("A3: two segments pool to cutechess-cli's own line for the whole score (hand-checked)", () => {
+    // 12/6/22 on openings 1–20 (no --start) and 19/10/31 on 21–50 pool to 31/16/53: score
+    // (31 + 53/2)/100 = 0.575, X = −400·log10(1/0.575 − 1) = 52.5. cutechess-cli printed
+    // `52.5 +/- 46.8` for 31/16/53 (qe-epic008-q4c d, A3's case list above).
+    const a = segment({ rounds: 20, wld: [12, 6, 22] });
+    const b = segment({ start: 21, rounds: 30, wld: [19, 10, 31] });
+    const run = harness("rsum", b, a);
+    assert.equal(run.status, 0, run.stderr);
+    const out = run.stdout;
+    assert.match(out, /^rsum: 2 r segments pooled; nothing is played or written$/m);
+    assert.match(out, new RegExp(`^skytalix ${SUBJECT}  Skill Level 5  E 2280  st 4 and 4  `, "m"));
+    assert.match(out, /^segment 01 .*: openings 1–20, games 40 of 40, W\/L\/D 12\/6\/22$/m);
+    assert.match(out, /^segment 02 .*: openings 21–50, games 60 of 60, W\/L\/D 19\/10\/31$/m);
+    assert.match(out, /^openings covered: 1–50 \(50 of 100\)$/m);
+    assert.match(
+      out,
+      /^pooled: Elo difference: 52\.5 \+\/- 46\.8 \(cutechess-cli 1\.5\.1's formula on 2 segments' pooled score\)$/m,
+    );
+    assert.match(out, /^ {2}W\/L\/D: 31\/16\/53 {2}score: 0\.575 {2}games: 100 of 100$/m);
+    assert.match(out, /^ {2}state: rating E \+ X ± Y = 2280 \+ 52\.5 ± 46\.8 = 2332\.5 ± 46\.8$/m);
+  });
+
+  test("A3: a segment with a fault is pooled UNRESOLVED, naming the segment", () => {
+    const a = segment({ start: 1, rounds: 5, wld: [4, 4, 2] });
+    const b = segment({ start: 6, rounds: 5, wld: [4, 4, 2] });
+    const text = readFileSync(join(b, "r.out"), "utf8");
+    writeFileSync(join(b, "r.out"), text.replace("{White mates}", "{Black loses on time}"));
+    const run = harness("rsum", a, b);
+    assert.equal(run.status, 0, run.stderr);
+    assert.match(run.stdout, /^ {2}state: UNRESOLVED\n {4}- segment 02: fault in game /m);
+  });
+
+  test("A3: rsum refuses segments that differ in sha, level, E, st, pins or openings sha", () => {
+    const ok = { start: 1, rounds: 5, wld: [4, 4, 2] } as Seg;
+    const next = { ...ok, start: 6 };
+    const cases: [Seg, string][] = [
+      [{ ...next, sha: "a".repeat(40) }, "sha"],
+      [{ ...next, level: 6, budget: 4000 }, "level"],
+      [{ ...next, elo: 2290 }, "E"],
+      [{ ...next, budget: 10_000 }, "st"],
+      [{ ...next, sf: "f".repeat(64) }, "pins"],
+      [{ ...next, openings: "e".repeat(64) }, "openings sha256"],
+    ];
+    for (const [seg, name] of cases) {
+      const run = harness("rsum", segment(ok), segment(seg));
+      assert.equal(run.status, 1, name);
+      assert.equal(run.stdout, "", name);
+      assert.ok(run.stderr.includes(`segments differ in ${name}: `), `${name}: ${run.stderr}`);
+    }
+  });
+
+  test("A3: rsum refuses opening ranges that overlap or leave a gap, and takes no flag", () => {
+    const a = segment({ rounds: 5, wld: [4, 4, 2] });
+    for (const [start, how] of [
+      [5, "overlap"],
+      [1, "overlap"],
+      [7, "leave a gap"],
+    ] as const) {
+      const b = segment({ start, rounds: 5, wld: [4, 4, 2] });
+      const run = harness("rsum", a, b);
+      assert.equal(run.status, 1, how);
+      assert.equal(run.stdout, "", how);
+      assert.match(
+        run.stderr,
+        new RegExp(`openings \\d+–\\d+ \\(.*\\) and \\d+–\\d+ \\(.*\\) ${how}`),
+      );
+    }
+    for (const args of [["rsum"], ["rsum", a, "--elo", "2280"]]) {
+      const run = harness(...args);
+      assert.equal(run.status, 1, args.join(" "));
+      assert.match(run.stderr, /^usage: /);
     }
   });
 });

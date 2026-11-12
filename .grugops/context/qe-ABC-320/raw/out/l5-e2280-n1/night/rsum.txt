@@ -1,0 +1,14 @@
+rsum: 6 r segments pooled; nothing is played or written
+skytalix cddd4df91d2932d31f37c6b2998e7eecbd9dcb1c  Skill Level 5  E 2280  st 4 and 4  openings sha256 0d7f7a72678cbf54c2c309dc5d664e7aac5de2c15bc54fe4247a437f51e82666
+pins: cutechess-cli dc77690113d9ae130f5d1b4c76fefb28f42620ac45a2bd4abb7dd8eb2154f40a, stockfish c78c22a924e8d452e1089ec8d47826f7a276aba69373185e82cbac4593e352d2
+segment 01 <out-root>/c001: openings 1–5, games 10 of 10, W/L/D 6/4/0
+segment 02 <out-root>/c006: openings 6–10, games 10 of 10, W/L/D 6/4/0
+segment 03 <out-root>/c011: openings 11–15, games 10 of 10, W/L/D 7/3/0
+segment 04 <out-root>/c016: openings 16–20, games 10 of 10, W/L/D 7/3/0
+segment 05 <out-root>/c021: openings 21–25, games 10 of 10, W/L/D 7/3/0
+segment 06 <out-root>/c026: openings 26–30, games 10 of 10, W/L/D 6/3/1
+openings covered: 1–30 (30 of 100)
+pooled: Elo difference: 113.9 +/- 94.7 (cutechess-cli 1.5.1's formula on 6 segments' pooled score)
+  W/L/D: 39/20/1  score: 0.658  games: 60 of 60
+  draw ratio: 1.7 %
+  state: rating E + X ± Y = 2280 + 113.9 ± 94.7 = 2393.9 ± 94.7

@@ -1,0 +1,17 @@
+[2285 1] rc=2 :: usage: night.sh <E> <first-start 1|6|...|96> <out-root> <repo> (E: a multiple of 10, 1320-3190)
+[1310 1] rc=2 :: usage: night.sh <E> <first-start 1|6|...|96> <out-root> <repo> (E: a multiple of 10, 1320-3190)
+[3200 1] rc=2 :: usage: night.sh <E> <first-start 1|6|...|96> <out-root> <repo> (E: a multiple of 10, 1320-3190)
+[abc 1] rc=2 :: usage: night.sh <E> <first-start 1|6|...|96> <out-root> <repo> (E: a multiple of 10, 1320-3190)
+[2280 0] rc=2 :: usage: night.sh <E> <first-start 1|6|...|96> <out-root> <repo> (first-start: 1, 6, ..., 96)
+[2280 2] rc=2 :: usage: night.sh <E> <first-start 1|6|...|96> <out-root> <repo> (first-start: 1, 6, ..., 96)
+[2280 5] rc=2 :: usage: night.sh <E> <first-start 1|6|...|96> <out-root> <repo> (first-start: 1, 6, ..., 96)
+[2280 7] rc=2 :: usage: night.sh <E> <first-start 1|6|...|96> <out-root> <repo> (first-start: 1, 6, ..., 96)
+[2280 97] rc=2 :: usage: night.sh <E> <first-start 1|6|...|96> <out-root> <repo> (first-start: 1, 6, ..., 96)
+[2280 101] rc=2 :: usage: night.sh <E> <first-start 1|6|...|96> <out-root> <repo> (first-start: 1, 6, ..., 96)
+[2280 01] rc=2 :: usage: night.sh <E> <first-start 1|6|...|96> <out-root> <repo> (first-start: 1, 6, ..., 96)
+[2280 x] rc=2 :: usage: night.sh <E> <first-start 1|6|...|96> <out-root> <repo> (first-start: 1, 6, ..., 96)
+[no repo] rc=2 :: usage: night.sh <E> <first-start 1|6|...|96> <out-root> <repo>
+[repo missing] rc=2 :: usage: night.sh <E> <first-start 1|6|...|96> <out-root> <repo>
+[out exists] rc=2 :: out-root exists
+[no parent] rc=2 :: out-root's parent does not exist
+[inside repo] rc=2 :: out-root lies inside the repo
