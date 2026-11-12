@@ -1,3 +1,4 @@
+_Updated: 2026-11-12T04:59:17Z — **ABC-320 merged** (673a8a00): L5 night 1 valid, 60 games, interim 2 393.9 ± 94.7; no band step. Gates green on main. Night 1 raw records copied to a durable disk. No open tickets; L5 night 2 waits on the owner._
 _Updated: 2026-11-11T22:28:53Z — **L5 night 1 running** (ABC-320; E 2280, chunks of 10 games, guard 8 h; W …b35596d8; PREREG …1d9e9a62, admitted for QE). C1 PASS (…b9e8898d). Nothing else may take the host lock until it ends._
 _Updated: 2026-11-11T21:53:46Z — se-ABC-320 done (5a8fbd8c; notes admitted by the orchestrator, SE had no note tool); qe-ABC-320 C1 check and stage A (smoke, PREREG; no graded games)._
 _Updated: 2026-11-11T21:44:52Z — owner: one night, max 8 h, for level 5; ABC-320 cut by note (…972c91df); se-ABC-320 building the segment harness (no games). Graded games wait on the owner's held-host word._
@@ -1639,8 +1640,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 1/3)
-- [ABC-320] L5 night 1 (≤ 8 h, E 2280, interim) and the segment harness (`--skill 1–7`, `--start`, combine). Cut 2026-11-11 (…972c91df); se-ABC-320 done (5a8fbd8c); qe-ABC-320 C1 PASS, PREREG …1d9e9a62 sealed; L5 night 1 running from 2026-11-11T22:28:53Z (W …b35596d8; ends by 06:28:53Z at the latest).
+## In Development (WIP 0/3)
 
 
 
@@ -1728,6 +1728,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready to Release (WIP 0/4)
 
 ## Done (WIP unlimited)
+- [ABC-320] Segment harness (`r --skill 1–7`, `r --start`, `rsum`) and L5 night 1: 60 games, openings 1–30, 39/20/1 at E 2280, interim 2 393.9 ± 94.7 (not L5's figure). Done 2026-11-12 (merged 673a8a00; QE PASS …b1a03872, UAT waived, src/ empty). Night 2 from opening 31 needs the owner's W.
 - [ABC-319] Release v1.1.0: version 1.1.0, CHANGELOG 1.1.0 (measured L1–L4 only), README L6 ~2310–2420, stale "3 s" test text. Done 2026-11-11 (merged 376e9fc3; QE PASS …50c91fb6; UAT waived, zero production lines). Tag v1.1.0 local; owner pushes it and publishes the Release page.
 - [ABC-318] Level 6 thinks 10 s a move (was 5 s; L6 ceiling 12 s); ADR-0045/0044/0052 and NFR-004 amended; README L6 ~2310–2410 projected, ABC-317's three gaps closed. Done 2026-11-11 (merged f30aeb0b; QE PASS_WITH_GAPS …387f257c signs UAT).
 - [ABC-317] Levels 3 and 4 measured vs Stockfish 19 (L3 1 909.1 ± 47.9 at E 1890; L4 2 094.3 ± 47.9 at E 2040); README levels 1–4 measured, 5–7 re-projected; ABC-316's gaps closed. Done 2026-11-11 (merged 69984d56; QE PASS_WITH_GAPS …6298d7f0, UAT waived, src/ empty).
