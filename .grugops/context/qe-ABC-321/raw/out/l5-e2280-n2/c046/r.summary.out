@@ -1,0 +1,49 @@
+Started game 1 of 10 (skytalix vs stockfish)
+Finished game 1 (skytalix vs stockfish): 0-1 {Black mates}
+Score of skytalix vs stockfish: 0 - 1 - 0  [0.000] 1
+Started game 2 of 10 (stockfish vs skytalix)
+Finished game 2 (stockfish vs skytalix): 0-1 {Black mates}
+Score of skytalix vs stockfish: 1 - 1 - 0  [0.500] 2
+Started game 3 of 10 (skytalix vs stockfish)
+Finished game 3 (skytalix vs stockfish): 1-0 {White mates}
+Score of skytalix vs stockfish: 2 - 1 - 0  [0.667] 3
+Started game 4 of 10 (stockfish vs skytalix)
+Finished game 4 (stockfish vs skytalix): 1/2-1/2 {Draw by insufficient mating material}
+Score of skytalix vs stockfish: 2 - 1 - 1  [0.625] 4
+Started game 5 of 10 (skytalix vs stockfish)
+Finished game 5 (skytalix vs stockfish): 1-0 {White mates}
+Score of skytalix vs stockfish: 3 - 1 - 1  [0.700] 5
+Started game 6 of 10 (stockfish vs skytalix)
+Finished game 6 (stockfish vs skytalix): 1-0 {White mates}
+Score of skytalix vs stockfish: 3 - 2 - 1  [0.583] 6
+Started game 7 of 10 (skytalix vs stockfish)
+Finished game 7 (skytalix vs stockfish): 0-1 {Black mates}
+Score of skytalix vs stockfish: 3 - 3 - 1  [0.500] 7
+Started game 8 of 10 (stockfish vs skytalix)
+Finished game 8 (stockfish vs skytalix): 1-0 {White mates}
+Score of skytalix vs stockfish: 3 - 4 - 1  [0.438] 8
+Started game 9 of 10 (skytalix vs stockfish)
+Finished game 9 (skytalix vs stockfish): 1-0 {White mates}
+Score of skytalix vs stockfish: 4 - 4 - 1  [0.500] 9
+Started game 10 of 10 (stockfish vs skytalix)
+Finished game 10 (stockfish vs skytalix): 1-0 {White mates}
+Score of skytalix vs stockfish: 4 - 5 - 1  [0.450] 10
+...      skytalix playing White: 3 - 2 - 0  [0.600] 5
+...      skytalix playing Black: 1 - 3 - 1  [0.300] 5
+...      White vs Black: 6 - 3 - 1  [0.650] 10
+Elo difference: -34.9 +/- 237.0, LOS: 36.9 %, DrawRatio: 10.0 %
+SPRT: llr 0 (0.0%), lbound -inf, ubound inf
+
+Player: skytalix
+   "Draw by insufficient mating material": 1
+   "Loss: Black mates": 2
+   "Loss: White mates": 3
+   "Win: Black mates": 1
+   "Win: White mates": 3
+Player: stockfish
+   "Draw by insufficient mating material": 1
+   "Loss: Black mates": 1
+   "Loss: White mates": 3
+   "Win: Black mates": 2
+   "Win: White mates": 3
+Finished match
