@@ -1,3 +1,4 @@
+_Updated: 2026-11-13T21:59:44Z — **L5 night 3 running** (ABC-322, from opening 56, E 2280; W …dbb1a3ae, 8 h window). Nothing else may take the host lock until it ends._
 _Updated: 2026-11-13T05:02:48Z — **ABC-321 merged**: L5 night 2 valid (50 games); interim over 110 games 2 370.4 ± 67.4; E stays 2280. Night 3 (opening 56) waits on the owner. QE low gap: one foreign vitest sample during the held window (source unknown)._
 _Updated: 2026-11-12T22:48:44Z — **L5 night 2 running** (ABC-321, from opening 31, E 2280; W …b354e881, about 7 h window). Nothing else may take the host lock until it ends._
 _Updated: 2026-11-12T04:59:17Z — **ABC-320 merged** (673a8a00): L5 night 1 valid, 60 games, interim 2 393.9 ± 94.7; no band step. Gates green on main. Night 1 raw records copied to a durable disk. No open tickets; L5 night 2 waits on the owner._
@@ -1642,7 +1643,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 0/3)
+## In Development (WIP 1/3)
+- [ABC-322] L5 night 3: openings from 56 at E 2280 on PREREG …1d9e9a62, sealed scripts unchanged. Cut 2026-11-13 (…dbb1a3ae, owner's W for 8 h). Running from 2026-11-13T21:59:44Z; expected end about 04:00–04:30Z, hard stop 05:59:44Z.
 
 
 
