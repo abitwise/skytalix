@@ -1,3 +1,4 @@
+_Updated: 2026-11-13T05:02:48Z — **ABC-321 merged**: L5 night 2 valid (50 games); interim over 110 games 2 370.4 ± 67.4; E stays 2280. Night 3 (opening 56) waits on the owner. QE low gap: one foreign vitest sample during the held window (source unknown)._
 _Updated: 2026-11-12T22:48:44Z — **L5 night 2 running** (ABC-321, from opening 31, E 2280; W …b354e881, about 7 h window). Nothing else may take the host lock until it ends._
 _Updated: 2026-11-12T04:59:17Z — **ABC-320 merged** (673a8a00): L5 night 1 valid, 60 games, interim 2 393.9 ± 94.7; no band step. Gates green on main. Night 1 raw records copied to a durable disk. No open tickets; L5 night 2 waits on the owner._
 _Updated: 2026-11-11T22:28:53Z — **L5 night 1 running** (ABC-320; E 2280, chunks of 10 games, guard 8 h; W …b35596d8; PREREG …1d9e9a62, admitted for QE). C1 PASS (…b9e8898d). Nothing else may take the host lock until it ends._
@@ -1641,8 +1642,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 1/3)
-- [ABC-321] L5 night 2: openings from 31 at E 2280 on PREREG …1d9e9a62, sealed scripts unchanged. Cut 2026-11-12 (…b354e881, owner's W for about 7 h). Running from 2026-11-12T22:48:44Z; expected end about 05:00–05:30Z, hard stop 06:48:44Z.
+## In Development (WIP 0/3)
 
 
 
@@ -1730,6 +1730,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready to Release (WIP 0/4)
 
 ## Done (WIP unlimited)
+- [ABC-321] L5 night 2: 50 games, openings 31–55, 29/20/1 (59.0 %). Pooled with night 1: 110 games, 68/40/2 (62.7 %), interim 2 370.4 ± 67.4 (not L5's figure); no band step. Done 2026-11-13 (merged; QE PASS …0a088790). Night 3 from opening 56 needs the owner's W.
 - [ABC-320] Segment harness (`r --skill 1–7`, `r --start`, `rsum`) and L5 night 1: 60 games, openings 1–30, 39/20/1 at E 2280, interim 2 393.9 ± 94.7 (not L5's figure). Done 2026-11-12 (merged 673a8a00; QE PASS …b1a03872, UAT waived, src/ empty). Night 2 from opening 31 needs the owner's W.
 - [ABC-319] Release v1.1.0: version 1.1.0, CHANGELOG 1.1.0 (measured L1–L4 only), README L6 ~2310–2420, stale "3 s" test text. Done 2026-11-11 (merged 376e9fc3; QE PASS …50c91fb6; UAT waived, zero production lines). Tag v1.1.0 local; owner pushes it and publishes the Release page.
 - [ABC-318] Level 6 thinks 10 s a move (was 5 s; L6 ceiling 12 s); ADR-0045/0044/0052 and NFR-004 amended; README L6 ~2310–2410 projected, ABC-317's three gaps closed. Done 2026-11-11 (merged f30aeb0b; QE PASS_WITH_GAPS …387f257c signs UAT).
