@@ -1,3 +1,4 @@
+_Updated: 2026-11-14T04:42:00Z — **L5 night 3 ended** (ABC-322): 60 games, openings 56–85, exit 0; durable copy made. Orchestrator pool over 170 games 2 389.8 ± 54.6 (QE to re-derive). qe-ABC-322 stage C running (no games). Host lock free._
 _Updated: 2026-11-13T21:59:44Z — **L5 night 3 running** (ABC-322, from opening 56, E 2280; W …dbb1a3ae, 8 h window). Nothing else may take the host lock until it ends._
 _Updated: 2026-11-13T05:02:48Z — **ABC-321 merged**: L5 night 2 valid (50 games); interim over 110 games 2 370.4 ± 67.4; E stays 2280. Night 3 (opening 56) waits on the owner. QE low gap: one foreign vitest sample during the held window (source unknown)._
 _Updated: 2026-11-12T22:48:44Z — **L5 night 2 running** (ABC-321, from opening 31, E 2280; W …b354e881, about 7 h window). Nothing else may take the host lock until it ends._
