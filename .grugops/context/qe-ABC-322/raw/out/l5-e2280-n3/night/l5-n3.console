@@ -1,0 +1,31 @@
+2026-11-13T21:59:44Z L5 E2280 el=0s session start: first-start 56, depth guard 6, cap 28800s, chunk worst 8400s, last launch at el <= 20400s
+2026-11-13T21:59:45Z L5 E2280 el=1s W-check 2026-11-13T21:59:45Z load1=0.21 tctl=33.0 tmp_free_mb=7131 foreign_vitest=0 foreign_cutechess=0 foreign_stockfish=0 foreign_node=0
+2026-11-13T21:59:45Z L5 E2280 el=1s launch chunk start=56 openings 56-60: r cddd4df9 skill=5 E=2280 st=4 rounds=5 concurrency=1
+2026-11-13T23:01:33Z L5 E2280 el=3709s end chunk start=56 tool_exit=0 stop=none wall=3708s
+2026-11-13T23:01:34Z L5 E2280 el=3710s chunk 56 clone deleted
+2026-11-13T23:01:34Z L5 E2280 el=3710s chunk 56 clean: W/L/D: 8/1/1  score: 0.850  games: 10 of 10
+2026-11-13T23:01:34Z L5 E2280 el=3710s launch chunk start=61 openings 61-65: r cddd4df9 skill=5 E=2280 st=4 rounds=5 concurrency=1
+2026-11-14T00:05:14Z L5 E2280 el=7530s end chunk start=61 tool_exit=0 stop=none wall=3820s
+2026-11-14T00:05:14Z L5 E2280 el=7530s chunk 61 clone deleted
+2026-11-14T00:05:14Z L5 E2280 el=7530s chunk 61 clean: W/L/D: 6/4/0  score: 0.600  games: 10 of 10
+2026-11-14T00:05:14Z L5 E2280 el=7530s launch chunk start=66 openings 66-70: r cddd4df9 skill=5 E=2280 st=4 rounds=5 concurrency=1
+2026-11-14T01:21:42Z L5 E2280 el=12118s end chunk start=66 tool_exit=0 stop=none wall=4588s
+2026-11-14T01:21:42Z L5 E2280 el=12118s chunk 66 clone deleted
+2026-11-14T01:21:42Z L5 E2280 el=12118s chunk 66 clean: W/L/D: 4/6/0  score: 0.400  games: 10 of 10
+2026-11-14T01:21:42Z L5 E2280 el=12118s launch chunk start=71 openings 71-75: r cddd4df9 skill=5 E=2280 st=4 rounds=5 concurrency=1
+2026-11-14T02:35:59Z L5 E2280 el=16575s end chunk start=71 tool_exit=0 stop=none wall=4457s
+2026-11-14T02:35:59Z L5 E2280 el=16575s chunk 71 clone deleted
+2026-11-14T02:35:59Z L5 E2280 el=16575s chunk 71 clean: W/L/D: 6/3/1  score: 0.650  games: 10 of 10
+2026-11-14T02:35:59Z L5 E2280 el=16575s launch chunk start=76 openings 76-80: r cddd4df9 skill=5 E=2280 st=4 rounds=5 concurrency=1
+2026-11-14T03:27:11Z L5 E2280 el=19647s end chunk start=76 tool_exit=0 stop=none wall=3072s
+2026-11-14T03:27:11Z L5 E2280 el=19647s chunk 76 clone deleted
+2026-11-14T03:27:11Z L5 E2280 el=19647s chunk 76 clean: W/L/D: 9/1/0  score: 0.900  games: 10 of 10
+2026-11-14T03:27:11Z L5 E2280 el=19647s launch chunk start=81 openings 81-85: r cddd4df9 skill=5 E=2280 st=4 rounds=5 concurrency=1
+2026-11-14T04:40:37Z L5 E2280 el=24053s end chunk start=81 tool_exit=0 stop=none wall=4406s
+2026-11-14T04:40:37Z L5 E2280 el=24053s chunk 81 clone deleted
+2026-11-14T04:40:37Z L5 E2280 el=24053s chunk 81 clean: W/L/D: 8/2/0  score: 0.800  games: 10 of 10
+2026-11-14T04:40:37Z L5 E2280 el=24053s session end: 8 h guard: el 24053s + 8400s > 28800s; clean chunks 6 (60 games)
+2026-11-14T04:40:37Z L5 E2280 el=24053s next start: 86 (night 2: night.sh 2280 86 <new out-root> <repo>)
+2026-11-14T04:40:38Z L5 E2280 el=24054s end rsum rc=0
+2026-11-14T04:40:38Z L5 E2280 el=24054s end read rc=0
+2026-11-14T04:40:38Z L5 E2280 el=24054s session exit 0
