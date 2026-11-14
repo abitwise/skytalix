@@ -1,4 +1,4 @@
-_Updated: 2026-11-14T22:29:30Z — **L5 night 4 cut** (ABC-323, from opening 86, E 2280; W …481f29ee). Waiting for a quiet host (checked every 10 min), then it starts; nothing else may take the host lock until it ends._
+_Updated: 2026-11-14T22:28:47Z — **L5 night 4 running** (ABC-323, from opening 86, E 2280; W …481f29ee); started on the first quiet check. Nothing else may take the host lock until it ends._
 _Updated: 2026-11-14T04:50:30Z — **ABC-322 merged**: L5 night 3 valid (60 games); interim over 170 games 2 389.8 ± 54.6; E stays 2280. Night 4 (opening 86, 3 chunks, about 3.4 h) waits on the owner._
 _Updated: 2026-11-14T04:42:00Z — **L5 night 3 ended** (ABC-322): 60 games, openings 56–85, exit 0; durable copy made. Orchestrator pool over 170 games 2 389.8 ± 54.6 (QE to re-derive). qe-ABC-322 stage C running (no games). Host lock free._
 _Updated: 2026-11-13T21:59:44Z — **L5 night 3 running** (ABC-322, from opening 56, E 2280; W …dbb1a3ae, 8 h window). Nothing else may take the host lock until it ends._
@@ -1647,7 +1647,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 ## In Development (WIP 1/3)
-- [ABC-323] L5 night 4: openings 86–100 at E 2280 on PREREG …1d9e9a62, sealed scripts unchanged. Cut 2026-11-14 (…481f29ee, owner's W, start on a quiet host). About 3.4 h once started (worst 7 h).
+- [ABC-323] L5 night 4: openings 86–100 at E 2280 on PREREG …1d9e9a62, sealed scripts unchanged. Cut 2026-11-14 (…481f29ee, owner's W, start on a quiet host). Running from 2026-11-14T22:28:47Z; expected end about 01:50Z, hard stop 06:28:47Z.
 
 
 
