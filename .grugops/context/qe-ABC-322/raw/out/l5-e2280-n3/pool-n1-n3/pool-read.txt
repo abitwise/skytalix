@@ -1,0 +1,20 @@
+chunks 17; games 170; W/D/L 109/4/57; points 111.0 of 170 = 65.29 %; Elo(score) 109.8
+  as White: 53.0 / 85
+  as Black: 58.0 / 85
+openings 85 (sizes [2]); FEN mismatches 0; openings 1-85
+iid per game (trinomial): SE(score) 0.0361; 95 % +/- 54.3 Elo; deff 1.000; effective games 170
+per opening cluster (2 games x 85, both colours) = opening-cluster interval: SE(score) 0.0350; 95 % +/- 52.6 Elo; deff 0.940; effective games 181
+terminations (skytalix's view):
+  draw: Draw by fifty moves rule  2
+  draw: Draw by insufficient mating material  2
+  loss: Black mates  31
+  loss: White mates  26
+  win: Black mates  57
+  win: White mates  52
+time losses (PGN result text): 0; "loses on time" lines in r.out: 0
+plies per game: median 92, mean 104.9, max 302; game seconds: mean 403.4, max 1163; seconds a ply 3.845
+latency skytalix: moves 8931 median 4001 p95 4002 p99 4002 max 4004 ms; >4010 0 >=4050(margin) 0
+latency stockfish: moves 8905 median 4000 p95 4001 p99 4001 max 4003 ms; >4010 0 >=4050(margin) 0
+Skill Level 5: processes with a go 170; got 5 170; missing or other 0
+UCI_Elo 2280: processes with a go 170; got 2280 170; missing or other 0
+go movetime 4000: skytalix 8931, stockfish 8905; any other go 0
