@@ -62,6 +62,13 @@ id: ADR-0045
 > levels 1–5 and 7, `DEFAULT_LEVEL` (5), `HARDEST_LEVEL` (7) and `HARD_CEILING_MS` (60 000) do not move. Dated lines in
 > A1, A3, A4 and § AMENDMENT 2026-10-24's § Consequences point to that section; no old text is changed.
 
+> **Amended 2026-11-15: the level 6 and level 7 projections are re-derived from measured level 5 (`ABC-324`).** Records
+> only, by Architect/Design (task `arch-ABC-324`, decision note `arch-ABC-324/raw/notes/note-decision.md`). Level 5 is
+> measured, 2412.9 ± 51.1 at 4 s (QE `qe-ABC-323` `…f1531600`). Level 6 (10 s) is projected at **~2470–2580** (was
+> ~2310–2410) and level 7 (30 s) at **~2540–2740** (was ~2380–2540). No decision moves: budgets, rates, ceilings,
+> `DEFAULT_LEVEL`, `HARDEST_LEVEL` and the ordering row are unchanged. Dated lines in A1 and § AMENDMENT 2026-11-11
+> point to § AMENDMENT 2026-11-15 at the end; no old text is changed.
+
 **accepted** 2026-10-19 by Olger Oeselg (owner), as proposed. The owner's menu answers, verbatim (note
 `.grugops/context/wave-2026-09-25/notes/20261019T130500Z-orchestrator-decision-owner-word-adr0045-accepted-q1-q3-abc171-rows-1a9c7f42.md`,
 a transcription, not a stamp):
@@ -522,6 +529,9 @@ then 2.5x, and the 6 → 7 step 3x.*
     `ABC-317`), and on the projection they anchor, 5 s sat +16–24 Elo over level 5, inside one reading's ± 48. The
     owner set 10 s. Level 6 is projected at ~2310–2410, about +65–100 over level 5, and about 0.9 ply deeper (2.5x at
     2.67x per ply). Both figures are `UNKNOWN - verify` until level 6 is read. See § AMENDMENT 2026-11-11.*
+  - *2026-11-15 (`ABC-324`): level 5 is measured at 2412.9 ± 51.1, and level 6 is re-projected at ~2470–2580, about
+    +66 to +165 over level 5. The ply figure does not move. Still `UNKNOWN - verify` until level 6 is read. See
+    § AMENDMENT 2026-11-15.*
 
 ### A2 (D2). The default stays 5, and the hardest is 7
 
@@ -703,6 +713,8 @@ a forward-only amendment. Above it, only the dated lines listed in § Status wer
   doublings, roughly even.
 - **Every level 5–7 figure is projected, `UNKNOWN - verify`.** No game was read for this amendment, and none is owed by
   `ABC-318` (level 6 stays projected).
+- *2026-11-15 (`ABC-324`): level 5 is measured (2412.9 ± 51.1, `qe-ABC-323`). The projection above is replaced for
+  levels 6 and 7: ~2470–2580 and ~2540–2740. The 10 s decision does not move. See § AMENDMENT 2026-11-15.*
 
 ### Checked at `main` `902680b7`: these still hold
 
@@ -757,3 +769,55 @@ a forward-only amendment. Above it, only the dated lines listed in § Status wer
 A data revert: `LEVELS[6]` goes back to `{ 5000, 0 }` and level 6's ceiling to 7 s. The pins, the catalog line, the
 README and the CHANGELOG go back with them. No mechanism code is involved. No verdict goes stale: level 6 was never read
 (A5).
+
+## AMENDMENT 2026-11-15 — levels 6 and 7 re-projected from measured level 5 (`ABC-324`)
+
+**Status: records only.** Written by Architect/Design (task `arch-ABC-324`) at `main` `2366bc1d`, on the owner's word
+"A" (re-project from level 5; Orchestrator note `orch-2026-10-30a/…2bfa1b06`, a transcription and not a stamp). No
+code ran, no game was played, nothing was timed. This is a forward-only amendment. Above it, only the dated lines
+listed in § Status were added. The derivation is in the decision note
+(`.grugops/context/arch-ABC-324/raw/notes/note-decision.md`).
+
+### What changed
+
+- **Level 5 is measured:** 2412.9 ± 51.1 at 4 s, against `UCI_Elo` 2280 (`qe-ABC-323` `…f1531600`). It sits 93–173
+  above `…152bb16f`'s projection (~2240–2320).
+- **The projection for levels 6 and 7 is replaced:**
+  - the anchor is level 5's measured point, 2412.9, without its ± 51.1;
+  - then +50 to +125 Elo a doubling from 4 s to 10 s (1.32 doublings);
+  - then +40 to +100 a doubling from 10 s to 30 s (1.58 doublings), one fifth less, for diminishing returns;
+  - rounded outward to tens, with no other padding.
+- **The ends of the range:**
+  - The top is the "all skytalix" reading. Level 4's no-blunder figure (2144–2164) to level 5 is +125 to +135 a
+    doubling (± 35). The top keeps the lower end, +125, and does not raise it.
+  - The bottom is the "part Stockfish" reading. Part of that step may be Stockfish's, since it had 4 s at level 5 and
+    1 s at level 4. Then skytalix's own rate is about the +73 to +79 measured below 1 s, and less beyond 4 s: +50.
+  - The two rate-0 readings, 1902.5 at 0.1 s and level 5 at 4 s, give +96 ± 13 a doubling. That is inside the range.
+- **Results:**
+  - level 6, 10 s: 2479–2578, so **~2470–2580** (was ~2310–2410; the README said ~2310–2420);
+  - level 7, 30 s: 2542–2737, so **~2540–2740** (was ~2380–2540).
+- **Level 6 is projected above level 5:**
+  - the whole range, +66 to +165, sits above level 5's 95 % upper end (2464.0);
+  - high confidence that it is stronger (the same engine and rate 0, at 2.5x the time);
+  - medium confidence in the size.
+- **The Stockfish time-scale effect stays `UNKNOWN - verify`.** In Stockfish's `sf_19` source, a limited-strength move
+  is picked once, at root depth 1 + int(level). That is depth 5 at E 2040 and depth 6 at E 2280, reached far inside
+  0.1 s. So its play should barely change with time. That is a code reading, not a measurement.
+
+### These still hold
+
+- **The levels' data:** every budget, every rate, every `NFR-004` ceiling, `DEFAULT_LEVEL` (5), `HARDEST_LEVEL` (7),
+  `HARD_CEILING_MS` (60 000) and the ordering row over 1..7. The 10 s decision of § AMENDMENT 2026-11-11 stands.
+- **A5:** no ladder verdict is owed, and levels 6 and 7 stay unread.
+- **D3, `ADR-0038` decision 1 and `ABC-101` A7:** the projected Elo lives in the README, not in a level's data.
+
+### Owed elsewhere (not edited here)
+
+- **README Levels table and text, and the CHANGELOG:** the SE (`se-ABC-324`), with the cells and wording in the
+  decision note.
+- **`memory-bank/60-progress.md`'s old projection figures:** the Orchestrator.
+
+### Rollback
+
+Remove this section and its dated lines. The projection reverts to § AMENDMENT 2026-11-11's, which measured level 5
+already contradicts. No code, pin or verdict depends on a projected figure.
