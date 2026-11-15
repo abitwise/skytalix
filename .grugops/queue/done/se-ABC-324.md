@@ -14,3 +14,15 @@ Sources (use their wording; do not invent figures):
 - Orchestrator call: leave OUT the architect's optional Stockfish-code sentence (it is a source reading, not a measurement).
 - Grep the repo docs (README, docs/, CHANGELOG, src comments are out of scope unless a user-facing doc string) for other quotes of the old L5/L6/L7 figures (~2240–2320, ~2310–2410/2420, ~2380–2540, "projected for the rest") and list any you find; fix user-facing docs, report the rest.
 Gates: lint, typecheck, unit tests and any README/doc test lane must stay green (run each as `flock <scratch>/host-test.lock <cmd>`). Run records-path-check `--base main` before each commit. Commit a short Result block here and move brief and claim to done. No push, force, amend, rebase or merge into main. Commit messages end with "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>".
+
+## Result
+by: software-engineer (claude-opus-5-5), at: 2026-11-15T19:50:55Z.
+
+Docs only, branch `grugops/ABC-324` from `main` `c2a8dbfa`; docs commit `4ac4a127`. No `src/` or `tools/` change.
+
+- **README Levels:** intro "measured for levels 1 to 5 and projected for 6 and 7"; Strength row L5 `2413 ± 51, measured`, L6 `~2470–2580, projected`, L7 `~2540–2740, projected`; measured-levels paragraph extended to 1–5 with E 2280; the "Levels 5 to 7 …" paragraph replaced by the architect's three sentences; QE's Stockfish 4 s vs 1 s paragraph directly after it, replacing the old two-line "Stockfish also had each level's time per move …" paragraph (QE's covers it).
+- **README Strength:** the stale "not measured … projection only" line now reads "At 4 s a move, with Stockfish also at 4 s, it measured 2413 ± 51 (see Levels)."
+- **CHANGELOG `[Unreleased]`:** QE's "Strength, measured only" paragraph and, under `### Changed`, the architect's re-projection line.
+- **Left out:** the architect's optional Stockfish-code sentence (orchestrator call).
+- **Other old-figure quotes, not edited:** CHANGELOG `[1.0.0]` "its strength at 4 s was not measured" and `[1.1.0]` (released history); `plans/board.md` ABC-318 / ABC-319 done lines (history). No `docs/` user-facing quote; no test pins README or CHANGELOG text.
+- **Gates (under the host lock):** `biome check .` clean (150 files); `tsc --noEmit` clean; `vitest run` 72 files, 2740 passed, 0 failed, 0 skipped. `records-path-check --base main` clean before each commit.

@@ -6,6 +6,17 @@ All notable changes to skytalix are recorded here. The format follows
 
 ## [Unreleased]
 
+Strength, measured only: level 5 against Stockfish 19 with `UCI_LimitStrength`, 200 games, both
+sides at 4 s a move: 2413 ± 51, at `UCI_Elo` 2280. This figure is on the scale of the README's
+Strength section only. It is not a FIDE or online rating. Stockfish had 4 s a move here and 1 s
+at level 4; how that moves its strength at a given `UCI_Elo` was not measured.
+
+### Changed
+
+- Levels 6 and 7's projected strength is re-derived from level 5's measured figure: about
+  2470–2580 and 2540–2740 (was about 2310–2420 and 2380–2540). Both are projections, not
+  measurements.
+
 ## [1.1.0] - 2026-11-11
 
 Strength, measured only: levels 1 to 4 against Stockfish 19 with `UCI_LimitStrength`, 200 games
