@@ -1,5 +1,5 @@
 /**
- * `ABC-315` — the version line, `skytalix 1.0.0`, for `--version` on both entry points. The version
+ * `ABC-315` — the version line, `skytalix X.Y.Z`, for `--version` on both entry points. The version
  * is written in one place, `package.json` (`VERSIONING.md`), and read from there when asked: no copy
  * of it exists in the code.
  *
