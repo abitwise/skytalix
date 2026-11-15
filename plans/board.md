@@ -1,3 +1,4 @@
+_Updated: 2026-11-15T01:48:30Z — **L5 night 4 ended** (ABC-323): 30 games, openings 86–100, exit 0; all 200 games played; durable copy made. Orchestrator pool 2 412.9 ± 51.1 (QE to re-derive). qe-ABC-323 stage C running (no games). Host lock free._
 _Updated: 2026-11-14T22:28:47Z — **L5 night 4 running** (ABC-323, from opening 86, E 2280; W …481f29ee); started on the first quiet check. Nothing else may take the host lock until it ends._
 _Updated: 2026-11-14T04:50:30Z — **ABC-322 merged**: L5 night 3 valid (60 games); interim over 170 games 2 389.8 ± 54.6; E stays 2280. Night 4 (opening 86, 3 chunks, about 3.4 h) waits on the owner._
 _Updated: 2026-11-14T04:42:00Z — **L5 night 3 ended** (ABC-322): 60 games, openings 56–85, exit 0; durable copy made. Orchestrator pool over 170 games 2 389.8 ± 54.6 (QE to re-derive). qe-ABC-322 stage C running (no games). Host lock free._
