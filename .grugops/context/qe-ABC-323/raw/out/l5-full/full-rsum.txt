@@ -1,0 +1,28 @@
+rsum: 20 r segments pooled; nothing is played or written
+skytalix cddd4df91d2932d31f37c6b2998e7eecbd9dcb1c  Skill Level 5  E 2280  st 4 and 4  openings sha256 0d7f7a72678cbf54c2c309dc5d664e7aac5de2c15bc54fe4247a437f51e82666
+pins: cutechess-cli dc77690113d9ae130f5d1b4c76fefb28f42620ac45a2bd4abb7dd8eb2154f40a, stockfish c78c22a924e8d452e1089ec8d47826f7a276aba69373185e82cbac4593e352d2
+segment 01 <scratch>/l5-e2280-n1/c001: openings 1–5, games 10 of 10, W/L/D 6/4/0
+segment 02 <scratch>/l5-e2280-n1/c006: openings 6–10, games 10 of 10, W/L/D 6/4/0
+segment 03 <scratch>/l5-e2280-n1/c011: openings 11–15, games 10 of 10, W/L/D 7/3/0
+segment 04 <scratch>/l5-e2280-n1/c016: openings 16–20, games 10 of 10, W/L/D 7/3/0
+segment 05 <scratch>/l5-e2280-n1/c021: openings 21–25, games 10 of 10, W/L/D 7/3/0
+segment 06 <scratch>/l5-e2280-n1/c026: openings 26–30, games 10 of 10, W/L/D 6/3/1
+segment 07 <scratch>/l5-e2280-n2/c031: openings 31–35, games 10 of 10, W/L/D 6/4/0
+segment 08 <scratch>/l5-e2280-n2/c036: openings 36–40, games 10 of 10, W/L/D 8/2/0
+segment 09 <scratch>/l5-e2280-n2/c041: openings 41–45, games 10 of 10, W/L/D 5/5/0
+segment 10 <scratch>/l5-e2280-n2/c046: openings 46–50, games 10 of 10, W/L/D 4/5/1
+segment 11 <scratch>/l5-e2280-n2/c051: openings 51–55, games 10 of 10, W/L/D 6/4/0
+segment 12 <scratch>/l5-e2280-n3/c056: openings 56–60, games 10 of 10, W/L/D 8/1/1
+segment 13 <scratch>/l5-e2280-n3/c061: openings 61–65, games 10 of 10, W/L/D 6/4/0
+segment 14 <scratch>/l5-e2280-n3/c066: openings 66–70, games 10 of 10, W/L/D 4/6/0
+segment 15 <scratch>/l5-e2280-n3/c071: openings 71–75, games 10 of 10, W/L/D 6/3/1
+segment 16 <scratch>/l5-e2280-n3/c076: openings 76–80, games 10 of 10, W/L/D 9/1/0
+segment 17 <scratch>/l5-e2280-n3/c081: openings 81–85, games 10 of 10, W/L/D 8/2/0
+segment 18 <scratch>/l5-e2280-n4/c086: openings 86–90, games 10 of 10, W/L/D 8/1/1
+segment 19 <scratch>/l5-e2280-n4/c091: openings 91–95, games 10 of 10, W/L/D 8/1/1
+segment 20 <scratch>/l5-e2280-n4/c096: openings 96–100, games 10 of 10, W/L/D 8/1/1
+openings covered: 1–100 (100 of 100)
+pooled: Elo difference: 132.9 +/- 51.1 (cutechess-cli 1.5.1's formula on 20 segments' pooled score)
+  W/L/D: 133/60/7  score: 0.682  games: 200 of 200
+  draw ratio: 3.5 %
+  state: rating E + X ± Y = 2280 + 132.9 ± 51.1 = 2412.9 ± 51.1

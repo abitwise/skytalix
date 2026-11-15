@@ -1,0 +1,47 @@
+Started game 1 of 10 (skytalix vs stockfish)
+Finished game 1 (skytalix vs stockfish): 1-0 {White mates}
+Score of skytalix vs stockfish: 1 - 0 - 0  [1.000] 1
+Started game 2 of 10 (stockfish vs skytalix)
+Finished game 2 (stockfish vs skytalix): 0-1 {Black mates}
+Score of skytalix vs stockfish: 2 - 0 - 0  [1.000] 2
+Started game 3 of 10 (skytalix vs stockfish)
+Finished game 3 (skytalix vs stockfish): 1-0 {White mates}
+Score of skytalix vs stockfish: 3 - 0 - 0  [1.000] 3
+Started game 4 of 10 (stockfish vs skytalix)
+Finished game 4 (stockfish vs skytalix): 0-1 {Black mates}
+Score of skytalix vs stockfish: 4 - 0 - 0  [1.000] 4
+Started game 5 of 10 (skytalix vs stockfish)
+Finished game 5 (skytalix vs stockfish): 1-0 {White mates}
+Score of skytalix vs stockfish: 5 - 0 - 0  [1.000] 5
+Started game 6 of 10 (stockfish vs skytalix)
+Finished game 6 (stockfish vs skytalix): 1/2-1/2 {Draw by fifty moves rule}
+Score of skytalix vs stockfish: 5 - 0 - 1  [0.917] 6
+Started game 7 of 10 (skytalix vs stockfish)
+Finished game 7 (skytalix vs stockfish): 1-0 {White mates}
+Score of skytalix vs stockfish: 6 - 0 - 1  [0.929] 7
+Started game 8 of 10 (stockfish vs skytalix)
+Finished game 8 (stockfish vs skytalix): 0-1 {Black mates}
+Score of skytalix vs stockfish: 7 - 0 - 1  [0.938] 8
+Started game 9 of 10 (skytalix vs stockfish)
+Finished game 9 (skytalix vs stockfish): 1-0 {White mates}
+Score of skytalix vs stockfish: 8 - 0 - 1  [0.944] 9
+Started game 10 of 10 (stockfish vs skytalix)
+Finished game 10 (stockfish vs skytalix): 1-0 {White mates}
+Score of skytalix vs stockfish: 8 - 1 - 1  [0.850] 10
+...      skytalix playing White: 5 - 0 - 0  [1.000] 5
+...      skytalix playing Black: 3 - 1 - 1  [0.700] 5
+...      White vs Black: 6 - 3 - 1  [0.650] 10
+Elo difference: 301.3 +/- nan, LOS: 99.0 %, DrawRatio: 10.0 %
+SPRT: llr 0 (0.0%), lbound -inf, ubound inf
+
+Player: skytalix
+   "Draw by fifty moves rule": 1
+   "Loss: White mates": 1
+   "Win: Black mates": 3
+   "Win: White mates": 5
+Player: stockfish
+   "Draw by fifty moves rule": 1
+   "Loss: Black mates": 3
+   "Loss: White mates": 5
+   "Win: White mates": 1
+Finished match
