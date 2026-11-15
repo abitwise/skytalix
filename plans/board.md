@@ -1,3 +1,5 @@
+_Updated: 2026-11-15T20:20:00Z — se-ABC-325 done (grugops/ABC-325 2aac1bfe: three README gaps closed, version 1.1.1, CHANGELOG [1.1.1]; gates green). qe-ABC-325 dispatched. README art cmp recipe moves to lines 8–13 after the logo (art itself unchanged)._
+_Updated: 2026-11-15T20:01:00Z — owner: release; ABC-325 cut (…a12ff347): close the three Low README gaps and bump to v1.1.1; se-ABC-325 running._
 _Updated: 2026-11-15T19:58:01Z — **ABC-324 merged**: README/CHANGELOG show L5 2413 ± 51 measured, L6/L7 re-projected. No open tickets. Release (v1.1.1 or not) waits on the owner; three Low README wording gaps carried._
 _Updated: 2026-11-15T20:05:00Z — se-ABC-324 done (grugops/ABC-324 7528cafd: README and CHANGELOG carry L5 2413 ± 51 and the new L6/L7 projections; gates green); qe-ABC-324 dispatched._
 _Updated: 2026-11-15T19:50:00Z — arch-ABC-324 merged (59fe4279): L6 ~2470–2580, L7 ~2540–2740 projected, ADR-0045 amended; se-ABC-324 (README/CHANGELOG) dispatched._
@@ -1652,7 +1654,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 0/3)
+## In Development (WIP 1/3)
+- [ABC-325] v1.1.1 (PATCH): README wording gaps G-QE-324-1/2/3, version-file doc example, version bump and CHANGELOG [1.1.1]. Cut 2026-11-15 (…a12ff347). se-ABC-325 done (2aac1bfe, gates green); qe-ABC-325 running.
 
 
 
