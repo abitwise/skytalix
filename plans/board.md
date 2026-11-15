@@ -1,3 +1,4 @@
+_Updated: 2026-11-15T20:05:00Z — se-ABC-324 done (grugops/ABC-324 7528cafd: README and CHANGELOG carry L5 2413 ± 51 and the new L6/L7 projections; gates green); qe-ABC-324 dispatched._
 _Updated: 2026-11-15T19:50:00Z — arch-ABC-324 merged (59fe4279): L6 ~2470–2580, L7 ~2540–2740 projected, ADR-0045 amended; se-ABC-324 (README/CHANGELOG) dispatched._
 _Updated: 2026-11-15T02:05:30Z — owner chose A: ABC-324 cut (…2bfa1b06): re-project L6/L7 from measured L5 (arch hop running), then README/CHANGELOG, then QE._
 _Updated: 2026-11-15T01:56:00Z — **ABC-323 merged**: L5 measured 2 412.9 ± 51.1 over 200 games (QE PASS …f1531600). No open tickets. Next: README/CHANGELOG (owner to choose how L6/L7 projections are shown) and an optional release._
@@ -1651,7 +1652,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 
 
 ## In Development (WIP 1/3)
-- [ABC-324] Re-project L6/L7 from measured L5; README and CHANGELOG carry L5 2413 ± 51. Cut 2026-11-15 (…2bfa1b06). Hop 1 merged (L6 ~2470–2580, L7 ~2540–2740; …39f1f696); hop 2 se-ABC-324 (docs) running.
+- [ABC-324] Re-project L6/L7 from measured L5; README and CHANGELOG carry L5 2413 ± 51. Cut 2026-11-15 (…2bfa1b06). Hop 1 merged (L6 ~2470–2580, L7 ~2540–2740; …39f1f696); hop 2 se-ABC-324 done (7528cafd, docs only, gates green); hop 3 qe-ABC-324 running.
 
 
 
