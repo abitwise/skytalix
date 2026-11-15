@@ -1,3 +1,4 @@
+_Updated: 2026-11-15T02:05:30Z — owner chose A: ABC-324 cut (…2bfa1b06): re-project L6/L7 from measured L5 (arch hop running), then README/CHANGELOG, then QE._
 _Updated: 2026-11-15T01:56:00Z — **ABC-323 merged**: L5 measured 2 412.9 ± 51.1 over 200 games (QE PASS …f1531600). No open tickets. Next: README/CHANGELOG (owner to choose how L6/L7 projections are shown) and an optional release._
 _Updated: 2026-11-15T01:48:30Z — **L5 night 4 ended** (ABC-323): 30 games, openings 86–100, exit 0; all 200 games played; durable copy made. Orchestrator pool 2 412.9 ± 51.1 (QE to re-derive). qe-ABC-323 stage C running (no games). Host lock free._
 _Updated: 2026-11-14T22:28:47Z — **L5 night 4 running** (ABC-323, from opening 86, E 2280; W …481f29ee); started on the first quiet check. Nothing else may take the host lock until it ends._
@@ -1648,7 +1649,8 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 0/3)
+## In Development (WIP 1/3)
+- [ABC-324] Re-project L6/L7 from measured L5; README and CHANGELOG carry L5 2413 ± 51. Cut 2026-11-15 (…2bfa1b06). Hop 1 arch-ABC-324 running.
 
 
 
