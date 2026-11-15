@@ -1,0 +1,6 @@
+{
+  "refs": ["arch-ABC-324", "grugops/arch-ABC-324", "ABC-324", "ABC-323", "ABC-318", "ADR-0045", "README.md", "CHANGELOG.md", "orch-2026-10-30a/20261115T020500Z-orchestrator-decision-2bfa1b06", "qe-ABC-323/20261115T015501Z-qe-e2e-decision-f1531600", "orch-2026-10-30a/20261111T044438Z-orchestrator-decision-152bb16f", "arch-ABC-318/20261111T074410Z-architect-design-decision-d82c4579"],
+  "notes": [
+    { "kind": "decision", "confidence": "medium: arithmetic on sealed readings only, no game; L6 above L5 high confidence, its size medium; L7 medium-low; the per-doubling ends, the one-fifth diminishing-returns cut and the Stockfish time-scale effect are assumptions (UNKNOWN - verify); the Stockfish depth-pick is a reading of the sf_19 source, not a measurement", "bodyFile": "notes/note-decision.md" }
+  ]
+}
