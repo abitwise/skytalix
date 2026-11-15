@@ -58,7 +58,7 @@ npm run chess -- --ascii
 
 On a terminal, a missing `--colour` or `--difficulty` is asked for; Enter keeps the default.
 
-`npm run chess -- --version` prints the version, for example `skytalix 1.1.0`, and so does
+`npm run chess -- --version` prints the version, for example `skytalix 1.1.1`, and so does
 `bin/skytalix-uci --version`.
 
 Type moves in SAN (`e4`, `Nf3`) or as coordinates (`e2e4`). Type `help` during a game to list
@@ -80,25 +80,29 @@ move and deliberately picks a weaker one.
 
 Levels 1 to 5 were measured. Each played 200 games against Stockfish 19 with
 `UCI_LimitStrength` on, against `UCI_Elo` 1320, 1720, 1890, 2040 and 2280 respectively.
-Both sides had the level's own time per move, and the level's blunder rate was on.
+Both sides had the level's own time per move, and the level's blunder rate was on. How each
+level's time per move moves Stockfish's strength at a given `UCI_Elo` was not measured.
 
 Levels 6 and 7 do not blunder, and their figures are projections, not measurements. They start
 from level 5's measured 2413 at 4 s a move, without its ± 51, and add about +50 to +125 Elo for
 each doubling of time up to 10 s, then about +40 to +100 a doubling up to 30 s, because the gain
 is expected to fall at longer times. The top follows the step from level 4 to level 5, about
-+125 to +135 a doubling once level 4's blunder cost is added back; the bottom is below the +73 to
-+79 a doubling measured under 1 s, in case part of that step was Stockfish's (see below).
++125 to +135 a doubling once level 4's blunder cost is added back. That cost is assumed, not
+measured: about 10 to 14 Elo for each percentage point of blunder rate, so 50 to 70 at level 4's
+5 %. The bottom is below the about +73 to +79 a doubling under 1 s, in case part of the step
+from level 4 to level 5 was Stockfish's (see below). That rate is derived, not measured: from
+the Strength section's measured 1902.5 at 0.1 s and level 4 at 1 s, with the same cost added
+back.
 
 Level 5 measured above its projection of about 2240 to 2320. Stockfish had 4 s a move against
-level 5 and 1 s against level 4. How that moves its strength at a given `UCI_Elo` was not
-measured, so part of the step from level 4 may be Stockfish's.
+level 5 and 1 s against level 4, so part of the step from level 4 may be Stockfish's.
 
 All these figures are on the Strength section's scale only, and are not FIDE or online ratings.
 
 ## Strength
 
-One measured figure, on one scale: X = 1902.5 ± 49.1. skytalix at level 5 played 200 games,
-one at a time, from 100 openings with both colours, against Stockfish 19 with
+One measured figure at 100 ms a move, on one scale: X = 1902.5 ± 49.1. skytalix at level 5
+played 200 games, one at a time, from 100 openings with both colours, against Stockfish 19 with
 `UCI_LimitStrength` on and `UCI_Elo` 1810. Each side had 100 ms a move. skytalix scored
 63.0 %, which is +92.5 ± 49.1 Elo against 1810, so X = 1810 + 92.5. The figure holds on that
 scale only. It is not a 40/15 rating and not a rating-list figure. Level 5 normally has 4 s
