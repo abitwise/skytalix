@@ -1,3 +1,4 @@
+_Updated: 2026-11-15T19:58:01Z — **ABC-324 merged**: README/CHANGELOG show L5 2413 ± 51 measured, L6/L7 re-projected. No open tickets. Release (v1.1.1 or not) waits on the owner; three Low README wording gaps carried._
 _Updated: 2026-11-15T20:05:00Z — se-ABC-324 done (grugops/ABC-324 7528cafd: README and CHANGELOG carry L5 2413 ± 51 and the new L6/L7 projections; gates green); qe-ABC-324 dispatched._
 _Updated: 2026-11-15T19:50:00Z — arch-ABC-324 merged (59fe4279): L6 ~2470–2580, L7 ~2540–2740 projected, ADR-0045 amended; se-ABC-324 (README/CHANGELOG) dispatched._
 _Updated: 2026-11-15T02:05:30Z — owner chose A: ABC-324 cut (…2bfa1b06): re-project L6/L7 from measured L5 (arch hop running), then README/CHANGELOG, then QE._
@@ -1651,8 +1652,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 1/3)
-- [ABC-324] Re-project L6/L7 from measured L5; README and CHANGELOG carry L5 2413 ± 51. Cut 2026-11-15 (…2bfa1b06). Hop 1 merged (L6 ~2470–2580, L7 ~2540–2740; …39f1f696); hop 2 se-ABC-324 done (7528cafd, docs only, gates green); hop 3 qe-ABC-324 running.
+## In Development (WIP 0/3)
 
 
 
@@ -1740,6 +1740,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready to Release (WIP 0/4)
 
 ## Done (WIP unlimited)
+- [ABC-324] L6/L7 re-projected from measured L5 (L6 ~2470–2580, L7 ~2540–2740; arch …39f1f696, ADR-0045 amended); README and CHANGELOG [Unreleased] carry L5 2413 ± 51. Done 2026-11-15 (merged; QE PASS_WITH_GAPS …c2ae1641; three Low wording gaps carried).
 - [ABC-323] L5 night 4 and the full reading: 30 games, openings 86–100, 24/3/3. **L5 measured: 200 games, 133/60/7 (68.25 %), 2 412.9 ± 51.1 at E 2280**; no band step; L5 − L4 +318.6 ± 70.0 (Stockfish time-scale caveat). Done 2026-11-15 (merged; QE PASS …f1531600). README/CHANGELOG hop waits on the owner's call on L6/L7 projections.
 - [ABC-322] L5 night 3: 60 games, openings 56–85, 41/17/2 (70.0 %). Pooled nights 1–3: 170 games, 109/57/4 (65.3 %), interim 2 389.8 ± 54.6 (not L5's figure); no band step, and none can fire at 200 if night 4 runs clean. Done 2026-11-14 (merged; QE PASS …a42953f6). Night 4 (openings 86–100, about 3.4 h) needs the owner's W.
 - [ABC-321] L5 night 2: 50 games, openings 31–55, 29/20/1 (59.0 %). Pooled with night 1: 110 games, 68/40/2 (62.7 %), interim 2 370.4 ± 67.4 (not L5's figure); no band step. Done 2026-11-13 (merged; QE PASS …0a088790). Night 3 from opening 56 needs the owner's W.
