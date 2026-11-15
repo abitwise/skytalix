@@ -1,3 +1,4 @@
+_Updated: 2026-11-15T20:17:45Z — **ABC-325 merged; v1.1.1 tagged locally.** Owner pushes main and tag v1.1.1 and publishes the Release page. No open tickets. Carried: G-QE-325-1 (VERSIONING.md --version example says 1.0.0); README art cmp recipe is now lines 8–13._
 _Updated: 2026-11-15T20:20:00Z — se-ABC-325 done (grugops/ABC-325 2aac1bfe: three README gaps closed, version 1.1.1, CHANGELOG [1.1.1]; gates green). qe-ABC-325 dispatched. README art cmp recipe moves to lines 8–13 after the logo (art itself unchanged)._
 _Updated: 2026-11-15T20:01:00Z — owner: release; ABC-325 cut (…a12ff347): close the three Low README gaps and bump to v1.1.1; se-ABC-325 running._
 _Updated: 2026-11-15T19:58:01Z — **ABC-324 merged**: README/CHANGELOG show L5 2413 ± 51 measured, L6/L7 re-projected. No open tickets. Release (v1.1.1 or not) waits on the owner; three Low README wording gaps carried._
@@ -1654,8 +1655,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready for Dev (WIP 0/6)
 
 
-## In Development (WIP 1/3)
-- [ABC-325] v1.1.1 (PATCH): README wording gaps G-QE-324-1/2/3, version-file doc example, version bump and CHANGELOG [1.1.1]. Cut 2026-11-15 (…a12ff347). se-ABC-325 done (2aac1bfe, gates green); qe-ABC-325 running.
+## In Development (WIP 0/3)
 
 
 
@@ -1743,6 +1743,7 @@ _Updated: 2026-08-21 by QE/E2E (task `qe-ABC-115-repair-2026-08-21`, subtask `qe
 ## Ready to Release (WIP 0/4)
 
 ## Done (WIP unlimited)
+- [ABC-325] v1.1.1 (PATCH): README wording gaps G-QE-324-1/2/3 closed, version-file doc example neutral, version 1.1.1, CHANGELOG [1.1.1]. Done 2026-11-15 (merged; QE PASS_WITH_GAPS …f2ccadfe; UAT signed on the QE verdict per the owner delegation of 2026-10-22). Tag v1.1.1 local; owner pushes main and tag and publishes the Release page.
 - [ABC-324] L6/L7 re-projected from measured L5 (L6 ~2470–2580, L7 ~2540–2740; arch …39f1f696, ADR-0045 amended); README and CHANGELOG [Unreleased] carry L5 2413 ± 51. Done 2026-11-15 (merged; QE PASS_WITH_GAPS …c2ae1641; three Low wording gaps carried).
 - [ABC-323] L5 night 4 and the full reading: 30 games, openings 86–100, 24/3/3. **L5 measured: 200 games, 133/60/7 (68.25 %), 2 412.9 ± 51.1 at E 2280**; no band step; L5 − L4 +318.6 ± 70.0 (Stockfish time-scale caveat). Done 2026-11-15 (merged; QE PASS …f1531600). README/CHANGELOG hop waits on the owner's call on L6/L7 projections.
 - [ABC-322] L5 night 3: 60 games, openings 56–85, 41/17/2 (70.0 %). Pooled nights 1–3: 170 games, 109/57/4 (65.3 %), interim 2 389.8 ± 54.6 (not L5's figure); no band step, and none can fire at 200 if night 4 runs clean. Done 2026-11-14 (merged; QE PASS …a42953f6). Night 4 (openings 86–100, about 3.4 h) needs the owner's W.
